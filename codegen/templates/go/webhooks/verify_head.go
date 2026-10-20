@@ -1,0 +1,340 @@
+// Package webhooks verifies the signature ZelfAI puts on every webhook delivery.
+package webhooks
+
+import (
+	"bytes"
+	"context"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"math"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
+)
+
+const (
+	SignatureHeader = "Webhook-Signature"
+	TimestampHeader = "Webhook-Timestamp"
+	IDHeader        = "Webhook-Id"
+
+	// DefaultTolerance bounds how far a delivery's timestamp may sit from now
+	// before it is treated as a replay.
+	DefaultTolerance = 5 * time.Minute
+)
+
+// ErrVerification is returned for every failed verification. Callers should
+// answer a failed verification with 400 and never process the body.
+var ErrVerification = errors.New("webhook verification failed")
+
+// Options tunes verification. The zero value uses DefaultTolerance and the
+// current wall clock.
+type Options struct {
+	Tolerance time.Duration
+	Now       time.Time
+}
+
+func parseSignature(raw string) (int64, []string, error) {
+	var timestamp int64
+	var digests []string
+	seen := false
+	for _, part := range strings.Split(raw, ",") {
+		key, value, found := strings.Cut(strings.TrimSpace(part), "=")
+		if !found {
+			continue
+		}
+		switch key {
+		case "t":
+			if seen {
+				continue
+			}
+			parsed, err := strconv.ParseInt(value, 10, 64)
+			if err != nil {
+				return 0, nil, fmt.Errorf("%w: signature timestamp is not an integer", ErrVerification)
+			}
+			timestamp, seen = parsed, true
+		case "v1":
+			digests = append(digests, value)
+		}
+	}
+	if !seen || len(digests) == 0 {
+		return 0, nil, fmt.Errorf("%w: signature header is missing a t or v1 component", ErrVerification)
+	}
+	return timestamp, digests, nil
+}
+
+// Verify checks a delivery against one or more signing secrets and returns the
+// decoded payload.
+//
+// payload must be the exact bytes received: re-encoding the JSON changes the
+// bytes and the signature will not match.
+//
+// A rotation switches at once: the API signs the next delivery with the new
+// secret only and rejects the old one immediately. A list of secrets is
+// accepted, so both can be held during a rollout.
+func Verify(payload []byte, signature string, secrets []string, opts Options) (map[string]any, error) {
+	if len(secrets) == 0 {
+		return nil, errors.New("webhooks: at least one signing secret is required")
+	}
+	if signature == "" {
+		return nil, fmt.Errorf("%w: missing %s header", ErrVerification, SignatureHeader)
+	}
+
+	timestamp, digests, err := parseSignature(signature)
+	if err != nil {
+		return nil, err
+	}
+
+	tolerance := opts.Tolerance
+	if tolerance == 0 {
+		tolerance = DefaultTolerance
+	}
+	if tolerance > 0 {
+		now := opts.Now
+		if now.IsZero() {
+			now = time.Now()
+		}
+		age := math.Abs(now.Sub(time.Unix(timestamp, 0)).Seconds())
+		if age > tolerance.Seconds() {
+			return nil, fmt.Errorf(
+				"%w: timestamp is %.0fs away from now, outside the %s tolerance, so this is a replay",
+				ErrVerification, age, tolerance,
+			)
+		}
+	}
+
+	signed := append([]byte(strconv.FormatInt(timestamp, 10)+"."), payload...)
+	matched := false
+	for _, secret := range secrets {
+		mac := hmac.New(sha256.New, []byte(secret))
+		mac.Write(signed)
+		want := mac.Sum(nil)
+		for _, digest := range digests {
+			got, err := hex.DecodeString(digest)
+			if err != nil {
+				continue
+			}
+			// hmac.Equal is constant time, so a wrong signature cannot be
+			// recovered byte by byte from response timing.
+			if hmac.Equal(want, got) {
+				matched = true
+			}
+		}
+	}
+	if !matched {
+		return nil, fmt.Errorf("%w: no signature matched the supplied secrets", ErrVerification)
+	}
+
+	var body map[string]any
+	if err := json.Unmarshal(payload, &body); err != nil {
+		return nil, fmt.Errorf("%w: body is not a JSON object", ErrVerification)
+	}
+	return body, nil
+}
+
+// Event is a delivery whose signature has already been checked.
+type Event struct {
+	// Raw is the payload exactly as it arrived, including any field this SDK
+	// predates.
+	Raw map[string]any
+
+	ID             string
+	Type           EventType
+	SubscriptionID string
+	DeliveredAt    time.Time
+	Livemode       bool
+	Resource       string
+	DeliveryMode   string
+	ItemCount      int
+	Files          []File
+	Items          []map[string]any
+	Statistics     map[string]any
+}
+
+// File is one downloadable snapshot file in a manifest delivery.
+type File struct {
+	Format      string `json:"format"`
+	ExpiresAt   int64  `json:"expires_at"`
+	SHA256      string `json:"sha256"`
+	SizeBytes   int64  `json:"size_bytes"`
+	ItemCount   int    `json:"item_count"`
+	DownloadURL string `json:"download_url"`
+}
+
+type envelope struct {
+	ID             string `json:"id"`
+	Type           string `json:"type"`
+	SubscriptionID string `json:"subscription_id"`
+	DeliveredAt    int64  `json:"delivered_at"`
+	Livemode       bool   `json:"livemode"`
+	Resource       string `json:"resource"`
+	DeliveryMode   string `json:"delivery_mode"`
+	Data           struct {
+		ItemCount  int              `json:"item_count"`
+		Files      []File           `json:"files"`
+		Items      []map[string]any `json:"items"`
+		Statistics map[string]any   `json:"statistics"`
+	} `json:"data"`
+}
+
+// Parse verifies a delivery and returns it as a typed Event.
+func Parse(payload []byte, signature string, secrets []string, opts Options) (*Event, error) {
+	raw, err := Verify(payload, signature, secrets, opts)
+	if err != nil {
+		return nil, err
+	}
+	var parsed envelope
+	if err := json.Unmarshal(payload, &parsed); err != nil {
+		return nil, fmt.Errorf("%w: body does not match the delivery envelope", ErrVerification)
+	}
+	return &Event{
+		Raw:            raw,
+		ID:             parsed.ID,
+		Type:           EventType(parsed.Type),
+		SubscriptionID: parsed.SubscriptionID,
+		DeliveredAt:    time.Unix(parsed.DeliveredAt, 0).UTC(),
+		Livemode:       parsed.Livemode,
+		Resource:       parsed.Resource,
+		DeliveryMode:   parsed.DeliveryMode,
+		ItemCount:      parsed.Data.ItemCount,
+		Files:          parsed.Data.Files,
+		Items:          parsed.Data.Items,
+		Statistics:     parsed.Data.Statistics,
+	}, nil
+}
+
+// DownloadOptions tunes Rows. The zero value uses http.DefaultClient and
+// verifies the published checksum.
+type DownloadOptions struct {
+	HTTPClient *http.Client
+	// SkipChecksum turns off the SHA-256 check over the downloaded body.
+	SkipChecksum bool
+}
+
+// Rows downloads the manifest files and calls visit for each decoded row.
+//
+// Each DownloadURL is signed and expires, so fetch soon after delivery. Unless
+// SkipChecksum is set, the published SHA-256 is recomputed over the body, and a
+// mismatch or a missing digest stops the walk before any row is visited.
+func (e *Event) Rows(ctx context.Context, visit func(row map[string]any) error, opts DownloadOptions) error {
+	client := opts.HTTPClient
+	if client == nil {
+		client = http.DefaultClient
+	}
+	for _, handle := range e.Files {
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, handle.DownloadURL, nil)
+		if err != nil {
+			return err
+		}
+		resp, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		body, readErr := io.ReadAll(resp.Body)
+		_ = resp.Body.Close()
+		if readErr != nil {
+			return readErr
+		}
+		if resp.StatusCode >= 400 {
+			return fmt.Errorf("webhooks: downloading the snapshot failed with HTTP %d", resp.StatusCode)
+		}
+		if !opts.SkipChecksum {
+			if handle.SHA256 == "" {
+				return fmt.Errorf(
+					"%w: the manifest published no sha256 for %s, so the file cannot "+
+						"be verified; set SkipChecksum to read it unchecked",
+					ErrVerification, handle.DownloadURL,
+				)
+			}
+			sum := sha256.Sum256(body)
+			got := hex.EncodeToString(sum[:])
+			if !hmac.Equal([]byte(got), []byte(handle.SHA256)) {
+				return fmt.Errorf(
+					"%w: downloaded file digest %s does not match the published %s",
+					ErrVerification, got, handle.SHA256,
+				)
+			}
+		}
+		for _, line := range bytes.Split(body, []byte("\n")) {
+			if len(bytes.TrimSpace(line)) == 0 {
+				continue
+			}
+			var row map[string]any
+			if err := json.Unmarshal(line, &row); err != nil {
+				return fmt.Errorf("webhooks: snapshot line is not valid JSON: %w", err)
+			}
+			if err := visit(row); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Listener handles one verified delivery.
+type Listener func(ctx context.Context, event *Event) error
+
+// Handler verifies a delivery once, then routes it to the listener for its
+// type. It is framework agnostic: hand it the raw body and the signature
+// header from whatever server is in front of it.
+type Handler struct {
+	secrets   []string
+	options   Options
+	listeners map[EventType][]Listener
+	fallback  Listener
+}
+
+// NewHandler builds a Handler for the given signing secrets. A rotation
+// switches at once, so hold both only for as long as the rollout takes.
+func NewHandler(secrets []string, opts Options) *Handler {
+	return &Handler{secrets: secrets, options: opts, listeners: map[EventType][]Listener{}}
+}
+
+// On registers a listener for one or more event types. It panics on an unknown
+// type, since that is a wiring mistake rather than a runtime condition.
+func (h *Handler) On(listener Listener, eventTypes ...EventType) *Handler {
+	if len(eventTypes) == 0 {
+		panic("webhooks: On needs at least one event type")
+	}
+	for _, name := range eventTypes {
+		if !name.Valid() {
+			panic("webhooks: unknown event type " + name.String())
+		}
+		h.listeners[name] = append(h.listeners[name], listener)
+	}
+	return h
+}
+
+// OnAny registers the listener used when no type specific one matched.
+func (h *Handler) OnAny(listener Listener) *Handler {
+	h.fallback = listener
+	return h
+}
+
+// Handle verifies, then calls every listener registered for the event type. It
+// returns before any listener runs if the signature, timestamp, or body does
+// not check out.
+func (h *Handler) Handle(ctx context.Context, payload []byte, signature string) (*Event, error) {
+	event, err := Parse(payload, signature, h.secrets, h.options)
+	if err != nil {
+		return nil, err
+	}
+	listeners := h.listeners[event.Type]
+	if len(listeners) == 0 {
+		if h.fallback == nil {
+			return event, nil
+		}
+		listeners = []Listener{h.fallback}
+	}
+	for _, listener := range listeners {
+		if err := listener(ctx, event); err != nil {
+			return event, err
+		}
+	}
+	return event, nil
+}

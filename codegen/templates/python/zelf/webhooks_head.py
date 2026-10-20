@@ -1,0 +1,309 @@
+from __future__ import annotations
+
+import hashlib
+import hmac
+import json
+import time
+from collections.abc import Callable, Iterator, Mapping, Sequence
+from datetime import datetime, timezone
+from enum import Enum
+from typing import Any, Literal
+
+import httpx
+
+from ._models import WebhookFile, WebhookPush
+
+SIGNATURE_HEADER = "Webhook-Signature"
+TIMESTAMP_HEADER = "Webhook-Timestamp"
+ID_HEADER = "Webhook-Id"
+DEFAULT_TOLERANCE_SECONDS = 300
+
+
+class WebhookVerificationError(Exception):
+    pass
+
+
+def header(headers: Mapping[str, str], name: str) -> str | None:
+    lowered = name.lower()
+    for key, value in headers.items():
+        if key.lower() == lowered:
+            return value
+    return None
+
+
+def parse_signature(raw: str) -> tuple[int, list[str]]:
+    timestamp: int | None = None
+    digests: list[str] = []
+    for part in raw.split(","):
+        key, _, value = part.strip().partition("=")
+        if key == "t" and timestamp is None:
+            try:
+                timestamp = int(value)
+            except ValueError as exc:
+                raise WebhookVerificationError("Signature timestamp is not an integer.") from exc
+        elif key == "v1":
+            digests.append(value)
+    if timestamp is None or not digests:
+        raise WebhookVerificationError("Signature header is missing a `t` or `v1` component.")
+    return timestamp, digests
+
+
+def expected_digest(payload: bytes, secret: str, timestamp: int) -> str:
+    signed = f"{timestamp}.".encode() + payload
+    return hmac.new(secret.encode(), signed, hashlib.sha256).hexdigest()
+
+
+def verify(
+    payload: bytes,
+    headers: Mapping[str, str],
+    secret: str | Sequence[str],
+    *,
+    tolerance_seconds: int = DEFAULT_TOLERANCE_SECONDS,
+    now: float | None = None,
+) -> dict[str, Any]:
+    """Verify a ZelfAI webhook and return its decoded payload as a dict.
+
+    Prefer `parse`, which returns the same thing as a typed WebhookEvent.
+
+    `payload` must be the exact bytes received. Re-serialising the JSON changes
+    the bytes and the signature will not match.
+
+    A rotation switches at once: the API signs the next delivery with the new
+    secret only and rejects the old one immediately. A sequence of secrets is
+    accepted, so both can be held during a rollout.
+    """
+    if isinstance(payload, str):
+        raise TypeError("payload must be the raw request bytes, not a decoded string.")
+
+    raw = header(headers, SIGNATURE_HEADER)
+    if not raw:
+        raise WebhookVerificationError(f"Missing {SIGNATURE_HEADER} header.")
+    timestamp, digests = parse_signature(raw)
+
+    if tolerance_seconds > 0:
+        age = abs((time.time() if now is None else now) - timestamp)
+        if age > tolerance_seconds:
+            raise WebhookVerificationError(
+                f"Webhook timestamp is {int(age)}s away from now, outside the "
+                f"{tolerance_seconds}s tolerance. Treating it as a replay."
+            )
+
+    secrets = [secret] if isinstance(secret, str) else list(secret)
+    if not secrets:
+        raise ValueError("At least one signing secret is required.")
+
+    matched = False
+    for candidate in secrets:
+        want = expected_digest(payload, candidate, timestamp)
+        for got in digests:
+            # compare_digest keeps the comparison constant-time, so a wrong
+            # signature cannot be recovered byte by byte from response timing.
+            if hmac.compare_digest(want, got):
+                matched = True
+    if not matched:
+        raise WebhookVerificationError("No signature matched the supplied secret(s).")
+
+    try:
+        body = json.loads(payload)
+    except ValueError as exc:
+        raise WebhookVerificationError("Webhook body is not valid JSON.") from exc
+    if not isinstance(body, dict):
+        raise WebhookVerificationError("Webhook body is not a JSON object.")
+    return body
+
+
+class WebhookEvent:
+    """A delivery whose signature has already been checked.
+
+    Wraps the parsed `WebhookPush` payload and keeps the raw dict, so a field
+    the API adds before the SDK knows about it is still reachable.
+    """
+
+    def __init__(self, raw: dict[str, Any]) -> None:
+        self.raw = raw
+        self.payload = WebhookPush.model_validate(raw)
+
+    @property
+    def id(self) -> str:
+        return self.payload.id
+
+    @property
+    def type(self) -> str:
+        """The wire value, which may be newer than this SDK's EventType."""
+        return self.payload.type
+
+    @property
+    def event_type(self) -> EventType | None:
+        """The declared event type, or None for one the SDK predates."""
+        return EventType(self.type) if EventType.known(self.type) else None
+
+    @property
+    def subscription_id(self) -> str:
+        return self.payload.subscription_id
+
+    @property
+    def livemode(self) -> bool:
+        return bool(self.payload.livemode)
+
+    @property
+    def delivered_at(self) -> datetime:
+        return datetime.fromtimestamp(self.payload.delivered_at, tz=timezone.utc)
+
+    @property
+    def delivery_mode(self) -> str:
+        return str(self.payload.delivery_mode)
+
+    @property
+    def files(self) -> list[WebhookFile]:
+        """Downloadable snapshot files. Populated in `manifest` mode only."""
+        return list(getattr(self.payload.data, "files", None) or [])
+
+    @property
+    def items(self) -> list[dict[str, Any]]:
+        """Rows carried in the body. Populated in `inline` mode only."""
+        return list(getattr(self.payload.data, "items", None) or [])
+
+    @property
+    def statistics(self) -> Any:
+        return getattr(self.payload.data, "statistics", None)
+
+    @property
+    def item_count(self) -> int:
+        return int(getattr(self.payload.data, "item_count", 0) or 0)
+
+    def __repr__(self) -> str:
+        return f"<WebhookEvent {self.type} id={self.id} items={self.item_count}>"
+
+    def rows(
+        self,
+        *,
+        client: httpx.Client | None = None,
+        verify_checksum: bool = True,
+        timeout: float = 300.0,
+    ) -> Iterator[dict[str, Any]]:
+        """Download the manifest files and yield one decoded row per line.
+
+        Each `download_url` is signed and expires, so fetch soon after
+        delivery. With `verify_checksum` the published SHA-256 is recomputed
+        over the body, and a mismatch or a missing digest raises before any
+        row is yielded.
+        """
+        owned = client is None
+        http = client or httpx.Client(timeout=timeout)
+        try:
+            for handle in self.files:
+                response = http.get(str(handle.download_url))
+                response.raise_for_status()
+                body = response.content
+                if verify_checksum:
+                    published = str(handle.sha256 or "")
+                    if not published:
+                        raise WebhookVerificationError(
+                            "The manifest published no sha256 for "
+                            f"{handle.download_url}, so the file cannot be "
+                            "verified. Pass verify_checksum=False to read it "
+                            "unchecked."
+                        )
+                    digest = hashlib.sha256(body).hexdigest()
+                    if not hmac.compare_digest(digest, published):
+                        raise WebhookVerificationError(
+                            f"Downloaded file digest {digest} does not match the "
+                            f"published {published}."
+                        )
+                for line in body.splitlines():
+                    if line.strip():
+                        yield json.loads(line)
+        finally:
+            if owned:
+                http.close()
+
+
+def parse(
+    payload: bytes,
+    headers: Mapping[str, str],
+    secret: str | Sequence[str],
+    *,
+    tolerance_seconds: int = DEFAULT_TOLERANCE_SECONDS,
+    now: float | None = None,
+) -> WebhookEvent:
+    """Verify a delivery and return it as a typed WebhookEvent."""
+    return WebhookEvent(
+        verify(payload, headers, secret, tolerance_seconds=tolerance_seconds, now=now)
+    )
+
+
+Listener = Callable[[WebhookEvent], Any]
+
+
+class WebhookHandler:
+    """Verify a delivery once, then route it to the listener for its type.
+
+    Framework agnostic: hand it the raw body and the request headers from
+    whatever server is in front of it.
+
+        handler = WebhookHandler(secret)
+
+        @handler.on(CONTENT_SNAPSHOT)
+        def on_snapshot(event):
+            for row in event.rows():
+                ...
+    """
+
+    def __init__(
+        self,
+        secret: str | Sequence[str],
+        *,
+        tolerance_seconds: int = DEFAULT_TOLERANCE_SECONDS,
+    ) -> None:
+        self.secret = secret
+        self.tolerance_seconds = tolerance_seconds
+        self.listeners: dict[str, list[Listener]] = {}
+        self.fallback: Listener | None = None
+
+    def on(self, *event_types: EventType | str) -> Callable[[Listener], Listener]:
+        """Register a listener for one or more event types."""
+        if not event_types:
+            raise ValueError("Pass at least one event type to listen for.")
+        names = [str(name) for name in event_types]
+        unknown = [name for name in names if not EventType.known(name)]
+        if unknown:
+            raise ValueError(
+                f"Unknown event type(s) {unknown}. "
+                f"Known types: {[e.value for e in EventType]}."
+            )
+
+        def register(listener: Listener) -> Listener:
+            for name in names:
+                self.listeners.setdefault(name, []).append(listener)
+            return listener
+
+        return register
+
+    def on_any(self, listener: Listener) -> Listener:
+        """Register the listener used when no type specific one matched."""
+        self.fallback = listener
+        return listener
+
+    def handle(
+        self,
+        payload: bytes,
+        headers: Mapping[str, str],
+        *,
+        now: float | None = None,
+    ) -> list[Any]:
+        """Verify, then call every listener registered for the event type.
+
+        Raises WebhookVerificationError before any listener runs if the
+        signature, timestamp, or body does not check out.
+        """
+        event = parse(
+            payload,
+            headers,
+            self.secret,
+            tolerance_seconds=self.tolerance_seconds,
+            now=now,
+        )
+        listeners = self.listeners.get(event.type)
+        if not listeners:
+            return [self.fallback(event)] if self.fallback else []
+        return [listener(event) for listener in listeners]

@@ -1,0 +1,352 @@
+use std::collections::HashMap;
+
+use hmac::{Hmac, Mac};
+use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
+
+type HmacSha256 = Hmac<Sha256>;
+
+pub const SIGNATURE_HEADER: &str = "Webhook-Signature";
+pub const TIMESTAMP_HEADER: &str = "Webhook-Timestamp";
+pub const ID_HEADER: &str = "Webhook-Id";
+
+/// How far a delivery's timestamp may sit from now before it reads as a replay.
+pub const DEFAULT_TOLERANCE_SECONDS: i64 = 300;
+
+/// Every way verifying a delivery can fail. Answer any of these with a 400 and
+/// never process the body.
+#[derive(Debug, thiserror::Error)]
+pub enum VerificationError {
+    #[error("webhooks: missing or malformed signature header")]
+    MalformedSignature,
+
+    #[error("webhooks: timestamp is {age}s away from now, outside the {tolerance}s tolerance, so this is a replay")]
+    Replay { age: i64, tolerance: i64 },
+
+    #[error("webhooks: no signature matched the supplied secrets")]
+    NoMatch,
+
+    #[error("webhooks: body is not a JSON object: {0}")]
+    BadBody(#[from] serde_json::Error),
+
+    #[error("webhooks: at least one signing secret is required")]
+    NoSecret,
+
+    #[error("webhooks: downloading the snapshot failed: {0}")]
+    Download(String),
+
+    #[error("webhooks: downloaded file digest {got} does not match the published {want}")]
+    ChecksumMismatch { got: String, want: String },
+
+    #[error(
+        "webhooks: the manifest published no sha256 for {url}, so the file cannot be \
+         verified; pass skip_checksum to read it unchecked"
+    )]
+    ChecksumMissing { url: String },
+}
+
+/// Tunes verification. `Options::default()` uses the default tolerance and the
+/// current wall clock.
+#[derive(Debug, Clone, Copy)]
+pub struct Options {
+    pub tolerance_seconds: i64,
+    /// Unix seconds to treat as "now". Leave `None` outside tests.
+    pub now: Option<i64>,
+}
+
+impl Default for Options {
+    fn default() -> Self {
+        Self { tolerance_seconds: DEFAULT_TOLERANCE_SECONDS, now: None }
+    }
+}
+
+fn parse_signature(raw: &str) -> Result<(i64, Vec<&str>), VerificationError> {
+    let mut timestamp: Option<i64> = None;
+    let mut digests = Vec::new();
+    for part in raw.split(',') {
+        let Some((key, value)) = part.trim().split_once('=') else {
+            continue;
+        };
+        match key {
+            "t" if timestamp.is_none() => {
+                timestamp = Some(value.parse().map_err(|_| VerificationError::MalformedSignature)?);
+            }
+            "v1" => digests.push(value),
+            _ => {}
+        }
+    }
+    match timestamp {
+        Some(t) if !digests.is_empty() => Ok((t, digests)),
+        _ => Err(VerificationError::MalformedSignature),
+    }
+}
+
+fn now_seconds(options: &Options) -> i64 {
+    options.now.unwrap_or_else(|| {
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_secs() as i64)
+            .unwrap_or_default()
+    })
+}
+
+/// Verify a delivery and return the decoded payload.
+///
+/// `payload` must be the exact bytes received: re-encoding the JSON changes the
+/// bytes and the signature will not match.
+///
+/// A rotation switches at once: the API signs the next delivery with the new
+/// secret only and rejects the old one immediately. A list of secrets is
+/// accepted, so both can be held during a rollout.
+///
+/// The MAC comparison runs through `Mac::verify_slice`, which is constant time,
+/// so a wrong signature cannot be recovered from response timing.
+pub fn verify(
+    payload: &[u8],
+    signature: &str,
+    secrets: &[impl AsRef<str>],
+    options: Options,
+) -> Result<serde_json::Map<String, serde_json::Value>, VerificationError> {
+    if secrets.is_empty() {
+        return Err(VerificationError::NoSecret);
+    }
+    let (timestamp, digests) = parse_signature(signature)?;
+
+    if options.tolerance_seconds > 0 {
+        let age = (now_seconds(&options) - timestamp).abs();
+        if age > options.tolerance_seconds {
+            return Err(VerificationError::Replay { age, tolerance: options.tolerance_seconds });
+        }
+    }
+
+    let mut signed = format!("{timestamp}.").into_bytes();
+    signed.extend_from_slice(payload);
+
+    let mut matched = false;
+    for secret in secrets {
+        for digest in &digests {
+            let Ok(raw) = hex::decode(digest) else { continue };
+            let mut mac = HmacSha256::new_from_slice(secret.as_ref().as_bytes())
+                .expect("HMAC accepts a key of any length");
+            mac.update(&signed);
+            if mac.verify_slice(&raw).is_ok() {
+                matched = true;
+            }
+        }
+    }
+    if !matched {
+        return Err(VerificationError::NoMatch);
+    }
+
+    let value: serde_json::Value = serde_json::from_slice(payload)?;
+    value
+        .as_object()
+        .cloned()
+        .ok_or_else(|| serde_json::from_str::<serde_json::Map<String, serde_json::Value>>("0").unwrap_err().into())
+}
+
+/// One downloadable snapshot file in a manifest delivery.
+#[derive(Debug, Clone, Deserialize)]
+pub struct File {
+    #[serde(default)]
+    pub format: String,
+    #[serde(default)]
+    pub expires_at: i64,
+    #[serde(default)]
+    pub sha256: String,
+    #[serde(default)]
+    pub size_bytes: i64,
+    #[serde(default)]
+    pub item_count: i64,
+    pub download_url: String,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+struct Data {
+    #[serde(default)]
+    item_count: i64,
+    #[serde(default)]
+    files: Vec<File>,
+    #[serde(default)]
+    items: Vec<serde_json::Value>,
+    #[serde(default)]
+    statistics: Option<serde_json::Value>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+struct Envelope {
+    id: String,
+    #[serde(rename = "type")]
+    event_type: String,
+    #[serde(default)]
+    subscription_id: String,
+    #[serde(default)]
+    delivered_at: i64,
+    #[serde(default)]
+    livemode: bool,
+    #[serde(default)]
+    resource: Option<String>,
+    #[serde(default)]
+    delivery_mode: String,
+    #[serde(default)]
+    data: Data,
+}
+
+/// A delivery whose signature has already been checked.
+#[derive(Debug, Clone)]
+pub struct Event {
+    /// The payload exactly as it arrived, including fields this SDK predates.
+    pub raw: serde_json::Map<String, serde_json::Value>,
+    pub id: String,
+    /// The wire value, which may be newer than this SDK's [`EventType`].
+    pub event_type: String,
+    pub subscription_id: String,
+    pub delivered_at: i64,
+    pub livemode: bool,
+    pub resource: Option<String>,
+    pub delivery_mode: String,
+    pub item_count: i64,
+    pub files: Vec<File>,
+    pub items: Vec<serde_json::Value>,
+    pub statistics: Option<serde_json::Value>,
+}
+
+impl Event {
+    /// The declared event type, or `None` for one the SDK predates.
+    pub fn kind(&self) -> Option<EventType> {
+        EventType::from_wire(&self.event_type)
+    }
+
+    /// Download the manifest files and return every decoded row.
+    ///
+    /// Each `download_url` is signed and expires, so fetch soon after delivery.
+    /// Unless `skip_checksum` is set, the published SHA-256 is recomputed over
+    /// the body, and a mismatch or a missing digest returns before any row.
+    pub async fn rows(
+        &self,
+        client: &reqwest::Client,
+        skip_checksum: bool,
+    ) -> Result<Vec<serde_json::Value>, VerificationError> {
+        let mut out = Vec::new();
+        for handle in &self.files {
+            let response = client
+                .get(&handle.download_url)
+                .send()
+                .await
+                .map_err(|e| VerificationError::Download(e.to_string()))?;
+            let status = response.status();
+            let body = response
+                .bytes()
+                .await
+                .map_err(|e| VerificationError::Download(e.to_string()))?;
+            if status.is_client_error() || status.is_server_error() {
+                return Err(VerificationError::Download(format!("HTTP {}", status.as_u16())));
+            }
+            if !skip_checksum {
+                if handle.sha256.is_empty() {
+                    return Err(VerificationError::ChecksumMissing {
+                        url: handle.download_url.clone(),
+                    });
+                }
+                let got = hex::encode(Sha256::digest(&body));
+                if got != handle.sha256 {
+                    return Err(VerificationError::ChecksumMismatch {
+                        got,
+                        want: handle.sha256.clone(),
+                    });
+                }
+            }
+            for line in body.split(|byte| *byte == b'\n') {
+                if line.iter().all(u8::is_ascii_whitespace) {
+                    continue;
+                }
+                out.push(serde_json::from_slice(line)?);
+            }
+        }
+        Ok(out)
+    }
+}
+
+/// Verify a delivery and return it as a typed [`Event`].
+pub fn parse(
+    payload: &[u8],
+    signature: &str,
+    secrets: &[impl AsRef<str>],
+    options: Options,
+) -> Result<Event, VerificationError> {
+    let raw = verify(payload, signature, secrets, options)?;
+    let envelope: Envelope = serde_json::from_slice(payload)?;
+    Ok(Event {
+        raw,
+        id: envelope.id,
+        event_type: envelope.event_type,
+        subscription_id: envelope.subscription_id,
+        delivered_at: envelope.delivered_at,
+        livemode: envelope.livemode,
+        resource: envelope.resource,
+        delivery_mode: envelope.delivery_mode,
+        item_count: envelope.data.item_count,
+        files: envelope.data.files,
+        items: envelope.data.items,
+        statistics: envelope.data.statistics,
+    })
+}
+
+type Listener = Box<dyn Fn(&Event) -> Result<(), VerificationError> + Send + Sync>;
+
+/// Verify a delivery once, then route it to the listener for its type.
+///
+/// Framework agnostic: hand it the raw body and the signature header from
+/// whatever server is in front of it.
+pub struct Handler {
+    secrets: Vec<String>,
+    options: Options,
+    listeners: HashMap<EventType, Vec<Listener>>,
+    fallback: Option<Listener>,
+}
+
+impl Handler {
+    /// Build a handler for the given signing secrets. A rotation switches at
+    /// once, so hold both only for as long as the rollout takes.
+    pub fn new(secrets: Vec<String>, options: Options) -> Self {
+        Self { secrets, options, listeners: HashMap::new(), fallback: None }
+    }
+
+    /// Register a listener for one event type.
+    pub fn on<F>(mut self, event_type: EventType, listener: F) -> Self
+    where
+        F: Fn(&Event) -> Result<(), VerificationError> + Send + Sync + 'static,
+    {
+        self.listeners.entry(event_type).or_default().push(Box::new(listener));
+        self
+    }
+
+    /// Register the listener used when no type specific one matched.
+    pub fn on_any<F>(mut self, listener: F) -> Self
+    where
+        F: Fn(&Event) -> Result<(), VerificationError> + Send + Sync + 'static,
+    {
+        self.fallback = Some(Box::new(listener));
+        self
+    }
+
+    /// Verify, then call every listener registered for the event type. Returns
+    /// before any listener runs if the delivery does not check out.
+    pub fn handle(&self, payload: &[u8], signature: &str) -> Result<Event, VerificationError> {
+        let event = parse(payload, signature, &self.secrets, self.options)?;
+        let listeners = event.kind().and_then(|kind| self.listeners.get(&kind));
+        match listeners {
+            Some(found) if !found.is_empty() => {
+                for listener in found {
+                    listener(&event)?;
+                }
+            }
+            _ => {
+                if let Some(fallback) = &self.fallback {
+                    fallback(&event)?;
+                }
+            }
+        }
+        Ok(event)
+    }
+}
