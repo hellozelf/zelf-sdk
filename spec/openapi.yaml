@@ -2554,7 +2554,7 @@ paths:
             - -net_promoter_score
           uniqueItems: true
         description: |-
-          Sort the results. Any of: earned_media_value_cents, engagement_rate, like_count, view_count, share_count, net_promoter_score, total_engagement, posted_at, comment_count. A bare key sorts descending; prefix with `-` to sort ascending.
+          Sort the results. Any of: posted_at, view_count, like_count, comment_count, share_count, engagement_rate, total_engagement, earned_media_value_cents, net_promoter_score. A bare key sorts descending; prefix with `-` to sort ascending.
 
           **Sort direction is inverted:** `order_by=field` sorts descending and `order_by=-field` sorts ascending. Comma-separate to sort by multiple fields.
         explode: false
@@ -3155,7 +3155,7 @@ paths:
             - -net_promoter_score
           uniqueItems: true
         description: |-
-          Sort the results. Any of: earned_media_value_cents, engagement_rate, like_count, view_count, share_count, net_promoter_score, total_engagement, posted_at, comment_count. A bare key sorts descending; prefix with `-` to sort ascending.
+          Sort the results. Any of: posted_at, view_count, like_count, comment_count, share_count, engagement_rate, total_engagement, earned_media_value_cents, net_promoter_score. A bare key sorts descending; prefix with `-` to sort ascending.
 
           **Sort direction is inverted:** `order_by=field` sorts descending and `order_by=-field` sorts ascending. Comma-separate to sort by multiple fields.
         explode: false
@@ -9137,11 +9137,15 @@ components:
           readOnly: true
           description: Unique identifier of the creator.
         username:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The creator's username or handle on the platform, without the
             `@`.
         name:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The creator's display name on the platform.
         email:
           type:
@@ -9165,7 +9169,9 @@ components:
           - 'null'
           description: Number of active content items attributed to the creator.
         profile_bio:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The creator's profile bio as it appears on the platform.
         platform_url:
           type: string
