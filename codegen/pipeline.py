@@ -177,9 +177,10 @@ def cmd_changelog() -> int:
     before, after = locked(), current()
     version = release.spec_version()
 
-    if before is None:
-        # Nothing has been released, so there is no diff to take. Say what the
-        # first release contains instead.
+    if before is None or not released_before():
+        # A diff against nothing is meaningless, so the opening entry lists the
+        # whole surface instead. The lock may already exist without a release
+        # having happened, which is why this asks the changelog and not the lock.
         entry = first_release(version, after)
         if f"\n## {version}\n" not in "\n" + CHANGELOG.read_text():
             _prepend(entry)
@@ -217,27 +218,64 @@ def _prepend(entry: str) -> None:
     CHANGELOG.write_text(f"{head}{entry}\n{tail}")
 
 
+def released_before() -> bool:
+    """Whether any version has shipped, which the changelog is the record of."""
+    if not CHANGELOG.exists():
+        return False
+    return any(line.startswith("## ") for line in CHANGELOG.read_text().splitlines())
+
+
 def first_release(version: str, state: dict) -> str:
-    """The opening entry, when there is no previous shape to compare against."""
+    """The opening entry: the whole surface, since there is nothing to diff."""
     names = {"js": "TypeScript", "csharp": "C#"}
-    clients = ", ".join(names.get(n, n.title()) for n in languages.ALL)
-    return (
-        f"## {version}\n\n"
-        f"First release. {len(languages.ALL)} clients generated from the "
+    clients = ", ".join(names.get(n, n.title()) for n in languages.RELEASED)
+
+    by_resource: dict[str, list[str]] = {}
+    for op in state["operations"]:
+        resource, _, method = op["id"].partition(".")
+        by_resource.setdefault(resource, []).append(method)
+
+    lines = [
+        f"## {version}",
+        "",
+        f"First release. {len(languages.RELEASED)} clients generated from the "
         f"published OpenAPI document, covering all "
-        f"{len(state['operations'])} operations.\n\n"
-        f"- {clients}\n"
-        f"- The same resources and method names in every language\n"
-        f"- Cursor-free pagination with three bounds: everything, N pages, "
-        f"or N items\n"
-        f"- Typed errors carrying the API's error code and `log_id`\n"
-        f"- Retries honouring `Retry-After`; writes are never retried, "
-        f"because the API publishes no idempotency key\n"
-        f"- Webhook verification, typed events, a routing handler, and "
-        f"manifest downloads checked against the published SHA-256\n"
-        f"- `ZELF_API_KEY` and `ZELF_BASE_URL` are read from the "
-        f"environment\n"
-    )
+        f"{len(state['operations'])} operations.",
+        "",
+        f"Clients: {clients}.",
+        "",
+        "### Operations",
+        "",
+    ]
+    for resource in sorted(by_resource):
+        methods = ", ".join(f"`{m}`" for m in sorted(by_resource[resource]))
+        lines.append(f"- **{resource}**: {methods}")
+
+    lines += ["", "### Webhook events", ""]
+    for hook in sorted(state["webhooks"], key=lambda h: h["event_type"]):
+        lines.append(f"- `{hook['event_type']}`")
+
+    lines += [
+        "",
+        "### Types",
+        "",
+        f"- {len(state['models'])} models and {len(state['enums'])} enums, "
+        f"generated from the document",
+        f"- {len(state['error_codes'])} error codes, each with its own exception type",
+        "",
+        "### Client behaviour",
+        "",
+        "- The same resources and method names in every language",
+        "- Cursor-free pagination with three bounds: everything, N pages, or N items",
+        "- Typed errors carrying the API's error code and `log_id`",
+        "- Retries honouring `Retry-After`; writes are never retried, "
+        "because the API publishes no idempotency key",
+        "- Webhook verification, typed events, a routing handler, and "
+        "manifest downloads checked against the published SHA-256",
+        "- `ZELF_API_KEY` and `ZELF_BASE_URL` are read from the environment",
+        "",
+    ]
+    return "\n".join(lines)
 
 
 def cmd_matrix() -> int:
