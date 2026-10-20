@@ -1006,8 +1006,8 @@ pub struct ContentFilterInputRequest {
     pub posted_within_hours: Option<i64>,
     /// Sort the selected content. Any of: posted_at, view_count, like_count, comment_count,
     /// share_count, engagement_rate, total_engagement, earned_media_value_cents,
-    /// net_promoter_score. A bare key sorts descending; prefix with `-` to sort ascending.
-    /// Determines which content is retained when the set is capped. Defaults to
+    /// net_promoter_score, relevance_score. A bare key sorts descending; prefix with `-` to
+    /// sort ascending. Determines which content is retained when the set is capped. Defaults to
     /// `earned_media_value_cents` descending.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub order_by: Option<Vec<String>>,
@@ -1062,9 +1062,11 @@ pub struct Creator {
     /// Unique identifier of the creator.
     pub id: String,
     /// The creator's username or handle on the platform, without the `@`.
-    pub username: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
     /// The creator's display name on the platform.
-    pub name: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     /// The creator's email address when known by the platform; empty otherwise.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
@@ -1078,7 +1080,8 @@ pub struct Creator {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub active_content_count: Option<i64>,
     /// The creator's profile bio as it appears on the platform.
-    pub profile_bio: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub profile_bio: Option<String>,
     /// Direct URL to the creator's profile on the platform.
     pub platform_url: String,
     /// URL of the creator's profile picture.

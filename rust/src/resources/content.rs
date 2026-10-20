@@ -143,11 +143,11 @@ pub struct ContentListParams {
     /// Brand net promoter score for the content. Requires brand_id. (Inclusive Lower Bound)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub net_promoter_score_min: Option<i64>,
-    /// Sort the results. Any of: earned_media_value_cents, engagement_rate, like_count,
-    /// view_count, share_count, net_promoter_score, total_engagement, posted_at, comment_count.
-    /// A bare key sorts descending; prefix with `-` to sort ascending. **Sort direction is
-    /// inverted:*; `order_by=field` sorts descending and `order_by=-field` sorts ascending.
-    /// Comma-separate to sort by multiple fields.
+    /// Sort the results. Any of: posted_at, view_count, like_count, comment_count, share_count,
+    /// engagement_rate, total_engagement, earned_media_value_cents, net_promoter_score,
+    /// relevance_score. A bare key sorts descending; prefix with `-` to sort ascending. **Sort
+    /// direction is inverted:*; `order_by=field` sorts descending and `order_by=-field` sorts
+    /// ascending. Comma-separate to sort by multiple fields.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub order_by: Option<Vec<String>>,
     /// Page number (1-based). Omit for the first page.
@@ -326,11 +326,11 @@ pub struct ContentStatisticsParams {
     /// Brand net promoter score for the content. Requires brand_id. (Inclusive Lower Bound)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub net_promoter_score_min: Option<i64>,
-    /// Sort the results. Any of: earned_media_value_cents, engagement_rate, like_count,
-    /// view_count, share_count, net_promoter_score, total_engagement, posted_at, comment_count.
-    /// A bare key sorts descending; prefix with `-` to sort ascending. **Sort direction is
-    /// inverted:*; `order_by=field` sorts descending and `order_by=-field` sorts ascending.
-    /// Comma-separate to sort by multiple fields.
+    /// Sort the results. Any of: posted_at, view_count, like_count, comment_count, share_count,
+    /// engagement_rate, total_engagement, earned_media_value_cents, net_promoter_score,
+    /// relevance_score. A bare key sorts descending; prefix with `-` to sort ascending. **Sort
+    /// direction is inverted:*; `order_by=field` sorts descending and `order_by=-field` sorts
+    /// ascending. Comma-separate to sort by multiple fields.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub order_by: Option<Vec<String>>,
     /// Platforms to include, comma-separated.

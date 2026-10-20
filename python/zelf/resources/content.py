@@ -32,6 +32,8 @@ OrderBy = Literal[
     "-earned_media_value_cents",
     "net_promoter_score",
     "-net_promoter_score",
+    "relevance_score",
+    "-relevance_score",
 ]
 
 
