@@ -1,0 +1,9 @@
+package: openapi
+output: internal/openapi/openapi.gen.go
+generate:
+  # Types only; the transport builds its own requests.
+  models: true
+  client: false
+output-options:
+  nullable-type: true
+  skip-prune: true
