@@ -1,0 +1,93 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+env:
+  MODULE: github.com/hellozelf/zelf-sdk/go
+
+jobs:
+  python:
+    name: PyPI
+    if: startsWith(github.event.release.tag_name, 'py/v')
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: astral-sh/setup-uv@v10.3.0
+      - run: uv run pytest tests -q
+      - run: uv build
+      - uses: pypa/gh-action-pypi-publish@v1.14.2
+        with:
+          packages-dir: python/dist
+          skip-existing: true
+
+  js:
+    name: npm
+    if: startsWith(github.event.release.tag_name, 'js/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: js
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+          cache: npm
+          cache-dependency-path: js/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Publish unless npm already has this version
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if npm view "zelf-sdk@$version" version >/dev/null 2>&1; then
+            echo "::notice::zelf-sdk@$version is already on npm, nothing to publish"
+            exit 0
+          fi
+          npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  go:
+    name: Go module proxy
+    if: startsWith(github.event.release.tag_name, 'go/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: go
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version-file: go/go.mod
+      - run: go test ./...
+      - run: go build ./... && go vet ./...
+      - name: Warm the module proxy
+        working-directory: .
+        run: |
+          version="${TAG#go/}"
+          for attempt in 1 2 3 4 5; do
+            if GOPROXY=https://proxy.golang.org go list -m "$MODULE@$version"; then
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "::error::$MODULE@$version did not appear on the proxy"
+          exit 1
+        env:
+          TAG: ${{ github.event.release.tag_name }}
