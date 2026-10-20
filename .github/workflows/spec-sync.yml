@@ -1,7 +1,8 @@
 name: Spec sync
 
 on:
-  pull_request:
+  push:
+    branches: ['spec/**']
     paths:
       - 'spec/openapi.yaml'
 
@@ -21,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.ref_name }}
           # Not GITHUB_TOKEN: a push made with it is attributed to
           # github-actions[bot], which this repo's fork pull request approval
           # policy counts as a first-time contributor, so every run the push
@@ -62,7 +63,7 @@ jobs:
       - name: Commit the regenerated tree
         env:
           KIND: ${{ steps.classify.outputs.kind }}
-          HEAD_REF: ${{ github.head_ref }}
+          BRANCH: ${{ github.ref_name }}
         run: |
           case "$KIND" in
             structural|version-only|docs-only) ;;
@@ -76,24 +77,40 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "chore: regenerate clients for ${KIND} spec change"
-          git push origin "HEAD:${HEAD_REF}"
+          # This commit leaves spec/openapi.yaml alone, so the path filter above
+          # keeps the push from starting this workflow again.
+          git push origin "HEAD:${BRANCH}"
 
-      - name: Label the pull request
+      - name: Open the pull request
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Not GITHUB_TOKEN: GitHub starts no workflow runs for events it
+          # raises itself, so a pull request opened with it would sit with no
+          # checks against it.
+          GH_TOKEN: ${{ secrets.SDK_SYNC_TOKEN }}
           KIND: ${{ steps.classify.outputs.kind }}
-          NUMBER: ${{ github.event.pull_request.number }}
+          BRANCH: ${{ github.ref_name }}
         run: |
-          # The label is created on first use, so the repo needs no setup and a
-          # missing one cannot fail the run after the work is already done.
-          gh label create "spec:${KIND}" --color ededed --force >/dev/null
-          gh pr edit "$NUMBER" --add-label "spec:${KIND}"
+          version=$(grep -m1 '^  version:' spec/openapi.yaml | awk '{print $2}')
 
-      - name: Hand the pull request to CI
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NUMBER: ${{ github.event.pull_request.number }}
-        # The branch is complete now, so taking it out of draft is what starts
-        # the language checks. They skip while it is a draft, which is how the
-        # document-only commit avoids a run it could only fail.
-        run: gh pr ready "$NUMBER"
+          # Created on first use, so the repo needs no setup and a missing label
+          # cannot fail the run after the work is already done.
+          gh label create "spec:${KIND}" --color ededed --force >/dev/null
+
+          open_prs=$(gh pr list --head "$BRANCH" --state open --json number --jq 'length')
+          if [ "$open_prs" != "0" ]; then
+            gh pr edit "$BRANCH" --add-label "spec:${KIND}"
+            echo "::notice::updated the open pull request for $BRANCH"
+            exit 0
+          fi
+
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --label "spec:${KIND}" \
+            --title "feat: update the OpenAPI document to v${version}" \
+            --body "$(printf '%s\n' \
+              "The OpenAPI document moved to \`${version}\`." \
+              "" \
+              "The clients, their versions and the changelog were regenerated before this pull request opened, so one diff carries the document and everything that follows from it." \
+              "" \
+              "Merging publishes every released client at this version.")"
