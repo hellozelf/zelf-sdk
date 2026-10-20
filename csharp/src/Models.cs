@@ -821,14 +821,14 @@ public sealed record ContentStatistics(
 /// </summary>
 public sealed record Creator(
     [property: JsonPropertyName("id")] string Id,
-    [property: JsonPropertyName("username")] string Username,
-    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("username")] string? Username,
+    [property: JsonPropertyName("name")] string? Name,
     [property: JsonPropertyName("email")] string? Email,
     [property: JsonPropertyName("platform")] string Platform,
     [property: JsonPropertyName("platform_handle")] string PlatformHandle,
     [property: JsonPropertyName("follower_count")] long FollowerCount,
     [property: JsonPropertyName("active_content_count")] long? ActiveContentCount,
-    [property: JsonPropertyName("profile_bio")] string ProfileBio,
+    [property: JsonPropertyName("profile_bio")] string? ProfileBio,
     [property: JsonPropertyName("platform_url")] string PlatformUrl,
     [property: JsonPropertyName("profile_picture_url")] string ProfilePictureUrl
 );

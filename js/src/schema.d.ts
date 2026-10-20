@@ -1975,9 +1975,9 @@ export interface components {
       /** @description Unique identifier of the creator. */
       readonly id: string
       /** @description The creator's username or handle on the platform, without the `@`. */
-      username: string
+      username: string | null
       /** @description The creator's display name on the platform. */
-      name: string
+      name: string | null
       /** @description The creator's email address when known by the platform; empty otherwise. */
       email: string | null
       /** @description The platform the creator is on. One of `instagram`, `tiktok`, `youtube`. */
@@ -1989,7 +1989,7 @@ export interface components {
       /** @description Number of active content items attributed to the creator. */
       active_content_count: number | null
       /** @description The creator's profile bio as it appears on the platform. */
-      profile_bio: string
+      profile_bio: string | null
       /** @description Direct URL to the creator's profile on the platform. */
       readonly platform_url: string
       /** @description URL of the creator's profile picture. */
@@ -4531,7 +4531,7 @@ export interface operations {
         /** @description Brand net promoter score for the content. Requires brand_id. (Inclusive Lower Bound) */
         net_promoter_score_min?: number
         /**
-         * @description Sort the results. Any of: earned_media_value_cents, engagement_rate, like_count, view_count, share_count, net_promoter_score, total_engagement, posted_at, comment_count. A bare key sorts descending; prefix with `-` to sort ascending.
+         * @description Sort the results. Any of: posted_at, view_count, like_count, comment_count, share_count, engagement_rate, total_engagement, earned_media_value_cents, net_promoter_score. A bare key sorts descending; prefix with `-` to sort ascending.
          *
          *     **Sort direction is inverted:** `order_by=field` sorts descending and `order_by=-field` sorts ascending. Comma-separate to sort by multiple fields.
          */
@@ -4779,7 +4779,7 @@ export interface operations {
         /** @description Brand net promoter score for the content. Requires brand_id. (Inclusive Lower Bound) */
         net_promoter_score_min?: number
         /**
-         * @description Sort the results. Any of: earned_media_value_cents, engagement_rate, like_count, view_count, share_count, net_promoter_score, total_engagement, posted_at, comment_count. A bare key sorts descending; prefix with `-` to sort ascending.
+         * @description Sort the results. Any of: posted_at, view_count, like_count, comment_count, share_count, engagement_rate, total_engagement, earned_media_value_cents, net_promoter_score. A bare key sorts descending; prefix with `-` to sort ascending.
          *
          *     **Sort direction is inverted:** `order_by=field` sorts descending and `order_by=-field` sorts ascending. Comma-separate to sort by multiple fields.
          */

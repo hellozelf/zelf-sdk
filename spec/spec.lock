@@ -2012,7 +2012,7 @@
           },
           {
             "name": "name",
-            "nullable": false,
+            "nullable": true,
             "read_only": false,
             "required": true,
             "type": {
@@ -2048,7 +2048,7 @@
           },
           {
             "name": "profile_bio",
-            "nullable": false,
+            "nullable": true,
             "read_only": false,
             "required": true,
             "type": {
@@ -2066,7 +2066,7 @@
           },
           {
             "name": "username",
-            "nullable": false,
+            "nullable": true,
             "read_only": false,
             "required": true,
             "type": {

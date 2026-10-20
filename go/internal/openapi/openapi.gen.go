@@ -1004,7 +1004,7 @@ type Creator struct {
 	Id string `json:"id"`
 
 	// Name The creator's display name on the platform.
-	Name string `json:"name"`
+	Name nullable.Nullable[string] `json:"name"`
 
 	// Platform The platform the creator is on. One of `instagram`, `tiktok`, `youtube`.
 	Platform string `json:"platform"`
@@ -1016,13 +1016,13 @@ type Creator struct {
 	PlatformUrl string `json:"platform_url"`
 
 	// ProfileBio The creator's profile bio as it appears on the platform.
-	ProfileBio string `json:"profile_bio"`
+	ProfileBio nullable.Nullable[string] `json:"profile_bio"`
 
 	// ProfilePictureUrl URL of the creator's profile picture.
 	ProfilePictureUrl string `json:"profile_picture_url"`
 
 	// Username The creator's username or handle on the platform, without the `@`.
-	Username string `json:"username"`
+	Username nullable.Nullable[string] `json:"username"`
 }
 
 // CreatorSync One creator sync job.
@@ -2225,7 +2225,7 @@ type ContentListParams struct {
 	// NetPromoterScoreMin Brand net promoter score for the content. Requires brand_id. (Inclusive Lower Bound)
 	NetPromoterScoreMin *int `form:"net_promoter_score_min,omitempty" json:"net_promoter_score_min,omitempty"`
 
-	// OrderBy Sort the results. Any of: earned_media_value_cents, engagement_rate, like_count, view_count, share_count, net_promoter_score, total_engagement, posted_at, comment_count. A bare key sorts descending; prefix with `-` to sort ascending.
+	// OrderBy Sort the results. Any of: posted_at, view_count, like_count, comment_count, share_count, engagement_rate, total_engagement, earned_media_value_cents, net_promoter_score. A bare key sorts descending; prefix with `-` to sort ascending.
 	//
 	// **Sort direction is inverted:** `order_by=field` sorts descending and `order_by=-field` sorts ascending. Comma-separate to sort by multiple fields.
 	OrderBy *[]ContentListParamsOrderBy `form:"order_by,omitempty" json:"order_by,omitempty"`
@@ -2414,7 +2414,7 @@ type ContentStatisticsParams struct {
 	// NetPromoterScoreMin Brand net promoter score for the content. Requires brand_id. (Inclusive Lower Bound)
 	NetPromoterScoreMin *int `form:"net_promoter_score_min,omitempty" json:"net_promoter_score_min,omitempty"`
 
-	// OrderBy Sort the results. Any of: earned_media_value_cents, engagement_rate, like_count, view_count, share_count, net_promoter_score, total_engagement, posted_at, comment_count. A bare key sorts descending; prefix with `-` to sort ascending.
+	// OrderBy Sort the results. Any of: posted_at, view_count, like_count, comment_count, share_count, engagement_rate, total_engagement, earned_media_value_cents, net_promoter_score. A bare key sorts descending; prefix with `-` to sort ascending.
 	//
 	// **Sort direction is inverted:** `order_by=field` sorts descending and `order_by=-field` sorts ascending. Comma-separate to sort by multiple fields.
 	OrderBy *[]ContentStatisticsParamsOrderBy `form:"order_by,omitempty" json:"order_by,omitempty"`
