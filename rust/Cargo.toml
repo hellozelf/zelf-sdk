@@ -1,0 +1,40 @@
+[package]
+name = "zelf-sdk"
+version = "1.0.0"
+edition = "2021"
+# resolver 3 keeps the lockfile buildable on the MSRV.
+resolver = "3"
+rust-version = "1.88"
+description = "Rust client for the ZelfAI APIs"
+license = "Apache-2.0"
+repository = "https://github.com/hellozelf/zelf-sdk"
+homepage = "https://github.com/hellozelf/zelf-sdk"
+documentation = "https://docs.rs/zelf-sdk"
+readme = "README.md"
+keywords = ["zelf", "api", "sdk", "social", "analytics"]
+categories = ["api-bindings"]
+
+# Published as `zelf-sdk`; imports as `zelf`.
+[lib]
+name = "zelf"
+path = "src/lib.rs"
+
+[dependencies]
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tokio = { version = "1", features = ["time"] }
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+rand = "0.9"
+urlencoding = "2"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+wiremock = "0.6"
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }

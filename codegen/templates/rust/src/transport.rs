@@ -40,7 +40,7 @@ pub struct Envelope<T> {
 }
 
 /// Builds a [`crate::Client`].
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ClientBuilder {
     api_key: Option<String>,
     base_url: String,
@@ -49,6 +49,21 @@ pub struct ClientBuilder {
     retry_writes: bool,
     headers: HashMap<String, String>,
     http_client: Option<reqwest::Client>,
+}
+
+// The key must never reach a log line, so Debug prints a placeholder. The
+// transport does the same; the builder holds the key just as long.
+impl std::fmt::Debug for ClientBuilder {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ClientBuilder")
+            .field("api_key", &self.api_key.as_ref().map(|_| "***"))
+            .field("base_url", &self.base_url)
+            .field("timeout", &self.timeout)
+            .field("max_retries", &self.max_retries)
+            .field("retry_writes", &self.retry_writes)
+            .field("headers", &self.headers)
+            .finish()
+    }
 }
 
 impl Default for ClientBuilder {
