@@ -31,6 +31,8 @@ export type OrderBy =
   | '-earned_media_value_cents'
   | 'net_promoter_score'
   | '-net_promoter_score'
+  | 'relevance_score'
+  | '-relevance_score'
 
 export interface ContentAiSummarizeParams {
   /**
@@ -194,11 +196,11 @@ export interface ContentListParams {
    */
   netPromoterScoreMin?: number
   /**
-   * Sort the results. Any of: earned_media_value_cents, engagement_rate, like_count,
-   * view_count, share_count, net_promoter_score, total_engagement, posted_at, comment_count.
-   * A bare key sorts descending; prefix with `-` to sort ascending. **Sort direction is
-   * inverted:** `order_by=field` sorts descending and `order_by=-field` sorts ascending.
-   * Comma-separate to sort by multiple fields.
+   * Sort the results. Any of: posted_at, view_count, like_count, comment_count, share_count,
+   * engagement_rate, total_engagement, earned_media_value_cents, net_promoter_score,
+   * relevance_score. A bare key sorts descending; prefix with `-` to sort ascending. **Sort
+   * direction is inverted:** `order_by=field` sorts descending and `order_by=-field` sorts
+   * ascending. Comma-separate to sort by multiple fields.
    */
   orderBy?: OrderBy[] | OrderBy
   /**
@@ -427,11 +429,11 @@ export interface ContentStatisticsParams {
    */
   netPromoterScoreMin?: number
   /**
-   * Sort the results. Any of: earned_media_value_cents, engagement_rate, like_count,
-   * view_count, share_count, net_promoter_score, total_engagement, posted_at, comment_count.
-   * A bare key sorts descending; prefix with `-` to sort ascending. **Sort direction is
-   * inverted:** `order_by=field` sorts descending and `order_by=-field` sorts ascending.
-   * Comma-separate to sort by multiple fields.
+   * Sort the results. Any of: posted_at, view_count, like_count, comment_count, share_count,
+   * engagement_rate, total_engagement, earned_media_value_cents, net_promoter_score,
+   * relevance_score. A bare key sorts descending; prefix with `-` to sort ascending. **Sort
+   * direction is inverted:** `order_by=field` sorts descending and `order_by=-field` sorts
+   * ascending. Comma-separate to sort by multiple fields.
    */
   orderBy?: OrderBy[] | OrderBy
   /**

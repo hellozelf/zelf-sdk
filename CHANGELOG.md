@@ -9,3 +9,46 @@ API did not cause.
 
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
+
+## 1.0.0
+
+First release. 3 clients generated from the published OpenAPI document, covering all 48 operations.
+
+Clients: Python, TypeScript, Go.
+
+### Operations
+
+- **ai_analysis**: `content_statistics`, `contents`, `create`, `list`, `results`
+- **brand_accounts**: `add`, `list`, `remove`
+- **brands**: `catalog`, `catalog_categories`, `list`, `update`
+- **comments**: `list`
+- **content**: `ai_summarize`, `details`, `discover`, `list`, `statistics`, `transcribe`
+- **creator_sync**: `create`, `get`, `list`
+- **creator_vetting**: `content_statistics`, `contents`, `create`, `list`, `results`
+- **creators**: `list`
+- **detection**: `create`, `get`, `list`
+- **sub_brands**: `create`
+- **usage**: `retrieve`
+- **webhooks**: `create_secret`, `create_subscription`, `delete_secret`, `delete_subscription`, `get_delivery`, `get_secret`, `get_subscription`, `list_deliveries`, `list_events`, `list_secrets`, `list_subscriptions`, `rotate_subscription_secret`, `send_test`, `set_default_secret`, `update_subscription`
+
+### Webhook events
+
+- `ai_analysis.completed`
+- `content.snapshot`
+- `creator.snapshot`
+- `creator_vetting.completed`
+
+### Types
+
+- 63 models and 13 enums, generated from the document
+- 8 error codes, each with its own exception type
+
+### Client behaviour
+
+- The same resources and method names in every language
+- Cursor-free pagination with three bounds: everything, N pages, or N items
+- Typed errors carrying the API's error code and `log_id`
+- Retries honouring `Retry-After`; writes are never retried, because the API publishes no idempotency key
+- Webhook verification, typed events, a routing handler, and manifest downloads checked against the published SHA-256
+- `ZELF_API_KEY` and `ZELF_BASE_URL` are read from the environment
+

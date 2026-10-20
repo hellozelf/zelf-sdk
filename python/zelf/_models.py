@@ -390,9 +390,10 @@ class Creator(BaseModel):
     )
     id: Annotated[str, Field(description="Unique identifier of the creator.")]
     username: Annotated[
-        str, Field(description="The creator's username or handle on the platform, without the `@`.")
+        str | None,
+        Field(description="The creator's username or handle on the platform, without the `@`."),
     ]
-    name: Annotated[str, Field(description="The creator's display name on the platform.")]
+    name: Annotated[str | None, Field(description="The creator's display name on the platform.")]
     email: Annotated[
         str | None,
         Field(
@@ -415,7 +416,7 @@ class Creator(BaseModel):
         int | None, Field(description="Number of active content items attributed to the creator.")
     ]
     profile_bio: Annotated[
-        str, Field(description="The creator's profile bio as it appears on the platform.")
+        str | None, Field(description="The creator's profile bio as it appears on the platform.")
     ]
     platform_url: Annotated[
         str, Field(description="Direct URL to the creator's profile on the platform.")
@@ -1777,7 +1778,7 @@ class ContentFilterInputRequest(BaseModel):
     order_by: Annotated[
         list[str] | None,
         Field(
-            description="Sort the selected content. Any of: posted_at, view_count, like_count, comment_count, share_count, engagement_rate, total_engagement, earned_media_value_cents, net_promoter_score. A bare key sorts descending; prefix with `-` to sort ascending. Determines which content is retained when the set is capped. Defaults to `earned_media_value_cents` descending."
+            description="Sort the selected content. Any of: posted_at, view_count, like_count, comment_count, share_count, engagement_rate, total_engagement, earned_media_value_cents, net_promoter_score, relevance_score. A bare key sorts descending; prefix with `-` to sort ascending. Determines which content is retained when the set is capped. Defaults to `earned_media_value_cents` descending."
         ),
     ] = None
 
