@@ -6,7 +6,7 @@ import pytest
 import zelf
 from zelf import _pagination
 
-FIXTURES = json.loads((Path(__file__).parents[2] / "fixtures.json").read_text())
+FIXTURES = json.loads((Path(__file__).parents[2] / "fixtures" / "fixtures.json").read_text())
 OPERATIONS = FIXTURES["operations"]
 ENVELOPES = FIXTURES["envelopes"]
 PUBLISHED = set(FIXTURES["published"])

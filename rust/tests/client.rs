@@ -23,7 +23,7 @@ fn envelope(results: serde_json::Value, page: i64, next: Option<i64>) -> serde_j
 /// The spec's own published example for content.list, so the fixture always
 /// satisfies the schema the models were generated from.
 fn content_row(id: &str) -> serde_json::Value {
-    let raw = include_str!("../../fixtures.json");
+    let raw = include_str!("../../fixtures/fixtures.json");
     let fixtures: serde_json::Value = serde_json::from_str(raw).expect("fixtures parse");
     let mut row = fixtures["envelopes"]["content_list"]["results"][0].clone();
     row["id"] = json!(id);

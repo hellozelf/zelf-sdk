@@ -8,7 +8,7 @@ use zelf::{Client, Limits};
 const KEY: &str = "sk_test_not_a_real_key";
 
 fn row(id: &str) -> serde_json::Value {
-    let raw = include_str!("../../fixtures.json");
+    let raw = include_str!("../../fixtures/fixtures.json");
     let fixtures: serde_json::Value = serde_json::from_str(raw).unwrap();
     let mut out = fixtures["envelopes"]["content_list"]["results"][0].clone();
     out["id"] = json!(id);

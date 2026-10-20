@@ -9,7 +9,7 @@ import respx
 
 import zelf
 
-FIXTURES = json.loads((Path(__file__).parents[2] / "fixtures.json").read_text())
+FIXTURES = json.loads((Path(__file__).parents[2] / "fixtures" / "fixtures.json").read_text())
 ENVELOPES = FIXTURES["envelopes"]
 MODELS = FIXTURES["models"]
 BASE = "https://api.hellozelf.com"

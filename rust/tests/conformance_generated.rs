@@ -42,7 +42,7 @@ use zelf::resources::webhooks::WebhooksListSubscriptionsParams;
 use zelf::resources::webhooks::WebhooksUpdateSubscriptionParams;
 use zelf::{Client, Limits};
 
-const FIXTURES: &str = include_str!("../../fixtures.json");
+const FIXTURES: &str = include_str!("../../fixtures/fixtures.json");
 
 fn envelope_for(operation: &str) -> serde_json::Value {
     let parsed: serde_json::Value = serde_json::from_str(FIXTURES).unwrap();

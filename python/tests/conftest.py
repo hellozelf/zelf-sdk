@@ -5,7 +5,7 @@ import pytest
 
 import zelf
 
-FIXTURES = json.loads((Path(__file__).parents[2] / "fixtures.json").read_text())
+FIXTURES = json.loads((Path(__file__).parents[2] / "fixtures" / "fixtures.json").read_text())
 
 
 @pytest.fixture

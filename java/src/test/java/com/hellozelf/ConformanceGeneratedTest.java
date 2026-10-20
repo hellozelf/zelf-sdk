@@ -474,7 +474,7 @@ class ConformanceGeneratedTest {
             new Case("", "", "", Map.of(), List.of(), "", client -> null, client -> null));
 
     private static JsonNode fixtures() throws IOException {
-        return MAPPER.readTree(Files.readString(Path.of("..", "fixtures.json")));
+        return MAPPER.readTree(Files.readString(Path.of("..", "fixtures", "fixtures.json")));
     }
 
     private static String envelopeFor(JsonNode fixtures, String operation) {

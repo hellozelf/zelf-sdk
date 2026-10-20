@@ -8,7 +8,7 @@ Every language directory is generated. Editing one by hand works until the next
 ```text
 VERSION             one version for all eight clients
 spec/openapi.yaml   the published spec, the only input
-fixtures.json       response examples and model samples, shared by every suite
+fixtures/           response examples and model samples, shared by every suite
 Makefile            make all | make test | make cov | make <lang>
 codegen/            the generator
   spec.py           spec/openapi.yaml -> an intermediate representation
@@ -17,7 +17,7 @@ codegen/            the generator
   naming.py         casing rules and the two spec workaround tables
   models_input.py   prepares the schema document the Python models come from
   downgrade.py      3.1 -> 3.0 rewrite, needed only by the Go toolchain
-  make_fixtures.py  writes fixtures.json
+  make_fixtures.py  writes fixtures/fixtures.json
   emit_*.py         one per language
   emit_conformance.py  the generated test suites
   release.py        reads VERSION

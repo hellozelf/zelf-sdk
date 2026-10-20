@@ -29,7 +29,7 @@ cov-go:
 
 cov-csharp:
 	docker run --rm -e DOTNET_ROLL_FORWARD=Major \
-		-v "$(CURDIR)/csharp:/csharp" -v "$(CURDIR)/fixtures.json:/fixtures.json" \
+		-v "$(CURDIR)/csharp:/csharp" -v "$(CURDIR)/fixtures:/fixtures" \
 		-w /csharp/tests mcr.microsoft.com/dotnet/sdk:10.0 dotnet test -v q --nologo \
 		/p:CollectCoverage=true /p:SkipAutoProps=true \
 		/p:Threshold=100 /p:ThresholdType=line /p:ThresholdStat=total
@@ -59,7 +59,7 @@ test-go:
 	cd go && go test ./...
 
 test-rust:
-	docker run --rm -v "$(CURDIR)/rust:/app" -v "$(CURDIR)/fixtures.json:/fixtures.json" \
+	docker run --rm -v "$(CURDIR)/rust:/app" -v "$(CURDIR)/fixtures:/fixtures" \
 		-w /app rust:slim cargo test
 
 test-ruby:
@@ -67,7 +67,7 @@ test-ruby:
 
 test-csharp:
 	docker run --rm -e DOTNET_ROLL_FORWARD=Major \
-		-v "$(CURDIR)/csharp:/csharp" -v "$(CURDIR)/fixtures.json:/fixtures.json" \
+		-v "$(CURDIR)/csharp:/csharp" -v "$(CURDIR)/fixtures:/fixtures" \
 		-w /csharp/tests mcr.microsoft.com/dotnet/sdk:10.0 dotnet test -v q --nologo
 
 test-java:

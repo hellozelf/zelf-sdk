@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs'
 import { ZelfAPIClient, Page } from '../dist/index.js'
 
 const FIXTURES = JSON.parse(
-  readFileSync(new URL('../../fixtures.json', import.meta.url), 'utf8'),
+  readFileSync(new URL('../../fixtures/fixtures.json', import.meta.url), 'utf8'),
 ) as { envelopes: Record<string, any>; models: Record<string, any> }
 
 const KEY = 'sk_zelf_' + '0'.repeat(64)

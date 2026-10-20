@@ -192,7 +192,7 @@ import respx
 
 import zelf
 
-FIXTURES = json.loads((Path(__file__).parents[2] / "fixtures.json").read_text())
+FIXTURES = json.loads((Path(__file__).parents[2] / "fixtures" / "fixtures.json").read_text())
 ENVELOPES = FIXTURES["envelopes"]
 MODELS = FIXTURES["models"]
 BASE = "https://api.hellozelf.com"
@@ -362,7 +362,7 @@ import {{ readFileSync }} from 'node:fs'
 import {{ ZelfAPIClient, Page }} from '../dist/index.js'
 
 const FIXTURES = JSON.parse(
-  readFileSync(new URL('../../fixtures.json', import.meta.url), 'utf8'),
+  readFileSync(new URL('../../fixtures/fixtures.json', import.meta.url), 'utf8'),
 ) as {{ envelopes: Record<string, any>; models: Record<string, any> }}
 
 const KEY = 'sk_zelf_' + '0'.repeat(64)
@@ -731,7 +731,7 @@ func (r *recordingRoundTripper) RoundTrip(req *http.Request) (*http.Response, er
 
 func conformanceFixtures(t *testing.T) map[string]json.RawMessage {{
 	t.Helper()
-	raw, err := os.ReadFile(filepath.Join("..", "fixtures.json"))
+	raw, err := os.ReadFile(filepath.Join("..", "fixtures", "fixtures.json"))
 	if err != nil {{
 		t.Fatalf("reading fixtures: %v", err)
 	}}
@@ -1111,7 +1111,7 @@ class ConformanceGeneratedTest {{
             new Case("", "", "", Map.of(), List.of(), "", client -> null, client -> null));
 
     private static JsonNode fixtures() throws IOException {{
-        return MAPPER.readTree(Files.readString(Path.of("..", "fixtures.json")));
+        return MAPPER.readTree(Files.readString(Path.of("..", "fixtures", "fixtures.json")));
     }}
 
     private static String envelopeFor(JsonNode fixtures, String operation) {{
@@ -1912,7 +1912,7 @@ use wiremock::{{Mock, MockServer, ResponseTemplate}};
 use zelf::{{Client, Limits}};
 {imports}
 
-const FIXTURES: &str = include_str!("../../fixtures.json");
+const FIXTURES: &str = include_str!("../../fixtures/fixtures.json");
 
 fn envelope_for(operation: &str) -> serde_json::Value {{
     let parsed: serde_json::Value = serde_json::from_str(FIXTURES).unwrap();

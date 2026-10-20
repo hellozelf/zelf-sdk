@@ -5,7 +5,7 @@ require 'socket'
 $LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
 require 'zelf'
 
-FIXTURES = JSON.parse(File.read(File.expand_path('../../fixtures.json', __dir__)))
+FIXTURES = JSON.parse(File.read(File.expand_path('../../fixtures/fixtures.json', __dir__)))
 
 API_KEY = 'sk_test_not_a_real_key'.freeze
 

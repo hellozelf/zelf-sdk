@@ -58,7 +58,8 @@ def main() -> int:
         if snake(name.replace(".", "_")) not in rows
     }
 
-    out = ROOT.parent / "fixtures.json"
+    out = ROOT.parent / "fixtures" / "fixtures.json"
+    out.parent.mkdir(exist_ok=True)
     out.write_text(
         json.dumps(
             {

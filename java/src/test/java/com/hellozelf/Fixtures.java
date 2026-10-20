@@ -20,7 +20,7 @@ public final class Fixtures {
 
     private static JsonNode load() {
         try {
-            return MAPPER.readTree(Files.readString(Path.of("..", "fixtures.json")));
+            return MAPPER.readTree(Files.readString(Path.of("..", "fixtures", "fixtures.json")));
         } catch (IOException error) {
             throw new IllegalStateException("fixtures.json is missing", error);
         }

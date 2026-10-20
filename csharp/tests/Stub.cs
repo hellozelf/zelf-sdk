@@ -45,7 +45,7 @@ public static class Fixtures
 
     private static readonly JsonDocument Document =
         JsonDocument.Parse(File.ReadAllText(Path.Combine(
-            AppContext.BaseDirectory, "..", "..", "..", "..", "..", "fixtures.json")));
+            AppContext.BaseDirectory, "..", "..", "..", "..", "..", "fixtures", "fixtures.json")));
 
     /// <summary>The spec's own published example for content.list.</summary>
     public static JsonElement ContentRow(string id = "con_1")

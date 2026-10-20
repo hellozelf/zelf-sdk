@@ -1028,7 +1028,7 @@ func (r *recordingRoundTripper) RoundTrip(req *http.Request) (*http.Response, er
 
 func conformanceFixtures(t *testing.T) map[string]json.RawMessage {
 	t.Helper()
-	raw, err := os.ReadFile(filepath.Join("..", "fixtures.json"))
+	raw, err := os.ReadFile(filepath.Join("..", "fixtures", "fixtures.json"))
 	if err != nil {
 		t.Fatalf("reading fixtures: %v", err)
 	}
