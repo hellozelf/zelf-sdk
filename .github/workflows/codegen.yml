@@ -16,6 +16,10 @@ permissions:
 jobs:
   reproducible:
     name: Generated code matches the spec
+    # Spec sync owns the spec branches: it regenerates and commits the result,
+    # so running the same check against the spec-only commit that opens the
+    # pull request only ever reports work that has not happened yet.
+    if: ${{ !startsWith(github.head_ref, 'spec/') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:

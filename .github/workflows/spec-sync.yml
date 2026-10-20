@@ -22,7 +22,11 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.head_ref }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # Not GITHUB_TOKEN: a push made with it is attributed to
+          # github-actions[bot], which this repo's fork pull request approval
+          # policy counts as a first-time contributor, so every run the push
+          # triggers is held for manual approval.
+          token: ${{ secrets.SDK_SYNC_TOKEN }}
 
       - uses: astral-sh/setup-uv@v10.3.0
       - uses: actions/setup-node@v7.1.0
@@ -79,4 +83,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           KIND: ${{ steps.classify.outputs.kind }}
           NUMBER: ${{ github.event.pull_request.number }}
-        run: gh pr edit "$NUMBER" --add-label "spec:${KIND}"
+        run: |
+          # The label is created on first use, so the repo needs no setup and a
+          # missing one cannot fail the run after the work is already done.
+          gh label create "spec:${KIND}" --color ededed --force >/dev/null
+          gh pr edit "$NUMBER" --add-label "spec:${KIND}"
