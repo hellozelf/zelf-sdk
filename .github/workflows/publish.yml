@@ -61,6 +61,95 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+  rust:
+    name: crates.io
+    if: startsWith(github.event.release.tag_name, 'rust/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: rust
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test
+      - id: auth
+        uses: rust-lang/crates-io-auth-action@v1.0.5
+      - name: Publish unless crates.io already has this version
+        run: |
+          version=$(grep -m1 '^version = ' Cargo.toml | cut -d'"' -f2)
+          if curl -sf -H 'User-Agent: zelf-sdk-release' \
+               "https://crates.io/api/v1/crates/zelf-sdk/${version}" >/dev/null; then
+            echo "::notice::zelf-sdk ${version} is already on crates.io, nothing to publish"
+            exit 0
+          fi
+          cargo publish --token "$CARGO_TOKEN"
+        env:
+          CARGO_TOKEN: ${{ steps.auth.outputs.token }}
+
+  ruby:
+    name: RubyGems
+    if: startsWith(github.event.release.tag_name, 'ruby/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: ruby
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: ruby/setup-ruby@v1.331.0
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+          working-directory: ruby
+      - run: bundle exec ruby -Itest test/all.rb
+      - run: gem build zelf.gemspec
+      - uses: rubygems/configure-rubygems-credentials@v2.1.0
+      - name: Publish unless RubyGems already has this version
+        run: |
+          version=$(ruby -Ilib -e 'require "zelf/version"; print Zelf::VERSION')
+          if curl -sf "https://rubygems.org/api/v2/rubygems/zelf-sdk/versions/${version}.json" >/dev/null; then
+            echo "::notice::zelf-sdk ${version} is already on RubyGems, nothing to publish"
+            exit 0
+          fi
+          gem push zelf-sdk-"${version}".gem
+
+  csharp:
+    name: NuGet
+    if: startsWith(github.event.release.tag_name, 'csharp/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: csharp
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - run: dotnet test tests/Zelf.Tests.csproj -c Release --nologo
+      - run: dotnet pack src/Zelf.csproj -c Release -o nupkg
+      - id: auth
+        uses: NuGet/login@v1.2.0
+        with:
+          user: ${{ vars.NUGET_USER }}
+      - name: Publish unless NuGet already has this version
+        run: |
+          dotnet nuget push "nupkg/*.nupkg" \
+            --api-key "$NUGET_API_KEY" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+        env:
+          NUGET_API_KEY: ${{ steps.auth.outputs.NUGET_API_KEY }}
+
   go:
     name: Go module proxy
     if: startsWith(github.event.release.tag_name, 'go/v')

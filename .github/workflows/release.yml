@@ -33,7 +33,7 @@ jobs:
           PLAN: ${{ steps.plan.outputs.matrix }}
         run: |
           printf '%s' "$PLAN" > plan.json
-          for language in python js go; do
+          for language in $(jq -r '.[].language' plan.json); do
             tag=$(jq -r --arg l "$language" '.[] | select(.language==$l) | .tag' plan.json)
             version=$(jq -r --arg l "$language" '.[] | select(.language==$l) | .version' plan.json)
             [ -n "$tag" ] || continue
