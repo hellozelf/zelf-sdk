@@ -1,0 +1,59 @@
+# Toolchain binaries codegen installs on demand (oapi-codegen).
+.tools/
+
+# Throwaway files for poking at the API by hand.
+python/scratch.py
+js/scratch.ts
+go/cmd/scratch/
+rust/examples/scratch.rs
+ruby/scratch.rb
+php/scratch.php
+java/src/test/java/ai/zelf/ScratchTest.java
+csharp/tests/ScratchTests.cs
+
+# Python
+python/.venv/
+python/.pytest_cache/
+python/.ruff_cache/
+__pycache__/
+*.py[cod]
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# JavaScript
+js/node_modules/
+js/dist/
+js/coverage/
+*.tsbuildinfo
+
+# Go
+go/cover.out
+
+# Rust
+rust/target/
+rust/lcov.info
+
+# C#
+csharp/**/bin/
+csharp/**/obj/
+csharp/**/TestResults/
+csharp/**/coverage.*.xml
+csharp/**/coverage.*.json
+
+# Java
+java/target/
+
+# Ruby
+ruby/.bundle/
+ruby/coverage/
+ruby/Gemfile.lock
+
+# PHP
+php/vendor/
+php/.phpunit.cache/
+
+.DS_Store
+.idea/
+.vscode/
