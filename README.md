@@ -147,7 +147,7 @@ except zelf.NotFoundError as error:
     print(error.status_code, error.code, error.log_id)
 ```
 
-```
+```text
 404 NOT_FOUND 0ca57078-d810-4038-a1d7-02953ac7ce60
 ```
 

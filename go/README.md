@@ -114,7 +114,7 @@ checks the published SHA-256 before yielding anything.
 
 ## Sandbox
 
-```
+```bash
 ZELF_BASE_URL=https://sandbox-api.hellozelf.com
 ZELF_API_KEY=sk_zelf_sandbox_demo
 ```

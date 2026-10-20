@@ -5,7 +5,7 @@ Every language directory is generated. Editing one by hand works until the next
 
 ## Layout
 
-```
+```text
 VERSION             one version for all eight clients
 spec/openapi.yaml   the published spec, the only input
 fixtures.json       response examples and model samples, shared by every suite
@@ -27,7 +27,7 @@ python/ js/ go/ rust/ ruby/ csharp/ java/ php/
 
 ## Commands
 
-```
+```text
 make all          regenerate every client
 make rust         regenerate one of them
 make test         run all eight suites
