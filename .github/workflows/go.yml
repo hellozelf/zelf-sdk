@@ -1,0 +1,42 @@
+name: Go
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  GO_PKGS: github.com/hellozelf/zelf-sdk/go,github.com/hellozelf/zelf-sdk/go/webhooks
+
+jobs:
+  test:
+    name: go
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version-file: go/go.mod
+          cache-dependency-path: go/go.sum
+      - name: Vet
+        working-directory: go
+        run: go vet ./...
+      - name: Check formatting
+        working-directory: go
+        run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+      - name: Test with coverage
+        working-directory: go
+        run: |
+          go test ./... -covermode=atomic -coverpkg="$GO_PKGS" -coverprofile=cover.out
+          total=$(go tool cover -func=cover.out | awk '/^total:/{print $3}')
+          echo "coverage: $total"
+          [ "$total" = "100.0%" ] || { go tool cover -func=cover.out | grep -v '100.0%$'; exit 1; }

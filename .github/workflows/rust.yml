@@ -1,0 +1,51 @@
+name: Rust
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: rust ${{ matrix.toolchain }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        toolchain: ['1.88', 'stable']
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+          components: rustfmt, clippy, llvm-tools-preview
+      - uses: Swatinem/rust-cache@v2.9.3
+        with:
+          workspaces: rust
+      - name: Check formatting
+        working-directory: rust
+        run: cargo fmt --check
+      - name: Clippy
+        working-directory: rust
+        run: cargo clippy --all-targets -- -D warnings
+      - uses: taiki-e/install-action@cargo-llvm-cov
+        if: matrix.toolchain == 'stable'
+      - name: Test with coverage
+        if: matrix.toolchain == 'stable'
+        working-directory: rust
+        run: >
+          cargo llvm-cov --all-features --fail-under-lines 89
+          --ignore-filename-regex '(tests|examples)/'
+      - name: Test
+        if: matrix.toolchain != 'stable'
+        working-directory: rust
+        run: cargo test

@@ -1,0 +1,39 @@
+name: Python
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10', '3.13']
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: python/uv.lock
+      - run: uv python install ${{ matrix.python }}
+      - name: Test with coverage
+        working-directory: python
+        run: >
+          uv run --python ${{ matrix.python }}
+          pytest tests -q --cov --cov-report=term-missing
+      - name: Lint
+        working-directory: python
+        run: uv run ruff check . && uv run ruff format --check .

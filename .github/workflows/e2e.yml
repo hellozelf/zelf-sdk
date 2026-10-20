@@ -1,0 +1,72 @@
+name: E2E
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  ZELF_BASE_URL: https://sandbox-api.hellozelf.com
+  ZELF_API_KEY: sk_zelf_sandbox_demo
+
+jobs:
+  sandbox:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, js, go, rust, ruby, csharp, java]
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - uses: astral-sh/setup-uv@v10.3.0
+        if: matrix.language == 'python'
+      - uses: actions/setup-node@v7.1.0
+        if: matrix.language == 'js'
+        with:
+          node-version: 22.x
+          cache: npm
+          cache-dependency-path: js/package-lock.json
+      - uses: actions/setup-go@v7.0.0
+        if: matrix.language == 'go'
+        with:
+          go-version-file: go/go.mod
+      - uses: dtolnay/rust-toolchain@stable
+        if: matrix.language == 'rust'
+      - uses: ruby/setup-ruby@v1.331.0
+        if: matrix.language == 'ruby'
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+          working-directory: ruby
+      - uses: actions/setup-dotnet@v6.0.0
+        if: matrix.language == 'csharp'
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-java@v6.1.0
+        if: matrix.language == 'java'
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Wait for the sandbox
+        run: |
+          for attempt in 1 2 3 4 5; do
+            if curl -fsS "$ZELF_BASE_URL/health/"; then exit 0; fi
+            sleep "$((attempt * 5))"
+          done
+          echo "::error::$ZELF_BASE_URL did not answer /health/"
+          exit 1
+
+      - run: make e2e-${{ matrix.language }}

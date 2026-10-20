@@ -1,0 +1,52 @@
+name: Codegen
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  reproducible:
+    name: Generated code matches the spec
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          enable-cache: true
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 22.x
+          cache: npm
+          cache-dependency-path: js/package-lock.json
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version-file: go/go.mod
+          cache-dependency-path: go/go.sum
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - working-directory: js
+        run: npm ci
+
+      - run: make all
+
+      - name: The tree must be unchanged
+        run: |
+          if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
+            echo "::error::`make all` changed the tree. Commit the regenerated output."
+            git status --porcelain
+            git diff
+            exit 1
+          fi
