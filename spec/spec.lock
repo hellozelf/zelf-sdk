@@ -2012,7 +2012,7 @@
           },
           {
             "name": "name",
-            "nullable": false,
+            "nullable": true,
             "read_only": false,
             "required": true,
             "type": {
@@ -2048,7 +2048,7 @@
           },
           {
             "name": "profile_bio",
-            "nullable": false,
+            "nullable": true,
             "read_only": false,
             "required": true,
             "type": {
@@ -2066,7 +2066,7 @@
           },
           {
             "name": "username",
-            "nullable": false,
+            "nullable": true,
             "read_only": false,
             "required": true,
             "type": {
@@ -5215,6 +5215,7 @@
                   "-like_count",
                   "-net_promoter_score",
                   "-posted_at",
+                  "-relevance_score",
                   "-share_count",
                   "-total_engagement",
                   "-view_count",
@@ -5224,6 +5225,7 @@
                   "like_count",
                   "net_promoter_score",
                   "posted_at",
+                  "relevance_score",
                   "share_count",
                   "total_engagement",
                   "view_count"
@@ -5689,6 +5691,7 @@
                   "-like_count",
                   "-net_promoter_score",
                   "-posted_at",
+                  "-relevance_score",
                   "-share_count",
                   "-total_engagement",
                   "-view_count",
@@ -5698,6 +5701,7 @@
                   "like_count",
                   "net_promoter_score",
                   "posted_at",
+                  "relevance_score",
                   "share_count",
                   "total_engagement",
                   "view_count"
