@@ -29,12 +29,10 @@ jobs:
 
       - name: Create what does not exist yet
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.SDK_SYNC_TOKEN }}
           PLAN: ${{ steps.plan.outputs.matrix }}
         run: |
           printf '%s' "$PLAN" > plan.json
-          # Ordered so Go is last. Its tag is cached by the module proxy the
-          # moment it is visible, and cannot be withdrawn.
           for language in python js go; do
             tag=$(jq -r --arg l "$language" '.[] | select(.language==$l) | .tag' plan.json)
             version=$(jq -r --arg l "$language" '.[] | select(.language==$l) | .version' plan.json)
@@ -58,6 +56,6 @@ jobs:
             echo "creating $tag"
             gh release create "$tag" \
               --target "$GITHUB_SHA" \
-              --title "$language $version" \
+              --title "zelf-sdk/$tag" \
               --notes "$notes"
           done

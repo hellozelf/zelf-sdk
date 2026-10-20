@@ -23,10 +23,6 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.ref_name }}
-          # Not GITHUB_TOKEN: a push made with it is attributed to
-          # github-actions[bot], which this repo's fork pull request approval
-          # policy counts as a first-time contributor, so every run the push
-          # triggers is held for manual approval.
           token: ${{ secrets.SDK_SYNC_TOKEN }}
 
       - uses: astral-sh/setup-uv@v10.3.0
@@ -77,23 +73,16 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "chore: regenerate clients for ${KIND} spec change"
-          # This commit leaves spec/openapi.yaml alone, so the path filter above
-          # keeps the push from starting this workflow again.
           git push origin "HEAD:${BRANCH}"
 
       - name: Open the pull request
         env:
-          # Not GITHUB_TOKEN: GitHub starts no workflow runs for events it
-          # raises itself, so a pull request opened with it would sit with no
-          # checks against it.
           GH_TOKEN: ${{ secrets.SDK_SYNC_TOKEN }}
           KIND: ${{ steps.classify.outputs.kind }}
           BRANCH: ${{ github.ref_name }}
         run: |
           version=$(grep -m1 '^  version:' spec/openapi.yaml | awk '{print $2}')
 
-          # Created on first use, so the repo needs no setup and a missing label
-          # cannot fail the run after the work is already done.
           gh label create "spec:${KIND}" --color ededed --force >/dev/null
 
           open_prs=$(gh pr list --head "$BRANCH" --state open --json number --jq 'length')
