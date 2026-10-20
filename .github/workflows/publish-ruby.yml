@@ -1,0 +1,35 @@
+name: Publish Ruby
+
+on:
+  release:
+    types: [published]
+
+defaults:
+  run:
+    working-directory: ruby
+
+jobs:
+  publish:
+    if: startsWith(github.event.release.tag_name, 'ruby/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: ruby/setup-ruby@v1.331.0
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+          working-directory: ruby
+      - run: bundle exec ruby -Itest test/all.rb
+      - run: gem build zelf.gemspec
+      - uses: rubygems/configure-rubygems-credentials@v2.1.0
+      - name: Publish unless RubyGems already has this version
+        run: |
+          version=$(ruby -Ilib -e 'require "zelf/version"; print Zelf::VERSION')
+          if curl -sf "https://rubygems.org/api/v2/rubygems/zelf-sdk/versions/${version}.json" >/dev/null; then
+            echo "::notice::zelf-sdk ${version} is already on RubyGems, nothing to publish"
+            exit 0
+          fi
+          gem push zelf-sdk-"${version}".gem

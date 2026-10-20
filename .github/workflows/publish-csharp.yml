@@ -1,0 +1,38 @@
+name: Publish C#
+
+on:
+  release:
+    types: [published]
+
+defaults:
+  run:
+    working-directory: csharp
+
+jobs:
+  publish:
+    if: startsWith(github.event.release.tag_name, 'csharp/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - run: dotnet test tests/Zelf.Tests.csproj -c Release --nologo
+      - run: dotnet pack src/Zelf.csproj -c Release -o nupkg
+      - id: auth
+        uses: NuGet/login@v1.2.0
+        with:
+          user: ${{ vars.NUGET_USER }}
+      - name: Publish unless NuGet already has this version
+        run: |
+          dotnet nuget push "nupkg/*.nupkg" \
+            --api-key "$NUGET_API_KEY" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+        env:
+          NUGET_API_KEY: ${{ steps.auth.outputs.NUGET_API_KEY }}
