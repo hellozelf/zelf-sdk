@@ -88,3 +88,12 @@ jobs:
           # missing one cannot fail the run after the work is already done.
           gh label create "spec:${KIND}" --color ededed --force >/dev/null
           gh pr edit "$NUMBER" --add-label "spec:${KIND}"
+
+      - name: Hand the pull request to CI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NUMBER: ${{ github.event.pull_request.number }}
+        # The branch is complete now, so taking it out of draft is what starts
+        # the language checks. They skip while it is a draft, which is how the
+        # document-only commit avoids a run it could only fail.
+        run: gh pr ready "$NUMBER"

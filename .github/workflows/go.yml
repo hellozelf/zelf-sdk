@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
 
 concurrency:
@@ -18,6 +19,9 @@ env:
 
 jobs:
   test:
+    # A sync pull request opens with the document and none of the
+    # regeneration, so it stays a draft until Spec sync has pushed.
+    if: ${{ github.event_name != 'pull_request' || !github.event.pull_request.draft }}
     name: go
     runs-on: ubuntu-24.04
     timeout-minutes: 15
