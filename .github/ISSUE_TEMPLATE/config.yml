@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: API reference
+    url: https://developers.hellozelf.com
+    about: Endpoint behaviour, filters and error codes.
+  - name: Security report
+    url: https://github.com/hellozelf/zelf-sdk/security/advisories/new
+    about: Report a vulnerability privately. Do not open a public issue.

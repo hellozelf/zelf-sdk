@@ -1,0 +1,99 @@
+name: Bug report
+description: Something the SDK does wrong
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Every API response carries a `log_id`. Include it and the backend can
+        find the exact request.
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+        - Python
+        - TypeScript
+        - Go
+        - Rust
+        - Ruby
+        - Java
+        - C#
+    validations:
+      required: true
+
+  - type: input
+    id: sdk_version
+    attributes:
+      label: SDK version
+      placeholder: "1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: runtime
+    attributes:
+      label: Runtime version
+      placeholder: "Python 3.13.1, Node 22.9.0, Go 1.25.1"
+    validations:
+      required: true
+
+  - type: input
+    id: operation
+    attributes:
+      label: Operation
+      description: The resource and method, as the reference names it.
+      placeholder: content.list
+    validations:
+      required: true
+
+  - type: input
+    id: log_id
+    attributes:
+      label: Log ID
+      description: From the response envelope, or from the error.
+      placeholder: 0ca57078-d810-4038-a1d7-02953ac7ce60
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: Paste the error with its status and code, not a screenshot.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduce
+      description: The smallest call that shows it. Never paste an API key.
+      render: shell
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Production
+        - Sandbox
+        - Both
+    validations:
+      required: true
+
+  - type: textarea
+    id: other_languages
+    attributes:
+      label: Other languages
+      description: >
+        If the same call behaves differently in another client, say which.
+        That points at the generator rather than the API.

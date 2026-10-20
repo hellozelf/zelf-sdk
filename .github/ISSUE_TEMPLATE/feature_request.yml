@@ -1,0 +1,49 @@
+name: Feature request
+description: Something the SDK should do
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        These clients are generated from the OpenAPI document, so a missing
+        endpoint or field is usually a change to the spec rather than to a
+        client. Say which you think it is.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - One language
+        - Every language
+        - The API itself
+    validations:
+      required: true
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      description: Leave blank when it applies to all of them.
+      options:
+        - Python
+        - TypeScript
+        - Go
+        - Rust
+        - Ruby
+        - Java
+        - C#
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is hard today
+      description: The problem, not the solution.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like instead
+      render: shell
