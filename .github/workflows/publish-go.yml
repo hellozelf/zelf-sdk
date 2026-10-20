@@ -1,0 +1,40 @@
+name: Publish Go
+
+on:
+  release:
+    types: [published]
+
+defaults:
+  run:
+    working-directory: go
+
+env:
+  MODULE: github.com/hellozelf/zelf-sdk/go
+
+jobs:
+  publish:
+    if: startsWith(github.event.release.tag_name, 'go/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version-file: go/go.mod
+      - run: go test ./...
+      - run: go build ./... && go vet ./...
+      - name: Warm the module proxy
+        working-directory: .
+        run: |
+          version="${TAG#go/}"
+          for attempt in 1 2 3 4 5; do
+            if GOPROXY=https://proxy.golang.org go list -m "$MODULE@$version"; then
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "::error::$MODULE@$version did not appear on the proxy"
+          exit 1
+        env:
+          TAG: ${{ github.event.release.tag_name }}

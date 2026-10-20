@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    name: create any missing release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v10.3.0
+
+      - id: plan
+        run: uv run --with pyyaml python codegen/pipeline.py matrix
+
+      - name: Create what does not exist yet
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PLAN: ${{ steps.plan.outputs.matrix }}
+        run: |
+          printf '%s' "$PLAN" > plan.json
+          # Ordered so Go is last. Its tag is cached by the module proxy the
+          # moment it is visible, and cannot be withdrawn.
+          for language in python js go; do
+            tag=$(jq -r --arg l "$language" '.[] | select(.language==$l) | .tag' plan.json)
+            version=$(jq -r --arg l "$language" '.[] | select(.language==$l) | .version' plan.json)
+            [ -n "$tag" ] || continue
+
+            if git rev-parse "refs/tags/$tag" >/dev/null 2>&1; then
+              echo "$tag already exists, nothing to do"
+              continue
+            fi
+
+            notes=$(awk -v v="## $version" '
+              $0 == v {found=1; next}
+              found && /^## / {exit}
+              found {print}
+            ' CHANGELOG.md)
+            if [ -z "$notes" ]; then
+              echo "no CHANGELOG section for $version, nothing to release"
+              continue
+            fi
+
+            echo "creating $tag"
+            gh release create "$tag" \
+              --target "$GITHUB_SHA" \
+              --title "$language $version" \
+              --notes "$notes"
+          done

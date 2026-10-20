@@ -1,0 +1,82 @@
+name: Spec sync
+
+on:
+  pull_request:
+    paths:
+      - 'spec/openapi.yaml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  regenerate:
+    name: regenerate from the spec
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: astral-sh/setup-uv@v10.3.0
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: js/package-lock.json
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version-file: go/go.mod
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - id: classify
+        run: uv run --with pyyaml python codegen/pipeline.py classify
+
+      - name: The spec obeys the version rules
+        run: uv run --with pyyaml python codegen/pipeline.py check-spec
+
+      - working-directory: js
+        run: npm ci
+
+      - run: make all
+
+      - name: Every client sits on the spec version
+        run: uv run --with pyyaml python codegen/pipeline.py check-manifests
+
+      - name: Write the changelog and refresh the lock
+        if: steps.classify.outputs.kind != 'docs-only'
+        run: uv run --with pyyaml python codegen/pipeline.py changelog
+
+      - name: Commit the regenerated tree
+        env:
+          KIND: ${{ steps.classify.outputs.kind }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          case "$KIND" in
+            structural|version-only|docs-only) ;;
+            *) echo "::error::unexpected classification: $KIND"; exit 1 ;;
+          esac
+          if git diff --quiet && [ -z "$(git status --porcelain)" ]; then
+            echo "::notice::the spec and the clients already agree"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: regenerate clients for ${KIND} spec change"
+          git push origin "HEAD:${HEAD_REF}"
+
+      - name: Label the pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          KIND: ${{ steps.classify.outputs.kind }}
+          NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr edit "$NUMBER" --add-label "spec:${KIND}"
