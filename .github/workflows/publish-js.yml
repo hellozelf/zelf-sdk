@@ -23,6 +23,9 @@ jobs:
           registry-url: "https://registry.npmjs.org"
           cache: npm
           cache-dependency-path: js/package-lock.json
+      - name: Trusted publishing needs npm 11.5.1 or newer
+        run: npm install -g npm@latest
+        working-directory: .
       - run: npm ci
       - run: npm test
       - run: npm run build
@@ -33,6 +36,4 @@ jobs:
             echo "::notice::zelf-sdk@$version is already on npm, nothing to publish"
             exit 0
           fi
-          npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm publish --access public

@@ -14,10 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: dtolnay/rust-toolchain@stable
       - run: cargo test
+      - id: auth
+        uses: rust-lang/crates-io-auth-action@v1.0.5
       - name: Publish unless crates.io already has this version
         run: |
           version=$(grep -m1 '^version = ' Cargo.toml | cut -d'"' -f2)
@@ -28,4 +31,4 @@ jobs:
           fi
           cargo publish --token "$CARGO_TOKEN"
         env:
-          CARGO_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+          CARGO_TOKEN: ${{ steps.auth.outputs.token }}
