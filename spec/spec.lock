@@ -1,0 +1,7046 @@
+{
+  "shape": {
+    "enums": [
+      {
+        "name": "AccountTypeEnum",
+        "values": [
+          "influencer",
+          "owned",
+          "tracked"
+        ]
+      },
+      {
+        "name": "AnalysisScopeEnum",
+        "values": [
+          "COMMENT",
+          "CONTENT"
+        ]
+      },
+      {
+        "name": "BlankEnum",
+        "values": [
+          ""
+        ]
+      },
+      {
+        "name": "ContentFormEnum",
+        "values": [
+          "IMAGE",
+          "VIDEO"
+        ]
+      },
+      {
+        "name": "KindEnum",
+        "values": [
+          "event",
+          "snapshot"
+        ]
+      },
+      {
+        "name": "LastStatusEnum",
+        "values": [
+          "FAILED",
+          "SUCCESS"
+        ]
+      },
+      {
+        "name": "MentionTypeEnum",
+        "values": [
+          "comment",
+          "content"
+        ]
+      },
+      {
+        "name": "PlatformEnum",
+        "values": [
+          "instagram",
+          "tiktok",
+          "youtube"
+        ]
+      },
+      {
+        "name": "ResourceEnum",
+        "values": [
+          "content",
+          "creator"
+        ]
+      },
+      {
+        "name": "SecretTypeEnum",
+        "values": [
+          "default",
+          "new"
+        ]
+      },
+      {
+        "name": "StateEnum",
+        "values": [
+          "EXHAUSTED",
+          "FAILED",
+          "PENDING",
+          "QUOTA_EXHAUSTED",
+          "SUCCEEDED"
+        ]
+      },
+      {
+        "name": "SubBrandTypeEnum",
+        "values": [
+          "COMPETITIVE",
+          "THEME"
+        ]
+      },
+      {
+        "name": "TypeEnum",
+        "values": [
+          "ADULT_CONTENT",
+          "ARMS_AND_AMMUNITION",
+          "DISCLOSURE",
+          "MISINFORMATION",
+          "POLITICS",
+          "PROFANITY",
+          "USER_DEFINED_SAFETY_CRITERION"
+        ]
+      }
+    ],
+    "error_codes": {
+      "400": [
+        "BRAND_ID_REQUIRED",
+        "INVALID_ID",
+        "VALIDATION_ERROR"
+      ],
+      "401": [
+        "EXPIRED_API_KEY",
+        "INVALID_API_KEY",
+        "REVOKED_API_KEY"
+      ],
+      "403": [
+        "PERMISSION_DENIED"
+      ],
+      "404": [
+        "NOT_FOUND"
+      ],
+      "406": [
+        "NOT_ACCEPTABLE"
+      ],
+      "429": [
+        "RATE_LIMIT_EXCEEDED"
+      ],
+      "500": [
+        "INTERNAL_ERROR"
+      ],
+      "503": [
+        "SERVICE_UNAVAILABLE"
+      ]
+    },
+    "models": [
+      {
+        "fields": [
+          {
+            "name": "analyses",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AiAnalysisRun"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "analysis_type",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "created_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "modified_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "name",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "topic",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AiAnalysis"
+      },
+      {
+        "fields": [
+          {
+            "name": "analysis_scope",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "COMMENT",
+                  "CONTENT"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "content_filters",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "ContentFilterInputRequest"
+            }
+          },
+          {
+            "name": "name",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "topic",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AiAnalysisCreateRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "analysis_id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "created_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "modified_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "result",
+            "nullable": true,
+            "read_only": true,
+            "required": false,
+            "type": {
+              "kind": "ref",
+              "ref": "ResultFile"
+            }
+          },
+          {
+            "name": "scope",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "status",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AiAnalysisResult"
+      },
+      {
+        "fields": [
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "scope",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "status",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AiAnalysisRun"
+      },
+      {
+        "fields": [
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "is_primary",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "keywords",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "BrandKeywords"
+            }
+          },
+          {
+            "name": "parent_brand_id",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "sub_brand_type",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "title",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "Brand"
+      },
+      {
+        "fields": [
+          {
+            "name": "external_url",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platform",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "username",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "BrandAccount"
+      },
+      {
+        "fields": [
+          {
+            "name": "influencer",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "BrandAccount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "owned",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "BrandAccount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "tracked",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "BrandAccount"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "BrandAccountGroups"
+      },
+      {
+        "fields": [
+          {
+            "name": "account_type",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "enum": [
+                "influencer",
+                "owned",
+                "tracked"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "brand_id",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "profile_urls",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "BrandAccountsWriteRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "brand_logo",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "category_id",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "category_name",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "industry_id",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "industry_name",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "title",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "BrandCatalog"
+      },
+      {
+        "fields": [
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "level",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "name",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "parent_id",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "BrandCatalogItem"
+      },
+      {
+        "fields": [
+          {
+            "name": "allowed_languages",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "boolean_query",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "compound_inclusion_terms",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "exclusion_terms",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "inclusion_terms",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "influencer_terms",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "search_terms",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "sub_brand_type",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "enum": [
+                "COMPETITIVE",
+                "THEME"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "title",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "BrandCreateSubBrandRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "allowed_languages",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "boolean_query",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "compound_inclusion_terms",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "exclusion_terms",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "inclusion_terms",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "influencer_terms",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "search_terms",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "BrandKeywords"
+      },
+      {
+        "fields": [
+          {
+            "name": "author",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "CommentAuthor"
+            }
+          },
+          {
+            "name": "content_id",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "is_parent_comment",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "like_count",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "parent_comment_id",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platform",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "posted_at",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "text",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "Comment"
+      },
+      {
+        "fields": [
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "name",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "profile_picture_url",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "username",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "CommentAuthor"
+      },
+      {
+        "fields": [
+          {
+            "name": "ai_summary",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "brand_id",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "caption",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "comment_count",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "content_form",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "creator",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "ContentCreator"
+            }
+          },
+          {
+            "name": "description",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "earned_media_value_cents",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "engagement_rate",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "hashtags",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "is_influencer",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "is_owned",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "is_tagged",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "language",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "last_keyword",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "like_count",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "media_duration",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "mention_type",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "net_promoter_score",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "platform",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platform_post_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platform_url",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "posted_at",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "share_count",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "thumbnail_url",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "total_engagement",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "transcript",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "view_count",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "Content"
+      },
+      {
+        "fields": [
+          {
+            "name": "content_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "ContentActionRequestRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "content_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "status",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "ContentActionResponse"
+      },
+      {
+        "fields": [
+          {
+            "name": "active_content_count",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "follower_count",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "name",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platform",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platform_handle",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platform_url",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "profile_bio",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "profile_picture_url",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "username",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "ContentCreator"
+      },
+      {
+        "fields": [
+          {
+            "name": "created_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "dispatched",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platforms",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "search_term",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "status",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "updated_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          }
+        ],
+        "name": "ContentDiscovery"
+      },
+      {
+        "fields": [
+          {
+            "name": "platforms",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "instagram",
+                  "tiktok",
+                  "youtube"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "search_term",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "ContentDiscoveryRequestRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "brand_id",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "comment_count_max",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "comment_count_min",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "content_form",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "IMAGE",
+                "VIDEO"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "creator_follower_count_max",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "creator_follower_count_min",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "creator_id",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "creator_username",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "earned_media_value_cents_max",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "earned_media_value_cents_min",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "engagement_rate_max",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "engagement_rate_min",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "external_id",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "is_influencer",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "is_owned",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "is_tagged",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "language",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "like_count_max",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "like_count_min",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "media_duration_max",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "media_duration_min",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "mention_type",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "comment",
+                  "content"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "mention_type_not",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "comment",
+                  "content"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "net_promoter_score_max",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "net_promoter_score_min",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "order_by",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "platform",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "instagram",
+                  "tiktok",
+                  "youtube"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "posted_after",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "posted_before",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "posted_within_days",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "posted_within_hours",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "search",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "share_count_max",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "share_count_min",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_engagement_max",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_engagement_min",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "view_count_max",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "view_count_min",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "ContentFilterInputRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "liked",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "owned",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "repost",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          }
+        ],
+        "name": "ContentScopeRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "engagement_rate",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "post_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_comments",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_earned_media_value_cents",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_engagement",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_likes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_media_duration",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "total_shares",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_views",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "unique_creator_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "ContentStatistics"
+      },
+      {
+        "fields": [
+          {
+            "name": "active_content_count",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "email",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "follower_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "name",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platform",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platform_handle",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platform_url",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "profile_bio",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "profile_picture_url",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "username",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "Creator"
+      },
+      {
+        "fields": [
+          {
+            "name": "created_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "creator_id",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "profile_url",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "status",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "updated_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          }
+        ],
+        "name": "CreatorSync"
+      },
+      {
+        "fields": [
+          {
+            "name": "profile_url",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "CreatorSyncCreateRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "analysis",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "CreatorVettingRun"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "content_scope",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "created_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "creator",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "Creator"
+            }
+          },
+          {
+            "name": "creator_id",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "safety_checks",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "any"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "status",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "sync_job_id",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "type",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "updated_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          }
+        ],
+        "name": "CreatorVetting"
+      },
+      {
+        "fields": [
+          {
+            "name": "content_scope",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "ref",
+              "ref": "ContentScopeRequest"
+            }
+          },
+          {
+            "name": "profile_url",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "resync_profile",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "safety_checks",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "SafetyCheckRequest"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "CreatorVettingRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "created_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "modified_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "result",
+            "nullable": true,
+            "read_only": true,
+            "required": false,
+            "type": {
+              "kind": "ref",
+              "ref": "ResultFile"
+            }
+          },
+          {
+            "name": "scope",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "status",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "vetting_id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "CreatorVettingResult"
+      },
+      {
+        "fields": [
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "scope",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "status",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "CreatorVettingRun"
+      },
+      {
+        "fields": [
+          {
+            "name": "context",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "DetectionContext"
+            }
+          },
+          {
+            "name": "created_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "result",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "DetectionResult"
+            }
+          },
+          {
+            "name": "status",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "updated_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          }
+        ],
+        "name": "Detection"
+      },
+      {
+        "fields": [
+          {
+            "name": "identifiers",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array",
+              "min_items": 2
+            }
+          },
+          {
+            "name": "name",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "negatives",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "DetectionBrandHint"
+      },
+      {
+        "fields": [
+          {
+            "name": "identifiers",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array",
+              "min_items": 2
+            }
+          },
+          {
+            "name": "name",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "negatives",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "DetectionBrandHintRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "brand_name",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "found",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "placements",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "DetectionPlacement"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "summary",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "DetectionBrandSummary"
+            }
+          }
+        ],
+        "name": "DetectionBrandResult"
+      },
+      {
+        "fields": [
+          {
+            "name": "confirmed",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "placements",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "review",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "DetectionBrandSummary"
+      },
+      {
+        "fields": [
+          {
+            "name": "external_url",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "hints",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "DetectionHints"
+            }
+          }
+        ],
+        "name": "DetectionContext"
+      },
+      {
+        "fields": [
+          {
+            "name": "hints",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "DetectionHintsRequest"
+            }
+          }
+        ],
+        "name": "DetectionContextInputRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "content_id",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "content_url",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "context",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "DetectionContextInputRequest"
+            }
+          }
+        ],
+        "name": "DetectionCreateRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "brands",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "DetectionBrandHint"
+              },
+              "kind": "array",
+              "min_items": 1
+            }
+          }
+        ],
+        "name": "DetectionHints"
+      },
+      {
+        "fields": [
+          {
+            "name": "brands",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "DetectionBrandHintRequest"
+              },
+              "kind": "array",
+              "min_items": 1
+            }
+          }
+        ],
+        "name": "DetectionHintsRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "confidence",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "modality",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "reasoning",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "timestamp",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "video_url_at_timestamp",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "what_detected",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "DetectionPlacement"
+      },
+      {
+        "fields": [
+          {
+            "name": "brands",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "DetectionBrandResult"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "summary",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "DetectionSummary"
+            }
+          },
+          {
+            "name": "video",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "DetectionVideo"
+            }
+          }
+        ],
+        "name": "DetectionResult"
+      },
+      {
+        "fields": [
+          {
+            "name": "brands_found",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "brands_requested",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "confirmed",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "placements",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "review",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "DetectionSummary"
+      },
+      {
+        "fields": [
+          {
+            "name": "duration_s",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "platform",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "video_url",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "DetectionVideo"
+      },
+      {
+        "fields": [
+          {
+            "name": "allowed_languages",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "boolean_query",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "brand_id",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "compound_inclusion_terms",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "exclusion_terms",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "inclusion_terms",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "influencer_terms",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "search_terms",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "PatchedBrandUpdateRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "custom_headers",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "enabled",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "interval_hours",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "12",
+                "168",
+                "24",
+                "720"
+              ],
+              "kind": "int"
+            }
+          },
+          {
+            "name": "max_items",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "resource_filters",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "url",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "PatchedWebhookSubscriptionUpdateRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "download_url",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "expires_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "format",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "ResultFile"
+      },
+      {
+        "fields": [
+          {
+            "name": "extra",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "type",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "enum": [
+                "ADULT_CONTENT",
+                "ARMS_AND_AMMUNITION",
+                "DISCLOSURE",
+                "MISINFORMATION",
+                "POLITICS",
+                "PROFANITY",
+                "USER_DEFINED_SAFETY_CRITERION"
+              ],
+              "kind": "enum"
+            }
+          }
+        ],
+        "name": "SafetyCheckRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "authenticated_as",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "brand_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "scopes",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          }
+        ],
+        "name": "Usage"
+      },
+      {
+        "fields": [
+          {
+            "name": "human_name",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "kind",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "section",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "windows",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          }
+        ],
+        "name": "UsageScope"
+      },
+      {
+        "fields": [
+          {
+            "name": "limit",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "remaining",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "reset_in",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "used",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "UsageWindow"
+      },
+      {
+        "fields": [
+          {
+            "name": "description",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "event",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "group",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "WebhookAvailableEvent"
+      },
+      {
+        "fields": [
+          {
+            "name": "files",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "WebhookFile"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "item_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "items",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "any"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "statistics",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "any"
+            }
+          }
+        ],
+        "name": "WebhookData"
+      },
+      {
+        "fields": [
+          {
+            "name": "acknowledged",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "action",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "status",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "WebhookDeleteAcknowledgement"
+      },
+      {
+        "fields": [
+          {
+            "name": "attempt_count",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "created",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "finished_at",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "item_count",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "last_error",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "last_status_code",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "modified",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "response_excerpt",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "scheduled_at",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "sha256",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "size_bytes",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "state",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "enum": [
+                "EXHAUSTED",
+                "FAILED",
+                "PENDING",
+                "QUOTA_EXHAUSTED",
+                "SUCCEEDED"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "subscription",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "WebhookDelivery"
+      },
+      {
+        "fields": [
+          {
+            "name": "download_url",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "expires_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "format",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "item_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "sha256",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "size_bytes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "WebhookFile"
+      },
+      {
+        "fields": [
+          {
+            "name": "data",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "WebhookData"
+            }
+          },
+          {
+            "name": "delivered_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "delivery_mode",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "enum": [
+                "inline",
+                "manifest"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "livemode",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "resource",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "resource_filters",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "subscription_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "type",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "WebhookPush"
+      },
+      {
+        "fields": [
+          {
+            "name": "created",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "is_active",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "is_default",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "kind",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "enum": [
+                "event",
+                "snapshot"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "modified",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "secret_prefix",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "WebhookSecret"
+      },
+      {
+        "fields": [
+          {
+            "name": "kind",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "event",
+                "snapshot"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "make_default",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          }
+        ],
+        "name": "WebhookSecretCreateRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "created",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "is_active",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "is_default",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "kind",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "enum": [
+                "event",
+                "snapshot"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "modified",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "secret",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "secret_prefix",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "WebhookSecretCreated"
+      },
+      {
+        "fields": [
+          {
+            "name": "created",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "custom_headers",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "enabled",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "event_types",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "interval_hours",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "kind",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "enum": [
+                "event",
+                "snapshot"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "last_run_at",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "last_status",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "enum": [
+                "FAILED",
+                "SUCCESS"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "max_items",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "modified",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "resource",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "enum": [
+                "content",
+                "creator"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "resource_filters",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "secret_prefix",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "url",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "WebhookSubscription"
+      },
+      {
+        "fields": [
+          {
+            "name": "custom_headers",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "event_types",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "interval_hours",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "12",
+                "168",
+                "24",
+                "720"
+              ],
+              "kind": "int"
+            }
+          },
+          {
+            "name": "kind",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "event",
+                "snapshot"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "max_items",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "resource",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "content",
+                "creator"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "resource_filters",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "secret_type",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "default",
+                "new"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "url",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "WebhookSubscriptionCreateRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "created",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "custom_headers",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "enabled",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "event_types",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "interval_hours",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "kind",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "enum": [
+                "event",
+                "snapshot"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "max_items",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "resource",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "enum": [
+                "content",
+                "creator"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "resource_filters",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "secret",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "secret_prefix",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "url",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "WebhookSubscriptionCreated"
+      }
+    ],
+    "operations": [
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "ai_analysis.content_statistics",
+        "item": "ContentStatistics",
+        "path": "/api/v1/ai_analysis/contents/statistics/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "analysis_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "ai_analysis.contents",
+        "item": "Content",
+        "path": "/api/v1/ai_analysis/contents/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "analysis_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": "AiAnalysisCreateRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "analysis_scope",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "COMMENT",
+                  "CONTENT"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "content_filters",
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "ContentFilterInputRequest"
+            }
+          },
+          {
+            "in": "body",
+            "name": "name",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "body",
+            "name": "topic",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "body_required": true,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "ai_analysis.create",
+        "item": "AiAnalysis",
+        "path": "/api/v1/ai_analysis/",
+        "path_params": [],
+        "query_params": [],
+        "status": 201
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "ai_analysis.list",
+        "item": "AiAnalysis",
+        "path": "/api/v1/ai_analysis/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "ai_analysis.results",
+        "item": "AiAnalysisResult",
+        "path": "/api/v1/ai_analysis/results/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "analysis_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": "BrandAccountsWriteRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "account_type",
+            "required": true,
+            "type": {
+              "enum": [
+                "influencer",
+                "owned",
+                "tracked"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "body",
+            "name": "brand_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "body",
+            "name": "profile_urls",
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "body_required": true,
+        "cardinality": "list",
+        "http_method": "POST",
+        "id": "brand_accounts.add",
+        "item": "BrandAccountGroups",
+        "path": "/api/v1/brands/accounts/",
+        "path_params": [],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "list",
+        "http_method": "GET",
+        "id": "brand_accounts.list",
+        "item": "BrandAccountGroups",
+        "path": "/api/v1/brands/accounts/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "account_type",
+            "required": false,
+            "type": {
+              "enum": [
+                "influencer",
+                "owned",
+                "tracked"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "query",
+            "name": "brand_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": "BrandAccountsWriteRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "account_type",
+            "required": true,
+            "type": {
+              "enum": [
+                "influencer",
+                "owned",
+                "tracked"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "body",
+            "name": "brand_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "body",
+            "name": "profile_urls",
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "body_required": true,
+        "cardinality": "list",
+        "http_method": "DELETE",
+        "id": "brand_accounts.remove",
+        "item": "BrandAccountGroups",
+        "path": "/api/v1/brands/accounts/",
+        "path_params": [],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "brands.catalog",
+        "item": "BrandCatalog",
+        "path": "/api/v1/brands/catalog/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "category_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "industry_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "order_by",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "-title",
+                  "title"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "list",
+        "http_method": "GET",
+        "id": "brands.catalog_categories",
+        "item": "BrandCatalogItem",
+        "path": "/api/v1/brands/catalog/categories/",
+        "path_params": [],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "brands.list",
+        "item": "Brand",
+        "path": "/api/v1/brands/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": "PatchedBrandUpdateRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "allowed_languages",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "boolean_query",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "body",
+            "name": "brand_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "body",
+            "name": "compound_inclusion_terms",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "exclusion_terms",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "inclusion_terms",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "influencer_terms",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "search_terms",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "PATCH",
+        "id": "brands.update",
+        "item": "Brand",
+        "path": "/api/v1/brands/",
+        "path_params": [],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "comments.list",
+        "item": "Comment",
+        "path": "/api/v1/comment/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "content_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "is_parent_comment",
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "in": "query",
+            "name": "order_by",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "-like_count",
+                  "like_count"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "parent_comment_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": "ContentActionRequestRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "content_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "body_required": true,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "content.ai_summarize",
+        "item": "ContentActionResponse",
+        "path": "/api/v1/content/ai_summarize/",
+        "path_params": [],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "content.details",
+        "item": "Content",
+        "path": "/api/v1/content/{id}/",
+        "path_params": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "brand_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": "ContentDiscoveryRequestRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "platforms",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "instagram",
+                  "tiktok",
+                  "youtube"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "search_term",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "body_required": true,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "content.discover",
+        "item": "ContentDiscovery",
+        "path": "/api/v1/content/discovery/",
+        "path_params": [],
+        "query_params": [],
+        "status": 201
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "content.list",
+        "item": "Content",
+        "path": "/api/v1/content/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "brand_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "comment_count",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "comment_count_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "comment_count_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "content_form",
+            "required": false,
+            "type": {
+              "enum": [
+                "IMAGE",
+                "VIDEO"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "query",
+            "name": "creator_follower_count",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "creator_follower_count_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "creator_follower_count_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "creator_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "creator_username",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "earned_media_value_cents",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "earned_media_value_cents_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "earned_media_value_cents_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "engagement_rate",
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "engagement_rate_max",
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "engagement_rate_min",
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "external_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "is_influencer",
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "in": "query",
+            "name": "is_owned",
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "in": "query",
+            "name": "is_tagged",
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "in": "query",
+            "name": "language",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "like_count",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "like_count_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "like_count_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "media_duration",
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "media_duration_max",
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "media_duration_min",
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "mention_type",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "comment",
+                  "content"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "mention_type_not",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "comment",
+                  "content"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "net_promoter_score",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "net_promoter_score_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "net_promoter_score_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "order_by",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "-comment_count",
+                  "-earned_media_value_cents",
+                  "-engagement_rate",
+                  "-like_count",
+                  "-net_promoter_score",
+                  "-posted_at",
+                  "-share_count",
+                  "-total_engagement",
+                  "-view_count",
+                  "comment_count",
+                  "earned_media_value_cents",
+                  "engagement_rate",
+                  "like_count",
+                  "net_promoter_score",
+                  "posted_at",
+                  "share_count",
+                  "total_engagement",
+                  "view_count"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "platform",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "instagram",
+                  "tiktok",
+                  "youtube"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_after",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_before",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_within_days",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_within_hours",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "share_count",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "share_count_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "share_count_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "total_engagement",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "total_engagement_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "total_engagement_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "view_count",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "view_count_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "view_count_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "content.statistics",
+        "item": "ContentStatistics",
+        "path": "/api/v1/content/statistics/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "brand_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "comment_count",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "comment_count_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "comment_count_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "content_form",
+            "required": false,
+            "type": {
+              "enum": [
+                "IMAGE",
+                "VIDEO"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "query",
+            "name": "creator_follower_count",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "creator_follower_count_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "creator_follower_count_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "creator_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "creator_username",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "earned_media_value_cents",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "earned_media_value_cents_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "earned_media_value_cents_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "engagement_rate",
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "engagement_rate_max",
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "engagement_rate_min",
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "external_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "is_influencer",
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "in": "query",
+            "name": "is_owned",
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "in": "query",
+            "name": "is_tagged",
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "in": "query",
+            "name": "language",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "like_count",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "like_count_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "like_count_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "media_duration",
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "media_duration_max",
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "media_duration_min",
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "mention_type",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "comment",
+                  "content"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "mention_type_not",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "comment",
+                  "content"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "net_promoter_score",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "net_promoter_score_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "net_promoter_score_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "order_by",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "-comment_count",
+                  "-earned_media_value_cents",
+                  "-engagement_rate",
+                  "-like_count",
+                  "-net_promoter_score",
+                  "-posted_at",
+                  "-share_count",
+                  "-total_engagement",
+                  "-view_count",
+                  "comment_count",
+                  "earned_media_value_cents",
+                  "engagement_rate",
+                  "like_count",
+                  "net_promoter_score",
+                  "posted_at",
+                  "share_count",
+                  "total_engagement",
+                  "view_count"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "platform",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "instagram",
+                  "tiktok",
+                  "youtube"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_after",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_before",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_within_days",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_within_hours",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "share_count",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "share_count_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "share_count_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "total_engagement",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "total_engagement_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "total_engagement_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "view_count",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "view_count_max",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "view_count_min",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": "ContentActionRequestRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "content_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "body_required": true,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "content.transcribe",
+        "item": "ContentActionResponse",
+        "path": "/api/v1/content/transcribe/",
+        "path_params": [],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": "CreatorSyncCreateRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "profile_url",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "body_required": true,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "creator_sync.create",
+        "item": "CreatorSync",
+        "path": "/api/v1/creator_sync/",
+        "path_params": [],
+        "query_params": [],
+        "status": 201
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "creator_sync.get",
+        "item": "CreatorSync",
+        "path": "/api/v1/creator_sync/{id}/",
+        "path_params": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "creator_sync.list",
+        "item": "CreatorSync",
+        "path": "/api/v1/creator_sync/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "creator_vetting.content_statistics",
+        "item": "ContentStatistics",
+        "path": "/api/v1/creator/vetting/contents/statistics/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "vetting_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "creator_vetting.contents",
+        "item": "Content",
+        "path": "/api/v1/creator/vetting/contents/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "vetting_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": "CreatorVettingRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "content_scope",
+            "required": false,
+            "type": {
+              "kind": "ref",
+              "ref": "ContentScopeRequest"
+            }
+          },
+          {
+            "in": "body",
+            "name": "profile_url",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "body",
+            "name": "resync_profile",
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "in": "body",
+            "name": "safety_checks",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "SafetyCheckRequest"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "body_required": true,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "creator_vetting.create",
+        "item": "CreatorVetting",
+        "path": "/api/v1/creator/vetting/",
+        "path_params": [],
+        "query_params": [],
+        "status": 201
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "creator_vetting.list",
+        "item": "CreatorVetting",
+        "path": "/api/v1/creator/vetting/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "creator_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "creator_vetting.results",
+        "item": "CreatorVettingResult",
+        "path": "/api/v1/creator/vetting/results/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "vetting_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "creators.list",
+        "item": "Creator",
+        "path": "/api/v1/creator/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "email",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "order_by",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "-follower_count",
+                  "-id",
+                  "follower_count",
+                  "id"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "platform",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "instagram",
+                  "tiktok",
+                  "youtube"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "username",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": "DetectionCreateRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "content_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "body",
+            "name": "content_url",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "body",
+            "name": "context",
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "DetectionContextInputRequest"
+            }
+          }
+        ],
+        "body_required": true,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "detection.create",
+        "item": "Detection",
+        "path": "/api/v1/detection/",
+        "path_params": [],
+        "query_params": [],
+        "status": 201
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "detection.get",
+        "item": "Detection",
+        "path": "/api/v1/detection/{id}/",
+        "path_params": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "detection.list",
+        "item": "Detection",
+        "path": "/api/v1/detection/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": "BrandCreateSubBrandRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "allowed_languages",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "boolean_query",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "body",
+            "name": "compound_inclusion_terms",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "exclusion_terms",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "inclusion_terms",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "influencer_terms",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "search_terms",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "sub_brand_type",
+            "required": true,
+            "type": {
+              "enum": [
+                "COMPETITIVE",
+                "THEME"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "body",
+            "name": "title",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "body_required": true,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "sub_brands.create",
+        "item": "Brand",
+        "path": "/api/v1/brands/",
+        "path_params": [],
+        "query_params": [],
+        "status": 201
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "usage.retrieve",
+        "item": "Usage",
+        "path": "/api/v1/usage/",
+        "path_params": [],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": "WebhookSecretCreateRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "kind",
+            "required": false,
+            "type": {
+              "enum": [
+                "event",
+                "snapshot"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "body",
+            "name": "make_default",
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          }
+        ],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "webhooks.create_secret",
+        "item": "WebhookSecretCreated",
+        "path": "/api/v1/webhooks/secrets/",
+        "path_params": [],
+        "query_params": [],
+        "status": 201
+      },
+      {
+        "body": "WebhookSubscriptionCreateRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "custom_headers",
+            "required": false,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "in": "body",
+            "name": "event_types",
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "body",
+            "name": "interval_hours",
+            "required": false,
+            "type": {
+              "enum": [
+                "12",
+                "168",
+                "24",
+                "720"
+              ],
+              "kind": "int"
+            }
+          },
+          {
+            "in": "body",
+            "name": "kind",
+            "required": false,
+            "type": {
+              "enum": [
+                "event",
+                "snapshot"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "body",
+            "name": "max_items",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "body",
+            "name": "resource",
+            "required": false,
+            "type": {
+              "enum": [
+                "content",
+                "creator"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "body",
+            "name": "resource_filters",
+            "required": false,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "in": "body",
+            "name": "secret_type",
+            "required": false,
+            "type": {
+              "enum": [
+                "default",
+                "new"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "body",
+            "name": "url",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "body_required": true,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "webhooks.create_subscription",
+        "item": "WebhookSubscriptionCreated",
+        "path": "/api/v1/webhooks/subscriptions/",
+        "path_params": [],
+        "query_params": [],
+        "status": 201
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "DELETE",
+        "id": "webhooks.delete_secret",
+        "item": "WebhookDeleteAcknowledgement",
+        "path": "/api/v1/webhooks/secrets/{secret_id}/",
+        "path_params": [
+          {
+            "in": "path",
+            "name": "secret_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "DELETE",
+        "id": "webhooks.delete_subscription",
+        "item": "WebhookDeleteAcknowledgement",
+        "path": "/api/v1/webhooks/subscriptions/{subscription_id}/",
+        "path_params": [
+          {
+            "in": "path",
+            "name": "subscription_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "webhooks.get_delivery",
+        "item": "WebhookDelivery",
+        "path": "/api/v1/webhooks/deliveries/{delivery_id}/",
+        "path_params": [
+          {
+            "in": "path",
+            "name": "delivery_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "webhooks.get_secret",
+        "item": "WebhookSecret",
+        "path": "/api/v1/webhooks/secrets/{secret_id}/",
+        "path_params": [
+          {
+            "in": "path",
+            "name": "secret_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "webhooks.get_subscription",
+        "item": "WebhookSubscription",
+        "path": "/api/v1/webhooks/subscriptions/{subscription_id}/",
+        "path_params": [
+          {
+            "in": "path",
+            "name": "subscription_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "webhooks.list_deliveries",
+        "item": "WebhookDelivery",
+        "path": "/api/v1/webhooks/deliveries/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "created",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "created_after",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "created_before",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "-created",
+                  "created"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "type": {
+              "enum": [
+                "EXHAUSTED",
+                "FAILED",
+                "PENDING",
+                "QUOTA_EXHAUSTED",
+                "SUCCEEDED"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "query",
+            "name": "state!",
+            "required": false,
+            "type": {
+              "enum": [
+                "EXHAUSTED",
+                "FAILED",
+                "PENDING",
+                "QUOTA_EXHAUSTED",
+                "SUCCEEDED"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "query",
+            "name": "subscription",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "list",
+        "http_method": "GET",
+        "id": "webhooks.list_events",
+        "item": "WebhookAvailableEvent",
+        "path": "/api/v1/webhooks/events/",
+        "path_params": [],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "webhooks.list_secrets",
+        "item": "WebhookSecret",
+        "path": "/api/v1/webhooks/secrets/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "webhooks.list_subscriptions",
+        "item": "WebhookSubscription",
+        "path": "/api/v1/webhooks/subscriptions/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "webhooks.rotate_subscription_secret",
+        "item": "WebhookSubscriptionCreated",
+        "path": "/api/v1/webhooks/subscriptions/{subscription_id}/rotate_secret/",
+        "path_params": [
+          {
+            "in": "path",
+            "name": "subscription_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "webhooks.send_test",
+        "item": null,
+        "path": "/api/v1/webhooks/subscriptions/{subscription_id}/send_test/",
+        "path_params": [
+          {
+            "in": "path",
+            "name": "subscription_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "query_params": [],
+        "status": 202
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "webhooks.set_default_secret",
+        "item": "WebhookSecret",
+        "path": "/api/v1/webhooks/secrets/{secret_id}/set_default/",
+        "path_params": [
+          {
+            "in": "path",
+            "name": "secret_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "query_params": [],
+        "status": 200
+      },
+      {
+        "body": "PatchedWebhookSubscriptionUpdateRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "custom_headers",
+            "required": false,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "in": "body",
+            "name": "enabled",
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "in": "body",
+            "name": "interval_hours",
+            "required": false,
+            "type": {
+              "enum": [
+                "12",
+                "168",
+                "24",
+                "720"
+              ],
+              "kind": "int"
+            }
+          },
+          {
+            "in": "body",
+            "name": "max_items",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "body",
+            "name": "resource_filters",
+            "required": false,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "in": "body",
+            "name": "url",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "PATCH",
+        "id": "webhooks.update_subscription",
+        "item": "WebhookSubscription",
+        "path": "/api/v1/webhooks/subscriptions/{subscription_id}/",
+        "path_params": [
+          {
+            "in": "path",
+            "name": "subscription_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "query_params": [],
+        "status": 200
+      }
+    ],
+    "webhooks": [
+      {
+        "event_type": "ai_analysis.completed",
+        "name": "AiAnalysisCompleted",
+        "payload": "WebhookPush"
+      },
+      {
+        "event_type": "content.snapshot",
+        "name": "ContentSnapshot",
+        "payload": "WebhookPush"
+      },
+      {
+        "event_type": "creator.snapshot",
+        "name": "CreatorSnapshot",
+        "payload": "WebhookPush"
+      },
+      {
+        "event_type": "creator_vetting.completed",
+        "name": "CreatorVettingCompleted",
+        "payload": "WebhookPush"
+      }
+    ]
+  },
+  "version": "1.0.0"
+}
