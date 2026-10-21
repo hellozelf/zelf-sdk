@@ -163,6 +163,7 @@ manifest, so regenerating never resets a client to someone else's number. The
 major and minor come from the spec; only the patch is a client's own.
 
 To release one client: edit its patch version, run `make all`, commit, and let
-`release.yml` create the tag and release on the next push to `main`. Each
-publish workflow keys off its own tag prefix (`py/v`, `js/v`, `go/v`,
-`rust/v`, `ruby/v`, `csharp/v`), so only that language goes out.
+`release.yml` create the tag and release on the next push to `main`.
+`publish.yml` holds one job per client, each gated on its own tag prefix
+(`py/v`, `js/v`, `go/v`, `rust/v`, `ruby/v`, `csharp/v`), so only that
+language goes out.
