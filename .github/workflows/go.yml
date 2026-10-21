@@ -36,7 +36,9 @@ jobs:
       - name: Test with coverage
         working-directory: go
         run: |
-          go test ./... -covermode=atomic -coverpkg="$GO_PKGS" -coverprofile=cover.out
+          # -count=1 because a cached package result contributes no counts for
+          # the other package's statements, which reads as lost coverage.
+          go test ./... -count=1 -covermode=atomic -coverpkg="$GO_PKGS" -coverprofile=cover.out
           total=$(go tool cover -func=cover.out | awk '/^total:/{print $3}')
           echo "coverage: $total"
           [ "$total" = "100.0%" ] || { go tool cover -func=cover.out | grep -v '100.0%$'; exit 1; }

@@ -3044,8 +3044,8 @@
   },
   "FollowerPeriod": {
    "followers": 42,
-   "start_date": "Start date",
-   "end_date": "End date",
+   "start_date": "2026-01-01",
+   "end_date": "2026-01-01",
    "accounts": [
     {
      "platform": "tiktok",
@@ -3064,8 +3064,8 @@
    "periods": [
     {
      "followers": 42,
-     "start_date": "Start date",
-     "end_date": "End date",
+     "start_date": "2026-01-01",
+     "end_date": "2026-01-01",
      "accounts": [
       {
        "platform": "tiktok",
@@ -3153,8 +3153,8 @@
     }
    ],
    "history": {
-    "start_date": "Start date",
-    "end_date": "End date",
+    "start_date": "2026-01-01",
+    "end_date": "2026-01-01",
     "days": [
      {
       "source": "Source",
@@ -3163,7 +3163,7 @@
       "creator_vetting": 7,
       "data_records": 42,
       "data_records_items": 42,
-      "date": "Date"
+      "date": "2026-01-01"
      }
     ]
    }
@@ -3175,11 +3175,11 @@
    "creator_vetting": 7,
    "data_records": 42,
    "data_records_items": 42,
-   "date": "Date"
+   "date": "2026-01-01"
   },
   "UsageHistory": {
-   "start_date": "Start date",
-   "end_date": "End date",
+   "start_date": "2026-01-01",
+   "end_date": "2026-01-01",
    "days": [
     {
      "source": "Source",
@@ -3188,7 +3188,7 @@
      "creator_vetting": 7,
      "data_records": 42,
      "data_records_items": 42,
-     "date": "Date"
+     "date": "2026-01-01"
     }
    ]
   },
