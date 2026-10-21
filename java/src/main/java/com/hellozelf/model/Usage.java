@@ -13,6 +13,7 @@ import java.util.List;
 public record Usage(
         @JsonProperty("brand_id") String brandId,
         @JsonProperty("authenticated_as") String authenticatedAs,
-        @JsonProperty("scopes") JsonNode scopes
+        @JsonProperty("scopes") List<UsageScope> scopes,
+        @JsonProperty("history") UsageHistory history
 ) {
 }

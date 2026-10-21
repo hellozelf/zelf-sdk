@@ -110,6 +110,78 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/analytics/brand_comparison/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Compare Brand Performance
+     * @description `analytics.brand_comparison`
+     *
+     *     Returns one row of totals per brand: the top-level brand named by `brand_id`, followed by each of its competitor sub-brands. The statistics block matches `content.statistics`, so the same parsing works for both.
+     *
+     *     `brand_id` must name a top-level brand. A sub-brand is refused with the id of the parent to use instead.
+     */
+    get: operations['analytics.brand_comparison']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/analytics/follower_timeseries/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Brand Follower Time Series
+     * @description `analytics.follower_timeseries`
+     *
+     *     Returns follower history for the top-level brand named by `brand_id` and each of its competitor sub-brands, bucketed by `period`. A brand appears only for the periods in which one of its owned handles was measured.
+     *
+     *     Follower counts carry forward: a handle with no reading in a period keeps the last one recorded before it.
+     */
+    get: operations['analytics.follower_timeseries']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/analytics/posted_comments/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Posted Comment Analytics
+     * @description `analytics.posted_comments`
+     *
+     *     Returns the comments the brand posted in the window, grouped by the kind of content they were posted on, together with the likes and replies those comments received. These are comments the brand wrote, not comments left on its content; `comments.list` returns the latter.
+     *
+     *     The five categories add up to `total_comments_posted`.
+     */
+    get: operations['analytics.posted_comments']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/brands/': {
     parameters: {
       query?: never
@@ -506,7 +578,7 @@ export interface paths {
      * Create Creator Vetting
      * @description `creator_vetting.create`
      *
-     *     Vets a creator identified by `profile_url`, running or reusing the profile scrape and the AI safety and brand-fit analysis. Runs complete asynchronously, so this method returns immediately with the created vetting.
+     *     Vets a creator identified by `profile_url`, retrieving the profile and scoring its safety and brand fit. Runs complete asynchronously, so this method returns immediately with the created vetting.
      *
      *     The vetting analyzes up to 150 of the creator's posts per connection type, or the limit configured for your workspace.
      *
@@ -742,7 +814,7 @@ export interface paths {
      *
      *     `reset_in` counts down to the end of the current window, which starts on its first request rather than on the clock. Reading this consumes no quota.
      */
-    get: operations['usage_retrieve']
+    get: operations['usage.retrieve']
     put?: never
     post?: never
     delete?: never
@@ -760,19 +832,19 @@ export interface paths {
     }
     /**
      * List Webhook Subscriptions
-     * @description `webhook.subscriptions`
+     * @description `webhooks.list_subscriptions`
      *
      *     Returns the webhook subscriptions owned by your brand, newest first.
      */
-    get: operations['webhook.subscriptions']
+    get: operations['webhooks.list_subscriptions']
     put?: never
     /**
      * Create Webhook Subscription
-     * @description `webhook.create_subscription`
+     * @description `webhooks.create_subscription`
      *
      *     Creates a webhook subscription for your brand. The full signing `secret` is returned only once, in this response. A brand may hold at most one `event` subscription.
      */
-    post: operations['webhook.create_subscription']
+    post: operations['webhooks.create_subscription']
     delete?: never
     options?: never
     head?: never
@@ -788,29 +860,29 @@ export interface paths {
     }
     /**
      * Get Webhook Subscription
-     * @description `webhook.subscription`
+     * @description `webhooks.get_subscription`
      *
      *     Returns a single subscription.
      */
-    get: operations['webhook.subscription']
+    get: operations['webhooks.get_subscription']
     put?: never
     post?: never
     /**
      * Delete Webhook Subscription
-     * @description `webhook.delete_subscription`
+     * @description `webhooks.delete_subscription`
      *
      *     Deletes a subscription. This is destructive: the subscription stops receiving deliveries.
      */
-    delete: operations['webhook.delete_subscription']
+    delete: operations['webhooks.delete_subscription']
     options?: never
     head?: never
     /**
      * Update Webhook Subscription
-     * @description `webhook.update_subscription`
+     * @description `webhooks.update_subscription`
      *
      *     Partially updates a subscription's `url`, `custom_headers`, `resource_filters`, `interval_hours`, `max_items`, or `enabled`. `kind`, `resource`, and `event_types` are immutable after create.
      */
-    patch: operations['webhook.update_subscription']
+    patch: operations['webhooks.update_subscription']
     trace?: never
   }
   '/api/v1/webhooks/subscriptions/{subscription_id}/rotate_secret/': {
@@ -824,11 +896,11 @@ export interface paths {
     put?: never
     /**
      * Rotate Webhook Subscription Secret
-     * @description `webhook.rotate_subscription_secret`
+     * @description `webhooks.rotate_subscription_secret`
      *
      *     Mints a new signing secret for the subscription and returns the full `secret` once. Deliveries after this use the new secret.
      */
-    post: operations['webhook.rotate_subscription_secret']
+    post: operations['webhooks.rotate_subscription_secret']
     delete?: never
     options?: never
     head?: never
@@ -846,11 +918,11 @@ export interface paths {
     put?: never
     /**
      * Send Test Webhook
-     * @description `webhook.send_test`
+     * @description `webhooks.send_test`
      *
      *     Queues a test event to the subscription's URL so you can verify signing and parsing. Rate limited to 12 per hour per subscription. A disabled subscription is rejected.
      */
-    post: operations['webhook.send_test']
+    post: operations['webhooks.send_test']
     delete?: never
     options?: never
     head?: never
@@ -866,19 +938,19 @@ export interface paths {
     }
     /**
      * List Webhook Secrets
-     * @description `webhook.secrets`
+     * @description `webhooks.list_secrets`
      *
      *     Lists the brand's active secrets.
      */
-    get: operations['webhook.secrets']
+    get: operations['webhooks.list_secrets']
     put?: never
     /**
      * Create Webhook Secret
-     * @description `webhook.create_secret`
+     * @description `webhooks.create_secret`
      *
      *     Creates a signing secret for the brand. The full `secret` is returned only once.
      */
-    post: operations['webhook.create_secret']
+    post: operations['webhooks.create_secret']
     delete?: never
     options?: never
     head?: never
@@ -894,20 +966,20 @@ export interface paths {
     }
     /**
      * Get Webhook Secret
-     * @description `webhook.secret`
+     * @description `webhooks.get_secret`
      *
      *     Returns a single secret.
      */
-    get: operations['webhook.secret']
+    get: operations['webhooks.get_secret']
     put?: never
     post?: never
     /**
      * Delete Webhook Secret
-     * @description `webhook.delete_secret`
+     * @description `webhooks.delete_secret`
      *
      *     Deactivates a secret. The default secret, or one still linked to a subscription, cannot be deleted.
      */
-    delete: operations['webhook.delete_secret']
+    delete: operations['webhooks.delete_secret']
     options?: never
     head?: never
     patch?: never
@@ -924,11 +996,11 @@ export interface paths {
     put?: never
     /**
      * Set Default Webhook Secret
-     * @description `webhook.set_default_secret`
+     * @description `webhooks.set_default_secret`
      *
      *     Marks a secret as the brand's default for its kind.
      */
-    post: operations['webhook.set_default_secret']
+    post: operations['webhooks.set_default_secret']
     delete?: never
     options?: never
     head?: never
@@ -944,11 +1016,11 @@ export interface paths {
     }
     /**
      * List Available Webhook Events
-     * @description `webhook.available_events`
+     * @description `webhooks.list_events`
      *
      *     Lists the event types an event subscription can listen for.
      */
-    get: operations['webhook.available_events']
+    get: operations['webhooks.list_events']
     put?: never
     post?: never
     delete?: never
@@ -966,11 +1038,11 @@ export interface paths {
     }
     /**
      * List Webhook Deliveries
-     * @description `webhook.deliveries`
+     * @description `webhooks.list_deliveries`
      *
      *     Lists webhook delivery attempts for the brand, newest first. Filter by `subscription` (masked id), `state`, and a `created_after` / `created_before` window.
      */
-    get: operations['webhook.deliveries']
+    get: operations['webhooks.list_deliveries']
     put?: never
     post?: never
     delete?: never
@@ -988,11 +1060,11 @@ export interface paths {
     }
     /**
      * Get Webhook Delivery
-     * @description `webhook.delivery`
+     * @description `webhooks.get_delivery`
      *
      *     Returns a single delivery attempt.
      */
-    get: operations['webhook.delivery']
+    get: operations['webhooks.get_delivery']
     put?: never
     post?: never
     delete?: never
@@ -1460,6 +1532,17 @@ export interface components {
     }
     /** @enum {string} */
     AnalysisScopeEnum: 'CONTENT' | 'COMMENT'
+    /** @description The brand a row of analytics belongs to. */
+    AnalyticsBrand: {
+      /** @description Unique identifier for the brand. */
+      readonly id: string
+      /** @description Display name of the brand. */
+      title: string | null
+      /** @description `true` for the brand the request named, `false` for a sub-brand. */
+      is_primary: boolean
+      /** @description `COMPETITIVE` or `THEME` for a sub-brand; `null` for the top-level brand the request named. */
+      readonly sub_brand_type: string | null
+    }
     /** @enum {unknown} */
     BlankEnum: ''
     /** @description A brand you can reach. */
@@ -1481,7 +1564,7 @@ export interface components {
     BrandAccount: {
       /** @description The account's handle. */
       username: string
-      /** @description `instagram` or `tiktok`. */
+      /** @description `instagram`, `tiktok` or `youtube`. */
       platform: string
       /** @description The account's profile URL, when available. */
       external_url?: string | null
@@ -1506,7 +1589,7 @@ export interface components {
       brand_id?: string
       /** @description The list to modify: `tracked`, `influencer`, or `owned` for the brand's own profiles. */
       account_type: components['schemas']['AccountTypeEnum']
-      /** @description Profile URLs on a supported platform (`instagram` or `tiktok`). */
+      /** @description Profile URLs on a supported platform (`instagram`, `tiktok` or `youtube`). */
       profile_urls: string[]
     }
     /** @description A brand in the curated catalog, readable by every api key. */
@@ -1536,6 +1619,15 @@ export interface components {
       level: string
       /** @description Industry id a category belongs to; `null` for an industry. */
       parent_id: string | null
+    }
+    /** @description One brand's performance in the comparison. */
+    BrandComparison: {
+      /** @description The brand this row covers. */
+      brand: components['schemas']['AnalyticsBrand']
+      /** @description Totals over the window. */
+      statistics: components['schemas']['BrandStatistics']
+      /** @description Follower counts as they stand now, not over the window. */
+      followers: components['schemas']['BrandFollowers']
     }
     /** @description Create a sub-brand under the workspace brand. */
     BrandCreateSubBrandRequest: {
@@ -1578,6 +1670,13 @@ export interface components {
       /** @description Type of sub-brand: `COMPETITIVE` or `THEME`. */
       sub_brand_type: components['schemas']['SubBrandTypeEnum']
     }
+    /** @description Followers across the handles a brand owns. */
+    BrandFollowers: {
+      /** @description Followers across every owned handle. */
+      total: number
+      /** @description Per handle counts that add up to `total`. */
+      accounts: components['schemas']['FollowerAccount'][]
+    }
     /** @description The terms this brand uses to monitor social platforms. */
     BrandKeywords: {
       /** @description Plain keywords the brand monitors across platforms, matched as-is (case-insensitive, no operators). */
@@ -1615,13 +1714,43 @@ export interface components {
        */
       readonly boolean_query: string | null
     }
+    /** @description Totals over the content matched to a brand in the window. */
+    BrandStatistics: {
+      /** @description Number of posts matched to the brand. */
+      post_count: number
+      /** @description Total views across those posts. */
+      total_views: number
+      /** @description Total likes across those posts. */
+      total_likes: number
+      /** @description Total comments across those posts. */
+      total_comments: number
+      /** @description Total shares across those posts. */
+      total_shares: number
+      /** @description Likes, comments and shares across those posts. */
+      total_engagement: number
+      /** @description Estimated marketing value across those posts, in US cents. */
+      total_earned_media_value_cents: number
+      /**
+       * Format: double
+       * @description Total engagement divided by total views. Null when the set has no recorded views.
+       */
+      engagement_rate: number | null
+      /** @description Number of distinct creators who posted. */
+      unique_creator_count: number
+      /** @description Engagement on positive posts. */
+      total_positive_nps: number
+      /** @description Engagement on neutral posts. */
+      total_neutral_nps: number
+      /** @description Engagement on negative posts. */
+      total_negative_nps: number
+    }
     /** @description A comment left on a piece of content. */
     Comment: {
       /** @description Unique identifier for the comment. */
       readonly id: string
       /** @description The comment's text content. */
       text: string
-      /** @description The platform the comment was posted on. Either `instagram` or `tiktok`. */
+      /** @description The platform the comment was posted on: `instagram`, `tiktok` or `youtube`. */
       platform: string | null
       /** @description Number of likes the comment has received. */
       like_count: number | null
@@ -1662,7 +1791,7 @@ export interface components {
        *     - TikTok: `https://www.tiktok.com/@username/video/12345678` -> `12345678`
        */
       platform_post_id: string
-      /** @description The platform the content was published on. Either `instagram` or `tiktok`. */
+      /** @description The platform the content was published on: `instagram`, `tiktok` or `youtube`. */
       platform: string
       /** @description Whether the content is a video or an image. */
       content_form: string | null
@@ -2280,6 +2409,39 @@ export interface components {
        */
       duration_s: number
     }
+    /** @description One owned handle and the followers it carries. */
+    FollowerAccount: {
+      /** @description The platform the handle is on. */
+      platform: string
+      /** @description The handle. */
+      username: string
+      /** @description Follower count for this handle. */
+      followers: number
+    }
+    /** @description Followers at the end of one period. */
+    FollowerPeriod: {
+      /** @description Followers across every owned handle. */
+      followers: number
+      /**
+       * Format: date
+       * @description First day of the period.
+       */
+      start_date: string
+      /**
+       * Format: date
+       * @description Last day of the period.
+       */
+      end_date: string
+      /** @description Per handle counts that add up to `followers`. */
+      accounts: components['schemas']['FollowerAccount'][]
+    }
+    /** @description One brand's follower history. */
+    FollowerTimeseries: {
+      /** @description The brand this row covers. */
+      brand: components['schemas']['AnalyticsBrand']
+      /** @description One entry per period, oldest first. */
+      periods: components['schemas']['FollowerPeriod'][]
+    }
     /** @enum {integer} */
     IntervalHoursEnum: 12 | 24 | 168 | 720
     /** @enum {string} */
@@ -2381,6 +2543,24 @@ export interface components {
     }
     /** @enum {string} */
     PlatformEnum: 'instagram' | 'tiktok' | 'youtube'
+    /** @description Comments the brand posted on one category of content. */
+    PostedCommentCategory: {
+      /** @description `brand`, `owned`, `competitors`, `themes` or `other`. `other` covers content outside the brand's own tree. */
+      category: string
+      /** @description Comments posted on this category. */
+      comments: number
+      /** @description Likes those comments received. */
+      likes: number
+      /** @description Replies those comments received. */
+      replies: number
+    }
+    /** @description Comments the brand posted, split by the content they were posted on. */
+    PostedComments: {
+      /** @description Comments the brand posted in the window, across every category. */
+      total_comments_posted: number
+      /** @description One entry per category. They add up to `total_comments_posted`. */
+      categories: components['schemas']['PostedCommentCategory'][]
+    }
     /** @enum {string} */
     ResourceEnum: 'content' | 'creator'
     /** @description Signed, time-limited download of an analysis run's result payload. */
@@ -2433,26 +2613,63 @@ export interface components {
       brand_id: string
       /** @description ``api_key`` or ``mcp``, whichever made this call. It decides which groups your calls are counted against. */
       authenticated_as: string
-      /** @description Keyed by group. Both sections are returned whichever way you call. */
-      readonly scopes: {
-        [key: string]: components['schemas']['UsageScope']
-      }
+      /** @description One entry per metered group. Both sections are returned whichever way you call. */
+      scopes: components['schemas']['UsageScope'][]
+      /** @description What was actually spent, day by day, from the usage ledger. */
+      history: components['schemas']['UsageHistory']
+    }
+    /** @description One day of consumption for one source. */
+    UsageDay: {
+      /** @description ``api`` for direct requests, ``mcp`` for AI clients. */
+      source: string
+      /** @description Every counted call that day. */
+      general: number
+      /** @description Calls counted against the AI analysis group. */
+      ai_analysis: number
+      /** @description Calls counted against creator vetting. */
+      creator_vetting: number
+      /** @description Calls counted against data records. */
+      data_records: number
+      /** @description Records those calls returned. */
+      data_records_items: number
+      /**
+       * Format: date
+       * @description The day, in the brand's billing timezone.
+       */
+      date: string
+    }
+    /** @description Daily consumption over the window the ledger keeps. */
+    UsageHistory: {
+      /**
+       * Format: date
+       * @description First day covered.
+       */
+      start_date: string
+      /**
+       * Format: date
+       * @description Last day covered.
+       */
+      end_date: string
+      /** @description One entry per day and source that saw usage, oldest first. */
+      days: components['schemas']['UsageDay'][]
     }
     /** @description One metered group, with every window that has a limit. */
     UsageScope: {
+      /** @description Identifier of the metered group. */
+      scope: string
       /** @description Name of the group, as an admin sees it. */
       human_name: string
       /** @description ``request`` counts calls; ``item`` counts rows returned. */
       kind: string
       /** @description Which product the group meters: ``api`` for direct requests, ``mcp`` for AI clients. The two never share a counter. */
       section: string
-      /** @description Keyed by window: rps, rpm, rph, rpd, rpmonth, or the item windows. */
-      readonly windows: {
-        [key: string]: components['schemas']['UsageWindow']
-      }
+      /** @description Every window that has a limit configured. */
+      windows: components['schemas']['UsageWindow'][]
     }
     /** @description Consumption of one window, e.g. requests in the current hour. */
     UsageWindow: {
+      /** @description Which window this is: rps, rpm, rph, rpd, rpmonth, or an item window. */
+      window: string
       /** @description Most that may be spent in this window. */
       limit: number
       /** @description Spent so far in this window. */
@@ -2462,6 +2679,7 @@ export interface components {
       /** @description Seconds until the window resets. The window starts on its first request rather than on the clock, so this is what is left of it. */
       reset_in: number
     }
+    /** @description An event type a subscription may ask for. */
     WebhookAvailableEvent: {
       /** @description Event type identifier, e.g. creator_vetting.completed. */
       readonly event: string
@@ -2487,6 +2705,7 @@ export interface components {
       /** @description Inline mode only. The delivered rows themselves, in the same shape returned by the matching REST endpoint. Absent in `manifest` mode. */
       items?: unknown[]
     }
+    /** @description Confirmation that a webhook resource was deleted. */
     WebhookDeleteAcknowledgement: {
       /** @description Always true; confirms the webhook resource delete was acknowledged. */
       readonly acknowledged: boolean
@@ -2495,6 +2714,7 @@ export interface components {
       /** @description Completion status of the action. Always 'complete'. */
       readonly status: string
     }
+    /** @description One attempt to deliver one push, with its outcome. */
     WebhookDelivery: {
       /** @description Encoded identifier of the webhook delivery. */
       readonly id: string
@@ -2540,9 +2760,7 @@ export interface components {
     /**
      * @description One downloadable snapshot file in a manifest push.
      *
-     *     A delivery currently consists of a single file, so `files` carries one
-     *     entry. The array shape allows a snapshot to be sharded across several
-     *     files in the future without changing the envelope.
+     *     `files` is an array, so read every entry rather than assuming one.
      */
     WebhookFile: {
       /** @description File encoding. Always `ndjson` (newline-delimited JSON, with one row per line). */
@@ -2592,6 +2810,7 @@ export interface components {
       /** @description The push payload. See `delivery_mode` for which key inside is populated. */
       data: components['schemas']['WebhookData']
     }
+    /** @description A signing secret, identified by its prefix rather than its value. */
     WebhookSecret: {
       /** @description Encoded identifier of the webhook secret. */
       readonly id: string
@@ -2626,6 +2845,11 @@ export interface components {
        */
       make_default: boolean
     }
+    /**
+     * @description A secret just created or rotated, carrying the value once.
+     *
+     *     Store it now: later reads return the prefix alone.
+     */
     WebhookSecretCreated: {
       /** @description Encoded identifier of the webhook secret. */
       readonly id: string
@@ -2650,6 +2874,7 @@ export interface components {
       /** @description Full signing secret, returned only once on creation. */
       readonly secret: string
     }
+    /** @description A registered endpoint and the events it receives. */
     WebhookSubscription: {
       /** @description Encoded identifier of the webhook subscription. */
       readonly id: string
@@ -2725,6 +2950,11 @@ export interface components {
        */
       secret_type: components['schemas']['SecretTypeEnum']
     }
+    /**
+     * @description A subscription just created, with the signing secret attached.
+     *
+     *     The secret is shown on this response only and never again.
+     */
     WebhookSubscriptionCreated: {
       /** @description Encoded identifier of the webhook subscription. */
       readonly id: string
@@ -3420,6 +3650,347 @@ export interface operations {
             /** Format: date-time */
             timestamp: string
             results: components['schemas']['ContentStatistics'][]
+            item_count: number
+            page: number
+            next: number | null
+            previous: number | null
+          }
+        }
+      }
+      /** @description Validation failed or a supplied id is malformed. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error400']
+        }
+      }
+      /** @description The `x-api-key` header is missing, invalid, expired, or revoked. */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error401']
+        }
+      }
+      /** @description The api key cannot access the requested brand or resource. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error403']
+        }
+      }
+      /** @description The resource does not exist or is outside this key's scope. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error404']
+        }
+      }
+      /** @description The requested response media type cannot be served. */
+      406: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error406']
+        }
+      }
+      /** @description A rate-limit quota was exceeded. */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error429']
+        }
+      }
+      /** @description Something went wrong on our side; include `log_id` when reporting. */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error500']
+        }
+      }
+      /** @description The request took too long and was stopped; narrow the window or pass `brand_id`. */
+      503: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error503']
+        }
+      }
+    }
+  }
+  'analytics.brand_comparison': {
+    parameters: {
+      query: {
+        /** @description The top-level brand to analyse, as returned by `brands.list`. A sub-brand is refused with the id of the parent to use instead. */
+        brand_id: string
+        /** @description Platforms to include, comma-separated. Defaults to all of them. */
+        platform?: ('instagram' | 'tiktok' | 'youtube')[]
+        /** @description Start of the window (UTC, ISO 8601). Supplying more than one start is accepted and only one applies: this one wins over `posted_within_hours`, which wins over `posted_within_days`. */
+        posted_after?: string
+        /** @description End of the window (UTC, ISO 8601). Defaults to the current time, and a relative start is counted back from it. */
+        posted_before?: string
+        /** @description Start of the window, counted back from `posted_before` or the current time, in days (1-365). Defaults to 7 when no date parameter is supplied, and loses to `posted_after` and `posted_within_hours`. */
+        posted_within_days?: number
+        /** @description Start of the window, counted back from `posted_before` or the current time, in hours (1-8760). `posted_after` wins over it; it wins over `posted_within_days`. */
+        posted_within_hours?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            log_id: string
+            /** Format: date-time */
+            timestamp: string
+            results: components['schemas']['BrandComparison'][]
+            item_count: number
+            page: number
+            next: number | null
+            previous: number | null
+          }
+        }
+      }
+      /** @description Validation failed or a supplied id is malformed. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error400']
+        }
+      }
+      /** @description The `x-api-key` header is missing, invalid, expired, or revoked. */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error401']
+        }
+      }
+      /** @description The api key cannot access the requested brand or resource. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error403']
+        }
+      }
+      /** @description The resource does not exist or is outside this key's scope. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error404']
+        }
+      }
+      /** @description The requested response media type cannot be served. */
+      406: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error406']
+        }
+      }
+      /** @description A rate-limit quota was exceeded. */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error429']
+        }
+      }
+      /** @description Something went wrong on our side; include `log_id` when reporting. */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error500']
+        }
+      }
+      /** @description The request took too long and was stopped; narrow the window or pass `brand_id`. */
+      503: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error503']
+        }
+      }
+    }
+  }
+  'analytics.follower_timeseries': {
+    parameters: {
+      query: {
+        /** @description The top-level brand to analyse, as returned by `brands.list`. A sub-brand is refused with the id of the parent to use instead. */
+        brand_id: string
+        /** @description Size of each bucket in the series. Defaults to `day`. */
+        period?: 'day' | 'week' | 'month' | 'year'
+        /** @description Platforms to include, comma-separated. Defaults to all of them. */
+        platform?: ('instagram' | 'tiktok' | 'youtube')[]
+        /** @description Start of the window (UTC, ISO 8601). Supplying more than one start is accepted and only one applies: this one wins over `posted_within_hours`, which wins over `posted_within_days`. */
+        posted_after?: string
+        /** @description End of the window (UTC, ISO 8601). Defaults to the current time, and a relative start is counted back from it. */
+        posted_before?: string
+        /** @description Start of the window, counted back from `posted_before` or the current time, in days (1-365). Defaults to 7 when no date parameter is supplied, and loses to `posted_after` and `posted_within_hours`. */
+        posted_within_days?: number
+        /** @description Start of the window, counted back from `posted_before` or the current time, in hours (1-8760). `posted_after` wins over it; it wins over `posted_within_days`. */
+        posted_within_hours?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            log_id: string
+            /** Format: date-time */
+            timestamp: string
+            results: components['schemas']['FollowerTimeseries'][]
+            item_count: number
+            page: number
+            next: number | null
+            previous: number | null
+          }
+        }
+      }
+      /** @description Validation failed or a supplied id is malformed. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error400']
+        }
+      }
+      /** @description The `x-api-key` header is missing, invalid, expired, or revoked. */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error401']
+        }
+      }
+      /** @description The api key cannot access the requested brand or resource. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error403']
+        }
+      }
+      /** @description The resource does not exist or is outside this key's scope. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error404']
+        }
+      }
+      /** @description The requested response media type cannot be served. */
+      406: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error406']
+        }
+      }
+      /** @description A rate-limit quota was exceeded. */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error429']
+        }
+      }
+      /** @description Something went wrong on our side; include `log_id` when reporting. */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error500']
+        }
+      }
+      /** @description The request took too long and was stopped; narrow the window or pass `brand_id`. */
+      503: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error503']
+        }
+      }
+    }
+  }
+  'analytics.posted_comments': {
+    parameters: {
+      query: {
+        /** @description The top-level brand to analyse, as returned by `brands.list`. A sub-brand is refused with the id of the parent to use instead. */
+        brand_id: string
+        /** @description Platforms to include, comma-separated. Defaults to all of them. */
+        platform?: ('instagram' | 'tiktok' | 'youtube')[]
+        /** @description Start of the window (UTC, ISO 8601). Supplying more than one start is accepted and only one applies: this one wins over `posted_within_hours`, which wins over `posted_within_days`. */
+        posted_after?: string
+        /** @description End of the window (UTC, ISO 8601). Defaults to the current time, and a relative start is counted back from it. */
+        posted_before?: string
+        /** @description Start of the window, counted back from `posted_before` or the current time, in days (1-365). Defaults to 7 when no date parameter is supplied, and loses to `posted_after` and `posted_within_hours`. */
+        posted_within_days?: number
+        /** @description Start of the window, counted back from `posted_before` or the current time, in hours (1-8760). `posted_after` wins over it; it wins over `posted_within_days`. */
+        posted_within_hours?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            log_id: string
+            /** Format: date-time */
+            timestamp: string
+            results: components['schemas']['PostedComments'][]
             item_count: number
             page: number
             next: number | null
@@ -6695,7 +7266,7 @@ export interface operations {
       }
     }
   }
-  usage_retrieve: {
+  'usage.retrieve': {
     parameters: {
       query?: never
       header?: never
@@ -6795,7 +7366,7 @@ export interface operations {
       }
     }
   }
-  'webhook.subscriptions': {
+  'webhooks.list_subscriptions': {
     parameters: {
       query?: {
         /** @description Page number (1-based). Omit for the first page. */
@@ -6900,7 +7471,7 @@ export interface operations {
       }
     }
   }
-  'webhook.create_subscription': {
+  'webhooks.create_subscription': {
     parameters: {
       query?: never
       header?: never
@@ -7013,7 +7584,7 @@ export interface operations {
       }
     }
   }
-  'webhook.subscription': {
+  'webhooks.get_subscription': {
     parameters: {
       query?: never
       header?: never
@@ -7115,7 +7686,7 @@ export interface operations {
       }
     }
   }
-  'webhook.delete_subscription': {
+  'webhooks.delete_subscription': {
     parameters: {
       query?: never
       header?: never
@@ -7217,7 +7788,7 @@ export interface operations {
       }
     }
   }
-  'webhook.update_subscription': {
+  'webhooks.update_subscription': {
     parameters: {
       query?: never
       header?: never
@@ -7325,7 +7896,7 @@ export interface operations {
       }
     }
   }
-  'webhook.rotate_subscription_secret': {
+  'webhooks.rotate_subscription_secret': {
     parameters: {
       query?: never
       header?: never
@@ -7427,7 +7998,7 @@ export interface operations {
       }
     }
   }
-  'webhook.send_test': {
+  'webhooks.send_test': {
     parameters: {
       query?: never
       header?: never
@@ -7526,7 +8097,7 @@ export interface operations {
       }
     }
   }
-  'webhook.secrets': {
+  'webhooks.list_secrets': {
     parameters: {
       query?: {
         /** @description Page number (1-based). Omit for the first page. */
@@ -7631,7 +8202,7 @@ export interface operations {
       }
     }
   }
-  'webhook.create_secret': {
+  'webhooks.create_secret': {
     parameters: {
       query?: never
       header?: never
@@ -7737,7 +8308,7 @@ export interface operations {
       }
     }
   }
-  'webhook.secret': {
+  'webhooks.get_secret': {
     parameters: {
       query?: never
       header?: never
@@ -7839,7 +8410,7 @@ export interface operations {
       }
     }
   }
-  'webhook.delete_secret': {
+  'webhooks.delete_secret': {
     parameters: {
       query?: never
       header?: never
@@ -7948,7 +8519,7 @@ export interface operations {
       }
     }
   }
-  'webhook.set_default_secret': {
+  'webhooks.set_default_secret': {
     parameters: {
       query?: never
       header?: never
@@ -8050,7 +8621,7 @@ export interface operations {
       }
     }
   }
-  'webhook.available_events': {
+  'webhooks.list_events': {
     parameters: {
       query?: never
       header?: never
@@ -8150,7 +8721,7 @@ export interface operations {
       }
     }
   }
-  'webhook.deliveries': {
+  'webhooks.list_deliveries': {
     parameters: {
       query?: {
         /** @description Delivery creation time (ISO 8601). */
@@ -8268,7 +8839,7 @@ export interface operations {
       }
     }
   }
-  'webhook.delivery': {
+  'webhooks.get_delivery': {
     parameters: {
       query?: never
       header?: never

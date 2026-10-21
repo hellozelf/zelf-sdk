@@ -11,9 +11,10 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record UsageScope(
+        @JsonProperty("scope") String scope,
         @JsonProperty("human_name") String humanName,
         @JsonProperty("kind") String kind,
         @JsonProperty("section") String section,
-        @JsonProperty("windows") JsonNode windows
+        @JsonProperty("windows") List<UsageWindow> windows
 ) {
 }

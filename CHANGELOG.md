@@ -10,6 +10,31 @@ API did not cause.
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
 
+## 1.1.0
+
+### Added
+- `analytics.brand_comparison` (GET /api/v1/analytics/brand_comparison/)
+- `analytics.follower_timeseries` (GET /api/v1/analytics/follower_timeseries/)
+- `analytics.posted_comments` (GET /api/v1/analytics/posted_comments/)
+- `AnalyticsBrand`
+- `BrandComparison`
+- `BrandFollowers`
+- `BrandStatistics`
+- `FollowerAccount`
+- `FollowerPeriod`
+- `FollowerTimeseries`
+- `PostedCommentCategory`
+- `PostedComments`
+- `UsageDay`
+- `UsageHistory`
+- `Usage.history`
+- `UsageScope.scope`
+- `UsageWindow.window`
+
+### Changed
+- `Usage.scopes` changed type
+- `UsageScope.windows` changed type
+
 ## 1.0.0
 
 First release. 3 clients generated from the published OpenAPI document, covering all 48 operations.

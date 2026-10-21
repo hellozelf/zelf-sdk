@@ -155,6 +155,66 @@ var conformanceCases = []conformanceCase{
 		},
 	},
 	{
+		operation:   "analytics.brand_comparison",
+		method:      "GET",
+		path:        "/api/v1/analytics/brand_comparison/",
+		query:       map[string][]string{"brand_id": {"brd_tp6wqSj7PlBzhPTC"}, "platform": {"instagram"}, "posted_after": {"2026-01-01T00:00:00Z"}, "posted_before": {"2026-01-01T00:00:00Z"}, "posted_within_days": {"42"}, "posted_within_hours": {"42"}},
+		body:        nil,
+		cardinality: "single",
+		paramsJSON:  []byte(`{"brand_id": "brd_tp6wqSj7PlBzhPTC", "platform": ["instagram"], "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "posted_within_days": 42, "posted_within_hours": 42}`),
+		bodyJSON:    []byte(`{}`),
+		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
+			var params AnalyticsBrandComparisonParams
+			if err := json.Unmarshal(paramsJSON, &params); err != nil {
+				return nil, err
+			}
+			return c.Analytics.BrandComparison(ctx, &params)
+		},
+		nilCall: func(c *Client, ctx context.Context, bodyJSON json.RawMessage) (any, error) {
+			return c.Analytics.BrandComparison(ctx, nil)
+		},
+	},
+	{
+		operation:   "analytics.follower_timeseries",
+		method:      "GET",
+		path:        "/api/v1/analytics/follower_timeseries/",
+		query:       map[string][]string{"brand_id": {"brd_tp6wqSj7PlBzhPTC"}, "period": {"day"}, "platform": {"instagram"}, "posted_after": {"2026-01-01T00:00:00Z"}, "posted_before": {"2026-01-01T00:00:00Z"}, "posted_within_days": {"42"}, "posted_within_hours": {"42"}},
+		body:        nil,
+		cardinality: "single",
+		paramsJSON:  []byte(`{"brand_id": "brd_tp6wqSj7PlBzhPTC", "period": "day", "platform": ["instagram"], "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "posted_within_days": 42, "posted_within_hours": 42}`),
+		bodyJSON:    []byte(`{}`),
+		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
+			var params AnalyticsFollowerTimeseriesParams
+			if err := json.Unmarshal(paramsJSON, &params); err != nil {
+				return nil, err
+			}
+			return c.Analytics.FollowerTimeseries(ctx, &params)
+		},
+		nilCall: func(c *Client, ctx context.Context, bodyJSON json.RawMessage) (any, error) {
+			return c.Analytics.FollowerTimeseries(ctx, nil)
+		},
+	},
+	{
+		operation:   "analytics.posted_comments",
+		method:      "GET",
+		path:        "/api/v1/analytics/posted_comments/",
+		query:       map[string][]string{"brand_id": {"brd_tp6wqSj7PlBzhPTC"}, "platform": {"instagram"}, "posted_after": {"2026-01-01T00:00:00Z"}, "posted_before": {"2026-01-01T00:00:00Z"}, "posted_within_days": {"42"}, "posted_within_hours": {"42"}},
+		body:        nil,
+		cardinality: "single",
+		paramsJSON:  []byte(`{"brand_id": "brd_tp6wqSj7PlBzhPTC", "platform": ["instagram"], "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "posted_within_days": 42, "posted_within_hours": 42}`),
+		bodyJSON:    []byte(`{}`),
+		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
+			var params AnalyticsPostedCommentsParams
+			if err := json.Unmarshal(paramsJSON, &params); err != nil {
+				return nil, err
+			}
+			return c.Analytics.PostedComments(ctx, &params)
+		},
+		nilCall: func(c *Client, ctx context.Context, bodyJSON json.RawMessage) (any, error) {
+			return c.Analytics.PostedComments(ctx, nil)
+		},
+	},
+	{
 		operation:   "brand_accounts.add",
 		method:      "POST",
 		path:        "/api/v1/brands/accounts/",
@@ -756,7 +816,7 @@ var conformanceCases = []conformanceCase{
 		paramsJSON:  []byte(`{}`),
 		bodyJSON:    []byte(`{"kind": "snapshot", "make_default": true}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
-			var body WebhookCreateSecretJSONRequestBody
+			var body WebhooksCreateSecretJSONRequestBody
 			if err := json.Unmarshal(bodyJSON, &body); err != nil {
 				return nil, err
 			}
@@ -773,7 +833,7 @@ var conformanceCases = []conformanceCase{
 		paramsJSON:  []byte(`{}`),
 		bodyJSON:    []byte(`{"url": "https://example.com/request/url", "kind": "snapshot", "resource": "content", "event_types": ["Event types"], "resource_filters": {}, "custom_headers": {}, "interval_hours": 12, "max_items": 10, "secret_type": "default"}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
-			var body WebhookCreateSubscriptionJSONRequestBody
+			var body WebhooksCreateSubscriptionJSONRequestBody
 			if err := json.Unmarshal(bodyJSON, &body); err != nil {
 				return nil, err
 			}
@@ -855,7 +915,7 @@ var conformanceCases = []conformanceCase{
 		paramsJSON:  []byte(`{"created": "2026-01-01T00:00:00Z", "created_after": "2026-01-01T00:00:00Z", "created_before": "2026-01-01T00:00:00Z", "page": 1, "page_size": 1, "sort_by": ["created"], "state": "PENDING", "state!": "PENDING", "subscription": "Subscription"}`),
 		bodyJSON:    []byte(`{}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
-			var params WebhookDeliveriesParams
+			var params WebhooksListDeliveriesParams
 			if err := json.Unmarshal(paramsJSON, &params); err != nil {
 				return nil, err
 			}
@@ -897,7 +957,7 @@ var conformanceCases = []conformanceCase{
 		paramsJSON:  []byte(`{"page": 1, "page_size": 1}`),
 		bodyJSON:    []byte(`{}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
-			var params WebhookSecretsParams
+			var params WebhooksListSecretsParams
 			if err := json.Unmarshal(paramsJSON, &params); err != nil {
 				return nil, err
 			}
@@ -926,7 +986,7 @@ var conformanceCases = []conformanceCase{
 		paramsJSON:  []byte(`{"page": 1, "page_size": 1}`),
 		bodyJSON:    []byte(`{}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
-			var params WebhookSubscriptionsParams
+			var params WebhooksListSubscriptionsParams
 			if err := json.Unmarshal(paramsJSON, &params); err != nil {
 				return nil, err
 			}
@@ -994,7 +1054,7 @@ var conformanceCases = []conformanceCase{
 		paramsJSON:  []byte(`{}`),
 		bodyJSON:    []byte(`{"url": "https://example.com/request/url", "resource_filters": {}, "custom_headers": {}, "interval_hours": 12, "max_items": 10, "enabled": true}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
-			var body WebhookUpdateSubscriptionJSONRequestBody
+			var body WebhooksUpdateSubscriptionJSONRequestBody
 			if err := json.Unmarshal(bodyJSON, &body); err != nil {
 				return nil, err
 			}

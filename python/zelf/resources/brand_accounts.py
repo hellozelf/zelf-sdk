@@ -37,7 +37,8 @@ class BrandAccountsResource:
         Args:
             account_type: The list to modify: tracked, influencer, or owned for the brand's
                 own profiles.
-            profile_urls: Profile URLs on a supported platform (instagram or tiktok).
+            profile_urls: Profile URLs on a supported platform (instagram, tiktok or
+                youtube).
             brand_id: Brand to modify, specified as an id from brands.list.
 
         Calls `POST /api/v1/brands/accounts/` (`brand_accounts.add`).
@@ -106,7 +107,8 @@ class BrandAccountsResource:
         Args:
             account_type: The list to modify: tracked, influencer, or owned for the brand's
                 own profiles.
-            profile_urls: Profile URLs on a supported platform (instagram or tiktok).
+            profile_urls: Profile URLs on a supported platform (instagram, tiktok or
+                youtube).
             brand_id: Brand to modify, specified as an id from brands.list.
 
         Calls `DELETE /api/v1/brands/accounts/` (`brand_accounts.remove`).
@@ -148,7 +150,8 @@ class AsyncBrandAccountsResource:
         Args:
             account_type: The list to modify: tracked, influencer, or owned for the brand's
                 own profiles.
-            profile_urls: Profile URLs on a supported platform (instagram or tiktok).
+            profile_urls: Profile URLs on a supported platform (instagram, tiktok or
+                youtube).
             brand_id: Brand to modify, specified as an id from brands.list.
 
         Calls `POST /api/v1/brands/accounts/` (`brand_accounts.add`).
@@ -217,7 +220,8 @@ class AsyncBrandAccountsResource:
         Args:
             account_type: The list to modify: tracked, influencer, or owned for the brand's
                 own profiles.
-            profile_urls: Profile URLs on a supported platform (instagram or tiktok).
+            profile_urls: Profile URLs on a supported platform (instagram, tiktok or
+                youtube).
             brand_id: Brand to modify, specified as an id from brands.list.
 
         Calls `DELETE /api/v1/brands/accounts/` (`brand_accounts.remove`).

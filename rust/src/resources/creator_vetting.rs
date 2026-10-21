@@ -165,15 +165,15 @@ impl CreatorVettingResource {
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 
-    /// Create Creator Vetting. Vets a creator identified by `profile_url`, running or reusing
-    /// the profile scrape and the AI safety and brand-fit analysis. Runs complete
-    /// asynchronously, so this method returns immediately with the created vetting. The vetting
-    /// analyzes up to 150 of the creator's posts per connection type, or the limit configured
-    /// for your workspace. The created vetting is returned as the single item in `results`.
-    /// Take its `id` and poll `creator_vetting.list` until a run reports `COMPLETED`. A vetting
-    /// can take an hour or more to complete, so prefer the `creator_vetting.completed` webhook
-    /// over frequent polling, which can trigger `RATE_LIMIT_EXCEEDED`. Once a run is complete,
-    /// retrieve the payload from `creator_vetting.results`, passing `vetting_id=<id>`.
+    /// Create Creator Vetting. Vets a creator identified by `profile_url`, retrieving the
+    /// profile and scoring its safety and brand fit. Runs complete asynchronously, so this
+    /// method returns immediately with the created vetting. The vetting analyzes up to 150 of
+    /// the creator's posts per connection type, or the limit configured for your workspace. The
+    /// created vetting is returned as the single item in `results`. Take its `id` and poll
+    /// `creator_vetting.list` until a run reports `COMPLETED`. A vetting can take an hour or
+    /// more to complete, so prefer the `creator_vetting.completed` webhook over frequent
+    /// polling, which can trigger `RATE_LIMIT_EXCEEDED`. Once a run is complete, retrieve the
+    /// payload from `creator_vetting.results`, passing `vetting_id=<id>`.
     ///
     /// Calls `POST /api/v1/creator/vetting/` (`creator_vetting.create`).
     pub async fn create(&self, params: CreatorVettingCreateParams) -> Result<CreatorVetting> {

@@ -11,6 +11,7 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record UsageWindow(
+        @JsonProperty("window") String window,
         @JsonProperty("limit") Long limit,
         @JsonProperty("used") Long used,
         @JsonProperty("remaining") Long remaining,

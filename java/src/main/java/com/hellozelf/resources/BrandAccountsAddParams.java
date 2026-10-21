@@ -35,7 +35,7 @@ public final class BrandAccountsAddParams {
     }
 
     /**
-     * Profile URLs on a supported platform (instagram or tiktok)
+     * Profile URLs on a supported platform (instagram, tiktok or youtube)
      */
     public BrandAccountsAddParams profileUrls(List<String> value) {
         this.profileUrls = value;

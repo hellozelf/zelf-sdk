@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import date as date_aliased
 from typing import Annotated, Any, Literal
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
@@ -28,6 +29,27 @@ class AiAnalysisRun(BaseModel):
     ]
 
 
+class AnalyticsBrand(BaseModel):
+    """
+    The brand a row of analytics belongs to.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    id: Annotated[str, Field(description="Unique identifier for the brand.")]
+    title: Annotated[str | None, Field(description="Display name of the brand.")]
+    is_primary: Annotated[
+        bool, Field(description="`true` for the brand the request named, `false` for a sub-brand.")
+    ]
+    sub_brand_type: Annotated[
+        str | None,
+        Field(
+            description="`COMPETITIVE` or `THEME` for a sub-brand; `null` for the top-level brand the request named."
+        ),
+    ]
+
+
 class BrandAccount(BaseModel):
     """
     An account tracked, marked as an influencer, or owned by the brand.
@@ -37,7 +59,7 @@ class BrandAccount(BaseModel):
         extra="allow",
     )
     username: Annotated[str, Field(description="The account's handle.")]
-    platform: Annotated[str, Field(description="`instagram` or `tiktok`.")]
+    platform: Annotated[str, Field(description="`instagram`, `tiktok` or `youtube`.")]
     external_url: Annotated[
         str | None, Field(description="The account's profile URL, when available.")
     ] = None
@@ -89,7 +111,9 @@ class BrandAccountsWriteRequest(BaseModel):
     ]
     profile_urls: Annotated[
         list[str],
-        Field(description="Profile URLs on a supported platform (`instagram` or `tiktok`)."),
+        Field(
+            description="Profile URLs on a supported platform (`instagram`, `tiktok` or `youtube`)."
+        ),
     ]
 
 
@@ -185,6 +209,39 @@ class BrandKeywords(BaseModel):
             description='Full-text search across the caption, transcript, summary, and hashtags.\n\n**Syntax**\n- Multiple words are combined with AND: `nike running` matches content containing both `nike` and `running`.\n- `OR` (case-insensitive) matches either side: `nike OR adidas`.\n- `NOT` (case-insensitive) excludes a term: `running NOT marathon` matches `running` but not `marathon`.\n- Wrap a phrase in double quotes to match the words in order: `"summer collection"`.\n- Negate a phrase with `NOT`: `NOT "out of stock"`.\n- Group with parentheses to combine operators: `(nike OR adidas) running`.\n- `ONEAR/n` (case-insensitive) matches terms within `n` words of each other, in order: `apple ONEAR/2 watch` matches `apple watch` and `apple smart watch`, but not `watch ... apple`. It binds more tightly than `AND` and `OR`, so `apple ONEAR/2 watch AND cheap` is interpreted as `(apple near watch) AND cheap`.\n\n**Examples**\n- `nike running` - contains both terms.\n- `nike OR adidas` - contains either brand.\n- `"summer sale" NOT clearance` - the exact phrase, without `clearance`.\n- `(running OR cycling) NOT "beginner guide"` - either sport, excluding the phrase.\n- `apple ONEAR/2 watch` - `apple` within two words before `watch`.\n\nContent matching this query is connected to (associated with) this brand.'
         ),
     ]
+
+
+class BrandStatistics(BaseModel):
+    """
+    Totals over the content matched to a brand in the window.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    post_count: Annotated[int, Field(description="Number of posts matched to the brand.")]
+    total_views: Annotated[int, Field(description="Total views across those posts.")]
+    total_likes: Annotated[int, Field(description="Total likes across those posts.")]
+    total_comments: Annotated[int, Field(description="Total comments across those posts.")]
+    total_shares: Annotated[int, Field(description="Total shares across those posts.")]
+    total_engagement: Annotated[
+        int, Field(description="Likes, comments and shares across those posts.")
+    ]
+    total_earned_media_value_cents: Annotated[
+        int, Field(description="Estimated marketing value across those posts, in US cents.")
+    ]
+    engagement_rate: Annotated[
+        float | None,
+        Field(
+            description="Total engagement divided by total views. Null when the set has no recorded views."
+        ),
+    ]
+    unique_creator_count: Annotated[
+        int, Field(description="Number of distinct creators who posted.")
+    ]
+    total_positive_nps: Annotated[int, Field(description="Engagement on positive posts.")]
+    total_neutral_nps: Annotated[int, Field(description="Engagement on neutral posts.")]
+    total_negative_nps: Annotated[int, Field(description="Engagement on negative posts.")]
 
 
 class CommentAuthor(BaseModel):
@@ -686,6 +743,49 @@ class DetectionVideo(BaseModel):
     duration_s: Annotated[float, Field(description="Length of the content in seconds.")]
 
 
+class FollowerAccount(BaseModel):
+    """
+    One owned handle and the followers it carries.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    platform: Annotated[str, Field(description="The platform the handle is on.")]
+    username: Annotated[str, Field(description="The handle.")]
+    followers: Annotated[int, Field(description="Follower count for this handle.")]
+
+
+class FollowerPeriod(BaseModel):
+    """
+    Followers at the end of one period.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    followers: Annotated[int, Field(description="Followers across every owned handle.")]
+    start_date: Annotated[date_aliased, Field(description="First day of the period.")]
+    end_date: Annotated[date_aliased, Field(description="Last day of the period.")]
+    accounts: Annotated[
+        list[FollowerAccount], Field(description="Per handle counts that add up to `followers`.")
+    ]
+
+
+class FollowerTimeseries(BaseModel):
+    """
+    One brand's follower history.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    brand: Annotated[AnalyticsBrand, Field(description="The brand this row covers.")]
+    periods: Annotated[
+        list[FollowerPeriod], Field(description="One entry per period, oldest first.")
+    ]
+
+
 class PatchedBrandUpdateRequest(BaseModel):
     """
     Partial update for a brand's monitoring keywords.
@@ -771,6 +871,42 @@ class PatchedWebhookSubscriptionUpdateRequest(BaseModel):
     ] = None
 
 
+class PostedCommentCategory(BaseModel):
+    """
+    Comments the brand posted on one category of content.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    category: Annotated[
+        str,
+        Field(
+            description="`brand`, `owned`, `competitors`, `themes` or `other`. `other` covers content outside the brand's own tree."
+        ),
+    ]
+    comments: Annotated[int, Field(description="Comments posted on this category.")]
+    likes: Annotated[int, Field(description="Likes those comments received.")]
+    replies: Annotated[int, Field(description="Replies those comments received.")]
+
+
+class PostedComments(BaseModel):
+    """
+    Comments the brand posted, split by the content they were posted on.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    total_comments_posted: Annotated[
+        int, Field(description="Comments the brand posted in the window, across every category.")
+    ]
+    categories: Annotated[
+        list[PostedCommentCategory],
+        Field(description="One entry per category. They add up to `total_comments_posted`."),
+    ]
+
+
 class ResultFile(BaseModel):
     """
     Signed, time-limited download of an analysis run's result payload.
@@ -791,6 +927,41 @@ class ResultFile(BaseModel):
     ]
 
 
+class UsageDay(BaseModel):
+    """
+    One day of consumption for one source.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    source: Annotated[
+        str, Field(description="``api`` for direct requests, ``mcp`` for AI clients.")
+    ]
+    general: Annotated[int, Field(description="Every counted call that day.")]
+    ai_analysis: Annotated[int, Field(description="Calls counted against the AI analysis group.")]
+    creator_vetting: Annotated[int, Field(description="Calls counted against creator vetting.")]
+    data_records: Annotated[int, Field(description="Calls counted against data records.")]
+    data_records_items: Annotated[int, Field(description="Records those calls returned.")]
+    date: Annotated[date_aliased, Field(description="The day, in the brand's billing timezone.")]
+
+
+class UsageHistory(BaseModel):
+    """
+    Daily consumption over the window the ledger keeps.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    start_date: Annotated[date_aliased, Field(description="First day covered.")]
+    end_date: Annotated[date_aliased, Field(description="Last day covered.")]
+    days: Annotated[
+        list[UsageDay],
+        Field(description="One entry per day and source that saw usage, oldest first."),
+    ]
+
+
 class UsageWindow(BaseModel):
     """
     Consumption of one window, e.g. requests in the current hour.
@@ -799,6 +970,10 @@ class UsageWindow(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
+    window: Annotated[
+        str,
+        Field(description="Which window this is: rps, rpm, rph, rpd, rpmonth, or an item window."),
+    ]
     limit: Annotated[int, Field(description="Most that may be spent in this window.")]
     used: Annotated[int, Field(description="Spent so far in this window.")]
     remaining: Annotated[int, Field(description="Still available in this window.")]
@@ -811,6 +986,10 @@ class UsageWindow(BaseModel):
 
 
 class WebhookAvailableEvent(BaseModel):
+    """
+    An event type a subscription may ask for.
+    """
+
     model_config = ConfigDict(
         extra="allow",
     )
@@ -824,6 +1003,10 @@ class WebhookAvailableEvent(BaseModel):
 
 
 class WebhookDeleteAcknowledgement(BaseModel):
+    """
+    Confirmation that a webhook resource was deleted.
+    """
+
     model_config = ConfigDict(
         extra="allow",
     )
@@ -836,6 +1019,10 @@ class WebhookDeleteAcknowledgement(BaseModel):
 
 
 class WebhookDelivery(BaseModel):
+    """
+    One attempt to deliver one push, with its outcome.
+    """
+
     model_config = ConfigDict(
         extra="allow",
     )
@@ -881,9 +1068,7 @@ class WebhookFile(BaseModel):
     """
     One downloadable snapshot file in a manifest push.
 
-    A delivery currently consists of a single file, so `files` carries one
-    entry. The array shape allows a snapshot to be sharded across several
-    files in the future without changing the envelope.
+    `files` is an array, so read every entry rather than assuming one.
     """
 
     model_config = ConfigDict(
@@ -915,6 +1100,10 @@ class WebhookFile(BaseModel):
 
 
 class WebhookSecret(BaseModel):
+    """
+    A signing secret, identified by its prefix rather than its value.
+    """
+
     model_config = ConfigDict(
         extra="allow",
     )
@@ -951,6 +1140,12 @@ class WebhookSecretCreateRequest(BaseModel):
 
 
 class WebhookSecretCreated(BaseModel):
+    """
+    A secret just created or rotated, carrying the value once.
+
+    Store it now: later reads return the prefix alone.
+    """
+
     model_config = ConfigDict(
         extra="allow",
     )
@@ -977,6 +1172,10 @@ class WebhookSecretCreated(BaseModel):
 
 
 class WebhookSubscription(BaseModel):
+    """
+    A registered endpoint and the events it receives.
+    """
+
     model_config = ConfigDict(
         extra="allow",
     )
@@ -1075,6 +1274,12 @@ class WebhookSubscriptionCreateRequest(BaseModel):
 
 
 class WebhookSubscriptionCreated(BaseModel):
+    """
+    A subscription just created, with the signing secret attached.
+
+    The secret is shown on this response only and never again.
+    """
+
     model_config = ConfigDict(
         extra="allow",
     )
@@ -1408,6 +1613,20 @@ class BrandCreateSubBrandRequest(BaseModel):
     ]
 
 
+class BrandFollowers(BaseModel):
+    """
+    Followers across the handles a brand owns.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    total: Annotated[int, Field(description="Followers across every owned handle.")]
+    accounts: Annotated[
+        list[FollowerAccount], Field(description="Per handle counts that add up to `total`.")
+    ]
+
+
 class Comment(BaseModel):
     """
     A comment left on a piece of content.
@@ -1421,7 +1640,7 @@ class Comment(BaseModel):
     platform: Annotated[
         str | None,
         Field(
-            description="The platform the comment was posted on. Either `instagram` or `tiktok`."
+            description="The platform the comment was posted on: `instagram`, `tiktok` or `youtube`."
         ),
     ]
     like_count: Annotated[
@@ -1475,7 +1694,7 @@ class Content(BaseModel):
     platform: Annotated[
         str,
         Field(
-            description="The platform the content was published on. Either `instagram` or `tiktok`."
+            description="The platform the content was published on: `instagram`, `tiktok` or `youtube`."
         ),
     ]
     content_form: Annotated[
@@ -2017,6 +2236,7 @@ class UsageScope(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
+    scope: Annotated[str, Field(description="Identifier of the metered group.")]
     human_name: Annotated[str, Field(description="Name of the group, as an admin sees it.")]
     kind: Annotated[
         str, Field(description="``request`` counts calls; ``item`` counts rows returned.")
@@ -2028,8 +2248,7 @@ class UsageScope(BaseModel):
         ),
     ]
     windows: Annotated[
-        dict[str, UsageWindow],
-        Field(description="Keyed by window: rps, rpm, rph, rpd, rpmonth, or the item windows."),
+        list[UsageWindow], Field(description="Every window that has a limit configured.")
     ]
 
 
@@ -2162,6 +2381,21 @@ class AiAnalysisCreateRequest(BaseModel):
     ]
 
 
+class BrandComparison(BaseModel):
+    """
+    One brand's performance in the comparison.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    brand: Annotated[AnalyticsBrand, Field(description="The brand this row covers.")]
+    statistics: Annotated[BrandStatistics, Field(description="Totals over the window.")]
+    followers: Annotated[
+        BrandFollowers, Field(description="Follower counts as they stand now, not over the window.")
+    ]
+
+
 class CreatorVettingRequest(BaseModel):
     """
     Request body for ``POST /api/v1/creator/vetting/``.
@@ -2248,6 +2482,12 @@ class Usage(BaseModel):
         ),
     ]
     scopes: Annotated[
-        dict[str, UsageScope],
-        Field(description="Keyed by group. Both sections are returned whichever way you call."),
+        list[UsageScope],
+        Field(
+            description="One entry per metered group. Both sections are returned whichever way you call."
+        ),
+    ]
+    history: Annotated[
+        UsageHistory,
+        Field(description="What was actually spent, day by day, from the usage ledger."),
     ]

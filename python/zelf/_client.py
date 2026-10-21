@@ -10,6 +10,7 @@ import httpx
 
 from ._transport import AsyncTransport, SyncTransport
 from .resources.ai_analysis import AiAnalysisResource, AsyncAiAnalysisResource
+from .resources.analytics import AnalyticsResource, AsyncAnalyticsResource
 from .resources.brand_accounts import AsyncBrandAccountsResource, BrandAccountsResource
 from .resources.brands import AsyncBrandsResource, BrandsResource
 from .resources.comments import AsyncCommentsResource, CommentsResource
@@ -63,6 +64,7 @@ class ZelfAPIClient:
             http_client=http_client,
         )
         self.ai_analysis = AiAnalysisResource(self._transport)
+        self.analytics = AnalyticsResource(self._transport)
         self.brand_accounts = BrandAccountsResource(self._transport)
         self.brands = BrandsResource(self._transport)
         self.comments = CommentsResource(self._transport)
@@ -117,6 +119,7 @@ class ZelfAPIClientAsync:
             http_client=http_client,
         )
         self.ai_analysis = AsyncAiAnalysisResource(self._transport)
+        self.analytics = AsyncAnalyticsResource(self._transport)
         self.brand_accounts = AsyncBrandAccountsResource(self._transport)
         self.brands = AsyncBrandsResource(self._transport)
         self.comments = AsyncCommentsResource(self._transport)

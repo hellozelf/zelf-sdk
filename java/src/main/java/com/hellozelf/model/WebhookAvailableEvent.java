@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 
 /**
- * The WebhookAvailableEvent object.
+ * An event type a subscription may ask for.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record WebhookAvailableEvent(

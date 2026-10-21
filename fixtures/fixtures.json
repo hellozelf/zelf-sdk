@@ -21,6 +21,18 @@
    "model": "AiAnalysisResult",
    "cardinality": "page"
   },
+  "analytics_brand_comparison": {
+   "model": "BrandComparison",
+   "cardinality": "single"
+  },
+  "analytics_follower_timeseries": {
+   "model": "FollowerTimeseries",
+   "cardinality": "single"
+  },
+  "analytics_posted_comments": {
+   "model": "PostedComments",
+   "cardinality": "single"
+  },
   "brand_accounts_add": {
    "model": "BrandAccountGroups",
    "cardinality": "list"
@@ -338,6 +350,324 @@
      },
      "created_at": "2026-05-12T14:30:00Z",
      "modified_at": "2026-05-12T15:00:00Z"
+    }
+   ],
+   "item_count": 1,
+   "page": 1,
+   "next": null,
+   "previous": null
+  },
+  "analytics_brand_comparison": {
+   "log_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+   "timestamp": "2026-01-01T00:00:00Z",
+   "results": [
+    {
+     "brand": {
+      "id": "brd_Lw6ZZmNYhW0P9k0x",
+      "title": "Zelf",
+      "sub_brand_type": null,
+      "is_primary": true
+     },
+     "statistics": {
+      "post_count": 1280,
+      "total_views": 5000000,
+      "total_likes": 320000,
+      "total_comments": 20000,
+      "total_shares": 10000,
+      "total_engagement": 350000,
+      "total_earned_media_value_cents": 12500000,
+      "engagement_rate": 0.07,
+      "unique_creator_count": 412,
+      "total_positive_nps": 245000,
+      "total_neutral_nps": 84000,
+      "total_negative_nps": 21000
+     },
+     "followers": {
+      "total": 775000,
+      "accounts": [
+       {
+        "platform": "instagram",
+        "username": "zelfai",
+        "followers": 420000
+       },
+       {
+        "platform": "tiktok",
+        "username": "zelfai",
+        "followers": 260000
+       },
+       {
+        "platform": "youtube",
+        "username": "zelfai",
+        "followers": 95000
+       }
+      ]
+     }
+    },
+    {
+     "brand": {
+      "id": "brd_TOmS4tGtnsEhS9Fy",
+      "title": "Northwind Apparel",
+      "sub_brand_type": "COMPETITIVE",
+      "is_primary": false
+     },
+     "statistics": {
+      "post_count": 940,
+      "total_views": 3500000,
+      "total_likes": 180000,
+      "total_comments": 11000,
+      "total_shares": 5000,
+      "total_engagement": 196000,
+      "total_earned_media_value_cents": 7100000,
+      "engagement_rate": 0.056,
+      "unique_creator_count": 265,
+      "total_positive_nps": 122500,
+      "total_neutral_nps": 58800,
+      "total_negative_nps": 14700
+     },
+     "followers": {
+      "total": 458000,
+      "accounts": [
+       {
+        "platform": "instagram",
+        "username": "northwindapparel",
+        "followers": 310000
+       },
+       {
+        "platform": "tiktok",
+        "username": "northwindapparel",
+        "followers": 148000
+       }
+      ]
+     }
+    },
+    {
+     "brand": {
+      "id": "brd_rMojoPskS9hZZVa0",
+      "title": "Harborline",
+      "sub_brand_type": "COMPETITIVE",
+      "is_primary": false
+     },
+     "statistics": {
+      "post_count": 510,
+      "total_views": 2000000,
+      "total_likes": 72000,
+      "total_comments": 5400,
+      "total_shares": 2600,
+      "total_engagement": 80000,
+      "total_earned_media_value_cents": 3400000,
+      "engagement_rate": 0.04,
+      "unique_creator_count": 148,
+      "total_positive_nps": 46400,
+      "total_neutral_nps": 26400,
+      "total_negative_nps": 7200
+     },
+     "followers": {
+      "total": 137000,
+      "accounts": [
+       {
+        "platform": "instagram",
+        "username": "harborline",
+        "followers": 96000
+       },
+       {
+        "platform": "youtube",
+        "username": "harborline",
+        "followers": 41000
+       }
+      ]
+     }
+    }
+   ],
+   "item_count": 3,
+   "page": 1,
+   "next": null,
+   "previous": null
+  },
+  "analytics_follower_timeseries": {
+   "log_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+   "timestamp": "2026-01-01T00:00:00Z",
+   "results": [
+    {
+     "brand": {
+      "id": "brd_Lw6ZZmNYhW0P9k0x",
+      "title": "Zelf",
+      "sub_brand_type": null,
+      "is_primary": true
+     },
+     "periods": [
+      {
+       "start_date": "2026-09-28",
+       "end_date": "2026-10-04",
+       "followers": 742000,
+       "accounts": [
+        {
+         "platform": "instagram",
+         "username": "zelfai",
+         "followers": 402000
+        },
+        {
+         "platform": "tiktok",
+         "username": "zelfai",
+         "followers": 248000
+        },
+        {
+         "platform": "youtube",
+         "username": "zelfai",
+         "followers": 92000
+        }
+       ]
+      },
+      {
+       "start_date": "2026-10-05",
+       "end_date": "2026-10-11",
+       "followers": 758500,
+       "accounts": [
+        {
+         "platform": "instagram",
+         "username": "zelfai",
+         "followers": 411000
+        },
+        {
+         "platform": "tiktok",
+         "username": "zelfai",
+         "followers": 254000
+        },
+        {
+         "platform": "youtube",
+         "username": "zelfai",
+         "followers": 93500
+        }
+       ]
+      },
+      {
+       "start_date": "2026-10-12",
+       "end_date": "2026-10-18",
+       "followers": 775000,
+       "accounts": [
+        {
+         "platform": "instagram",
+         "username": "zelfai",
+         "followers": 420000
+        },
+        {
+         "platform": "tiktok",
+         "username": "zelfai",
+         "followers": 260000
+        },
+        {
+         "platform": "youtube",
+         "username": "zelfai",
+         "followers": 95000
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "brand": {
+      "id": "brd_TOmS4tGtnsEhS9Fy",
+      "title": "Northwind Apparel",
+      "sub_brand_type": "COMPETITIVE",
+      "is_primary": false
+     },
+     "periods": [
+      {
+       "start_date": "2026-09-28",
+       "end_date": "2026-10-04",
+       "followers": 443000,
+       "accounts": [
+        {
+         "platform": "instagram",
+         "username": "northwindapparel",
+         "followers": 301000
+        },
+        {
+         "platform": "tiktok",
+         "username": "northwindapparel",
+         "followers": 142000
+        }
+       ]
+      },
+      {
+       "start_date": "2026-10-05",
+       "end_date": "2026-10-11",
+       "followers": 450700,
+       "accounts": [
+        {
+         "platform": "instagram",
+         "username": "northwindapparel",
+         "followers": 305500
+        },
+        {
+         "platform": "tiktok",
+         "username": "northwindapparel",
+         "followers": 145200
+        }
+       ]
+      },
+      {
+       "start_date": "2026-10-12",
+       "end_date": "2026-10-18",
+       "followers": 458000,
+       "accounts": [
+        {
+         "platform": "instagram",
+         "username": "northwindapparel",
+         "followers": 310000
+        },
+        {
+         "platform": "tiktok",
+         "username": "northwindapparel",
+         "followers": 148000
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "item_count": 2,
+   "page": 1,
+   "next": null,
+   "previous": null
+  },
+  "analytics_posted_comments": {
+   "log_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+   "timestamp": "2026-01-01T00:00:00Z",
+   "results": [
+    {
+     "total_comments_posted": 3600,
+     "categories": [
+      {
+       "category": "brand",
+       "comments": 1420,
+       "likes": 3860,
+       "replies": 512
+      },
+      {
+       "category": "owned",
+       "comments": 980,
+       "likes": 2140,
+       "replies": 361
+      },
+      {
+       "category": "competitors",
+       "comments": 640,
+       "likes": 1275,
+       "replies": 208
+      },
+      {
+       "category": "themes",
+       "comments": 415,
+       "likes": 702,
+       "replies": 97
+      },
+      {
+       "category": "other",
+       "comments": 145,
+       "likes": 233,
+       "replies": 34
+      }
+     ]
     }
    ],
    "item_count": 1,
@@ -1348,157 +1678,205 @@
     {
      "brand_id": "brd_Lw6ZZmNYhW0P9k0x",
      "authenticated_as": "api_key",
-     "scopes": {
-      "global": {
+     "scopes": [
+      {
+       "scope": "global",
        "human_name": "General",
        "kind": "request",
        "section": "api",
-       "windows": {
-        "rps": {
+       "windows": [
+        {
+         "window": "rps",
          "limit": 100,
          "used": 10,
          "remaining": 90,
          "reset_in": 1
         },
-        "rph": {
+        {
+         "window": "rph",
          "limit": 5000,
          "used": 500,
          "remaining": 4500,
          "reset_in": 1800
         },
-        "rpd": {
+        {
+         "window": "rpd",
          "limit": 10000,
          "used": 1000,
          "remaining": 9000,
          "reset_in": 43200
         }
-       }
+       ]
       },
-      "ai_analysis": {
+      {
+       "scope": "ai_analysis",
        "human_name": "AI Analysis",
        "kind": "request",
        "section": "api",
-       "windows": {
-        "rps": {
+       "windows": [
+        {
+         "window": "rps",
          "limit": 10,
          "used": 1,
          "remaining": 9,
          "reset_in": 1
         },
-        "rph": {
+        {
+         "window": "rph",
          "limit": 1000,
          "used": 100,
          "remaining": 900,
          "reset_in": 1800
         },
-        "rpd": {
+        {
+         "window": "rpd",
          "limit": 5000,
          "used": 500,
          "remaining": 4500,
          "reset_in": 43200
         }
-       }
+       ]
       },
-      "creator_vetting": {
+      {
+       "scope": "creator_vetting",
        "human_name": "Creator Vetting",
        "kind": "request",
        "section": "api",
-       "windows": {
-        "rps": {
+       "windows": [
+        {
+         "window": "rps",
          "limit": 100,
          "used": 10,
          "remaining": 90,
          "reset_in": 1
         },
-        "rph": {
+        {
+         "window": "rph",
          "limit": 1000,
          "used": 100,
          "remaining": 900,
          "reset_in": 1800
         },
-        "rpd": {
+        {
+         "window": "rpd",
          "limit": 10000,
          "used": 1000,
          "remaining": 9000,
          "reset_in": 43200
         }
-       }
+       ]
       },
-      "mcp": {
+      {
+       "scope": "mcp",
        "human_name": "General",
        "kind": "request",
        "section": "mcp",
-       "windows": {
-        "rps": {
+       "windows": [
+        {
+         "window": "rps",
          "limit": 20,
          "used": 2,
          "remaining": 18,
          "reset_in": 1
         },
-        "rph": {
+        {
+         "window": "rph",
          "limit": 10000,
          "used": 1000,
          "remaining": 9000,
          "reset_in": 1800
         },
-        "rpd": {
+        {
+         "window": "rpd",
          "limit": 25000,
          "used": 2500,
          "remaining": 22500,
          "reset_in": 43200
         }
-       }
+       ]
       },
-      "mcp.ai_analysis": {
+      {
+       "scope": "mcp.ai_analysis",
        "human_name": "AI Analysis",
        "kind": "request",
        "section": "mcp",
-       "windows": {
-        "rps": {
+       "windows": [
+        {
+         "window": "rps",
          "limit": 5,
          "used": 1,
          "remaining": 4,
          "reset_in": 1
         },
-        "rph": {
+        {
+         "window": "rph",
          "limit": 2500,
          "used": 250,
          "remaining": 2250,
          "reset_in": 1800
         },
-        "rpd": {
+        {
+         "window": "rpd",
          "limit": 10000,
          "used": 1000,
          "remaining": 9000,
          "reset_in": 43200
         }
-       }
+       ]
       },
-      "mcp.creator_vetting": {
+      {
+       "scope": "mcp.creator_vetting",
        "human_name": "Creator Vetting",
        "kind": "request",
        "section": "mcp",
-       "windows": {
-        "rps": {
+       "windows": [
+        {
+         "window": "rps",
          "limit": 5,
          "used": 1,
          "remaining": 4,
          "reset_in": 1
         },
-        "rph": {
+        {
+         "window": "rph",
          "limit": 2500,
          "used": 250,
          "remaining": 2250,
          "reset_in": 1800
         },
-        "rpd": {
+        {
+         "window": "rpd",
          "limit": 10000,
          "used": 1000,
          "remaining": 9000,
          "reset_in": 43200
         }
-       }
+       ]
       }
+     ],
+     "history": {
+      "start_date": "2026-05-01",
+      "end_date": "2026-10-21",
+      "days": [
+       {
+        "date": "2026-10-20",
+        "source": "api",
+        "general": 4820,
+        "ai_analysis": 36,
+        "creator_vetting": 12,
+        "data_records": 4772,
+        "data_records_items": 143160
+       },
+       {
+        "date": "2026-10-21",
+        "source": "mcp",
+        "general": 311,
+        "ai_analysis": 4,
+        "creator_vetting": 0,
+        "data_records": 307,
+        "data_records_items": 9210
+       }
+      ]
      }
     }
    ],
@@ -1838,6 +2216,9 @@
   "ai_analysis_create",
   "ai_analysis_list",
   "ai_analysis_results",
+  "analytics_brand_comparison",
+  "analytics_follower_timeseries",
+  "analytics_posted_comments",
   "brand_accounts_add",
   "brand_accounts_list",
   "brand_accounts_remove",
@@ -1975,6 +2356,12 @@
    "scope": "CONTENT",
    "status": "COMPLETED"
   },
+  "AnalyticsBrand": {
+   "id": "id_fX9lUrfH2FGkqseH",
+   "title": "Title",
+   "is_primary": true,
+   "sub_brand_type": "THEME"
+  },
   "Brand": {
    "id": "brd_oSRYWNeuAV29x3Zb",
    "title": "Title",
@@ -2053,6 +2440,38 @@
    "level": "Level",
    "parent_id": "m7a0UgTypD661Ip9"
   },
+  "BrandComparison": {
+   "brand": {
+    "id": "id_fX9lUrfH2FGkqseH",
+    "title": "Title",
+    "is_primary": true,
+    "sub_brand_type": "THEME"
+   },
+   "statistics": {
+    "post_count": 42,
+    "total_views": 42,
+    "total_likes": 42,
+    "total_comments": 42,
+    "total_shares": 42,
+    "total_engagement": 18400,
+    "total_earned_media_value_cents": 42,
+    "engagement_rate": 0.0425,
+    "unique_creator_count": 42,
+    "total_positive_nps": 42,
+    "total_neutral_nps": 42,
+    "total_negative_nps": 42
+   },
+   "followers": {
+    "total": 7,
+    "accounts": [
+     {
+      "platform": "tiktok",
+      "username": "zelfai",
+      "followers": 42
+     }
+    ]
+   }
+  },
   "BrandCreateSubBrandRequest": {
    "search_terms": [
     "Search terms"
@@ -2076,6 +2495,16 @@
    "title": "Title",
    "sub_brand_type": "COMPETITIVE"
   },
+  "BrandFollowers": {
+   "total": 7,
+   "accounts": [
+    {
+     "platform": "tiktok",
+     "username": "zelfai",
+     "followers": 42
+    }
+   ]
+  },
   "BrandKeywords": {
    "search_terms": [
     "Search terms"
@@ -2096,6 +2525,20 @@
     "Allowed languages"
    ],
    "boolean_query": "Boolean query"
+  },
+  "BrandStatistics": {
+   "post_count": 42,
+   "total_views": 42,
+   "total_likes": 42,
+   "total_comments": 42,
+   "total_shares": 42,
+   "total_engagement": 18400,
+   "total_earned_media_value_cents": 42,
+   "engagement_rate": 0.0425,
+   "unique_creator_count": 42,
+   "total_positive_nps": 42,
+   "total_neutral_nps": 42,
+   "total_negative_nps": 42
   },
   "Comment": {
    "id": "com_4o8xWFf16rJD0SsE",
@@ -2594,6 +3037,45 @@
    "platform": "tiktok",
    "duration_s": 0.0425
   },
+  "FollowerAccount": {
+   "platform": "tiktok",
+   "username": "zelfai",
+   "followers": 42
+  },
+  "FollowerPeriod": {
+   "followers": 42,
+   "start_date": "Start date",
+   "end_date": "End date",
+   "accounts": [
+    {
+     "platform": "tiktok",
+     "username": "zelfai",
+     "followers": 42
+    }
+   ]
+  },
+  "FollowerTimeseries": {
+   "brand": {
+    "id": "id_fX9lUrfH2FGkqseH",
+    "title": "Title",
+    "is_primary": true,
+    "sub_brand_type": "THEME"
+   },
+   "periods": [
+    {
+     "followers": 42,
+     "start_date": "Start date",
+     "end_date": "End date",
+     "accounts": [
+      {
+       "platform": "tiktok",
+       "username": "zelfai",
+       "followers": 42
+      }
+     ]
+    }
+   ]
+  },
   "PatchedBrandUpdateRequest": {
    "search_terms": [
     "Search terms"
@@ -2624,6 +3106,23 @@
    "max_items": 10,
    "enabled": true
   },
+  "PostedCommentCategory": {
+   "category": "Category",
+   "comments": 42,
+   "likes": 42,
+   "replies": 42
+  },
+  "PostedComments": {
+   "total_comments_posted": 7,
+   "categories": [
+    {
+     "category": "Category",
+     "comments": 42,
+     "likes": 42,
+     "replies": 42
+    }
+   ]
+  },
   "ResultFile": {
    "expires_at": 7,
    "format": "json",
@@ -2636,15 +3135,80 @@
   "Usage": {
    "brand_id": "brd_yG3ydHhMNfBbLicm",
    "authenticated_as": "Authenticated as",
-   "scopes": {}
+   "scopes": [
+    {
+     "scope": "CONTENT",
+     "human_name": "Human name",
+     "kind": "snapshot",
+     "section": "Section",
+     "windows": [
+      {
+       "window": "Window",
+       "limit": 7,
+       "used": 7,
+       "remaining": 7,
+       "reset_in": 7
+      }
+     ]
+    }
+   ],
+   "history": {
+    "start_date": "Start date",
+    "end_date": "End date",
+    "days": [
+     {
+      "source": "Source",
+      "general": 7,
+      "ai_analysis": 42,
+      "creator_vetting": 7,
+      "data_records": 42,
+      "data_records_items": 42,
+      "date": "Date"
+     }
+    ]
+   }
+  },
+  "UsageDay": {
+   "source": "Source",
+   "general": 7,
+   "ai_analysis": 42,
+   "creator_vetting": 7,
+   "data_records": 42,
+   "data_records_items": 42,
+   "date": "Date"
+  },
+  "UsageHistory": {
+   "start_date": "Start date",
+   "end_date": "End date",
+   "days": [
+    {
+     "source": "Source",
+     "general": 7,
+     "ai_analysis": 42,
+     "creator_vetting": 7,
+     "data_records": 42,
+     "data_records_items": 42,
+     "date": "Date"
+    }
+   ]
   },
   "UsageScope": {
+   "scope": "CONTENT",
    "human_name": "Human name",
    "kind": "snapshot",
    "section": "Section",
-   "windows": {}
+   "windows": [
+    {
+     "window": "Window",
+     "limit": 7,
+     "used": 7,
+     "remaining": 7,
+     "reset_in": 7
+    }
+   ]
   },
   "UsageWindow": {
+   "window": "Window",
    "limit": 7,
    "used": 7,
    "remaining": 7,

@@ -13,7 +13,7 @@ use crate::transport::{Envelope, Transport};
 pub struct BrandAccountsAddParams {
     /// The list to modify: `tracked`, `influencer`, or `owned` for the brand's own profiles.
     pub account_type: AccountTypeEnum,
-    /// Profile URLs on a supported platform (`instagram` or `tiktok`).
+    /// Profile URLs on a supported platform (`instagram`, `tiktok` or `youtube`).
     pub profile_urls: Vec<String>,
     /// Brand to modify, specified as an `id` from `brands.list`. Omit to modify the workspace
     /// brand.
@@ -40,7 +40,7 @@ pub struct BrandAccountsListParams {
 pub struct BrandAccountsRemoveParams {
     /// The list to modify: `tracked`, `influencer`, or `owned` for the brand's own profiles.
     pub account_type: AccountTypeEnum,
-    /// Profile URLs on a supported platform (`instagram` or `tiktok`).
+    /// Profile URLs on a supported platform (`instagram`, `tiktok` or `youtube`).
     pub profile_urls: Vec<String>,
     /// Brand to modify, specified as an `id` from `brands.list`. Omit to modify the workspace
     /// brand.

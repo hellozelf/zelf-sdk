@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 
 /**
- * The WebhookSubscription object.
+ * A registered endpoint and the events it receives.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record WebhookSubscription(

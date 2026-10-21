@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 
 /**
- * The WebhookDelivery object.
+ * One attempt to deliver one push, with its outcome.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record WebhookDelivery(

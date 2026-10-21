@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 
 /**
- * The WebhookSecret object.
+ * A signing secret, identified by its prefix rather than its value.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record WebhookSecret(

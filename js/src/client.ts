@@ -2,6 +2,7 @@
 
 import { Transport, type ClientOptions } from './transport.js'
 import { AiAnalysisResource } from './resources/ai_analysis.js'
+import { AnalyticsResource } from './resources/analytics.js'
 import { BrandAccountsResource } from './resources/brand_accounts.js'
 import { BrandsResource } from './resources/brands.js'
 import { CommentsResource } from './resources/comments.js'
@@ -22,6 +23,7 @@ import { WebhooksResource } from './resources/webhooks.js'
 export class ZelfAPIClient {
   readonly transport: Transport
   readonly aiAnalysis: AiAnalysisResource
+  readonly analytics: AnalyticsResource
   readonly brandAccounts: BrandAccountsResource
   readonly brands: BrandsResource
   readonly comments: CommentsResource
@@ -37,6 +39,7 @@ export class ZelfAPIClient {
   constructor(options: ClientOptions = {}) {
     this.transport = new Transport(options)
     this.aiAnalysis = new AiAnalysisResource(this.transport)
+    this.analytics = new AnalyticsResource(this.transport)
     this.brandAccounts = new BrandAccountsResource(this.transport)
     this.brands = new BrandsResource(this.transport)
     this.comments = new CommentsResource(this.transport)

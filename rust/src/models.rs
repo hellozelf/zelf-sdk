@@ -455,6 +455,22 @@ pub struct AiAnalysisRun {
     pub status: String,
 }
 
+/// The brand a row of analytics belongs to.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AnalyticsBrand {
+    /// Unique identifier for the brand.
+    pub id: String,
+    /// Display name of the brand.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    /// `true` for the brand the request named, `false` for a sub-brand.
+    pub is_primary: bool,
+    /// `COMPETITIVE` or `THEME` for a sub-brand; `null` for the top-level brand the request
+    /// named.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sub_brand_type: Option<String>,
+}
+
 /// A brand you can reach.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Brand {
@@ -481,7 +497,7 @@ pub struct Brand {
 pub struct BrandAccount {
     /// The account's handle.
     pub username: String,
-    /// `instagram` or `tiktok`.
+    /// `instagram`, `tiktok` or `youtube`.
     pub platform: String,
     /// The account's profile URL, when available.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -512,7 +528,7 @@ pub struct BrandAccountsWriteRequest {
     pub brand_id: Option<String>,
     /// The list to modify: `tracked`, `influencer`, or `owned` for the brand's own profiles.
     pub account_type: AccountTypeEnum,
-    /// Profile URLs on a supported platform (`instagram` or `tiktok`).
+    /// Profile URLs on a supported platform (`instagram`, `tiktok` or `youtube`).
     #[serde(default)]
     pub profile_urls: Vec<String>,
 }
@@ -554,6 +570,17 @@ pub struct BrandCatalogItem {
     /// Industry id a category belongs to; `null` for an industry.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub parent_id: Option<String>,
+}
+
+/// One brand's performance in the comparison.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BrandComparison {
+    /// The brand this row covers.
+    pub brand: AnalyticsBrand,
+    /// Totals over the window.
+    pub statistics: BrandStatistics,
+    /// Follower counts as they stand now, not over the window.
+    pub followers: BrandFollowers,
 }
 
 /// Create a sub-brand under the workspace brand.
@@ -603,6 +630,16 @@ pub struct BrandCreateSubBrandRequest {
     pub sub_brand_type: SubBrandTypeEnum,
 }
 
+/// Followers across the handles a brand owns.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BrandFollowers {
+    /// Followers across every owned handle.
+    pub total: i64,
+    /// Per handle counts that add up to `total`.
+    #[serde(default)]
+    pub accounts: Vec<FollowerAccount>,
+}
+
 /// The terms this brand uses to monitor social platforms.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BrandKeywords {
@@ -647,6 +684,36 @@ pub struct BrandKeywords {
     pub boolean_query: Option<String>,
 }
 
+/// Totals over the content matched to a brand in the window.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BrandStatistics {
+    /// Number of posts matched to the brand.
+    pub post_count: i64,
+    /// Total views across those posts.
+    pub total_views: i64,
+    /// Total likes across those posts.
+    pub total_likes: i64,
+    /// Total comments across those posts.
+    pub total_comments: i64,
+    /// Total shares across those posts.
+    pub total_shares: i64,
+    /// Likes, comments and shares across those posts.
+    pub total_engagement: i64,
+    /// Estimated marketing value across those posts, in US cents.
+    pub total_earned_media_value_cents: i64,
+    /// Total engagement divided by total views. Null when the set has no recorded views.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub engagement_rate: Option<f64>,
+    /// Number of distinct creators who posted.
+    pub unique_creator_count: i64,
+    /// Engagement on positive posts.
+    pub total_positive_nps: i64,
+    /// Engagement on neutral posts.
+    pub total_neutral_nps: i64,
+    /// Engagement on negative posts.
+    pub total_negative_nps: i64,
+}
+
 /// A comment left on a piece of content.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Comment {
@@ -654,7 +721,7 @@ pub struct Comment {
     pub id: String,
     /// The comment's text content.
     pub text: String,
-    /// The platform the comment was posted on. Either `instagram` or `tiktok`.
+    /// The platform the comment was posted on: `instagram`, `tiktok` or `youtube`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
     /// Number of likes the comment has received.
@@ -701,7 +768,7 @@ pub struct Content {
     /// Examples:; Instagram: `https://instagram.com/reel/abcd` -> `abcd`; TikTok:
     /// `https://www.tiktok.com/@username/video/12345678` -> `12345678`
     pub platform_post_id: String,
-    /// The platform the content was published on. Either `instagram` or `tiktok`.
+    /// The platform the content was published on: `instagram`, `tiktok` or `youtube`.
     pub platform: String,
     /// Whether the content is a video or an image.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1395,6 +1462,41 @@ pub struct DetectionVideo {
     pub duration_s: f64,
 }
 
+/// One owned handle and the followers it carries.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FollowerAccount {
+    /// The platform the handle is on.
+    pub platform: String,
+    /// The handle.
+    pub username: String,
+    /// Follower count for this handle.
+    pub followers: i64,
+}
+
+/// Followers at the end of one period.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FollowerPeriod {
+    /// Followers across every owned handle.
+    pub followers: i64,
+    /// First day of the period.
+    pub start_date: String,
+    /// Last day of the period.
+    pub end_date: String,
+    /// Per handle counts that add up to `followers`.
+    #[serde(default)]
+    pub accounts: Vec<FollowerAccount>,
+}
+
+/// One brand's follower history.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FollowerTimeseries {
+    /// The brand this row covers.
+    pub brand: AnalyticsBrand,
+    /// One entry per period, oldest first.
+    #[serde(default)]
+    pub periods: Vec<FollowerPeriod>,
+}
+
 /// Partial update for a brand's monitoring keywords. Every field is optional, and only the
 /// supplied fields are changed, but at least one field is required.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1468,6 +1570,30 @@ pub struct PatchedWebhookSubscriptionUpdateRequest {
     pub enabled: Option<bool>,
 }
 
+/// Comments the brand posted on one category of content.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PostedCommentCategory {
+    /// `brand`, `owned`, `competitors`, `themes` or `other`. `other` covers content outside the
+    /// brand's own tree.
+    pub category: String,
+    /// Comments posted on this category.
+    pub comments: i64,
+    /// Likes those comments received.
+    pub likes: i64,
+    /// Replies those comments received.
+    pub replies: i64,
+}
+
+/// Comments the brand posted, split by the content they were posted on.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PostedComments {
+    /// Comments the brand posted in the window, across every category.
+    pub total_comments_posted: i64,
+    /// One entry per category. They add up to `total_comments_posted`.
+    #[serde(default)]
+    pub categories: Vec<PostedCommentCategory>,
+}
+
 /// Signed, time-limited download of an analysis run's result payload.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ResultFile {
@@ -1508,13 +1634,49 @@ pub struct Usage {
     /// ``api_key`` or ``mcp``, whichever made this call. It decides which groups your calls are
     /// counted against.
     pub authenticated_as: String,
-    /// Keyed by group. Both sections are returned whichever way you call.
-    pub scopes: serde_json::Value,
+    /// One entry per metered group. Both sections are returned whichever way you call.
+    #[serde(default)]
+    pub scopes: Vec<UsageScope>,
+    /// What was actually spent, day by day, from the usage ledger.
+    pub history: UsageHistory,
+}
+
+/// One day of consumption for one source.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UsageDay {
+    /// ``api`` for direct requests, ``mcp`` for AI clients.
+    pub source: String,
+    /// Every counted call that day.
+    pub general: i64,
+    /// Calls counted against the AI analysis group.
+    pub ai_analysis: i64,
+    /// Calls counted against creator vetting.
+    pub creator_vetting: i64,
+    /// Calls counted against data records.
+    pub data_records: i64,
+    /// Records those calls returned.
+    pub data_records_items: i64,
+    /// The day, in the brand's billing timezone.
+    pub date: String,
+}
+
+/// Daily consumption over the window the ledger keeps.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UsageHistory {
+    /// First day covered.
+    pub start_date: String,
+    /// Last day covered.
+    pub end_date: String,
+    /// One entry per day and source that saw usage, oldest first.
+    #[serde(default)]
+    pub days: Vec<UsageDay>,
 }
 
 /// One metered group, with every window that has a limit.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UsageScope {
+    /// Identifier of the metered group.
+    pub scope: String,
     /// Name of the group, as an admin sees it.
     pub human_name: String,
     /// ``request`` counts calls; ``item`` counts rows returned.
@@ -1522,13 +1684,16 @@ pub struct UsageScope {
     /// Which product the group meters: ``api`` for direct requests, ``mcp`` for AI clients. The
     /// two never share a counter.
     pub section: String,
-    /// Keyed by window: rps, rpm, rph, rpd, rpmonth, or the item windows.
-    pub windows: serde_json::Value,
+    /// Every window that has a limit configured.
+    #[serde(default)]
+    pub windows: Vec<UsageWindow>,
 }
 
 /// Consumption of one window, e.g. requests in the current hour.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UsageWindow {
+    /// Which window this is: rps, rpm, rph, rpd, rpmonth, or an item window.
+    pub window: String,
     /// Most that may be spent in this window.
     pub limit: i64,
     /// Spent so far in this window.
@@ -1540,7 +1705,7 @@ pub struct UsageWindow {
     pub reset_in: i64,
 }
 
-/// The WebhookAvailableEvent object.
+/// An event type a subscription may ask for.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WebhookAvailableEvent {
     /// Event type identifier, e.g. creator_vetting.completed.
@@ -1575,7 +1740,7 @@ pub struct WebhookData {
     pub items: Option<Vec<serde_json::Value>>,
 }
 
-/// The WebhookDeleteAcknowledgement object.
+/// Confirmation that a webhook resource was deleted.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WebhookDeleteAcknowledgement {
     /// Always true; confirms the webhook resource delete was acknowledged.
@@ -1586,7 +1751,7 @@ pub struct WebhookDeleteAcknowledgement {
     pub status: String,
 }
 
-/// The WebhookDelivery object.
+/// One attempt to deliver one push, with its outcome.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WebhookDelivery {
     /// Encoded identifier of the webhook delivery.
@@ -1623,9 +1788,8 @@ pub struct WebhookDelivery {
     pub modified: String,
 }
 
-/// One downloadable snapshot file in a manifest push. A delivery currently consists of a
-/// single file, so `files` carries one entry. The array shape allows a snapshot to be
-/// sharded across several files in the future without changing the envelope.
+/// One downloadable snapshot file in a manifest push. `files` is an array, so read every
+/// entry rather than assuming one.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WebhookFile {
     /// File encoding. Always `ndjson` (newline-delimited JSON, with one row per line).
@@ -1676,7 +1840,7 @@ pub struct WebhookPush {
     pub data: WebhookData,
 }
 
-/// The WebhookSecret object.
+/// A signing secret, identified by its prefix rather than its value.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WebhookSecret {
     /// Encoded identifier of the webhook secret.
@@ -1706,7 +1870,8 @@ pub struct WebhookSecretCreateRequest {
     pub make_default: Option<bool>,
 }
 
-/// The WebhookSecretCreated object.
+/// A secret just created or rotated, carrying the value once. Store it now: later reads
+/// return the prefix alone.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WebhookSecretCreated {
     /// Encoded identifier of the webhook secret.
@@ -1727,7 +1892,7 @@ pub struct WebhookSecretCreated {
     pub secret: String,
 }
 
-/// The WebhookSubscription object.
+/// A registered endpoint and the events it receives.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WebhookSubscription {
     /// Encoded identifier of the webhook subscription.
@@ -1800,7 +1965,8 @@ pub struct WebhookSubscriptionCreateRequest {
     pub secret_type: Option<SecretTypeEnum>,
 }
 
-/// The WebhookSubscriptionCreated object.
+/// A subscription just created, with the signing secret attached. The secret is shown on
+/// this response only and never again.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WebhookSubscriptionCreated {
     /// Encoded identifier of the webhook subscription.
