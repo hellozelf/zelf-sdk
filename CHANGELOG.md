@@ -37,9 +37,10 @@ structural diff between releases.
 
 ## 1.0.0
 
-First release. 3 clients generated from the published OpenAPI document, covering all 48 operations.
+First release. 6 clients generated from the published OpenAPI document, covering all 48 operations.
 
-Clients: Python, TypeScript, Go.
+Clients: Python, TypeScript, Go, Rust, Ruby, C#. A Java client is generated
+and versioned with the rest, and is not published yet.
 
 ### Operations
 

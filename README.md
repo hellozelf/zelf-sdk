@@ -1,26 +1,11 @@
 # Zelf SDKs
 
-Official clients for the Zelf API in Python, TypeScript and Go. One spec,
-three clients, the same resources and method names in each.
+Official clients for the Zelf API in Python, TypeScript, Go, Rust, Ruby and C#.
+One spec, six clients, the same resources and method names in each.
 
-```bash
-pip install zelf-sdk
-```
-
-```python
-from zelf import ZelfAPIClient
-
-client = ZelfAPIClient(api_key="sk_zelf_...")
-
-page = client.content.list(brand_id="brd_6u5...", posted_within_days=30)
-for item in page:
-    print(item.view_count, item.caption)
-```
-
-Examples on this page are Python. Each one is followed by the same call in
-TypeScript and Go, collapsed. Per-language detail lives in that language's own
-README: [Python](python/README.md), [TypeScript](js/README.md),
-[Go](go/README.md).
+Per-language detail lives in that language's own README:
+[Python](python/README.md), [TypeScript](js/README.md), [Go](go/README.md),
+[Rust](rust/README.md), [Ruby](ruby/README.md), [C#](csharp/README.md).
 
 ## Install
 
@@ -29,9 +14,11 @@ README: [Python](python/README.md), [TypeScript](js/README.md),
 | Python | `pip install zelf-sdk` | `from zelf import ZelfAPIClient` |
 | TypeScript | `npm install zelf-sdk` | `import { ZelfAPIClient } from 'zelf-sdk'` |
 | Go | `go get github.com/hellozelf/zelf-sdk/go` | `import zelf "github.com/hellozelf/zelf-sdk/go"` |
+| Rust | `cargo add zelf-sdk` | `use zelf::Client` |
+| Ruby | `gem install zelf-sdk` | `require 'zelf'` |
+| C# | `dotnet add package Zelf.Sdk` | `using Zelf` |
 
-The package is `zelf-sdk` because `zelf` was taken on npm and crates.io. The
-import stays `zelf` everywhere the two can differ.
+The package is `zelf-sdk`; the import stays `zelf` wherever the two differ.
 
 ## Authentication
 
@@ -46,12 +33,9 @@ client = ZelfAPIClient(api_key="sk_zelf_...")
 client = ZelfAPIClient()                       # reads ZELF_API_KEY
 ```
 
-<details>
-<summary>The same in TypeScript and Go</summary>
-
 **TypeScript**
 
-```ts
+```typescript
 const client = new ZelfAPIClient({ apiKey: 'sk_zelf_...' })
 ```
 
@@ -61,7 +45,23 @@ const client = new ZelfAPIClient({ apiKey: 'sk_zelf_...' })
 client, err := zelf.New(zelf.WithAPIKey("sk_zelf_..."))
 ```
 
-</details>
+**Rust**
+
+```rust
+let client = Client::new("sk_zelf_...")?;
+```
+
+**Ruby**
+
+```ruby
+client = Zelf::Client.new(api_key: 'sk_zelf_...')
+```
+
+**C#**
+
+```csharp
+using var client = new ZelfClient("sk_zelf_...");
+```
 
 ## Calling the API
 
@@ -74,12 +74,9 @@ Operation ids read as `resource.method`, so `content.list` is
 page = client.content.list(search="running shoes", brand_id="brd_1")
 ```
 
-<details>
-<summary>The same in TypeScript and Go</summary>
-
 **TypeScript**
 
-```ts
+```typescript
 const page = await client.content.list({ search: 'running shoes' })
 ```
 
@@ -89,7 +86,26 @@ const page = await client.content.list({ search: 'running shoes' })
 page, err := client.Content.List(ctx, &zelf.ContentListParams{Search: zelf.Ptr("running shoes")})
 ```
 
-</details>
+**Rust**
+
+```rust
+let page = client.content().list(ContentListParams {
+    search: Some("running shoes".into()),
+    ..Default::default()
+}).await?;
+```
+
+**Ruby**
+
+```ruby
+page = client.content.list(search: 'running shoes')
+```
+
+**C#**
+
+```csharp
+var page = await client.Content.ListAsync(new ContentListParams { Search = "running shoes" });
+```
 
 Python also ships an async client with the same surface:
 
@@ -113,12 +129,9 @@ for item in page.auto_paging(max_pages=5):
     print(item.id)
 ```
 
-<details>
-<summary>The same in TypeScript and Go</summary>
-
 **TypeScript**
 
-```ts
+```typescript
 for await (const item of page.autoPaging({ maxPages: 5 })) { }
 ```
 
@@ -128,7 +141,23 @@ for await (const item of page.autoPaging({ maxPages: 5 })) { }
 err = page.AutoPaging(ctx, visit, zelf.MaxPages(5))
 ```
 
-</details>
+**Rust**
+
+```rust
+let rows = page.collect_all(Limits::pages(5)).await?;
+```
+
+**Ruby**
+
+```ruby
+page.auto_paging(max_pages: 5) { |item| }
+```
+
+**C#**
+
+```csharp
+await foreach (var item in page.AutoPagingAsync(PageLimits.Pages(5))) { }
+```
 
 The envelope is on the page itself: `page.item_count`, `page.page`,
 `page.applied_filters`, `page.log_id`.
@@ -151,12 +180,9 @@ except zelf.NotFoundError as error:
 404 NOT_FOUND 0ca57078-d810-4038-a1d7-02953ac7ce60
 ```
 
-<details>
-<summary>The same in TypeScript and Go</summary>
-
 **TypeScript**
 
-```ts
+```typescript
 try {
   await client.content.details('con_nope')
 } catch (error) {
@@ -174,7 +200,39 @@ if errors.As(err, &apiError) {
 }
 ```
 
-</details>
+**Rust**
+
+```rust
+match client.content().details("con_nope", Default::default()).await {
+    Err(error) if error.is_not_found() => {
+        println!("{:?} {:?}", error.status(), error.code());
+    }
+    _ => {}
+}
+```
+
+**Ruby**
+
+```ruby
+begin
+  client.content.details('con_nope')
+rescue Zelf::NotFoundError => error
+  puts error.status, error.code, error.log_id
+end
+```
+
+**C#**
+
+```csharp
+try
+{
+    await client.Content.DetailsAsync("con_nope");
+}
+catch (ZelfNotFoundException error)
+{
+    Console.WriteLine($"{error.Status} {error.Code} {error.LogId}");
+}
+```
 
 The type follows the status: bad request, authentication, permission denied,
 not found, conflict, rate limit, internal server and service unavailable.
@@ -196,12 +254,9 @@ if your call site can tolerate it:
 client = ZelfAPIClient(max_retries=5, retry_writes=True)
 ```
 
-<details>
-<summary>The same in TypeScript and Go</summary>
-
 **TypeScript**
 
-```ts
+```typescript
 new ZelfAPIClient({ maxRetries: 5, retryWrites: true })
 ```
 
@@ -211,7 +266,23 @@ new ZelfAPIClient({ maxRetries: 5, retryWrites: true })
 zelf.New(zelf.WithMaxRetries(5), zelf.WithRetryWrites(true))
 ```
 
-</details>
+**Rust**
+
+```rust
+Client::builder().api_key("sk_zelf_...").max_retries(5).retry_writes(true).build()?;
+```
+
+**Ruby**
+
+```ruby
+Zelf::Client.new(max_retries: 5, retry_writes: true)
+```
+
+**C#**
+
+```csharp
+new ZelfClient(new ZelfClientOptions { MaxRetries = 5, RetryWrites = true });
+```
 
 ## Webhooks
 
@@ -227,6 +298,36 @@ event = webhooks.parse(request.body, request.headers, secret)
 if event.event_type is webhooks.EventType.CONTENT_SNAPSHOT:
     for row in event.items:
         print(row["id"])
+```
+
+**TypeScript**
+
+```typescript
+const event = webhooks.parse(body, headers, secret)
+```
+
+**Go**
+
+```go
+event, err := webhooks.Parse(body, headers, []string{secret})
+```
+
+**Rust**
+
+```rust
+let event = webhooks::parse(body, &headers, secret)?;
+```
+
+**Ruby**
+
+```ruby
+event = Zelf::Webhooks.parse(body, headers, secret)
+```
+
+**C#**
+
+```csharp
+var webhookEvent = Webhooks.Parse(body, headers, secret);
 ```
 
 Verification uses each language's constant-time comparison, enforces a 300
@@ -246,12 +347,9 @@ handler = (
 event = handler.handle(request.body, request.headers)
 ```
 
-<details>
-<summary>The same in TypeScript and Go</summary>
-
 **TypeScript**
 
-```ts
+```typescript
 const handler = new webhooks.WebhookHandler(secret)
   .on(webhooks.EventType.ContentSnapshot, onSnapshot)
   .onAny(onEverythingElse)
@@ -264,8 +362,6 @@ handler := webhooks.NewHandler([]string{secret}, webhooks.Options{}).
     On(onSnapshot, webhooks.EventContentSnapshot).
     OnAny(onEverythingElse)
 ```
-
-</details>
 
 For a manifest delivery, `rows` downloads the NDJSON files and verifies the
 published SHA-256 over each body before yielding anything.

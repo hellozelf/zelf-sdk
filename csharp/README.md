@@ -1,8 +1,7 @@
-# Zelf.Sdk (.NET)
+# zelf-sdk (C#)
 
 Official client for the Zelf API. Part of
-[hellozelf/zelf-sdk](https://github.com/hellozelf/zelf-sdk), which holds the
-same client in eight languages.
+[hellozelf/zelf-sdk](https://github.com/hellozelf/zelf-sdk).
 
 ## Install
 
