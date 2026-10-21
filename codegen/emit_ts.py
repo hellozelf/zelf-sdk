@@ -449,6 +449,15 @@ def emit(api: Api, spec_path: Path, root: Path, templates: Path) -> None:
     (src / "client.ts").write_text(client_module(api))
     (src / "index.ts").write_text(index_module(api))
     (root / "package.json").write_text(json.dumps(PACKAGE_JSON, indent=2) + "\n")
+    # The lock records this package's own version in two places; npm rewrites
+    # both on the next install, which leaves the tree dirty mid-release.
+    lock_path = root / "package-lock.json"
+    if lock_path.exists():
+        lock = json.loads(lock_path.read_text())
+        lock["version"] = VERSION
+        if "" in lock.get("packages", {}):
+            lock["packages"][""]["version"] = VERSION
+        lock_path.write_text(json.dumps(lock, indent=2) + "\n")
     (root / "tsconfig.json").write_text(json.dumps(TSCONFIG, indent=2) + "\n")
     # This package has its own prettier config so formatting never reaches for
     # the repo-wide defaults the other client apps use.

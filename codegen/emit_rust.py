@@ -524,4 +524,15 @@ def emit(api: Api, spec_path: Path, root: Path, templates: Path) -> None:
     )
     (src / "lib.rs").write_text(lib_module(api))
     (root / "Cargo.toml").write_text(CARGO.format(title=api.title, version=VERSION))
+    # The lock pins this crate too. Left behind, the first cargo command in CI
+    # rewrites it, and `cargo publish` refuses to publish a dirty tree.
+    lock = root / "Cargo.lock"
+    if lock.exists():
+        lock.write_text(
+            re.sub(
+                r'(?m)^(name = "zelf-sdk"\nversion = ")[^"]*"',
+                rf'\g<1>{VERSION}"',
+                lock.read_text(),
+            )
+        )
     subprocess.run(["cargo", "fmt"], cwd=root, capture_output=True)

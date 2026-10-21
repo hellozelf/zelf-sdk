@@ -1603,7 +1603,7 @@ dependencies = [
 
 [[package]]
 name = "zelf-sdk"
-version = "1.0.0"
+version = "1.1.0"
 dependencies = [
  "hex",
  "hmac",
