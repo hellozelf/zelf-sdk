@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: ZelfAI APIs
-  version: 1.0.0
+  version: 1.1.0
   description: |-
     The ZelfAI API provides programmatic access to ZelfAI's creator and content intelligence. Use it to search the content and creators tracked for your brand, run AI analyses over that content, vet individual creators, and subscribe to webhooks that deliver results as they are produced.
 
@@ -28,6 +28,23 @@ info:
     Every request must be authenticated with an API key issued for your brand. Supply the key in the `x-api-key` request header. A request without a valid key returns `INVALID_API_KEY`.
 
     All responses are returned as `application/json`; the `Accept` header is not required.
+
+    ## Client SDKs
+
+    Official clients are published for six languages. Each exposes the same resources and method names as this reference, so `content.list` is `client.content.list()` in every one of them.
+
+    | Language | Install | Import |
+    | --- | --- | --- |
+    | Python | `pip install zelf-sdk` | `from zelf import ZelfAPIClient` |
+    | TypeScript | `npm install zelf-sdk` | `import { ZelfAPIClient } from 'zelf-sdk'` |
+    | Go | `go get github.com/hellozelf/zelf-sdk/go` | `import zelf "github.com/hellozelf/zelf-sdk/go"` |
+    | Rust | `cargo add zelf-sdk` | `use zelf::Client` |
+    | Ruby | `gem install zelf-sdk` | `require 'zelf'` |
+    | C# | `dotnet add package Zelf.Sdk` | `using Zelf` |
+
+    A client reads the key from `ZELF_API_KEY` and the base URL from `ZELF_BASE_URL` when neither is passed. It walks pagination, retries safe requests, verifies webhook signatures, and raises a typed error carrying the `log_id`.
+
+    Source and per-language documentation: [github.com/hellozelf/zelf-sdk](https://github.com/hellozelf/zelf-sdk)
 
     ## Response format
 
@@ -90,16 +107,36 @@ info:
 
     Requests are subject to quotas applied per API key and per brand, grouped as shown below. When a quota is exceeded, the API returns `RATE_LIMIT_EXCEEDED`; the response's `details.retry_after_seconds` indicates how long to wait before retrying, and `details.scopes` identifies the quota groups that were exceeded. The exact limit for each group is available in the dashboard.
 
+    **Requests made with an API key**
+
     | Group | Scope (`details.scopes`) |
     | --- | --- |
     | General | `global` |
     | AI Analysis | `ai_analysis` |
     | Creator Vetting | `creator_vetting` |
     | Data Records | `data_records` |
+
+    **Requests an AI client makes**
+
+    | Group | Scope (`details.scopes`) |
+    | --- | --- |
     | General | `mcp` |
     | AI Analysis | `mcp.ai_analysis` |
     | Creator Vetting | `mcp.creator_vetting` |
     | Data Records | `mcp.data_records` |
+
+    ## Testing
+
+    A sandbox answers every endpoint from fixed data, so you can build and test a client without a key and without touching production. The key below is public.
+
+    ```bash
+    export ZELF_BASE_URL=https://sandbox-api.hellozelf.com
+    export ZELF_API_KEY=sk_zelf_sandbox_demo
+    ```
+
+    It returns the shapes, status codes, error codes and pagination that production returns, and `page` and `page_size` work. Every other query parameter is accepted and ignored, so a list returns the same rows whatever you filter on, nothing is validated, and writes persist nothing. That is enough to exercise request building, serialization, paging, authentication and retries.
+
+    Anything that depends on a real filter, a real id or a real result has to be checked against production with your own key.
 
     ## Webhooks
 
@@ -841,6 +878,698 @@ paths:
                       total_media_duration: 53400.0
                       engagement_rate: 0.077
                       unique_creator_count: 412
+                    item_count: 1
+                    page: 1
+                    next: null
+                    previous: null
+          description: ''
+        '400':
+          description: Validation failed or a supplied id is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: The `x-api-key` header is missing, invalid, expired, or revoked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: The api key cannot access the requested brand or resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '404':
+          description: The resource does not exist or is outside this key's scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '406':
+          description: The requested response media type cannot be served.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error406'
+        '429':
+          description: A rate-limit quota was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error429'
+        '500':
+          description: Something went wrong on our side; include `log_id` when reporting.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '503':
+          description: The request took too long and was stopped; narrow the window
+            or pass `brand_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error503'
+  /api/v1/analytics/brand_comparison/:
+    get:
+      operationId: analytics.brand_comparison
+      description: |-
+        `analytics.brand_comparison`
+
+        Returns one row of totals per brand: the top-level brand named by `brand_id`, followed by each of its competitor sub-brands. The statistics block matches `content.statistics`, so the same parsing works for both.
+
+        `brand_id` must name a top-level brand. A sub-brand is refused with the id of the parent to use instead.
+      summary: Compare Brand Performance
+      parameters:
+      - in: query
+        name: brand_id
+        schema:
+          type: string
+        description: The top-level brand to analyse, as returned by `brands.list`.
+          A sub-brand is refused with the id of the parent to use instead.
+        required: true
+      - in: query
+        name: platform
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - instagram
+            - tiktok
+            - youtube
+          uniqueItems: true
+        description: Platforms to include, comma-separated. Defaults to all of them.
+        explode: false
+        style: form
+      - in: query
+        name: posted_after
+        schema:
+          type: string
+          format: date-time
+        description: 'Start of the window (UTC, ISO 8601). Supplying more than one
+          start is accepted and only one applies: this one wins over `posted_within_hours`,
+          which wins over `posted_within_days`.'
+      - in: query
+        name: posted_before
+        schema:
+          type: string
+          format: date-time
+        description: End of the window (UTC, ISO 8601). Defaults to the current time,
+          and a relative start is counted back from it.
+      - in: query
+        name: posted_within_days
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 365
+        description: Start of the window, counted back from `posted_before` or the
+          current time, in days (1-365). Defaults to 7 when no date parameter is supplied,
+          and loses to `posted_after` and `posted_within_hours`.
+      - in: query
+        name: posted_within_hours
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 8760
+        description: Start of the window, counted back from `posted_before` or the
+          current time, in hours (1-8760). `posted_after` wins over it; it wins over
+          `posted_within_days`.
+      tags:
+      - Analytics
+      security:
+      - ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BrandComparison'
+                  item_count:
+                    type: integer
+                  page:
+                    type: integer
+                  next:
+                    type:
+                    - integer
+                    - 'null'
+                  previous:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - log_id
+                - timestamp
+                - results
+                - item_count
+                - page
+                - next
+                - previous
+              examples:
+                Example:
+                  value:
+                    log_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    timestamp: '2026-01-01T00:00:00Z'
+                    results:
+                    - brand:
+                        id: brd_Lw6ZZmNYhW0P9k0x
+                        title: Zelf
+                        sub_brand_type: null
+                        is_primary: true
+                      statistics:
+                        post_count: 1280
+                        total_views: 5000000
+                        total_likes: 320000
+                        total_comments: 20000
+                        total_shares: 10000
+                        total_engagement: 350000
+                        total_earned_media_value_cents: 12500000
+                        engagement_rate: 0.07
+                        unique_creator_count: 412
+                        total_positive_nps: 245000
+                        total_neutral_nps: 84000
+                        total_negative_nps: 21000
+                      followers:
+                        total: 775000
+                        accounts:
+                        - platform: instagram
+                          username: zelfai
+                          followers: 420000
+                        - platform: tiktok
+                          username: zelfai
+                          followers: 260000
+                        - platform: youtube
+                          username: zelfai
+                          followers: 95000
+                    - brand:
+                        id: brd_TOmS4tGtnsEhS9Fy
+                        title: Northwind Apparel
+                        sub_brand_type: COMPETITIVE
+                        is_primary: false
+                      statistics:
+                        post_count: 940
+                        total_views: 3500000
+                        total_likes: 180000
+                        total_comments: 11000
+                        total_shares: 5000
+                        total_engagement: 196000
+                        total_earned_media_value_cents: 7100000
+                        engagement_rate: 0.056
+                        unique_creator_count: 265
+                        total_positive_nps: 122500
+                        total_neutral_nps: 58800
+                        total_negative_nps: 14700
+                      followers:
+                        total: 458000
+                        accounts:
+                        - platform: instagram
+                          username: northwindapparel
+                          followers: 310000
+                        - platform: tiktok
+                          username: northwindapparel
+                          followers: 148000
+                    - brand:
+                        id: brd_rMojoPskS9hZZVa0
+                        title: Harborline
+                        sub_brand_type: COMPETITIVE
+                        is_primary: false
+                      statistics:
+                        post_count: 510
+                        total_views: 2000000
+                        total_likes: 72000
+                        total_comments: 5400
+                        total_shares: 2600
+                        total_engagement: 80000
+                        total_earned_media_value_cents: 3400000
+                        engagement_rate: 0.04
+                        unique_creator_count: 148
+                        total_positive_nps: 46400
+                        total_neutral_nps: 26400
+                        total_negative_nps: 7200
+                      followers:
+                        total: 137000
+                        accounts:
+                        - platform: instagram
+                          username: harborline
+                          followers: 96000
+                        - platform: youtube
+                          username: harborline
+                          followers: 41000
+                    item_count: 3
+                    page: 1
+                    next: null
+                    previous: null
+          description: ''
+        '400':
+          description: Validation failed or a supplied id is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: The `x-api-key` header is missing, invalid, expired, or revoked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: The api key cannot access the requested brand or resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '404':
+          description: The resource does not exist or is outside this key's scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '406':
+          description: The requested response media type cannot be served.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error406'
+        '429':
+          description: A rate-limit quota was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error429'
+        '500':
+          description: Something went wrong on our side; include `log_id` when reporting.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '503':
+          description: The request took too long and was stopped; narrow the window
+            or pass `brand_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error503'
+  /api/v1/analytics/follower_timeseries/:
+    get:
+      operationId: analytics.follower_timeseries
+      description: |-
+        `analytics.follower_timeseries`
+
+        Returns follower history for the top-level brand named by `brand_id` and each of its competitor sub-brands, bucketed by `period`. A brand appears only for the periods in which one of its owned handles was measured.
+
+        Follower counts carry forward: a handle with no reading in a period keeps the last one recorded before it.
+      summary: Get Brand Follower Time Series
+      parameters:
+      - in: query
+        name: brand_id
+        schema:
+          type: string
+        description: The top-level brand to analyse, as returned by `brands.list`.
+          A sub-brand is refused with the id of the parent to use instead.
+        required: true
+      - in: query
+        name: period
+        schema:
+          type: string
+          enum:
+          - day
+          - week
+          - month
+          - year
+        description: Size of each bucket in the series. Defaults to `day`.
+      - in: query
+        name: platform
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - instagram
+            - tiktok
+            - youtube
+          uniqueItems: true
+        description: Platforms to include, comma-separated. Defaults to all of them.
+        explode: false
+        style: form
+      - in: query
+        name: posted_after
+        schema:
+          type: string
+          format: date-time
+        description: 'Start of the window (UTC, ISO 8601). Supplying more than one
+          start is accepted and only one applies: this one wins over `posted_within_hours`,
+          which wins over `posted_within_days`.'
+      - in: query
+        name: posted_before
+        schema:
+          type: string
+          format: date-time
+        description: End of the window (UTC, ISO 8601). Defaults to the current time,
+          and a relative start is counted back from it.
+      - in: query
+        name: posted_within_days
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 365
+        description: Start of the window, counted back from `posted_before` or the
+          current time, in days (1-365). Defaults to 7 when no date parameter is supplied,
+          and loses to `posted_after` and `posted_within_hours`.
+      - in: query
+        name: posted_within_hours
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 8760
+        description: Start of the window, counted back from `posted_before` or the
+          current time, in hours (1-8760). `posted_after` wins over it; it wins over
+          `posted_within_days`.
+      tags:
+      - Analytics
+      security:
+      - ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FollowerTimeseries'
+                  item_count:
+                    type: integer
+                  page:
+                    type: integer
+                  next:
+                    type:
+                    - integer
+                    - 'null'
+                  previous:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - log_id
+                - timestamp
+                - results
+                - item_count
+                - page
+                - next
+                - previous
+              examples:
+                Example:
+                  value:
+                    log_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    timestamp: '2026-01-01T00:00:00Z'
+                    results:
+                    - brand:
+                        id: brd_Lw6ZZmNYhW0P9k0x
+                        title: Zelf
+                        sub_brand_type: null
+                        is_primary: true
+                      periods:
+                      - start_date: '2026-09-28'
+                        end_date: '2026-10-04'
+                        followers: 742000
+                        accounts:
+                        - platform: instagram
+                          username: zelfai
+                          followers: 402000
+                        - platform: tiktok
+                          username: zelfai
+                          followers: 248000
+                        - platform: youtube
+                          username: zelfai
+                          followers: 92000
+                      - start_date: '2026-10-05'
+                        end_date: '2026-10-11'
+                        followers: 758500
+                        accounts:
+                        - platform: instagram
+                          username: zelfai
+                          followers: 411000
+                        - platform: tiktok
+                          username: zelfai
+                          followers: 254000
+                        - platform: youtube
+                          username: zelfai
+                          followers: 93500
+                      - start_date: '2026-10-12'
+                        end_date: '2026-10-18'
+                        followers: 775000
+                        accounts:
+                        - platform: instagram
+                          username: zelfai
+                          followers: 420000
+                        - platform: tiktok
+                          username: zelfai
+                          followers: 260000
+                        - platform: youtube
+                          username: zelfai
+                          followers: 95000
+                    - brand:
+                        id: brd_TOmS4tGtnsEhS9Fy
+                        title: Northwind Apparel
+                        sub_brand_type: COMPETITIVE
+                        is_primary: false
+                      periods:
+                      - start_date: '2026-09-28'
+                        end_date: '2026-10-04'
+                        followers: 443000
+                        accounts:
+                        - platform: instagram
+                          username: northwindapparel
+                          followers: 301000
+                        - platform: tiktok
+                          username: northwindapparel
+                          followers: 142000
+                      - start_date: '2026-10-05'
+                        end_date: '2026-10-11'
+                        followers: 450700
+                        accounts:
+                        - platform: instagram
+                          username: northwindapparel
+                          followers: 305500
+                        - platform: tiktok
+                          username: northwindapparel
+                          followers: 145200
+                      - start_date: '2026-10-12'
+                        end_date: '2026-10-18'
+                        followers: 458000
+                        accounts:
+                        - platform: instagram
+                          username: northwindapparel
+                          followers: 310000
+                        - platform: tiktok
+                          username: northwindapparel
+                          followers: 148000
+                    item_count: 2
+                    page: 1
+                    next: null
+                    previous: null
+          description: ''
+        '400':
+          description: Validation failed or a supplied id is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: The `x-api-key` header is missing, invalid, expired, or revoked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: The api key cannot access the requested brand or resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '404':
+          description: The resource does not exist or is outside this key's scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '406':
+          description: The requested response media type cannot be served.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error406'
+        '429':
+          description: A rate-limit quota was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error429'
+        '500':
+          description: Something went wrong on our side; include `log_id` when reporting.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '503':
+          description: The request took too long and was stopped; narrow the window
+            or pass `brand_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error503'
+  /api/v1/analytics/posted_comments/:
+    get:
+      operationId: analytics.posted_comments
+      description: |-
+        `analytics.posted_comments`
+
+        Returns the comments the brand posted in the window, grouped by the kind of content they were posted on, together with the likes and replies those comments received. These are comments the brand wrote, not comments left on its content; `comments.list` returns the latter.
+
+        The five categories add up to `total_comments_posted`.
+      summary: Get Posted Comment Analytics
+      parameters:
+      - in: query
+        name: brand_id
+        schema:
+          type: string
+        description: The top-level brand to analyse, as returned by `brands.list`.
+          A sub-brand is refused with the id of the parent to use instead.
+        required: true
+      - in: query
+        name: platform
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - instagram
+            - tiktok
+            - youtube
+          uniqueItems: true
+        description: Platforms to include, comma-separated. Defaults to all of them.
+        explode: false
+        style: form
+      - in: query
+        name: posted_after
+        schema:
+          type: string
+          format: date-time
+        description: 'Start of the window (UTC, ISO 8601). Supplying more than one
+          start is accepted and only one applies: this one wins over `posted_within_hours`,
+          which wins over `posted_within_days`.'
+      - in: query
+        name: posted_before
+        schema:
+          type: string
+          format: date-time
+        description: End of the window (UTC, ISO 8601). Defaults to the current time,
+          and a relative start is counted back from it.
+      - in: query
+        name: posted_within_days
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 365
+        description: Start of the window, counted back from `posted_before` or the
+          current time, in days (1-365). Defaults to 7 when no date parameter is supplied,
+          and loses to `posted_after` and `posted_within_hours`.
+      - in: query
+        name: posted_within_hours
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 8760
+        description: Start of the window, counted back from `posted_before` or the
+          current time, in hours (1-8760). `posted_after` wins over it; it wins over
+          `posted_within_days`.
+      tags:
+      - Analytics
+      security:
+      - ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostedComments'
+                  item_count:
+                    type: integer
+                  page:
+                    type: integer
+                  next:
+                    type:
+                    - integer
+                    - 'null'
+                  previous:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - log_id
+                - timestamp
+                - results
+                - item_count
+                - page
+                - next
+                - previous
+              examples:
+                Example:
+                  value:
+                    log_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    timestamp: '2026-01-01T00:00:00Z'
+                    results:
+                    - total_comments_posted: 3600
+                      categories:
+                      - category: brand
+                        comments: 1420
+                        likes: 3860
+                        replies: 512
+                      - category: owned
+                        comments: 980
+                        likes: 2140
+                        replies: 361
+                      - category: competitors
+                        comments: 640
+                        likes: 1275
+                        replies: 208
+                      - category: themes
+                        comments: 415
+                        likes: 702
+                        replies: 97
+                      - category: other
+                        comments: 145
+                        likes: 233
+                        replies: 34
                     item_count: 1
                     page: 1
                     next: null
@@ -4320,7 +5049,7 @@ paths:
       description: |-
         `creator_vetting.create`
 
-        Vets a creator identified by `profile_url`, running or reusing the profile scrape and the AI safety and brand-fit analysis. Runs complete asynchronously, so this method returns immediately with the created vetting.
+        Vets a creator identified by `profile_url`, retrieving the profile and scoring its safety and brand fit. Runs complete asynchronously, so this method returns immediately with the created vetting.
 
         The vetting analyzes up to 150 of the creator's posts per connection type, or the limit configured for your workspace.
 
@@ -6050,7 +6779,7 @@ paths:
                 $ref: '#/components/schemas/Error503'
   /api/v1/usage/:
     get:
-      operationId: usage_retrieve
+      operationId: usage.retrieve
       description: |-
         Live consumption for your brand, per group and per window.
 
@@ -6109,126 +6838,144 @@ paths:
                     - brand_id: brd_Lw6ZZmNYhW0P9k0x
                       authenticated_as: api_key
                       scopes:
-                        global:
-                          human_name: General
-                          kind: request
-                          section: api
-                          windows:
-                            rps:
-                              limit: 100
-                              used: 10
-                              remaining: 90
-                              reset_in: 1
-                            rph:
-                              limit: 5000
-                              used: 500
-                              remaining: 4500
-                              reset_in: 1800
-                            rpd:
-                              limit: 10000
-                              used: 1000
-                              remaining: 9000
-                              reset_in: 43200
-                        ai_analysis:
-                          human_name: AI Analysis
-                          kind: request
-                          section: api
-                          windows:
-                            rps:
-                              limit: 10
-                              used: 1
-                              remaining: 9
-                              reset_in: 1
-                            rph:
-                              limit: 1000
-                              used: 100
-                              remaining: 900
-                              reset_in: 1800
-                            rpd:
-                              limit: 5000
-                              used: 500
-                              remaining: 4500
-                              reset_in: 43200
-                        creator_vetting:
-                          human_name: Creator Vetting
-                          kind: request
-                          section: api
-                          windows:
-                            rps:
-                              limit: 100
-                              used: 10
-                              remaining: 90
-                              reset_in: 1
-                            rph:
-                              limit: 1000
-                              used: 100
-                              remaining: 900
-                              reset_in: 1800
-                            rpd:
-                              limit: 10000
-                              used: 1000
-                              remaining: 9000
-                              reset_in: 43200
-                        mcp:
-                          human_name: General
-                          kind: request
-                          section: mcp
-                          windows:
-                            rps:
-                              limit: 20
-                              used: 2
-                              remaining: 18
-                              reset_in: 1
-                            rph:
-                              limit: 10000
-                              used: 1000
-                              remaining: 9000
-                              reset_in: 1800
-                            rpd:
-                              limit: 25000
-                              used: 2500
-                              remaining: 22500
-                              reset_in: 43200
-                        mcp.ai_analysis:
-                          human_name: AI Analysis
-                          kind: request
-                          section: mcp
-                          windows:
-                            rps:
-                              limit: 5
-                              used: 1
-                              remaining: 4
-                              reset_in: 1
-                            rph:
-                              limit: 2500
-                              used: 250
-                              remaining: 2250
-                              reset_in: 1800
-                            rpd:
-                              limit: 10000
-                              used: 1000
-                              remaining: 9000
-                              reset_in: 43200
-                        mcp.creator_vetting:
-                          human_name: Creator Vetting
-                          kind: request
-                          section: mcp
-                          windows:
-                            rps:
-                              limit: 5
-                              used: 1
-                              remaining: 4
-                              reset_in: 1
-                            rph:
-                              limit: 2500
-                              used: 250
-                              remaining: 2250
-                              reset_in: 1800
-                            rpd:
-                              limit: 10000
-                              used: 1000
-                              remaining: 9000
-                              reset_in: 43200
+                      - scope: global
+                        human_name: General
+                        kind: request
+                        section: api
+                        windows:
+                        - window: rps
+                          limit: 100
+                          used: 10
+                          remaining: 90
+                          reset_in: 1
+                        - window: rph
+                          limit: 5000
+                          used: 500
+                          remaining: 4500
+                          reset_in: 1800
+                        - window: rpd
+                          limit: 10000
+                          used: 1000
+                          remaining: 9000
+                          reset_in: 43200
+                      - scope: ai_analysis
+                        human_name: AI Analysis
+                        kind: request
+                        section: api
+                        windows:
+                        - window: rps
+                          limit: 10
+                          used: 1
+                          remaining: 9
+                          reset_in: 1
+                        - window: rph
+                          limit: 1000
+                          used: 100
+                          remaining: 900
+                          reset_in: 1800
+                        - window: rpd
+                          limit: 5000
+                          used: 500
+                          remaining: 4500
+                          reset_in: 43200
+                      - scope: creator_vetting
+                        human_name: Creator Vetting
+                        kind: request
+                        section: api
+                        windows:
+                        - window: rps
+                          limit: 100
+                          used: 10
+                          remaining: 90
+                          reset_in: 1
+                        - window: rph
+                          limit: 1000
+                          used: 100
+                          remaining: 900
+                          reset_in: 1800
+                        - window: rpd
+                          limit: 10000
+                          used: 1000
+                          remaining: 9000
+                          reset_in: 43200
+                      - scope: mcp
+                        human_name: General
+                        kind: request
+                        section: mcp
+                        windows:
+                        - window: rps
+                          limit: 20
+                          used: 2
+                          remaining: 18
+                          reset_in: 1
+                        - window: rph
+                          limit: 10000
+                          used: 1000
+                          remaining: 9000
+                          reset_in: 1800
+                        - window: rpd
+                          limit: 25000
+                          used: 2500
+                          remaining: 22500
+                          reset_in: 43200
+                      - scope: mcp.ai_analysis
+                        human_name: AI Analysis
+                        kind: request
+                        section: mcp
+                        windows:
+                        - window: rps
+                          limit: 5
+                          used: 1
+                          remaining: 4
+                          reset_in: 1
+                        - window: rph
+                          limit: 2500
+                          used: 250
+                          remaining: 2250
+                          reset_in: 1800
+                        - window: rpd
+                          limit: 10000
+                          used: 1000
+                          remaining: 9000
+                          reset_in: 43200
+                      - scope: mcp.creator_vetting
+                        human_name: Creator Vetting
+                        kind: request
+                        section: mcp
+                        windows:
+                        - window: rps
+                          limit: 5
+                          used: 1
+                          remaining: 4
+                          reset_in: 1
+                        - window: rph
+                          limit: 2500
+                          used: 250
+                          remaining: 2250
+                          reset_in: 1800
+                        - window: rpd
+                          limit: 10000
+                          used: 1000
+                          remaining: 9000
+                          reset_in: 43200
+                      history:
+                        start_date: '2026-05-01'
+                        end_date: '2026-10-21'
+                        days:
+                        - date: '2026-10-20'
+                          source: api
+                          general: 4820
+                          ai_analysis: 36
+                          creator_vetting: 12
+                          data_records: 4772
+                          data_records_items: 143160
+                        - date: '2026-10-21'
+                          source: mcp
+                          general: 311
+                          ai_analysis: 4
+                          creator_vetting: 0
+                          data_records: 307
+                          data_records_items: 9210
                     item_count: 1
                     page: 1
                     next: null
@@ -6285,9 +7032,9 @@ paths:
                 $ref: '#/components/schemas/Error503'
   /api/v1/webhooks/subscriptions/:
     post:
-      operationId: webhook.create_subscription
+      operationId: webhooks.create_subscription
       description: |-
-        `webhook.create_subscription`
+        `webhooks.create_subscription`
 
         Creates a webhook subscription for your brand. The full signing `secret` is returned only once, in this response. A brand may hold at most one `event` subscription.
       summary: Create Webhook Subscription
@@ -6396,9 +7143,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error503'
     get:
-      operationId: webhook.subscriptions
+      operationId: webhooks.list_subscriptions
       description: |-
-        `webhook.subscriptions`
+        `webhooks.list_subscriptions`
 
         Returns the webhook subscriptions owned by your brand, newest first.
       summary: List Webhook Subscriptions
@@ -6511,9 +7258,9 @@ paths:
                 $ref: '#/components/schemas/Error503'
   /api/v1/webhooks/subscriptions/{subscription_id}/:
     get:
-      operationId: webhook.subscription
+      operationId: webhooks.get_subscription
       description: |-
-        `webhook.subscription`
+        `webhooks.get_subscription`
 
         Returns a single subscription.
       summary: Get Webhook Subscription
@@ -6614,9 +7361,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error503'
     patch:
-      operationId: webhook.update_subscription
+      operationId: webhooks.update_subscription
       description: |-
-        `webhook.update_subscription`
+        `webhooks.update_subscription`
 
         Partially updates a subscription's `url`, `custom_headers`, `resource_filters`, `interval_hours`, `max_items`, or `enabled`. `kind`, `resource`, and `event_types` are immutable after create.
       summary: Update Webhook Subscription
@@ -6728,9 +7475,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error503'
     delete:
-      operationId: webhook.delete_subscription
+      operationId: webhooks.delete_subscription
       description: |-
-        `webhook.delete_subscription`
+        `webhooks.delete_subscription`
 
         Deletes a subscription. This is destructive: the subscription stops receiving deliveries.
       summary: Delete Webhook Subscription
@@ -6832,9 +7579,9 @@ paths:
                 $ref: '#/components/schemas/Error503'
   /api/v1/webhooks/subscriptions/{subscription_id}/rotate_secret/:
     post:
-      operationId: webhook.rotate_subscription_secret
+      operationId: webhooks.rotate_subscription_secret
       description: |-
-        `webhook.rotate_subscription_secret`
+        `webhooks.rotate_subscription_secret`
 
         Mints a new signing secret for the subscription and returns the full `secret` once. Deliveries after this use the new secret.
       summary: Rotate Webhook Subscription Secret
@@ -6936,9 +7683,9 @@ paths:
                 $ref: '#/components/schemas/Error503'
   /api/v1/webhooks/subscriptions/{subscription_id}/send_test/:
     post:
-      operationId: webhook.send_test
+      operationId: webhooks.send_test
       description: |-
-        `webhook.send_test`
+        `webhooks.send_test`
 
         Queues a test event to the subscription's URL so you can verify signing and parsing. Rate limited to 12 per hour per subscription. A disabled subscription is rejected.
       summary: Send Test Webhook
@@ -7008,9 +7755,9 @@ paths:
                 $ref: '#/components/schemas/Error503'
   /api/v1/webhooks/secrets/:
     post:
-      operationId: webhook.create_secret
+      operationId: webhooks.create_secret
       description: |-
-        `webhook.create_secret`
+        `webhooks.create_secret`
 
         Creates a signing secret for the brand. The full `secret` is returned only once.
       summary: Create Webhook Secret
@@ -7116,9 +7863,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error503'
     get:
-      operationId: webhook.secrets
+      operationId: webhooks.list_secrets
       description: |-
-        `webhook.secrets`
+        `webhooks.list_secrets`
 
         Lists the brand's active secrets.
       summary: List Webhook Secrets
@@ -7231,9 +7978,9 @@ paths:
                 $ref: '#/components/schemas/Error503'
   /api/v1/webhooks/secrets/{secret_id}/:
     get:
-      operationId: webhook.secret
+      operationId: webhooks.get_secret
       description: |-
-        `webhook.secret`
+        `webhooks.get_secret`
 
         Returns a single secret.
       summary: Get Webhook Secret
@@ -7334,9 +8081,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error503'
     delete:
-      operationId: webhook.delete_secret
+      operationId: webhooks.delete_secret
       description: |-
-        `webhook.delete_secret`
+        `webhooks.delete_secret`
 
         Deactivates a secret. The default secret, or one still linked to a subscription, cannot be deleted.
       summary: Delete Webhook Secret
@@ -7440,9 +8187,9 @@ paths:
                 $ref: '#/components/schemas/Error503'
   /api/v1/webhooks/secrets/{secret_id}/set_default/:
     post:
-      operationId: webhook.set_default_secret
+      operationId: webhooks.set_default_secret
       description: |-
-        `webhook.set_default_secret`
+        `webhooks.set_default_secret`
 
         Marks a secret as the brand's default for its kind.
       summary: Set Default Webhook Secret
@@ -7544,9 +8291,9 @@ paths:
                 $ref: '#/components/schemas/Error503'
   /api/v1/webhooks/events/:
     get:
-      operationId: webhook.available_events
+      operationId: webhooks.list_events
       description: |-
-        `webhook.available_events`
+        `webhooks.list_events`
 
         Lists the event types an event subscription can listen for.
       summary: List Available Webhook Events
@@ -7642,9 +8389,9 @@ paths:
                 $ref: '#/components/schemas/Error503'
   /api/v1/webhooks/deliveries/:
     get:
-      operationId: webhook.deliveries
+      operationId: webhooks.list_deliveries
       description: |-
-        `webhook.deliveries`
+        `webhooks.list_deliveries`
 
         Lists webhook delivery attempts for the brand, newest first. Filter by `subscription` (masked id), `state`, and a `created_after` / `created_before` window.
       summary: List Webhook Deliveries
@@ -7820,9 +8567,9 @@ paths:
                 $ref: '#/components/schemas/Error503'
   /api/v1/webhooks/deliveries/{delivery_id}/:
     get:
-      operationId: webhook.delivery
+      operationId: webhooks.get_delivery
       description: |-
-        `webhook.delivery`
+        `webhooks.get_delivery`
 
         Returns a single delivery attempt.
       summary: Get Webhook Delivery
@@ -8082,6 +8829,34 @@ components:
       - COMMENT
       type: string
       x-internal: true
+    AnalyticsBrand:
+      type: object
+      description: The brand a row of analytics belongs to.
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: Unique identifier for the brand.
+        title:
+          type:
+          - string
+          - 'null'
+          description: Display name of the brand.
+        is_primary:
+          type: boolean
+          description: '`true` for the brand the request named, `false` for a sub-brand.'
+        sub_brand_type:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: '`COMPETITIVE` or `THEME` for a sub-brand; `null` for the top-level
+            brand the request named.'
+      required:
+      - id
+      - is_primary
+      - sub_brand_type
+      - title
     BlankEnum:
       enum:
       - ''
@@ -8137,7 +8912,7 @@ components:
           description: The account's handle.
         platform:
           type: string
-          description: '`instagram` or `tiktok`.'
+          description: '`instagram`, `tiktok` or `youtube`.'
         external_url:
           type:
           - string
@@ -8189,7 +8964,8 @@ components:
             type: string
             format: uri
             minLength: 1
-          description: Profile URLs on a supported platform (`instagram` or `tiktok`).
+          description: Profile URLs on a supported platform (`instagram`, `tiktok`
+            or `youtube`).
       required:
       - account_type
       - profile_urls
@@ -8262,6 +9038,26 @@ components:
       - level
       - name
       - parent_id
+    BrandComparison:
+      type: object
+      description: One brand's performance in the comparison.
+      properties:
+        brand:
+          allOf:
+          - $ref: '#/components/schemas/AnalyticsBrand'
+          description: The brand this row covers.
+        statistics:
+          allOf:
+          - $ref: '#/components/schemas/BrandStatistics'
+          description: Totals over the window.
+        followers:
+          allOf:
+          - $ref: '#/components/schemas/BrandFollowers'
+          description: Follower counts as they stand now, not over the window.
+      required:
+      - brand
+      - followers
+      - statistics
     BrandCreateSubBrandRequest:
       type: object
       description: Create a sub-brand under the workspace brand.
@@ -8341,6 +9137,21 @@ components:
       - sub_brand_type
       - title
       x-internal: true
+    BrandFollowers:
+      type: object
+      description: Followers across the handles a brand owns.
+      properties:
+        total:
+          type: integer
+          description: Followers across every owned handle.
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FollowerAccount'
+          description: Per handle counts that add up to `total`.
+      required:
+      - accounts
+      - total
     BrandKeywords:
       type: object
       description: The terms this brand uses to monitor social platforms.
@@ -8420,6 +9231,63 @@ components:
       - inclusion_terms
       - influencer_terms
       - search_terms
+    BrandStatistics:
+      type: object
+      description: Totals over the content matched to a brand in the window.
+      properties:
+        post_count:
+          type: integer
+          description: Number of posts matched to the brand.
+        total_views:
+          type: integer
+          description: Total views across those posts.
+        total_likes:
+          type: integer
+          description: Total likes across those posts.
+        total_comments:
+          type: integer
+          description: Total comments across those posts.
+        total_shares:
+          type: integer
+          description: Total shares across those posts.
+        total_engagement:
+          type: integer
+          description: Likes, comments and shares across those posts.
+        total_earned_media_value_cents:
+          type: integer
+          description: Estimated marketing value across those posts, in US cents.
+        engagement_rate:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Total engagement divided by total views. Null when the set
+            has no recorded views.
+        unique_creator_count:
+          type: integer
+          description: Number of distinct creators who posted.
+        total_positive_nps:
+          type: integer
+          description: Engagement on positive posts.
+        total_neutral_nps:
+          type: integer
+          description: Engagement on neutral posts.
+        total_negative_nps:
+          type: integer
+          description: Engagement on negative posts.
+      required:
+      - engagement_rate
+      - post_count
+      - total_comments
+      - total_earned_media_value_cents
+      - total_engagement
+      - total_likes
+      - total_negative_nps
+      - total_neutral_nps
+      - total_positive_nps
+      - total_shares
+      - total_views
+      - unique_creator_count
     Comment:
       type: object
       description: A comment left on a piece of content.
@@ -8435,8 +9303,8 @@ components:
           type:
           - string
           - 'null'
-          description: The platform the comment was posted on. Either `instagram`
-            or `tiktok`.
+          description: 'The platform the comment was posted on: `instagram`, `tiktok`
+            or `youtube`.'
         like_count:
           type:
           - integer
@@ -8531,8 +9399,8 @@ components:
             - TikTok: `https://www.tiktok.com/@username/video/12345678` -> `12345678`
         platform:
           type: string
-          description: The platform the content was published on. Either `instagram`
-            or `tiktok`.
+          description: 'The platform the content was published on: `instagram`, `tiktok`
+            or `youtube`.'
         content_form:
           type:
           - string
@@ -9764,6 +10632,64 @@ components:
       - duration_s
       - platform
       - video_url
+    FollowerAccount:
+      type: object
+      description: One owned handle and the followers it carries.
+      properties:
+        platform:
+          type: string
+          description: The platform the handle is on.
+        username:
+          type: string
+          description: The handle.
+        followers:
+          type: integer
+          description: Follower count for this handle.
+      required:
+      - followers
+      - platform
+      - username
+    FollowerPeriod:
+      type: object
+      description: Followers at the end of one period.
+      properties:
+        followers:
+          type: integer
+          description: Followers across every owned handle.
+        start_date:
+          type: string
+          format: date
+          description: First day of the period.
+        end_date:
+          type: string
+          format: date
+          description: Last day of the period.
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FollowerAccount'
+          description: Per handle counts that add up to `followers`.
+      required:
+      - accounts
+      - end_date
+      - followers
+      - start_date
+    FollowerTimeseries:
+      type: object
+      description: One brand's follower history.
+      properties:
+        brand:
+          allOf:
+          - $ref: '#/components/schemas/AnalyticsBrand'
+          description: The brand this row covers.
+        periods:
+          type: array
+          items:
+            $ref: '#/components/schemas/FollowerPeriod'
+          description: One entry per period, oldest first.
+      required:
+      - brand
+      - periods
     IntervalHoursEnum:
       enum:
       - 12
@@ -10019,6 +10945,44 @@ components:
       - youtube
       type: string
       x-internal: true
+    PostedCommentCategory:
+      type: object
+      description: Comments the brand posted on one category of content.
+      properties:
+        category:
+          type: string
+          description: '`brand`, `owned`, `competitors`, `themes` or `other`. `other`
+            covers content outside the brand''s own tree.'
+        comments:
+          type: integer
+          description: Comments posted on this category.
+        likes:
+          type: integer
+          description: Likes those comments received.
+        replies:
+          type: integer
+          description: Replies those comments received.
+      required:
+      - category
+      - comments
+      - likes
+      - replies
+    PostedComments:
+      type: object
+      description: Comments the brand posted, split by the content they were posted
+        on.
+      properties:
+        total_comments_posted:
+          type: integer
+          description: Comments the brand posted in the window, across every category.
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostedCommentCategory'
+          description: One entry per category. They add up to `total_comments_posted`.
+      required:
+      - categories
+      - total_comments_posted
     ResourceEnum:
       enum:
       - content
@@ -10113,20 +11077,82 @@ components:
           description: '``api_key`` or ``mcp``, whichever made this call. It decides
             which groups your calls are counted against.'
         scopes:
-          type: object
-          additionalProperties:
+          type: array
+          items:
             $ref: '#/components/schemas/UsageScope'
-          readOnly: true
-          description: Keyed by group. Both sections are returned whichever way you
-            call.
+          description: One entry per metered group. Both sections are returned whichever
+            way you call.
+        history:
+          allOf:
+          - $ref: '#/components/schemas/UsageHistory'
+          description: What was actually spent, day by day, from the usage ledger.
       required:
       - authenticated_as
       - brand_id
+      - history
       - scopes
+    UsageDay:
+      type: object
+      description: One day of consumption for one source.
+      properties:
+        source:
+          type: string
+          description: '``api`` for direct requests, ``mcp`` for AI clients.'
+        general:
+          type: integer
+          description: Every counted call that day.
+        ai_analysis:
+          type: integer
+          description: Calls counted against the AI analysis group.
+        creator_vetting:
+          type: integer
+          description: Calls counted against creator vetting.
+        data_records:
+          type: integer
+          description: Calls counted against data records.
+        data_records_items:
+          type: integer
+          description: Records those calls returned.
+        date:
+          type: string
+          format: date
+          description: The day, in the brand's billing timezone.
+      required:
+      - ai_analysis
+      - creator_vetting
+      - data_records
+      - data_records_items
+      - date
+      - general
+      - source
+    UsageHistory:
+      type: object
+      description: Daily consumption over the window the ledger keeps.
+      properties:
+        start_date:
+          type: string
+          format: date
+          description: First day covered.
+        end_date:
+          type: string
+          format: date
+          description: Last day covered.
+        days:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageDay'
+          description: One entry per day and source that saw usage, oldest first.
+      required:
+      - days
+      - end_date
+      - start_date
     UsageScope:
       type: object
       description: One metered group, with every window that has a limit.
       properties:
+        scope:
+          type: string
+          description: Identifier of the metered group.
         human_name:
           type: string
           description: Name of the group, as an admin sees it.
@@ -10138,21 +11164,24 @@ components:
           description: 'Which product the group meters: ``api`` for direct requests,
             ``mcp`` for AI clients. The two never share a counter.'
         windows:
-          type: object
-          additionalProperties:
+          type: array
+          items:
             $ref: '#/components/schemas/UsageWindow'
-          readOnly: true
-          description: 'Keyed by window: rps, rpm, rph, rpd, rpmonth, or the item
-            windows.'
+          description: Every window that has a limit configured.
       required:
       - human_name
       - kind
+      - scope
       - section
       - windows
     UsageWindow:
       type: object
       description: Consumption of one window, e.g. requests in the current hour.
       properties:
+        window:
+          type: string
+          description: 'Which window this is: rps, rpm, rph, rpd, rpmonth, or an item
+            window.'
         limit:
           type: integer
           description: Most that may be spent in this window.
@@ -10171,8 +11200,10 @@ components:
       - remaining
       - reset_in
       - used
+      - window
     WebhookAvailableEvent:
       type: object
+      description: An event type a subscription may ask for.
       properties:
         event:
           type: string
@@ -10223,6 +11254,7 @@ components:
       - item_count
     WebhookDeleteAcknowledgement:
       type: object
+      description: Confirmation that a webhook resource was deleted.
       properties:
         acknowledged:
           type: boolean
@@ -10242,6 +11274,7 @@ components:
       - status
     WebhookDelivery:
       type: object
+      description: One attempt to deliver one push, with its outcome.
       properties:
         id:
           type: string
@@ -10332,9 +11365,7 @@ components:
       description: |-
         One downloadable snapshot file in a manifest push.
 
-        A delivery currently consists of a single file, so `files` carries one
-        entry. The array shape allows a snapshot to be sharded across several
-        files in the future without changing the envelope.
+        `files` is an array, so read every entry rather than assuming one.
       properties:
         format:
           type: string
@@ -10427,6 +11458,7 @@ components:
       - type
     WebhookSecret:
       type: object
+      description: A signing secret, identified by its prefix rather than its value.
       properties:
         id:
           type: string
@@ -10482,6 +11514,10 @@ components:
       x-internal: true
     WebhookSecretCreated:
       type: object
+      description: |-
+        A secret just created or rotated, carrying the value once.
+
+        Store it now: later reads return the prefix alone.
       properties:
         id:
           type: string
@@ -10529,6 +11565,7 @@ components:
       - secret_prefix
     WebhookSubscription:
       type: object
+      description: A registered endpoint and the events it receives.
       properties:
         id:
           type: string
@@ -10678,6 +11715,10 @@ components:
       x-internal: true
     WebhookSubscriptionCreated:
       type: object
+      description: |-
+        A subscription just created, with the signing secret attached.
+
+        The secret is shown on this response only and never again.
       properties:
         id:
           type: string
@@ -11073,6 +12114,10 @@ tags:
   description: Run AI analyses over content and comments. Start an analysis with a
     topic and a content filter, poll its runs for status, then fetch each run's result
     payload from `ai_analysis.results`.
+- name: Analytics
+  description: 'Compare a brand against its competitors: totals per brand, follower
+    history over time, and the comments the brand posted. Every endpoint takes the
+    same brand, platform and date window.'
 - name: Brands
   description: The brands (workspaces) an API key can access. Most content endpoints
     accept a `brand_id` from here to unlock brand-specific signals like ownership,
@@ -11087,7 +12132,7 @@ tags:
     and replies.
 - name: Creator
   description: Look up creators and their public profile metrics, and run creator
-    vetting analyses (safety + brand-fit) through the AI pipeline.
+    vetting analyses that score safety and brand fit.
 - name: Creator Sync
   description: 'Add a creator''s profile and posts to Zelf so their videos can be
     searched and analyzed. Syncing is asynchronous: create a sync, poll it until it
@@ -11495,9 +12540,10 @@ webhooks:
             receipt. Any non-2xx status, or a timeout, is treated as a failed delivery
             and retried with backoff.
 x-tagGroups:
-- name: APIs (v1.0)
+- name: APIs (v1)
   tags:
   - AI Analysis
+  - Analytics
   - Brands
   - Comment
   - Content
@@ -11506,7 +12552,7 @@ x-tagGroups:
   - Detection
   - Usage
   - Webhook Management
-- name: Webhooks (v1.0)
+- name: Webhooks (v1)
   tags:
   - webhooks
 - name: Models
