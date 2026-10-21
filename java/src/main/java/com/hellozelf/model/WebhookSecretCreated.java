@@ -7,7 +7,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 
 /**
- * The WebhookSecretCreated object.
+ * A secret just created or rotated, carrying the value once. Store it now: later
+ * reads return the prefix alone.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record WebhookSecretCreated(

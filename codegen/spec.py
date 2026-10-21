@@ -15,6 +15,8 @@ ENVELOPE_KEYS = {
 @dataclass
 class Type:
     kind: str  # str | int | float | bool | datetime | array | enum | ref | any
+    # The schema's own format, kept for the kinds that collapse into str.
+    fmt: str | None = None
     enum: list[str] | None = None
     item: "Type | None" = None
     ref: str | None = None
@@ -139,7 +141,10 @@ def resolve_type(schema: dict) -> Type:
     if raw == "boolean":
         return Type("bool")
     if raw == "string":
-        return Type("datetime") if schema.get("format") == "date-time" else Type("str")
+        fmt = schema.get("format")
+        if fmt == "date-time":
+            return Type("datetime")
+        return Type("str", fmt="date") if fmt == "date" else Type("str")
     if raw == "object" or raw is None:
         return Type("any")
     return Type("str")

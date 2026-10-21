@@ -34,7 +34,7 @@ class ConformanceGeneratedTest {
 
     static final List<String> RETURNS_NOTHING = List.of("webhooks.send_test");
 
-    static final List<String> PARAMS_CLASSES = List.of("AiAnalysisContentStatisticsParams", "AiAnalysisContentsParams", "AiAnalysisCreateParams", "AiAnalysisListParams", "AiAnalysisResultsParams", "BrandAccountsAddParams", "BrandAccountsListParams", "BrandAccountsRemoveParams", "BrandsCatalogParams", "BrandsListParams", "BrandsUpdateParams", "CommentsListParams", "ContentAiSummarizeParams", "ContentDetailsParams", "ContentDiscoverParams", "ContentListParams", "ContentStatisticsParams", "ContentTranscribeParams", "CreatorSyncCreateParams", "CreatorSyncListParams", "CreatorVettingContentStatisticsParams", "CreatorVettingContentsParams", "CreatorVettingCreateParams", "CreatorVettingListParams", "CreatorVettingResultsParams", "CreatorsListParams", "DetectionCreateParams", "DetectionListParams", "SubBrandsCreateParams", "WebhooksCreateSecretParams", "WebhooksCreateSubscriptionParams", "WebhooksListDeliveriesParams", "WebhooksListSecretsParams", "WebhooksListSubscriptionsParams", "WebhooksUpdateSubscriptionParams");
+    static final List<String> PARAMS_CLASSES = List.of("AiAnalysisContentStatisticsParams", "AiAnalysisContentsParams", "AiAnalysisCreateParams", "AiAnalysisListParams", "AiAnalysisResultsParams", "AnalyticsBrandComparisonParams", "AnalyticsFollowerTimeseriesParams", "AnalyticsPostedCommentsParams", "BrandAccountsAddParams", "BrandAccountsListParams", "BrandAccountsRemoveParams", "BrandsCatalogParams", "BrandsListParams", "BrandsUpdateParams", "CommentsListParams", "ContentAiSummarizeParams", "ContentDetailsParams", "ContentDiscoverParams", "ContentListParams", "ContentStatisticsParams", "ContentTranscribeParams", "CreatorSyncCreateParams", "CreatorSyncListParams", "CreatorVettingContentStatisticsParams", "CreatorVettingContentsParams", "CreatorVettingCreateParams", "CreatorVettingListParams", "CreatorVettingResultsParams", "CreatorsListParams", "DetectionCreateParams", "DetectionListParams", "SubBrandsCreateParams", "WebhooksCreateSecretParams", "WebhooksCreateSubscriptionParams", "WebhooksListDeliveriesParams", "WebhooksListSecretsParams", "WebhooksListSubscriptionsParams", "WebhooksUpdateSubscriptionParams");
 
     static final List<String> ENUM_CLASSES = List.of("AccountTypeEnum", "AnalysisScopeEnum", "BlankEnum", "ContentFormEnum", "KindEnum", "LastStatusEnum", "MentionTypeEnum", "PlatformEnum", "ResourceEnum", "SecretTypeEnum", "StateEnum", "SubBrandTypeEnum", "TypeEnum");
 
@@ -84,6 +84,33 @@ class ConformanceGeneratedTest {
             "page",
             client -> client.aiAnalysis().results(new AiAnalysisResultsParams().analysisId("ban_CByp0P2YSOnkg9qP").id("id_R5jAcrMDDBbK3BBf").page(1L).pageSize(1L)),
             client -> client.aiAnalysis().results(null)),
+        new Case(
+            "analytics.brand_comparison",
+            "GET",
+            "/api/v1/analytics/brand_comparison/",
+            java.util.Map.ofEntries(java.util.Map.entry("brand_id", java.util.List.of("brd_tp6wqSj7PlBzhPTC")), java.util.Map.entry("platform", java.util.List.of("instagram")), java.util.Map.entry("posted_after", java.util.List.of("2026-01-01T00:00:00Z")), java.util.Map.entry("posted_before", java.util.List.of("2026-01-01T00:00:00Z")), java.util.Map.entry("posted_within_days", java.util.List.of("42")), java.util.Map.entry("posted_within_hours", java.util.List.of("42"))),
+            java.util.List.of(),
+            "single",
+            client -> client.analytics().brandComparison(new AnalyticsBrandComparisonParams().brandId("brd_tp6wqSj7PlBzhPTC").platform(java.util.List.of("instagram")).postedAfter("2026-01-01T00:00:00Z").postedBefore("2026-01-01T00:00:00Z").postedWithinDays(42L).postedWithinHours(42L)),
+            client -> client.analytics().brandComparison(null)),
+        new Case(
+            "analytics.follower_timeseries",
+            "GET",
+            "/api/v1/analytics/follower_timeseries/",
+            java.util.Map.ofEntries(java.util.Map.entry("brand_id", java.util.List.of("brd_tp6wqSj7PlBzhPTC")), java.util.Map.entry("period", java.util.List.of("day")), java.util.Map.entry("platform", java.util.List.of("instagram")), java.util.Map.entry("posted_after", java.util.List.of("2026-01-01T00:00:00Z")), java.util.Map.entry("posted_before", java.util.List.of("2026-01-01T00:00:00Z")), java.util.Map.entry("posted_within_days", java.util.List.of("42")), java.util.Map.entry("posted_within_hours", java.util.List.of("42"))),
+            java.util.List.of(),
+            "single",
+            client -> client.analytics().followerTimeseries(new AnalyticsFollowerTimeseriesParams().brandId("brd_tp6wqSj7PlBzhPTC").period("day").platform(java.util.List.of("instagram")).postedAfter("2026-01-01T00:00:00Z").postedBefore("2026-01-01T00:00:00Z").postedWithinDays(42L).postedWithinHours(42L)),
+            client -> client.analytics().followerTimeseries(null)),
+        new Case(
+            "analytics.posted_comments",
+            "GET",
+            "/api/v1/analytics/posted_comments/",
+            java.util.Map.ofEntries(java.util.Map.entry("brand_id", java.util.List.of("brd_tp6wqSj7PlBzhPTC")), java.util.Map.entry("platform", java.util.List.of("instagram")), java.util.Map.entry("posted_after", java.util.List.of("2026-01-01T00:00:00Z")), java.util.Map.entry("posted_before", java.util.List.of("2026-01-01T00:00:00Z")), java.util.Map.entry("posted_within_days", java.util.List.of("42")), java.util.Map.entry("posted_within_hours", java.util.List.of("42"))),
+            java.util.List.of(),
+            "single",
+            client -> client.analytics().postedComments(new AnalyticsPostedCommentsParams().brandId("brd_tp6wqSj7PlBzhPTC").platform(java.util.List.of("instagram")).postedAfter("2026-01-01T00:00:00Z").postedBefore("2026-01-01T00:00:00Z").postedWithinDays(42L).postedWithinHours(42L)),
+            client -> client.analytics().postedComments(null)),
         new Case(
             "brand_accounts.add",
             "POST",

@@ -11,7 +11,7 @@ type WebhooksResource struct{ t *transport }
 // once.
 //
 // Calls POST /api/v1/webhooks/secrets/ (webhooks.create_secret).
-func (r *WebhooksResource) CreateSecret(ctx context.Context, body WebhookCreateSecretJSONRequestBody) (*WebhookSecretCreated, error) {
+func (r *WebhooksResource) CreateSecret(ctx context.Context, body WebhooksCreateSecretJSONRequestBody) (*WebhookSecretCreated, error) {
 	env, err := request[WebhookSecretCreated](ctx, r.t, "POST", "/api/v1/webhooks/secrets/",
 		nil, nil, body)
 	if err != nil {
@@ -25,7 +25,7 @@ func (r *WebhooksResource) CreateSecret(ctx context.Context, body WebhookCreateS
 // subscription.
 //
 // Calls POST /api/v1/webhooks/subscriptions/ (webhooks.create_subscription).
-func (r *WebhooksResource) CreateSubscription(ctx context.Context, body WebhookCreateSubscriptionJSONRequestBody) (*WebhookSubscriptionCreated, error) {
+func (r *WebhooksResource) CreateSubscription(ctx context.Context, body WebhooksCreateSubscriptionJSONRequestBody) (*WebhookSubscriptionCreated, error) {
 	env, err := request[WebhookSubscriptionCreated](ctx, r.t, "POST", "/api/v1/webhooks/subscriptions/",
 		nil, nil, body)
 	if err != nil {
@@ -100,9 +100,9 @@ func (r *WebhooksResource) GetSubscription(ctx context.Context, subscriptionId s
 // `subscription` (masked id), `state`, and a `created_after` / `created_before` window.
 //
 // Calls GET /api/v1/webhooks/deliveries/ (webhooks.list_deliveries).
-func (r *WebhooksResource) ListDeliveries(ctx context.Context, params *WebhookDeliveriesParams) (*Page[WebhookDelivery], error) {
+func (r *WebhooksResource) ListDeliveries(ctx context.Context, params *WebhooksListDeliveriesParams) (*Page[WebhookDelivery], error) {
 	if params == nil {
-		params = &WebhookDeliveriesParams{}
+		params = &WebhooksListDeliveriesParams{}
 	}
 	env, err := request[WebhookDelivery](ctx, r.t, "GET", "/api/v1/webhooks/deliveries/",
 		nil, params, nil)
@@ -133,9 +133,9 @@ func (r *WebhooksResource) ListEvents(ctx context.Context) ([]WebhookAvailableEv
 // ListSecrets lists the brand's active secrets.
 //
 // Calls GET /api/v1/webhooks/secrets/ (webhooks.list_secrets).
-func (r *WebhooksResource) ListSecrets(ctx context.Context, params *WebhookSecretsParams) (*Page[WebhookSecret], error) {
+func (r *WebhooksResource) ListSecrets(ctx context.Context, params *WebhooksListSecretsParams) (*Page[WebhookSecret], error) {
 	if params == nil {
-		params = &WebhookSecretsParams{}
+		params = &WebhooksListSecretsParams{}
 	}
 	env, err := request[WebhookSecret](ctx, r.t, "GET", "/api/v1/webhooks/secrets/",
 		nil, params, nil)
@@ -154,9 +154,9 @@ func (r *WebhooksResource) ListSecrets(ctx context.Context, params *WebhookSecre
 // ListSubscriptions returns the webhook subscriptions owned by your brand, newest first.
 //
 // Calls GET /api/v1/webhooks/subscriptions/ (webhooks.list_subscriptions).
-func (r *WebhooksResource) ListSubscriptions(ctx context.Context, params *WebhookSubscriptionsParams) (*Page[WebhookSubscription], error) {
+func (r *WebhooksResource) ListSubscriptions(ctx context.Context, params *WebhooksListSubscriptionsParams) (*Page[WebhookSubscription], error) {
 	if params == nil {
-		params = &WebhookSubscriptionsParams{}
+		params = &WebhooksListSubscriptionsParams{}
 	}
 	env, err := request[WebhookSubscription](ctx, r.t, "GET", "/api/v1/webhooks/subscriptions/",
 		nil, params, nil)
@@ -217,7 +217,7 @@ func (r *WebhooksResource) SetDefaultSecret(ctx context.Context, secretId string
 // `event_types` are immutable after create.
 //
 // Calls PATCH /api/v1/webhooks/subscriptions/{subscription_id}/ (webhooks.update_subscription).
-func (r *WebhooksResource) UpdateSubscription(ctx context.Context, subscriptionId string, body WebhookUpdateSubscriptionJSONRequestBody) (*WebhookSubscription, error) {
+func (r *WebhooksResource) UpdateSubscription(ctx context.Context, subscriptionId string, body WebhooksUpdateSubscriptionJSONRequestBody) (*WebhookSubscription, error) {
 	env, err := request[WebhookSubscription](ctx, r.t, "PATCH", "/api/v1/webhooks/subscriptions/{subscription_id}/",
 		[]string{"subscription_id", subscriptionId}, nil, body)
 	if err != nil {

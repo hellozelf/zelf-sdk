@@ -249,6 +249,16 @@ public sealed record AiAnalysisRun(
 );
 
 /// <summary>
+/// The brand a row of analytics belongs to.
+/// </summary>
+public sealed record AnalyticsBrand(
+    [property: JsonPropertyName("id")] string Id,
+    [property: JsonPropertyName("title")] string? Title,
+    [property: JsonPropertyName("is_primary")] bool IsPrimary,
+    [property: JsonPropertyName("sub_brand_type")] string? SubBrandType
+);
+
+/// <summary>
 /// A brand you can reach.
 /// </summary>
 public sealed record Brand(
@@ -297,7 +307,7 @@ public sealed record BrandAccountsWriteRequest
     public string? AccountType { get; init; }
 
     /// <summary>
-    /// Profile URLs on a supported platform (instagram or tiktok)
+    /// Profile URLs on a supported platform (instagram, tiktok or youtube)
     /// </summary>
     [JsonPropertyName("profile_urls")]
     public IReadOnlyList<string>? ProfileUrls { get; init; }
@@ -325,6 +335,15 @@ public sealed record BrandCatalogItem(
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("level")] string Level,
     [property: JsonPropertyName("parent_id")] string? ParentId
+);
+
+/// <summary>
+/// One brand's performance in the comparison.
+/// </summary>
+public sealed record BrandComparison(
+    [property: JsonPropertyName("brand")] AnalyticsBrand Brand,
+    [property: JsonPropertyName("statistics")] BrandStatistics Statistics,
+    [property: JsonPropertyName("followers")] BrandFollowers Followers
 );
 
 /// <summary>
@@ -389,6 +408,14 @@ public sealed record BrandCreateSubBrandRequest
 }
 
 /// <summary>
+/// Followers across the handles a brand owns.
+/// </summary>
+public sealed record BrandFollowers(
+    [property: JsonPropertyName("total")] long Total,
+    [property: JsonPropertyName("accounts")] IReadOnlyList<FollowerAccount> Accounts
+);
+
+/// <summary>
 /// The terms this brand uses to monitor social platforms.
 /// </summary>
 public sealed record BrandKeywords(
@@ -399,6 +426,24 @@ public sealed record BrandKeywords(
     [property: JsonPropertyName("influencer_terms")] IReadOnlyList<string> InfluencerTerms,
     [property: JsonPropertyName("allowed_languages")] IReadOnlyList<string> AllowedLanguages,
     [property: JsonPropertyName("boolean_query")] string? BooleanQuery
+);
+
+/// <summary>
+/// Totals over the content matched to a brand in the window.
+/// </summary>
+public sealed record BrandStatistics(
+    [property: JsonPropertyName("post_count")] long PostCount,
+    [property: JsonPropertyName("total_views")] long TotalViews,
+    [property: JsonPropertyName("total_likes")] long TotalLikes,
+    [property: JsonPropertyName("total_comments")] long TotalComments,
+    [property: JsonPropertyName("total_shares")] long TotalShares,
+    [property: JsonPropertyName("total_engagement")] long TotalEngagement,
+    [property: JsonPropertyName("total_earned_media_value_cents")] long TotalEarnedMediaValueCents,
+    [property: JsonPropertyName("engagement_rate")] double? EngagementRate,
+    [property: JsonPropertyName("unique_creator_count")] long UniqueCreatorCount,
+    [property: JsonPropertyName("total_positive_nps")] long TotalPositiveNps,
+    [property: JsonPropertyName("total_neutral_nps")] long TotalNeutralNps,
+    [property: JsonPropertyName("total_negative_nps")] long TotalNegativeNps
 );
 
 /// <summary>
@@ -1104,6 +1149,33 @@ public sealed record DetectionVideo(
 );
 
 /// <summary>
+/// One owned handle and the followers it carries.
+/// </summary>
+public sealed record FollowerAccount(
+    [property: JsonPropertyName("platform")] string Platform,
+    [property: JsonPropertyName("username")] string Username,
+    [property: JsonPropertyName("followers")] long Followers
+);
+
+/// <summary>
+/// Followers at the end of one period.
+/// </summary>
+public sealed record FollowerPeriod(
+    [property: JsonPropertyName("followers")] long Followers,
+    [property: JsonPropertyName("start_date")] string StartDate,
+    [property: JsonPropertyName("end_date")] string EndDate,
+    [property: JsonPropertyName("accounts")] IReadOnlyList<FollowerAccount> Accounts
+);
+
+/// <summary>
+/// One brand's follower history.
+/// </summary>
+public sealed record FollowerTimeseries(
+    [property: JsonPropertyName("brand")] AnalyticsBrand Brand,
+    [property: JsonPropertyName("periods")] IReadOnlyList<FollowerPeriod> Periods
+);
+
+/// <summary>
 /// Partial update for a brand's monitoring keywords. Every field is optional, and only
 /// the supplied fields are changed, but at least one field is required.
 /// </summary>
@@ -1203,6 +1275,24 @@ public sealed record PatchedWebhookSubscriptionUpdateRequest
 }
 
 /// <summary>
+/// Comments the brand posted on one category of content.
+/// </summary>
+public sealed record PostedCommentCategory(
+    [property: JsonPropertyName("category")] string Category,
+    [property: JsonPropertyName("comments")] long Comments,
+    [property: JsonPropertyName("likes")] long Likes,
+    [property: JsonPropertyName("replies")] long Replies
+);
+
+/// <summary>
+/// Comments the brand posted, split by the content they were posted on.
+/// </summary>
+public sealed record PostedComments(
+    [property: JsonPropertyName("total_comments_posted")] long TotalCommentsPosted,
+    [property: JsonPropertyName("categories")] IReadOnlyList<PostedCommentCategory> Categories
+);
+
+/// <summary>
 /// Signed, time-limited download of an analysis run's result payload.
 /// </summary>
 public sealed record ResultFile(
@@ -1238,23 +1328,48 @@ public sealed record SafetyCheckRequest
 public sealed record Usage(
     [property: JsonPropertyName("brand_id")] string BrandId,
     [property: JsonPropertyName("authenticated_as")] string AuthenticatedAs,
-    [property: JsonPropertyName("scopes")] JsonElement Scopes
+    [property: JsonPropertyName("scopes")] IReadOnlyList<UsageScope> Scopes,
+    [property: JsonPropertyName("history")] UsageHistory History
+);
+
+/// <summary>
+/// One day of consumption for one source.
+/// </summary>
+public sealed record UsageDay(
+    [property: JsonPropertyName("source")] string Source,
+    [property: JsonPropertyName("general")] long General,
+    [property: JsonPropertyName("ai_analysis")] long AiAnalysis,
+    [property: JsonPropertyName("creator_vetting")] long CreatorVetting,
+    [property: JsonPropertyName("data_records")] long DataRecords,
+    [property: JsonPropertyName("data_records_items")] long DataRecordsItems,
+    [property: JsonPropertyName("date")] string Date
+);
+
+/// <summary>
+/// Daily consumption over the window the ledger keeps.
+/// </summary>
+public sealed record UsageHistory(
+    [property: JsonPropertyName("start_date")] string StartDate,
+    [property: JsonPropertyName("end_date")] string EndDate,
+    [property: JsonPropertyName("days")] IReadOnlyList<UsageDay> Days
 );
 
 /// <summary>
 /// One metered group, with every window that has a limit.
 /// </summary>
 public sealed record UsageScope(
+    [property: JsonPropertyName("scope")] string Scope,
     [property: JsonPropertyName("human_name")] string HumanName,
     [property: JsonPropertyName("kind")] string Kind,
     [property: JsonPropertyName("section")] string Section,
-    [property: JsonPropertyName("windows")] JsonElement Windows
+    [property: JsonPropertyName("windows")] IReadOnlyList<UsageWindow> Windows
 );
 
 /// <summary>
 /// Consumption of one window, e.g. requests in the current hour.
 /// </summary>
 public sealed record UsageWindow(
+    [property: JsonPropertyName("window")] string Window,
     [property: JsonPropertyName("limit")] long Limit,
     [property: JsonPropertyName("used")] long Used,
     [property: JsonPropertyName("remaining")] long Remaining,
@@ -1262,7 +1377,7 @@ public sealed record UsageWindow(
 );
 
 /// <summary>
-/// The WebhookAvailableEvent object.
+/// An event type a subscription may ask for.
 /// </summary>
 public sealed record WebhookAvailableEvent(
     [property: JsonPropertyName("event")] string @Event,
@@ -1284,7 +1399,7 @@ public sealed record WebhookData(
 );
 
 /// <summary>
-/// The WebhookDeleteAcknowledgement object.
+/// Confirmation that a webhook resource was deleted.
 /// </summary>
 public sealed record WebhookDeleteAcknowledgement(
     [property: JsonPropertyName("acknowledged")] bool Acknowledged,
@@ -1293,7 +1408,7 @@ public sealed record WebhookDeleteAcknowledgement(
 );
 
 /// <summary>
-/// The WebhookDelivery object.
+/// One attempt to deliver one push, with its outcome.
 /// </summary>
 public sealed record WebhookDelivery(
     [property: JsonPropertyName("id")] string Id,
@@ -1313,9 +1428,8 @@ public sealed record WebhookDelivery(
 );
 
 /// <summary>
-/// One downloadable snapshot file in a manifest push. A delivery currently consists of
-/// a single file, so `files` carries one entry. The array shape allows a snapshot to be
-/// sharded across several files in the future without changing the envelope.
+/// One downloadable snapshot file in a manifest push. `files` is an array, so read
+/// every entry rather than assuming one.
 /// </summary>
 public sealed record WebhookFile(
     [property: JsonPropertyName("format")] string Format,
@@ -1346,7 +1460,7 @@ public sealed record WebhookPush(
 );
 
 /// <summary>
-/// The WebhookSecret object.
+/// A signing secret, identified by its prefix rather than its value.
 /// </summary>
 public sealed record WebhookSecret(
     [property: JsonPropertyName("id")] string Id,
@@ -1378,7 +1492,8 @@ public sealed record WebhookSecretCreateRequest
 }
 
 /// <summary>
-/// The WebhookSecretCreated object.
+/// A secret just created or rotated, carrying the value once. Store it now: later reads
+/// return the prefix alone.
 /// </summary>
 public sealed record WebhookSecretCreated(
     [property: JsonPropertyName("id")] string Id,
@@ -1392,7 +1507,7 @@ public sealed record WebhookSecretCreated(
 );
 
 /// <summary>
-/// The WebhookSubscription object.
+/// A registered endpoint and the events it receives.
 /// </summary>
 public sealed record WebhookSubscription(
     [property: JsonPropertyName("id")] string Id,
@@ -1474,7 +1589,8 @@ public sealed record WebhookSubscriptionCreateRequest
 }
 
 /// <summary>
-/// The WebhookSubscriptionCreated object.
+/// A subscription just created, with the signing secret attached. The secret is shown
+/// on this response only and never again.
 /// </summary>
 public sealed record WebhookSubscriptionCreated(
     [property: JsonPropertyName("id")] string Id,

@@ -10,7 +10,7 @@ namespace Zelf;
 public sealed class ZelfClient : IDisposable
 {
     /// <summary>The SDK version sent in the User-Agent header.</summary>
-    public const string Version = "1.0.0";
+    public const string Version = "1.1.0";
 
     private readonly Transport _transport;
 
@@ -18,6 +18,7 @@ public sealed class ZelfClient : IDisposable
     {
         _transport = new Transport(options);
         AiAnalysis = new AiAnalysisResource(_transport);
+        Analytics = new AnalyticsResource(_transport);
         BrandAccounts = new BrandAccountsResource(_transport);
         Brands = new BrandsResource(_transport);
         Comments = new CommentsResource(_transport);
@@ -38,6 +39,9 @@ public sealed class ZelfClient : IDisposable
 
     /// <summary>The ai_analysis endpoints.</summary>
     public AiAnalysisResource AiAnalysis { get; }
+
+    /// <summary>The analytics endpoints.</summary>
+    public AnalyticsResource Analytics { get; }
 
     /// <summary>The brand_accounts endpoints.</summary>
     public BrandAccountsResource BrandAccounts { get; }

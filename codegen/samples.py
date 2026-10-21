@@ -41,6 +41,7 @@ FIELD_PREFIXES = {
 
 ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 TIMESTAMP = "2026-01-01T00:00:00Z"
+DATE = "2026-01-01"
 
 # Free strings in the spec that only ever hold one of a few values.
 KNOWN_STRINGS = {
@@ -157,6 +158,10 @@ def sample(
         return True
     if kind == "datetime":
         return TIMESTAMP
+    if node.fmt == "date":
+        # A calendar date is typed as one in the generated models, so the name
+        # based fallback below would not round trip.
+        return DATE
     if kind == "any":
         # A multi-member oneOf loses its variants in the IR; the name does not.
         if field_name.lower() in KNOWN_STRINGS:

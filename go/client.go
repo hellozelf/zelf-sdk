@@ -3,13 +3,14 @@
 package zelf
 
 // Version is the SDK version sent in the User-Agent header.
-const Version = "1.0.0"
+const Version = "1.1.0"
 
 // Client is the ZelfAI APIs client. Create one with New.
 type Client struct {
 	t *transport
 
 	AIAnalysis     *AIAnalysisResource
+	Analytics      *AnalyticsResource
 	BrandAccounts  *BrandAccountsResource
 	Brands         *BrandsResource
 	Comments       *CommentsResource
@@ -33,6 +34,7 @@ func New(opts ...Option) (*Client, error) {
 	return &Client{
 		t:              t,
 		AIAnalysis:     &AIAnalysisResource{t: t},
+		Analytics:      &AnalyticsResource{t: t},
 		BrandAccounts:  &BrandAccountsResource{t: t},
 		Brands:         &BrandsResource{t: t},
 		Comments:       &CommentsResource{t: t},

@@ -6,7 +6,6 @@ Every language directory is generated. Editing one by hand works until the next
 ## Layout
 
 ```text
-VERSION             one version for all eight clients
 spec/openapi.yaml   the published spec, the only input
 fixtures/           response examples and model samples, shared by every suite
 Makefile            make all | make test | make cov | make <lang>
@@ -20,9 +19,9 @@ codegen/            the generator
   make_fixtures.py  writes fixtures/fixtures.json
   emit_*.py         one per language
   emit_conformance.py  the generated test suites
-  release.py        reads VERSION
+  release.py        the version each client is released at
   templates/        the hand written runtime each client is built around
-python/ js/ go/ rust/ ruby/ csharp/ java/ php/
+python/ js/ go/ rust/ ruby/ csharp/ java/
 ```
 
 ## Commands
@@ -30,7 +29,7 @@ python/ js/ go/ rust/ ruby/ csharp/ java/ php/
 ```text
 make all          regenerate every client
 make rust         regenerate one of them
-make test         run all eight suites
+make test         run all seven suites
 make cov          run the suites that gate at 100% coverage
 ```
 
@@ -42,7 +41,7 @@ from oapi-codegen. The other five render `codegen/models.py`'s shared model IR,
 which was less work than wiring up five more toolchains.
 
 The request layer, the client, the resources and the conformance suites are
-emitted for all eight. The runtime each client is built around lives in
+emitted for all seven. The runtime each client is built around lives in
 `codegen/templates/` and is copied verbatim.
 
 **Every emitter deletes its output directory and rewrites the build manifest
@@ -57,7 +56,6 @@ survive:
 | `ruby/zelf.gemspec` | `emit_ruby.py` |
 | `csharp/src/Zelf.csproj` | `emit_csharp.py` |
 | `java/pom.xml` | `emit_java.py` |
-| `php/composer.json`, `autoload.php` | `emit_php.py` |
 | `go/oapi-codegen.yaml` | `emit_go.py` |
 
 What survives: every test directory, `csharp/tests/Zelf.Tests.csproj`,
@@ -120,7 +118,7 @@ raise it whenever a change earns it.
 ## Adding or changing an operation
 
 Nothing here needs editing. Refresh `spec/openapi.yaml`, run `make all`, run
-`make test`. New operations appear in all eight clients with tests.
+`make test`. New operations appear in all seven clients with tests.
 
 Two things in the spec need a workaround table in `codegen/naming.py`:
 
@@ -142,7 +140,7 @@ Reproducibility matters because the `codegen` job diffs the tree:
 `datamodel-code-generator`, `oapi-codegen` and `ruff` are pinned, since a
 formatting change in any of them would turn the job red on an unrelated day.
 
-PHP and Rust suites run in containers so no local install is needed. C# runs
+The Rust suite runs in a container so no local install is needed. C# runs
 both target frameworks under one SDK image using `DOTNET_ROLL_FORWARD`.
 
 ## Releasing
@@ -162,9 +160,9 @@ language can release without dragging the other six along.
 
 `codegen/release.py` reads each one back before the emitters rewrite the
 manifest, so regenerating never resets a client to someone else's number. The
-root `VERSION` file is only the seed for a client that has no manifest yet.
+major and minor come from the spec; only the patch is a client's own.
 
-To release one client: edit its version, run `make all`, commit, then publish a
-GitHub release whose tag carries that language's prefix (`py/v1.1.0`,
-`js/v1.1.0`, `go/v1.1.0`). The publish workflow keys off the prefix, so only
-that language goes out.
+To release one client: edit its patch version, run `make all`, commit, and let
+`release.yml` create the tag and release on the next push to `main`. Each
+publish workflow keys off its own tag prefix (`py/v`, `js/v`, `go/v`,
+`rust/v`, `ruby/v`, `csharp/v`), so only that language goes out.

@@ -7,10 +7,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 
 /**
- * One downloadable snapshot file in a manifest push. A delivery currently consists
- * of a single file, so `files` carries one entry. The array shape allows a
- * snapshot to be sharded across several files in the future without changing the
- * envelope.
+ * One downloadable snapshot file in a manifest push. `files` is an array, so read
+ * every entry rather than assuming one.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record WebhookFile(

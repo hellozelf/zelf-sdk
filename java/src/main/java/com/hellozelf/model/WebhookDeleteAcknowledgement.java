@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 
 /**
- * The WebhookDeleteAcknowledgement object.
+ * Confirmation that a webhook resource was deleted.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record WebhookDeleteAcknowledgement(

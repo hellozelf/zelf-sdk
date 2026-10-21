@@ -156,6 +156,35 @@ const (
 	Manifest WebhookPushDeliveryMode = "manifest"
 )
 
+// Defines values for AnalyticsBrandComparisonParamsPlatform.
+const (
+	AnalyticsBrandComparisonParamsPlatformInstagram AnalyticsBrandComparisonParamsPlatform = "instagram"
+	AnalyticsBrandComparisonParamsPlatformTiktok    AnalyticsBrandComparisonParamsPlatform = "tiktok"
+	AnalyticsBrandComparisonParamsPlatformYoutube   AnalyticsBrandComparisonParamsPlatform = "youtube"
+)
+
+// Defines values for AnalyticsFollowerTimeseriesParamsPeriod.
+const (
+	Day   AnalyticsFollowerTimeseriesParamsPeriod = "day"
+	Month AnalyticsFollowerTimeseriesParamsPeriod = "month"
+	Week  AnalyticsFollowerTimeseriesParamsPeriod = "week"
+	Year  AnalyticsFollowerTimeseriesParamsPeriod = "year"
+)
+
+// Defines values for AnalyticsFollowerTimeseriesParamsPlatform.
+const (
+	AnalyticsFollowerTimeseriesParamsPlatformInstagram AnalyticsFollowerTimeseriesParamsPlatform = "instagram"
+	AnalyticsFollowerTimeseriesParamsPlatformTiktok    AnalyticsFollowerTimeseriesParamsPlatform = "tiktok"
+	AnalyticsFollowerTimeseriesParamsPlatformYoutube   AnalyticsFollowerTimeseriesParamsPlatform = "youtube"
+)
+
+// Defines values for AnalyticsPostedCommentsParamsPlatform.
+const (
+	AnalyticsPostedCommentsParamsPlatformInstagram AnalyticsPostedCommentsParamsPlatform = "instagram"
+	AnalyticsPostedCommentsParamsPlatformTiktok    AnalyticsPostedCommentsParamsPlatform = "tiktok"
+	AnalyticsPostedCommentsParamsPlatformYoutube   AnalyticsPostedCommentsParamsPlatform = "youtube"
+)
+
 // Defines values for BrandAccountsListParamsAccountType.
 const (
 	BrandAccountsListParamsAccountTypeInfluencer BrandAccountsListParamsAccountType = "influencer"
@@ -283,33 +312,33 @@ const (
 
 // Defines values for CreatorsListParamsPlatform.
 const (
-	CreatorsListParamsPlatformInstagram CreatorsListParamsPlatform = "instagram"
-	CreatorsListParamsPlatformTiktok    CreatorsListParamsPlatform = "tiktok"
-	CreatorsListParamsPlatformYoutube   CreatorsListParamsPlatform = "youtube"
+	Instagram CreatorsListParamsPlatform = "instagram"
+	Tiktok    CreatorsListParamsPlatform = "tiktok"
+	Youtube   CreatorsListParamsPlatform = "youtube"
 )
 
-// Defines values for WebhookDeliveriesParamsSortBy.
+// Defines values for WebhooksListDeliveriesParamsSortBy.
 const (
-	Created      WebhookDeliveriesParamsSortBy = "created"
-	MinusCreated WebhookDeliveriesParamsSortBy = "-created"
+	Created      WebhooksListDeliveriesParamsSortBy = "created"
+	MinusCreated WebhooksListDeliveriesParamsSortBy = "-created"
 )
 
-// Defines values for WebhookDeliveriesParamsState.
+// Defines values for WebhooksListDeliveriesParamsState.
 const (
-	WebhookDeliveriesParamsStateEXHAUSTED      WebhookDeliveriesParamsState = "EXHAUSTED"
-	WebhookDeliveriesParamsStateFAILED         WebhookDeliveriesParamsState = "FAILED"
-	WebhookDeliveriesParamsStatePENDING        WebhookDeliveriesParamsState = "PENDING"
-	WebhookDeliveriesParamsStateQUOTAEXHAUSTED WebhookDeliveriesParamsState = "QUOTA_EXHAUSTED"
-	WebhookDeliveriesParamsStateSUCCEEDED      WebhookDeliveriesParamsState = "SUCCEEDED"
+	WebhooksListDeliveriesParamsStateEXHAUSTED      WebhooksListDeliveriesParamsState = "EXHAUSTED"
+	WebhooksListDeliveriesParamsStateFAILED         WebhooksListDeliveriesParamsState = "FAILED"
+	WebhooksListDeliveriesParamsStatePENDING        WebhooksListDeliveriesParamsState = "PENDING"
+	WebhooksListDeliveriesParamsStateQUOTAEXHAUSTED WebhooksListDeliveriesParamsState = "QUOTA_EXHAUSTED"
+	WebhooksListDeliveriesParamsStateSUCCEEDED      WebhooksListDeliveriesParamsState = "SUCCEEDED"
 )
 
-// Defines values for WebhookDeliveriesParamsStateNot.
+// Defines values for WebhooksListDeliveriesParamsStateNot.
 const (
-	WebhookDeliveriesParamsStateNotEXHAUSTED      WebhookDeliveriesParamsStateNot = "EXHAUSTED"
-	WebhookDeliveriesParamsStateNotFAILED         WebhookDeliveriesParamsStateNot = "FAILED"
-	WebhookDeliveriesParamsStateNotPENDING        WebhookDeliveriesParamsStateNot = "PENDING"
-	WebhookDeliveriesParamsStateNotQUOTAEXHAUSTED WebhookDeliveriesParamsStateNot = "QUOTA_EXHAUSTED"
-	WebhookDeliveriesParamsStateNotSUCCEEDED      WebhookDeliveriesParamsStateNot = "SUCCEEDED"
+	WebhooksListDeliveriesParamsStateNotEXHAUSTED      WebhooksListDeliveriesParamsStateNot = "EXHAUSTED"
+	WebhooksListDeliveriesParamsStateNotFAILED         WebhooksListDeliveriesParamsStateNot = "FAILED"
+	WebhooksListDeliveriesParamsStateNotPENDING        WebhooksListDeliveriesParamsStateNot = "PENDING"
+	WebhooksListDeliveriesParamsStateNotQUOTAEXHAUSTED WebhooksListDeliveriesParamsStateNot = "QUOTA_EXHAUSTED"
+	WebhooksListDeliveriesParamsStateNotSUCCEEDED      WebhooksListDeliveriesParamsStateNot = "SUCCEEDED"
 )
 
 // AccountTypeEnum defines model for AccountTypeEnum.
@@ -396,6 +425,21 @@ type AiAnalysisRun struct {
 // AnalysisScopeEnum defines model for AnalysisScopeEnum.
 type AnalysisScopeEnum string
 
+// AnalyticsBrand The brand a row of analytics belongs to.
+type AnalyticsBrand struct {
+	// Id Unique identifier for the brand.
+	Id string `json:"id"`
+
+	// IsPrimary `true` for the brand the request named, `false` for a sub-brand.
+	IsPrimary bool `json:"is_primary"`
+
+	// SubBrandType `COMPETITIVE` or `THEME` for a sub-brand; `null` for the top-level brand the request named.
+	SubBrandType nullable.Nullable[string] `json:"sub_brand_type"`
+
+	// Title Display name of the brand.
+	Title nullable.Nullable[string] `json:"title"`
+}
+
 // BlankEnum defines model for BlankEnum.
 type BlankEnum = interface{}
 
@@ -425,7 +469,7 @@ type BrandAccount struct {
 	// ExternalUrl The account's profile URL, when available.
 	ExternalUrl nullable.Nullable[string] `json:"external_url,omitempty"`
 
-	// Platform `instagram` or `tiktok`.
+	// Platform `instagram`, `tiktok` or `youtube`.
 	Platform string `json:"platform"`
 
 	// Username The account's handle.
@@ -455,7 +499,7 @@ type BrandAccountsWriteRequest struct {
 	// BrandId Brand to modify, specified as an `id` from `brands.list`. Omit to modify the workspace brand.
 	BrandId *string `json:"brand_id,omitempty"`
 
-	// ProfileUrls Profile URLs on a supported platform (`instagram` or `tiktok`).
+	// ProfileUrls Profile URLs on a supported platform (`instagram`, `tiktok` or `youtube`).
 	ProfileUrls []string `json:"profile_urls"`
 }
 
@@ -496,6 +540,18 @@ type BrandCatalogItem struct {
 
 	// ParentId Industry id a category belongs to; `null` for an industry.
 	ParentId nullable.Nullable[string] `json:"parent_id"`
+}
+
+// BrandComparison One brand's performance in the comparison.
+type BrandComparison struct {
+	// Brand The brand this row covers.
+	Brand AnalyticsBrand `json:"brand"`
+
+	// Followers Follower counts as they stand now, not over the window.
+	Followers BrandFollowers `json:"followers"`
+
+	// Statistics Totals over the window.
+	Statistics BrandStatistics `json:"statistics"`
 }
 
 // BrandCreateSubBrandRequest Create a sub-brand under the workspace brand.
@@ -546,6 +602,15 @@ type BrandCreateSubBrandRequest struct {
 	Title string `json:"title"`
 }
 
+// BrandFollowers Followers across the handles a brand owns.
+type BrandFollowers struct {
+	// Accounts Per handle counts that add up to `total`.
+	Accounts []FollowerAccount `json:"accounts"`
+
+	// Total Followers across every owned handle.
+	Total int `json:"total"`
+}
+
 // BrandKeywords The terms this brand uses to monitor social platforms.
 type BrandKeywords struct {
 	// AllowedLanguages ISO 639-1 codes for the languages the brand tracks. An empty array indicates that all languages are tracked.
@@ -588,6 +653,45 @@ type BrandKeywords struct {
 	SearchTerms []string `json:"search_terms"`
 }
 
+// BrandStatistics Totals over the content matched to a brand in the window.
+type BrandStatistics struct {
+	// EngagementRate Total engagement divided by total views. Null when the set has no recorded views.
+	EngagementRate nullable.Nullable[float64] `json:"engagement_rate"`
+
+	// PostCount Number of posts matched to the brand.
+	PostCount int `json:"post_count"`
+
+	// TotalComments Total comments across those posts.
+	TotalComments int `json:"total_comments"`
+
+	// TotalEarnedMediaValueCents Estimated marketing value across those posts, in US cents.
+	TotalEarnedMediaValueCents int `json:"total_earned_media_value_cents"`
+
+	// TotalEngagement Likes, comments and shares across those posts.
+	TotalEngagement int `json:"total_engagement"`
+
+	// TotalLikes Total likes across those posts.
+	TotalLikes int `json:"total_likes"`
+
+	// TotalNegativeNps Engagement on negative posts.
+	TotalNegativeNps int `json:"total_negative_nps"`
+
+	// TotalNeutralNps Engagement on neutral posts.
+	TotalNeutralNps int `json:"total_neutral_nps"`
+
+	// TotalPositiveNps Engagement on positive posts.
+	TotalPositiveNps int `json:"total_positive_nps"`
+
+	// TotalShares Total shares across those posts.
+	TotalShares int `json:"total_shares"`
+
+	// TotalViews Total views across those posts.
+	TotalViews int `json:"total_views"`
+
+	// UniqueCreatorCount Number of distinct creators who posted.
+	UniqueCreatorCount int `json:"unique_creator_count"`
+}
+
 // Comment A comment left on a piece of content.
 type Comment struct {
 	// Author The creator who wrote the comment. Null when the author is unknown.
@@ -608,7 +712,7 @@ type Comment struct {
 	// ParentCommentId Identifier of the comment this is a reply to. Null for top-level comments.
 	ParentCommentId nullable.Nullable[string] `json:"parent_comment_id"`
 
-	// Platform The platform the comment was posted on. Either `instagram` or `tiktok`.
+	// Platform The platform the comment was posted on: `instagram`, `tiktok` or `youtube`.
 	Platform nullable.Nullable[string] `json:"platform"`
 
 	// PostedAt Time the comment was posted on its platform (UTC).
@@ -695,7 +799,7 @@ type Content struct {
 	// NetPromoterScore Net promoter score for the content from the perspective of the scoped brand. Returned as `null` when the request omits `brand_id`.
 	NetPromoterScore nullable.Nullable[int] `json:"net_promoter_score"`
 
-	// Platform The platform the content was published on. Either `instagram` or `tiktok`.
+	// Platform The platform the content was published on: `instagram`, `tiktok` or `youtube`.
 	Platform string `json:"platform"`
 
 	// PlatformPostId The post's identifier on its platform. This is the value at the end of the post's URL.
@@ -1444,6 +1548,42 @@ type Error503 struct {
 // Error503ErrorCode defines model for Error503.Error.Code.
 type Error503ErrorCode string
 
+// FollowerAccount One owned handle and the followers it carries.
+type FollowerAccount struct {
+	// Followers Follower count for this handle.
+	Followers int `json:"followers"`
+
+	// Platform The platform the handle is on.
+	Platform string `json:"platform"`
+
+	// Username The handle.
+	Username string `json:"username"`
+}
+
+// FollowerPeriod Followers at the end of one period.
+type FollowerPeriod struct {
+	// Accounts Per handle counts that add up to `followers`.
+	Accounts []FollowerAccount `json:"accounts"`
+
+	// EndDate Last day of the period.
+	EndDate openapi_types.Date `json:"end_date"`
+
+	// Followers Followers across every owned handle.
+	Followers int `json:"followers"`
+
+	// StartDate First day of the period.
+	StartDate openapi_types.Date `json:"start_date"`
+}
+
+// FollowerTimeseries One brand's follower history.
+type FollowerTimeseries struct {
+	// Brand The brand this row covers.
+	Brand AnalyticsBrand `json:"brand"`
+
+	// Periods One entry per period, oldest first.
+	Periods []FollowerPeriod `json:"periods"`
+}
+
 // IntervalHoursEnum defines model for IntervalHoursEnum.
 type IntervalHoursEnum int
 
@@ -1578,6 +1718,30 @@ type PatchedWebhookSubscriptionUpdateRequest_IntervalHours struct {
 // PlatformEnum defines model for PlatformEnum.
 type PlatformEnum string
 
+// PostedCommentCategory Comments the brand posted on one category of content.
+type PostedCommentCategory struct {
+	// Category `brand`, `owned`, `competitors`, `themes` or `other`. `other` covers content outside the brand's own tree.
+	Category string `json:"category"`
+
+	// Comments Comments posted on this category.
+	Comments int `json:"comments"`
+
+	// Likes Likes those comments received.
+	Likes int `json:"likes"`
+
+	// Replies Replies those comments received.
+	Replies int `json:"replies"`
+}
+
+// PostedComments Comments the brand posted, split by the content they were posted on.
+type PostedComments struct {
+	// Categories One entry per category. They add up to `total_comments_posted`.
+	Categories []PostedCommentCategory `json:"categories"`
+
+	// TotalCommentsPosted Comments the brand posted in the window, across every category.
+	TotalCommentsPosted int `json:"total_comments_posted"`
+}
+
 // ResourceEnum defines model for ResourceEnum.
 type ResourceEnum string
 
@@ -1628,8 +1792,47 @@ type Usage struct {
 	// BrandId Brand these figures belong to.
 	BrandId string `json:"brand_id"`
 
-	// Scopes Keyed by group. Both sections are returned whichever way you call.
-	Scopes map[string]UsageScope `json:"scopes"`
+	// History What was actually spent, day by day, from the usage ledger.
+	History UsageHistory `json:"history"`
+
+	// Scopes One entry per metered group. Both sections are returned whichever way you call.
+	Scopes []UsageScope `json:"scopes"`
+}
+
+// UsageDay One day of consumption for one source.
+type UsageDay struct {
+	// AiAnalysis Calls counted against the AI analysis group.
+	AiAnalysis int `json:"ai_analysis"`
+
+	// CreatorVetting Calls counted against creator vetting.
+	CreatorVetting int `json:"creator_vetting"`
+
+	// DataRecords Calls counted against data records.
+	DataRecords int `json:"data_records"`
+
+	// DataRecordsItems Records those calls returned.
+	DataRecordsItems int `json:"data_records_items"`
+
+	// Date The day, in the brand's billing timezone.
+	Date openapi_types.Date `json:"date"`
+
+	// General Every counted call that day.
+	General int `json:"general"`
+
+	// Source ``api`` for direct requests, ``mcp`` for AI clients.
+	Source string `json:"source"`
+}
+
+// UsageHistory Daily consumption over the window the ledger keeps.
+type UsageHistory struct {
+	// Days One entry per day and source that saw usage, oldest first.
+	Days []UsageDay `json:"days"`
+
+	// EndDate Last day covered.
+	EndDate openapi_types.Date `json:"end_date"`
+
+	// StartDate First day covered.
+	StartDate openapi_types.Date `json:"start_date"`
 }
 
 // UsageScope One metered group, with every window that has a limit.
@@ -1640,11 +1843,14 @@ type UsageScope struct {
 	// Kind ``request`` counts calls; ``item`` counts rows returned.
 	Kind string `json:"kind"`
 
+	// Scope Identifier of the metered group.
+	Scope string `json:"scope"`
+
 	// Section Which product the group meters: ``api`` for direct requests, ``mcp`` for AI clients. The two never share a counter.
 	Section string `json:"section"`
 
-	// Windows Keyed by window: rps, rpm, rph, rpd, rpmonth, or the item windows.
-	Windows map[string]UsageWindow `json:"windows"`
+	// Windows Every window that has a limit configured.
+	Windows []UsageWindow `json:"windows"`
 }
 
 // UsageWindow Consumption of one window, e.g. requests in the current hour.
@@ -1660,9 +1866,12 @@ type UsageWindow struct {
 
 	// Used Spent so far in this window.
 	Used int `json:"used"`
+
+	// Window Which window this is: rps, rpm, rph, rpd, rpmonth, or an item window.
+	Window string `json:"window"`
 }
 
-// WebhookAvailableEvent defines model for WebhookAvailableEvent.
+// WebhookAvailableEvent An event type a subscription may ask for.
 type WebhookAvailableEvent struct {
 	// Description What triggers the event and what the payload holds.
 	Description string `json:"description"`
@@ -1693,7 +1902,7 @@ type WebhookData struct {
 	Statistics interface{} `json:"statistics,omitempty"`
 }
 
-// WebhookDeleteAcknowledgement defines model for WebhookDeleteAcknowledgement.
+// WebhookDeleteAcknowledgement Confirmation that a webhook resource was deleted.
 type WebhookDeleteAcknowledgement struct {
 	// Acknowledged Always true; confirms the webhook resource delete was acknowledged.
 	Acknowledged bool `json:"acknowledged"`
@@ -1705,7 +1914,7 @@ type WebhookDeleteAcknowledgement struct {
 	Status string `json:"status"`
 }
 
-// WebhookDelivery defines model for WebhookDelivery.
+// WebhookDelivery One attempt to deliver one push, with its outcome.
 type WebhookDelivery struct {
 	// AttemptCount Number of delivery attempts made so far.
 	AttemptCount int `json:"attempt_count"`
@@ -1752,9 +1961,7 @@ type WebhookDelivery struct {
 
 // WebhookFile One downloadable snapshot file in a manifest push.
 //
-// A delivery currently consists of a single file, so `files` carries one
-// entry. The array shape allows a snapshot to be sharded across several
-// files in the future without changing the envelope.
+// `files` is an array, so read every entry rather than assuming one.
 type WebhookFile struct {
 	// DownloadUrl Signed, time-limited URL from which to retrieve the file. Expires at `expires_at`.
 	DownloadUrl string `json:"download_url"`
@@ -1813,7 +2020,7 @@ type WebhookPush struct {
 // WebhookPushDeliveryMode `manifest`: `data.files` holds downloadable snapshot files. `inline`: `data.items` holds the rows directly.
 type WebhookPushDeliveryMode string
 
-// WebhookSecret defines model for WebhookSecret.
+// WebhookSecret A signing secret, identified by its prefix rather than its value.
 type WebhookSecret struct {
 	// Created Timestamp set once when the row is first created.
 	Created time.Time `json:"created"`
@@ -1846,7 +2053,9 @@ type WebhookSecretCreateRequest struct {
 	MakeDefault *bool `json:"make_default,omitempty"`
 }
 
-// WebhookSecretCreated defines model for WebhookSecretCreated.
+// WebhookSecretCreated A secret just created or rotated, carrying the value once.
+//
+// Store it now: later reads return the prefix alone.
 type WebhookSecretCreated struct {
 	// Created Timestamp set once when the row is first created.
 	Created time.Time `json:"created"`
@@ -1873,7 +2082,7 @@ type WebhookSecretCreated struct {
 	SecretPrefix string `json:"secret_prefix"`
 }
 
-// WebhookSubscription defines model for WebhookSubscription.
+// WebhookSubscription A registered endpoint and the events it receives.
 type WebhookSubscription struct {
 	// Created Timestamp set once when the row is first created.
 	Created time.Time `json:"created"`
@@ -1971,7 +2180,9 @@ type WebhookSubscriptionCreateRequest_Resource struct {
 	union json.RawMessage
 }
 
-// WebhookSubscriptionCreated defines model for WebhookSubscriptionCreated.
+// WebhookSubscriptionCreated A subscription just created, with the signing secret attached.
+//
+// The secret is shown on this response only and never again.
 type WebhookSubscriptionCreated struct {
 	// Created Timestamp set once when the row is first created.
 	Created time.Time `json:"created"`
@@ -2062,6 +2273,84 @@ type AiAnalysisResultsParams struct {
 	// PageSize Items per page (1-30). Defaults to 30; larger values are clamped down.
 	PageSize *int `form:"page_size,omitempty" json:"page_size,omitempty"`
 }
+
+// AnalyticsBrandComparisonParams defines parameters for AnalyticsBrandComparison.
+type AnalyticsBrandComparisonParams struct {
+	// BrandId The top-level brand to analyse, as returned by `brands.list`. A sub-brand is refused with the id of the parent to use instead.
+	BrandId string `form:"brand_id" json:"brand_id"`
+
+	// Platform Platforms to include, comma-separated. Defaults to all of them.
+	Platform *[]AnalyticsBrandComparisonParamsPlatform `form:"platform,omitempty" json:"platform,omitempty"`
+
+	// PostedAfter Start of the window (UTC, ISO 8601). Supplying more than one start is accepted and only one applies: this one wins over `posted_within_hours`, which wins over `posted_within_days`.
+	PostedAfter *time.Time `form:"posted_after,omitempty" json:"posted_after,omitempty"`
+
+	// PostedBefore End of the window (UTC, ISO 8601). Defaults to the current time, and a relative start is counted back from it.
+	PostedBefore *time.Time `form:"posted_before,omitempty" json:"posted_before,omitempty"`
+
+	// PostedWithinDays Start of the window, counted back from `posted_before` or the current time, in days (1-365). Defaults to 7 when no date parameter is supplied, and loses to `posted_after` and `posted_within_hours`.
+	PostedWithinDays *int `form:"posted_within_days,omitempty" json:"posted_within_days,omitempty"`
+
+	// PostedWithinHours Start of the window, counted back from `posted_before` or the current time, in hours (1-8760). `posted_after` wins over it; it wins over `posted_within_days`.
+	PostedWithinHours *int `form:"posted_within_hours,omitempty" json:"posted_within_hours,omitempty"`
+}
+
+// AnalyticsBrandComparisonParamsPlatform defines parameters for AnalyticsBrandComparison.
+type AnalyticsBrandComparisonParamsPlatform string
+
+// AnalyticsFollowerTimeseriesParams defines parameters for AnalyticsFollowerTimeseries.
+type AnalyticsFollowerTimeseriesParams struct {
+	// BrandId The top-level brand to analyse, as returned by `brands.list`. A sub-brand is refused with the id of the parent to use instead.
+	BrandId string `form:"brand_id" json:"brand_id"`
+
+	// Period Size of each bucket in the series. Defaults to `day`.
+	Period *AnalyticsFollowerTimeseriesParamsPeriod `form:"period,omitempty" json:"period,omitempty"`
+
+	// Platform Platforms to include, comma-separated. Defaults to all of them.
+	Platform *[]AnalyticsFollowerTimeseriesParamsPlatform `form:"platform,omitempty" json:"platform,omitempty"`
+
+	// PostedAfter Start of the window (UTC, ISO 8601). Supplying more than one start is accepted and only one applies: this one wins over `posted_within_hours`, which wins over `posted_within_days`.
+	PostedAfter *time.Time `form:"posted_after,omitempty" json:"posted_after,omitempty"`
+
+	// PostedBefore End of the window (UTC, ISO 8601). Defaults to the current time, and a relative start is counted back from it.
+	PostedBefore *time.Time `form:"posted_before,omitempty" json:"posted_before,omitempty"`
+
+	// PostedWithinDays Start of the window, counted back from `posted_before` or the current time, in days (1-365). Defaults to 7 when no date parameter is supplied, and loses to `posted_after` and `posted_within_hours`.
+	PostedWithinDays *int `form:"posted_within_days,omitempty" json:"posted_within_days,omitempty"`
+
+	// PostedWithinHours Start of the window, counted back from `posted_before` or the current time, in hours (1-8760). `posted_after` wins over it; it wins over `posted_within_days`.
+	PostedWithinHours *int `form:"posted_within_hours,omitempty" json:"posted_within_hours,omitempty"`
+}
+
+// AnalyticsFollowerTimeseriesParamsPeriod defines parameters for AnalyticsFollowerTimeseries.
+type AnalyticsFollowerTimeseriesParamsPeriod string
+
+// AnalyticsFollowerTimeseriesParamsPlatform defines parameters for AnalyticsFollowerTimeseries.
+type AnalyticsFollowerTimeseriesParamsPlatform string
+
+// AnalyticsPostedCommentsParams defines parameters for AnalyticsPostedComments.
+type AnalyticsPostedCommentsParams struct {
+	// BrandId The top-level brand to analyse, as returned by `brands.list`. A sub-brand is refused with the id of the parent to use instead.
+	BrandId string `form:"brand_id" json:"brand_id"`
+
+	// Platform Platforms to include, comma-separated. Defaults to all of them.
+	Platform *[]AnalyticsPostedCommentsParamsPlatform `form:"platform,omitempty" json:"platform,omitempty"`
+
+	// PostedAfter Start of the window (UTC, ISO 8601). Supplying more than one start is accepted and only one applies: this one wins over `posted_within_hours`, which wins over `posted_within_days`.
+	PostedAfter *time.Time `form:"posted_after,omitempty" json:"posted_after,omitempty"`
+
+	// PostedBefore End of the window (UTC, ISO 8601). Defaults to the current time, and a relative start is counted back from it.
+	PostedBefore *time.Time `form:"posted_before,omitempty" json:"posted_before,omitempty"`
+
+	// PostedWithinDays Start of the window, counted back from `posted_before` or the current time, in days (1-365). Defaults to 7 when no date parameter is supplied, and loses to `posted_after` and `posted_within_hours`.
+	PostedWithinDays *int `form:"posted_within_days,omitempty" json:"posted_within_days,omitempty"`
+
+	// PostedWithinHours Start of the window, counted back from `posted_before` or the current time, in hours (1-8760). `posted_after` wins over it; it wins over `posted_within_days`.
+	PostedWithinHours *int `form:"posted_within_hours,omitempty" json:"posted_within_hours,omitempty"`
+}
+
+// AnalyticsPostedCommentsParamsPlatform defines parameters for AnalyticsPostedComments.
+type AnalyticsPostedCommentsParamsPlatform string
 
 // BrandsListParams defines parameters for BrandsList.
 type BrandsListParams struct {
@@ -2605,8 +2894,8 @@ type DetectionListParams struct {
 	PageSize *int `form:"page_size,omitempty" json:"page_size,omitempty"`
 }
 
-// WebhookDeliveriesParams defines parameters for WebhookDeliveries.
-type WebhookDeliveriesParams struct {
+// WebhooksListDeliveriesParams defines parameters for WebhooksListDeliveries.
+type WebhooksListDeliveriesParams struct {
 	// Created Delivery creation time (ISO 8601).
 	Created *time.Time `form:"created,omitempty" json:"created,omitempty"`
 
@@ -2620,30 +2909,30 @@ type WebhookDeliveriesParams struct {
 	Page *int `form:"page,omitempty" json:"page,omitempty"`
 
 	// PageSize Items per page (1-30). Defaults to 30; larger values are clamped down.
-	PageSize *int                             `form:"page_size,omitempty" json:"page_size,omitempty"`
-	SortBy   *[]WebhookDeliveriesParamsSortBy `form:"sort_by,omitempty" json:"sort_by,omitempty"`
+	PageSize *int                                  `form:"page_size,omitempty" json:"page_size,omitempty"`
+	SortBy   *[]WebhooksListDeliveriesParamsSortBy `form:"sort_by,omitempty" json:"sort_by,omitempty"`
 
 	// State Current delivery state.
-	State *WebhookDeliveriesParamsState `form:"state,omitempty" json:"state,omitempty"`
+	State *WebhooksListDeliveriesParamsState `form:"state,omitempty" json:"state,omitempty"`
 
 	// StateNot exclude where state - Current delivery state.
-	StateNot *WebhookDeliveriesParamsStateNot `form:"state!,omitempty" json:"state!,omitempty"`
+	StateNot *WebhooksListDeliveriesParamsStateNot `form:"state!,omitempty" json:"state!,omitempty"`
 
 	// Subscription Scope to a single subscription by its masked id.
 	Subscription *string `form:"subscription,omitempty" json:"subscription,omitempty"`
 }
 
-// WebhookDeliveriesParamsSortBy defines parameters for WebhookDeliveries.
-type WebhookDeliveriesParamsSortBy string
+// WebhooksListDeliveriesParamsSortBy defines parameters for WebhooksListDeliveries.
+type WebhooksListDeliveriesParamsSortBy string
 
-// WebhookDeliveriesParamsState defines parameters for WebhookDeliveries.
-type WebhookDeliveriesParamsState string
+// WebhooksListDeliveriesParamsState defines parameters for WebhooksListDeliveries.
+type WebhooksListDeliveriesParamsState string
 
-// WebhookDeliveriesParamsStateNot defines parameters for WebhookDeliveries.
-type WebhookDeliveriesParamsStateNot string
+// WebhooksListDeliveriesParamsStateNot defines parameters for WebhooksListDeliveries.
+type WebhooksListDeliveriesParamsStateNot string
 
-// WebhookSecretsParams defines parameters for WebhookSecrets.
-type WebhookSecretsParams struct {
+// WebhooksListSecretsParams defines parameters for WebhooksListSecrets.
+type WebhooksListSecretsParams struct {
 	// Page Page number (1-based). Omit for the first page.
 	Page *int `form:"page,omitempty" json:"page,omitempty"`
 
@@ -2651,8 +2940,8 @@ type WebhookSecretsParams struct {
 	PageSize *int `form:"page_size,omitempty" json:"page_size,omitempty"`
 }
 
-// WebhookSubscriptionsParams defines parameters for WebhookSubscriptions.
-type WebhookSubscriptionsParams struct {
+// WebhooksListSubscriptionsParams defines parameters for WebhooksListSubscriptions.
+type WebhooksListSubscriptionsParams struct {
 	// Page Page number (1-based). Omit for the first page.
 	Page *int `form:"page,omitempty" json:"page,omitempty"`
 
@@ -2759,32 +3048,32 @@ type DetectionCreateFormdataRequestBody = DetectionCreateRequest
 // DetectionCreateMultipartRequestBody defines body for DetectionCreate for multipart/form-data ContentType.
 type DetectionCreateMultipartRequestBody = DetectionCreateRequest
 
-// WebhookCreateSecretJSONRequestBody defines body for WebhookCreateSecret for application/json ContentType.
-type WebhookCreateSecretJSONRequestBody = WebhookSecretCreateRequest
+// WebhooksCreateSecretJSONRequestBody defines body for WebhooksCreateSecret for application/json ContentType.
+type WebhooksCreateSecretJSONRequestBody = WebhookSecretCreateRequest
 
-// WebhookCreateSecretFormdataRequestBody defines body for WebhookCreateSecret for application/x-www-form-urlencoded ContentType.
-type WebhookCreateSecretFormdataRequestBody = WebhookSecretCreateRequest
+// WebhooksCreateSecretFormdataRequestBody defines body for WebhooksCreateSecret for application/x-www-form-urlencoded ContentType.
+type WebhooksCreateSecretFormdataRequestBody = WebhookSecretCreateRequest
 
-// WebhookCreateSecretMultipartRequestBody defines body for WebhookCreateSecret for multipart/form-data ContentType.
-type WebhookCreateSecretMultipartRequestBody = WebhookSecretCreateRequest
+// WebhooksCreateSecretMultipartRequestBody defines body for WebhooksCreateSecret for multipart/form-data ContentType.
+type WebhooksCreateSecretMultipartRequestBody = WebhookSecretCreateRequest
 
-// WebhookCreateSubscriptionJSONRequestBody defines body for WebhookCreateSubscription for application/json ContentType.
-type WebhookCreateSubscriptionJSONRequestBody = WebhookSubscriptionCreateRequest
+// WebhooksCreateSubscriptionJSONRequestBody defines body for WebhooksCreateSubscription for application/json ContentType.
+type WebhooksCreateSubscriptionJSONRequestBody = WebhookSubscriptionCreateRequest
 
-// WebhookCreateSubscriptionFormdataRequestBody defines body for WebhookCreateSubscription for application/x-www-form-urlencoded ContentType.
-type WebhookCreateSubscriptionFormdataRequestBody = WebhookSubscriptionCreateRequest
+// WebhooksCreateSubscriptionFormdataRequestBody defines body for WebhooksCreateSubscription for application/x-www-form-urlencoded ContentType.
+type WebhooksCreateSubscriptionFormdataRequestBody = WebhookSubscriptionCreateRequest
 
-// WebhookCreateSubscriptionMultipartRequestBody defines body for WebhookCreateSubscription for multipart/form-data ContentType.
-type WebhookCreateSubscriptionMultipartRequestBody = WebhookSubscriptionCreateRequest
+// WebhooksCreateSubscriptionMultipartRequestBody defines body for WebhooksCreateSubscription for multipart/form-data ContentType.
+type WebhooksCreateSubscriptionMultipartRequestBody = WebhookSubscriptionCreateRequest
 
-// WebhookUpdateSubscriptionJSONRequestBody defines body for WebhookUpdateSubscription for application/json ContentType.
-type WebhookUpdateSubscriptionJSONRequestBody = PatchedWebhookSubscriptionUpdateRequest
+// WebhooksUpdateSubscriptionJSONRequestBody defines body for WebhooksUpdateSubscription for application/json ContentType.
+type WebhooksUpdateSubscriptionJSONRequestBody = PatchedWebhookSubscriptionUpdateRequest
 
-// WebhookUpdateSubscriptionFormdataRequestBody defines body for WebhookUpdateSubscription for application/x-www-form-urlencoded ContentType.
-type WebhookUpdateSubscriptionFormdataRequestBody = PatchedWebhookSubscriptionUpdateRequest
+// WebhooksUpdateSubscriptionFormdataRequestBody defines body for WebhooksUpdateSubscription for application/x-www-form-urlencoded ContentType.
+type WebhooksUpdateSubscriptionFormdataRequestBody = PatchedWebhookSubscriptionUpdateRequest
 
-// WebhookUpdateSubscriptionMultipartRequestBody defines body for WebhookUpdateSubscription for multipart/form-data ContentType.
-type WebhookUpdateSubscriptionMultipartRequestBody = PatchedWebhookSubscriptionUpdateRequest
+// WebhooksUpdateSubscriptionMultipartRequestBody defines body for WebhooksUpdateSubscription for multipart/form-data ContentType.
+type WebhooksUpdateSubscriptionMultipartRequestBody = PatchedWebhookSubscriptionUpdateRequest
 
 // AsIntervalHoursEnum returns the union data inside the PatchedWebhookSubscriptionUpdateRequest_IntervalHours as a IntervalHoursEnum
 func (t PatchedWebhookSubscriptionUpdateRequest_IntervalHours) AsIntervalHoursEnum() (IntervalHoursEnum, error) {

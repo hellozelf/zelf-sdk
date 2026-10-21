@@ -7,6 +7,7 @@ require_relative 'zelf/transport'
 require_relative 'zelf/page'
 require_relative 'zelf/webhooks'
 require_relative 'zelf/resources/ai_analysis'
+require_relative 'zelf/resources/analytics'
 require_relative 'zelf/resources/brand_accounts'
 require_relative 'zelf/resources/brands'
 require_relative 'zelf/resources/comments'
@@ -19,7 +20,7 @@ require_relative 'zelf/resources/sub_brands'
 require_relative 'zelf/resources/usage'
 require_relative 'zelf/resources/webhooks'
 
-# Ruby client for the ZelfAI APIs (spec version 1.0.0).
+# Ruby client for the ZelfAI APIs (spec version 1.1.0).
 module Zelf
   # Client for the ZelfAI APIs.
   #
@@ -27,7 +28,7 @@ module Zelf
   # ZELF_API_KEY environment variable. It is sent as the x-api-key header
   # and is kept out of inspect output.
   class Client
-    attr_reader :ai_analysis, :brand_accounts, :brands, :comments, :content, :creator_sync, :creator_vetting, :creators, :detection, :sub_brands, :usage, :webhooks
+    attr_reader :ai_analysis, :analytics, :brand_accounts, :brands, :comments, :content, :creator_sync, :creator_vetting, :creators, :detection, :sub_brands, :usage, :webhooks
 
     def initialize(api_key: nil, base_url: nil, timeout: 60,
                    max_retries: 2, retry_writes: false, headers: {})
@@ -35,6 +36,7 @@ module Zelf
                                  max_retries: max_retries, retry_writes: retry_writes,
                                  headers: headers)
       @ai_analysis = Resources::AiAnalysis.new(@transport)
+      @analytics = Resources::Analytics.new(@transport)
       @brand_accounts = Resources::BrandAccounts.new(@transport)
       @brands = Resources::Brands.new(@transport)
       @comments = Resources::Comments.new(@transport)

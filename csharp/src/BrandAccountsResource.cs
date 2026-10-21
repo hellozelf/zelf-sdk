@@ -17,7 +17,7 @@ public sealed record BrandAccountsAddParams
     public required string AccountType { get; init; }
 
     /// <summary>
-    /// Profile URLs on a supported platform (instagram or tiktok)
+    /// Profile URLs on a supported platform (instagram, tiktok or youtube)
     /// </summary>
     [JsonPropertyName("profile_urls")]
     public required IReadOnlyList<string> ProfileUrls { get; init; }
@@ -61,7 +61,7 @@ public sealed record BrandAccountsRemoveParams
     public required string AccountType { get; init; }
 
     /// <summary>
-    /// Profile URLs on a supported platform (instagram or tiktok)
+    /// Profile URLs on a supported platform (instagram, tiktok or youtube)
     /// </summary>
     [JsonPropertyName("profile_urls")]
     public required IReadOnlyList<string> ProfileUrls { get; init; }

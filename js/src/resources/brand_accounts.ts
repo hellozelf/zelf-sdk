@@ -13,7 +13,7 @@ export interface BrandAccountsAddParams {
    */
   accountType: AccountType
   /**
-   * Profile URLs on a supported platform (`instagram` or `tiktok`).
+   * Profile URLs on a supported platform (`instagram`, `tiktok` or `youtube`).
    */
   profileUrls: string[]
   /**
@@ -43,7 +43,7 @@ export interface BrandAccountsRemoveParams {
    */
   accountType: AccountType
   /**
-   * Profile URLs on a supported platform (`instagram` or `tiktok`).
+   * Profile URLs on a supported platform (`instagram`, `tiktok` or `youtube`).
    */
   profileUrls: string[]
   /**

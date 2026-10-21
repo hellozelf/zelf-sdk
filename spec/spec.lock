@@ -376,6 +376,47 @@
             }
           },
           {
+            "name": "sub_brand_type",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "title",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AnalyticsBrand"
+      },
+      {
+        "fields": [
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "is_primary",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
             "name": "keywords",
             "nullable": false,
             "read_only": false,
@@ -643,6 +684,41 @@
       {
         "fields": [
           {
+            "name": "brand",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AnalyticsBrand"
+            }
+          },
+          {
+            "name": "followers",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "BrandFollowers"
+            }
+          },
+          {
+            "name": "statistics",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "BrandStatistics"
+            }
+          }
+        ],
+        "name": "BrandComparison"
+      },
+      {
+        "fields": [
+          {
             "name": "allowed_languages",
             "nullable": false,
             "read_only": false,
@@ -751,6 +827,33 @@
       {
         "fields": [
           {
+            "name": "accounts",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "FollowerAccount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "total",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "BrandFollowers"
+      },
+      {
+        "fields": [
+          {
             "name": "allowed_languages",
             "nullable": false,
             "read_only": true,
@@ -833,6 +936,119 @@
           }
         ],
         "name": "BrandKeywords"
+      },
+      {
+        "fields": [
+          {
+            "name": "engagement_rate",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "post_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_comments",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_earned_media_value_cents",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_engagement",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_likes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_negative_nps",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_neutral_nps",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_positive_nps",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_shares",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_views",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "unique_creator_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "BrandStatistics"
       },
       {
         "fields": [
@@ -2917,6 +3133,111 @@
       {
         "fields": [
           {
+            "name": "followers",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "platform",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "username",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "FollowerAccount"
+      },
+      {
+        "fields": [
+          {
+            "name": "accounts",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "FollowerAccount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "end_date",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "followers",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "start_date",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "FollowerPeriod"
+      },
+      {
+        "fields": [
+          {
+            "name": "brand",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AnalyticsBrand"
+            }
+          },
+          {
+            "name": "periods",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "FollowerPeriod"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "FollowerTimeseries"
+      },
+      {
+        "fields": [
+          {
             "name": "allowed_languages",
             "nullable": false,
             "read_only": false,
@@ -3077,6 +3398,74 @@
       {
         "fields": [
           {
+            "name": "category",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "comments",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "likes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "replies",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "PostedCommentCategory"
+      },
+      {
+        "fields": [
+          {
+            "name": "categories",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "PostedCommentCategory"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "total_comments_posted",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "PostedComments"
+      },
+      {
+        "fields": [
+          {
             "name": "download_url",
             "nullable": false,
             "read_only": false,
@@ -3159,16 +3548,134 @@
             }
           },
           {
-            "name": "scopes",
+            "name": "history",
             "nullable": false,
-            "read_only": true,
+            "read_only": false,
             "required": true,
             "type": {
-              "kind": "any"
+              "kind": "ref",
+              "ref": "UsageHistory"
+            }
+          },
+          {
+            "name": "scopes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "UsageScope"
+              },
+              "kind": "array"
             }
           }
         ],
         "name": "Usage"
+      },
+      {
+        "fields": [
+          {
+            "name": "ai_analysis",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "creator_vetting",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "data_records",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "data_records_items",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "date",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "general",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "source",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "UsageDay"
+      },
+      {
+        "fields": [
+          {
+            "name": "days",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "UsageDay"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "end_date",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "start_date",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "UsageHistory"
       },
       {
         "fields": [
@@ -3191,6 +3698,15 @@
             }
           },
           {
+            "name": "scope",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
             "name": "section",
             "nullable": false,
             "read_only": false,
@@ -3202,10 +3718,14 @@
           {
             "name": "windows",
             "nullable": false,
-            "read_only": true,
+            "read_only": false,
             "required": true,
             "type": {
-              "kind": "any"
+              "item": {
+                "kind": "ref",
+                "ref": "UsageWindow"
+              },
+              "kind": "array"
             }
           }
         ],
@@ -3247,6 +3767,15 @@
             "required": true,
             "type": {
               "kind": "int"
+            }
+          },
+          {
+            "name": "window",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
             }
           }
         ],
@@ -4419,6 +4948,230 @@
           {
             "in": "query",
             "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "analytics.brand_comparison",
+        "item": "BrandComparison",
+        "path": "/api/v1/analytics/brand_comparison/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "brand_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "platform",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "instagram",
+                  "tiktok",
+                  "youtube"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_after",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_before",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_within_days",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_within_hours",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "analytics.follower_timeseries",
+        "item": "FollowerTimeseries",
+        "path": "/api/v1/analytics/follower_timeseries/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "brand_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "period",
+            "required": false,
+            "type": {
+              "enum": [
+                "day",
+                "month",
+                "week",
+                "year"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "in": "query",
+            "name": "platform",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "instagram",
+                  "tiktok",
+                  "youtube"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_after",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_before",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_within_days",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_within_hours",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "analytics.posted_comments",
+        "item": "PostedComments",
+        "path": "/api/v1/analytics/posted_comments/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "brand_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "platform",
+            "required": false,
+            "type": {
+              "item": {
+                "enum": [
+                  "instagram",
+                  "tiktok",
+                  "youtube"
+                ],
+                "kind": "enum"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_after",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_before",
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_within_days",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "posted_within_hours",
             "required": false,
             "type": {
               "kind": "int"
@@ -7046,5 +7799,5 @@
       }
     ]
   },
-  "version": "1.0.0"
+  "version": "1.1.0"
 }

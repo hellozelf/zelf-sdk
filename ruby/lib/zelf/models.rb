@@ -94,14 +94,18 @@ module Zelf
     class AiAnalysisCreateRequest < Zelf::Model; end
     class AiAnalysisResult < Zelf::Model; end
     class AiAnalysisRun < Zelf::Model; end
+    class AnalyticsBrand < Zelf::Model; end
     class Brand < Zelf::Model; end
     class BrandAccount < Zelf::Model; end
     class BrandAccountGroups < Zelf::Model; end
     class BrandAccountsWriteRequest < Zelf::Model; end
     class BrandCatalog < Zelf::Model; end
     class BrandCatalogItem < Zelf::Model; end
+    class BrandComparison < Zelf::Model; end
     class BrandCreateSubBrandRequest < Zelf::Model; end
+    class BrandFollowers < Zelf::Model; end
     class BrandKeywords < Zelf::Model; end
+    class BrandStatistics < Zelf::Model; end
     class Comment < Zelf::Model; end
     class CommentAuthor < Zelf::Model; end
     class Content < Zelf::Model; end
@@ -134,11 +138,18 @@ module Zelf
     class DetectionResult < Zelf::Model; end
     class DetectionSummary < Zelf::Model; end
     class DetectionVideo < Zelf::Model; end
+    class FollowerAccount < Zelf::Model; end
+    class FollowerPeriod < Zelf::Model; end
+    class FollowerTimeseries < Zelf::Model; end
     class PatchedBrandUpdateRequest < Zelf::Model; end
     class PatchedWebhookSubscriptionUpdateRequest < Zelf::Model; end
+    class PostedCommentCategory < Zelf::Model; end
+    class PostedComments < Zelf::Model; end
     class ResultFile < Zelf::Model; end
     class SafetyCheckRequest < Zelf::Model; end
     class Usage < Zelf::Model; end
+    class UsageDay < Zelf::Model; end
+    class UsageHistory < Zelf::Model; end
     class UsageScope < Zelf::Model; end
     class UsageWindow < Zelf::Model; end
     class WebhookAvailableEvent < Zelf::Model; end
@@ -213,6 +224,18 @@ module Zelf
       field :status, "status"
     end
 
+    # The brand a row of analytics belongs to.
+    class AnalyticsBrand
+      # Unique identifier for the brand
+      field :id, "id"
+      # Display name of the brand
+      field :title, "title"
+      # true for the brand the request named, false for a sub-brand
+      field :is_primary, "is_primary"
+      # COMPETITIVE or THEME for a sub-brand; null for the top-level brand the request named
+      field :sub_brand_type, "sub_brand_type"
+    end
+
     # A brand you can reach.
     class Brand
       # Unique identifier for the brand
@@ -233,7 +256,7 @@ module Zelf
     class BrandAccount
       # The account's handle
       field :username, "username"
-      # instagram or tiktok
+      # instagram, tiktok or youtube
       field :platform, "platform"
       # The account's profile URL, when available
       field :external_url, "external_url"
@@ -256,7 +279,7 @@ module Zelf
       field :brand_id, "brand_id"
       # The list to modify: tracked, influencer, or owned for the brand's own profiles
       field :account_type, "account_type"
-      # Profile URLs on a supported platform (instagram or tiktok)
+      # Profile URLs on a supported platform (instagram, tiktok or youtube)
       field :profile_urls, "profile_urls"
     end
 
@@ -290,6 +313,16 @@ module Zelf
       field :parent_id, "parent_id"
     end
 
+    # One brand's performance in the comparison.
+    class BrandComparison
+      # The brand this row covers
+      field :brand, "brand", cast: AnalyticsBrand
+      # Totals over the window
+      field :statistics, "statistics", cast: BrandStatistics
+      # Follower counts as they stand now, not over the window
+      field :followers, "followers", cast: BrandFollowers
+    end
+
     # Create a sub-brand under the workspace brand.
     class BrandCreateSubBrandRequest
       # Plain keywords the brand monitors across platforms, matched as-is (case-...
@@ -312,6 +345,14 @@ module Zelf
       field :sub_brand_type, "sub_brand_type"
     end
 
+    # Followers across the handles a brand owns.
+    class BrandFollowers
+      # Followers across every owned handle
+      field :total, "total"
+      # Per handle counts that add up to total
+      field :accounts, "accounts", cast: [FollowerAccount]
+    end
+
     # The terms this brand uses to monitor social platforms.
     class BrandKeywords
       # Plain keywords the brand monitors across platforms, matched as-is (case-...
@@ -330,13 +371,41 @@ module Zelf
       field :boolean_query, "boolean_query"
     end
 
+    # Totals over the content matched to a brand in the window.
+    class BrandStatistics
+      # Number of posts matched to the brand
+      field :post_count, "post_count"
+      # Total views across those posts
+      field :total_views, "total_views"
+      # Total likes across those posts
+      field :total_likes, "total_likes"
+      # Total comments across those posts
+      field :total_comments, "total_comments"
+      # Total shares across those posts
+      field :total_shares, "total_shares"
+      # Likes, comments and shares across those posts
+      field :total_engagement, "total_engagement"
+      # Estimated marketing value across those posts, in US cents
+      field :total_earned_media_value_cents, "total_earned_media_value_cents"
+      # Total engagement divided by total views
+      field :engagement_rate, "engagement_rate"
+      # Number of distinct creators who posted
+      field :unique_creator_count, "unique_creator_count"
+      # Engagement on positive posts
+      field :total_positive_nps, "total_positive_nps"
+      # Engagement on neutral posts
+      field :total_neutral_nps, "total_neutral_nps"
+      # Engagement on negative posts
+      field :total_negative_nps, "total_negative_nps"
+    end
+
     # A comment left on a piece of content.
     class Comment
       # Unique identifier for the comment
       field :id, "id"
       # The comment's text content
       field :text, "text"
-      # The platform the comment was posted on
+      # The platform the comment was posted on: instagram, tiktok or youtube
       field :platform, "platform"
       # Number of likes the comment has received
       field :like_count, "like_count"
@@ -370,7 +439,7 @@ module Zelf
       field :id, "id"
       # The post's identifier on its platform
       field :platform_post_id, "platform_post_id"
-      # The platform the content was published on
+      # The platform the content was published on: instagram, tiktok or youtube
       field :platform, "platform"
       # Whether the content is a video or an image
       field :content_form, "content_form"
@@ -875,6 +944,36 @@ module Zelf
       field :duration_s, "duration_s"
     end
 
+    # One owned handle and the followers it carries.
+    class FollowerAccount
+      # The platform the handle is on
+      field :platform, "platform"
+      # The handle
+      field :username, "username"
+      # Follower count for this handle
+      field :followers, "followers"
+    end
+
+    # Followers at the end of one period.
+    class FollowerPeriod
+      # Followers across every owned handle
+      field :followers, "followers"
+      # First day of the period
+      field :start_date, "start_date"
+      # Last day of the period
+      field :end_date, "end_date"
+      # Per handle counts that add up to followers
+      field :accounts, "accounts", cast: [FollowerAccount]
+    end
+
+    # One brand's follower history.
+    class FollowerTimeseries
+      # The brand this row covers
+      field :brand, "brand", cast: AnalyticsBrand
+      # One entry per period, oldest first
+      field :periods, "periods", cast: [FollowerPeriod]
+    end
+
     # Partial update for a brand's monitoring keywords. Every field is optional, and only
     # the supplied fields are changed, but at least one field is required.
     class PatchedBrandUpdateRequest
@@ -912,6 +1011,26 @@ module Zelf
       field :enabled, "enabled"
     end
 
+    # Comments the brand posted on one category of content.
+    class PostedCommentCategory
+      # brand, owned, competitors, themes or other
+      field :category, "category"
+      # Comments posted on this category
+      field :comments, "comments"
+      # Likes those comments received
+      field :likes, "likes"
+      # Replies those comments received
+      field :replies, "replies"
+    end
+
+    # Comments the brand posted, split by the content they were posted on.
+    class PostedComments
+      # Comments the brand posted in the window, across every category
+      field :total_comments_posted, "total_comments_posted"
+      # One entry per category
+      field :categories, "categories", cast: [PostedCommentCategory]
+    end
+
     # Signed, time-limited download of an analysis run's result payload.
     class ResultFile
       # Unix epoch seconds after which download_url expires
@@ -938,24 +1057,58 @@ module Zelf
       field :brand_id, "brand_id"
       # api_key or mcp, whichever made this call
       field :authenticated_as, "authenticated_as"
-      # Keyed by group
-      field :scopes, "scopes"
+      # One entry per metered group
+      field :scopes, "scopes", cast: [UsageScope]
+      # What was actually spent, day by day, from the usage ledger
+      field :history, "history", cast: UsageHistory
+    end
+
+    # One day of consumption for one source.
+    class UsageDay
+      # api for direct requests, mcp for AI clients
+      field :source, "source"
+      # Every counted call that day
+      field :general, "general"
+      # Calls counted against the AI analysis group
+      field :ai_analysis, "ai_analysis"
+      # Calls counted against creator vetting
+      field :creator_vetting, "creator_vetting"
+      # Calls counted against data records
+      field :data_records, "data_records"
+      # Records those calls returned
+      field :data_records_items, "data_records_items"
+      # The day, in the brand's billing timezone
+      field :date, "date"
+    end
+
+    # Daily consumption over the window the ledger keeps.
+    class UsageHistory
+      # First day covered
+      field :start_date, "start_date"
+      # Last day covered
+      field :end_date, "end_date"
+      # One entry per day and source that saw usage, oldest first
+      field :days, "days", cast: [UsageDay]
     end
 
     # One metered group, with every window that has a limit.
     class UsageScope
+      # Identifier of the metered group
+      field :scope, "scope"
       # Name of the group, as an admin sees it
       field :human_name, "human_name"
       # request counts calls; item counts rows returned
       field :kind, "kind"
       # Which product the group meters: api for direct requests, mcp for AI clients
       field :section, "section"
-      # Keyed by window: rps, rpm, rph, rpd, rpmonth, or the item windows
-      field :windows, "windows"
+      # Every window that has a limit configured
+      field :windows, "windows", cast: [UsageWindow]
     end
 
     # Consumption of one window, e.g. requests in the current hour.
     class UsageWindow
+      # Which window this is: rps, rpm, rph, rpd, rpmonth, or an item window
+      field :window, "window"
       # Most that may be spent in this window
       field :limit, "limit"
       # Spent so far in this window
@@ -966,7 +1119,7 @@ module Zelf
       field :reset_in, "reset_in"
     end
 
-    # The WebhookAvailableEvent object.
+    # An event type a subscription may ask for.
     class WebhookAvailableEvent
       # Event type identifier, e.g
       field :event, "event"
@@ -991,7 +1144,7 @@ module Zelf
       field :items, "items"
     end
 
-    # The WebhookDeleteAcknowledgement object.
+    # Confirmation that a webhook resource was deleted.
     class WebhookDeleteAcknowledgement
       # Always true; confirms the webhook resource delete was acknowledged
       field :acknowledged, "acknowledged"
@@ -1001,7 +1154,7 @@ module Zelf
       field :status, "status"
     end
 
-    # The WebhookDelivery object.
+    # One attempt to deliver one push, with its outcome.
     class WebhookDelivery
       # Encoded identifier of the webhook delivery
       field :id, "id"
@@ -1033,9 +1186,8 @@ module Zelf
       field :modified, "modified", cast: :time
     end
 
-    # One downloadable snapshot file in a manifest push. A delivery currently consists of
-    # a single file, so `files` carries one entry. The array shape allows a snapshot to be
-    # sharded across several files in the future without changing the envelope.
+    # One downloadable snapshot file in a manifest push. `files` is an array, so read
+    # every entry rather than assuming one.
     class WebhookFile
       # File encoding
       field :format, "format"
@@ -1077,7 +1229,7 @@ module Zelf
       field :data, "data", cast: WebhookData
     end
 
-    # The WebhookSecret object.
+    # A signing secret, identified by its prefix rather than its value.
     class WebhookSecret
       # Encoded identifier of the webhook secret
       field :id, "id"
@@ -1103,7 +1255,8 @@ module Zelf
       field :make_default, "make_default"
     end
 
-    # The WebhookSecretCreated object.
+    # A secret just created or rotated, carrying the value once. Store it now: later reads
+    # return the prefix alone.
     class WebhookSecretCreated
       # Encoded identifier of the webhook secret
       field :id, "id"
@@ -1123,7 +1276,7 @@ module Zelf
       field :secret, "secret"
     end
 
-    # The WebhookSubscription object.
+    # A registered endpoint and the events it receives.
     class WebhookSubscription
       # Encoded identifier of the webhook subscription
       field :id, "id"
@@ -1179,7 +1332,8 @@ module Zelf
       field :secret_type, "secret_type"
     end
 
-    # The WebhookSubscriptionCreated object.
+    # A subscription just created, with the signing secret attached. The secret is shown
+    # on this response only and never again.
     class WebhookSubscriptionCreated
       # Encoded identifier of the webhook subscription
       field :id, "id"

@@ -7,7 +7,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 
 /**
- * The WebhookSubscriptionCreated object.
+ * A subscription just created, with the signing secret attached. The secret is
+ * shown on this response only and never again.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record WebhookSubscriptionCreated(

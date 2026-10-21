@@ -2,6 +2,7 @@
 package com.hellozelf;
 
 import com.hellozelf.resources.AiAnalysisResource;
+import com.hellozelf.resources.AnalyticsResource;
 import com.hellozelf.resources.BrandAccountsResource;
 import com.hellozelf.resources.BrandsResource;
 import com.hellozelf.resources.CommentsResource;
@@ -18,11 +19,12 @@ import com.hellozelf.resources.WebhooksResource;
 public final class ZelfClient {
 
     /** The SDK version sent in the User-Agent header. */
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.1.0";
 
     private final Transport transport;
 
     private final AiAnalysisResource aiAnalysis;
+    private final AnalyticsResource analytics;
     private final BrandAccountsResource brandAccounts;
     private final BrandsResource brands;
     private final CommentsResource comments;
@@ -38,6 +40,7 @@ public final class ZelfClient {
     public ZelfClient(ZelfClientOptions options) {
         this.transport = new Transport(options);
         this.aiAnalysis = new AiAnalysisResource(transport);
+        this.analytics = new AnalyticsResource(transport);
         this.brandAccounts = new BrandAccountsResource(transport);
         this.brands = new BrandsResource(transport);
         this.comments = new CommentsResource(transport);
@@ -58,6 +61,11 @@ public final class ZelfClient {
     /** The ai_analysis endpoints. */
     public AiAnalysisResource aiAnalysis() {
         return aiAnalysis;
+    }
+
+    /** The analytics endpoints. */
+    public AnalyticsResource analytics() {
+        return analytics;
     }
 
     /** The brand_accounts endpoints. */

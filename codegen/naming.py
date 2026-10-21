@@ -1,27 +1,10 @@
 import re
 
-# The spec's operationIds are mostly `resource.method`, which maps straight onto
-# `client.<resource>.<method>()`. These few are inconsistent in the spec itself
-# (singular `webhook`, undotted `usage_retrieve`, list/get collisions), so the
-# SDK renames them here. Fixing the operationIds upstream would delete this map.
-OPERATION_RENAMES = {
-    "usage_retrieve": "usage.retrieve",
-    "webhook.subscriptions": "webhooks.list_subscriptions",
-    "webhook.subscription": "webhooks.get_subscription",
-    "webhook.create_subscription": "webhooks.create_subscription",
-    "webhook.update_subscription": "webhooks.update_subscription",
-    "webhook.delete_subscription": "webhooks.delete_subscription",
-    "webhook.rotate_subscription_secret": "webhooks.rotate_subscription_secret",
-    "webhook.send_test": "webhooks.send_test",
-    "webhook.secrets": "webhooks.list_secrets",
-    "webhook.secret": "webhooks.get_secret",
-    "webhook.create_secret": "webhooks.create_secret",
-    "webhook.delete_secret": "webhooks.delete_secret",
-    "webhook.set_default_secret": "webhooks.set_default_secret",
-    "webhook.available_events": "webhooks.list_events",
-    "webhook.deliveries": "webhooks.list_deliveries",
-    "webhook.delivery": "webhooks.get_delivery",
-}
+# Every operationId is `resource.method`, which maps straight onto
+# `client.<resource>.<method>()`, so nothing needs renaming. Kept as a seam for
+# the day the spec disagrees with a client again.
+OPERATION_RENAMES: dict[str, str] = {}
+
 
 # The envelope always wraps `results` in an array, even for single-object reads,
 # so cardinality cannot be read off the response schema. `page` in the query
@@ -42,17 +25,71 @@ FORCE_SINGLE = {
 }
 
 PYTHON_KEYWORDS = {
-    "and", "as", "assert", "async", "await", "break", "class", "continue", "def",
-    "del", "elif", "else", "except", "finally", "for", "from", "global", "if",
-    "import", "in", "is", "lambda", "nonlocal", "not", "or", "pass", "raise",
-    "return", "try", "while", "with", "yield", "None", "True", "False", "match",
+    "and",
+    "as",
+    "assert",
+    "async",
+    "await",
+    "break",
+    "class",
+    "continue",
+    "def",
+    "del",
+    "elif",
+    "else",
+    "except",
+    "finally",
+    "for",
+    "from",
+    "global",
+    "if",
+    "import",
+    "in",
+    "is",
+    "lambda",
+    "nonlocal",
+    "not",
+    "or",
+    "pass",
+    "raise",
+    "return",
+    "try",
+    "while",
+    "with",
+    "yield",
+    "None",
+    "True",
+    "False",
+    "match",
     "case",
 }
 
 GO_KEYWORDS = {
-    "break", "case", "chan", "const", "continue", "default", "defer", "else",
-    "fallthrough", "for", "func", "go", "goto", "if", "import", "interface",
-    "map", "package", "range", "return", "select", "struct", "switch", "type", "var",
+    "break",
+    "case",
+    "chan",
+    "const",
+    "continue",
+    "default",
+    "defer",
+    "else",
+    "fallthrough",
+    "for",
+    "func",
+    "go",
+    "goto",
+    "if",
+    "import",
+    "interface",
+    "map",
+    "package",
+    "range",
+    "return",
+    "select",
+    "struct",
+    "switch",
+    "type",
+    "var",
 }
 
 INITIALISMS = {"id", "url", "api", "ai", "http", "json", "uuid", "sha256", "ndjson"}
@@ -68,7 +105,9 @@ def snake(name: str) -> str:
 
 
 def pascal(name: str) -> str:
-    return "".join(part[:1].upper() + part[1:] for part in snake(name).split("_") if part)
+    return "".join(
+        part[:1].upper() + part[1:] for part in snake(name).split("_") if part
+    )
 
 
 def camel(name: str) -> str:
@@ -78,7 +117,9 @@ def camel(name: str) -> str:
 
 def go_pascal(name: str) -> str:
     parts = [p for p in snake(name).split("_") if p]
-    return "".join(p.upper() if p in INITIALISMS else p[:1].upper() + p[1:] for p in parts)
+    return "".join(
+        p.upper() if p in INITIALISMS else p[:1].upper() + p[1:] for p in parts
+    )
 
 
 def py_param(name: str) -> str:
