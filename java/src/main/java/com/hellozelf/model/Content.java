@@ -37,8 +37,8 @@ public record Content(
         @JsonProperty("description") String description,
         @JsonProperty("transcript") String transcript,
         @JsonProperty("platform_url") String platformUrl,
-        @JsonProperty("ai_summary") String aiSummary,
         @JsonProperty("last_keyword") String lastKeyword,
+        @JsonProperty("ai_summary") String aiSummary,
         @JsonProperty("hashtags") List<String> hashtags
 ) {
 }

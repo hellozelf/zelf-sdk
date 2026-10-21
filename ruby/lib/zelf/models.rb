@@ -487,10 +487,10 @@ module Zelf
       field :transcript, "transcript"
       # Direct URL to the post on its platform
       field :platform_url, "platform_url"
-      # Short AI-generated summary of the content
-      field :ai_summary, "ai_summary"
       # The search term the content was most recently found by
       field :last_keyword, "last_keyword"
+      # Short AI-generated summary of the content
+      field :ai_summary, "ai_summary"
       # Hashtags used in the post, normalized to lowercase and without the leading #
       field :hashtags, "hashtags"
     end

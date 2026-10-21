@@ -1171,8 +1171,8 @@ export interface webhooks {
      *       "description": "How ZelfAI turns social signals into creator insights.",
      *       "transcript": "We walk through how ZelfAI ranks creators by brand fit.",
      *       "platform_url": "https://www.instagram.com/zelfai",
-     *       "ai_summary": "A product walkthrough of ZelfAI creator analytics.",
      *       "last_keyword": "zelf creators",
+     *       "ai_summary": "A product walkthrough of ZelfAI creator analytics.",
      *       "hashtags": [
      *         "zelfai",
      *         "creatoreconomy"
@@ -1854,10 +1854,10 @@ export interface components {
        *     - `https://www.tiktok.com/@username/video/12345678`
        */
       platform_url: string
-      /** @description Short AI-generated summary of the content. */
-      ai_summary: string | null
       /** @description The search term the content was most recently found by. Null when the content was not picked up through a keyword search. */
       last_keyword: string | null
+      /** @description Short AI-generated summary of the content. */
+      ai_summary: string | null
       /** @description Hashtags used in the post, normalized to lowercase and without the leading `#`. */
       hashtags: string[]
     }
