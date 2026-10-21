@@ -746,8 +746,8 @@ paths:
                       transcript: We walk through how ZelfAI ranks creators by brand
                         fit.
                       platform_url: https://www.instagram.com/zelfai
-                      ai_summary: A product walkthrough of ZelfAI creator analytics.
                       last_keyword: zelf creators
+                      ai_summary: A product walkthrough of ZelfAI creator analytics.
                       hashtags:
                       - zelfai
                       - creatoreconomy
@@ -3540,8 +3540,8 @@ paths:
                       transcript: We walk through how ZelfAI ranks creators by brand
                         fit.
                       platform_url: https://www.instagram.com/zelfai
-                      ai_summary: A product walkthrough of ZelfAI creator analytics.
                       last_keyword: zelf creators
+                      ai_summary: A product walkthrough of ZelfAI creator analytics.
                       hashtags:
                       - zelfai
                       - creatoreconomy
@@ -4794,8 +4794,8 @@ paths:
                       transcript: We walk through how ZelfAI ranks creators by brand
                         fit.
                       platform_url: https://www.instagram.com/zelfai
-                      ai_summary: A product walkthrough of ZelfAI creator analytics.
                       last_keyword: zelf creators
+                      ai_summary: A product walkthrough of ZelfAI creator analytics.
                       hashtags:
                       - zelfai
                       - creatoreconomy
@@ -5645,8 +5645,8 @@ paths:
                       transcript: We walk through how ZelfAI ranks creators by brand
                         fit.
                       platform_url: https://www.instagram.com/zelfai
-                      ai_summary: A product walkthrough of ZelfAI creator analytics.
                       last_keyword: zelf creators
+                      ai_summary: A product walkthrough of ZelfAI creator analytics.
                       hashtags:
                       - zelfai
                       - creatoreconomy
@@ -9540,17 +9540,17 @@ components:
             Examples:
             - `https://instagram.com/reel/abcd`
             - `https://www.tiktok.com/@username/video/12345678`
-        ai_summary:
-          type:
-          - string
-          - 'null'
-          description: Short AI-generated summary of the content.
         last_keyword:
           type:
           - string
           - 'null'
           description: The search term the content was most recently found by. Null
             when the content was not picked up through a keyword search.
+        ai_summary:
+          type:
+          - string
+          - 'null'
+          description: Short AI-generated summary of the content.
         hashtags:
           type: array
           items:
@@ -12246,8 +12246,8 @@ webhooks:
           "description": "How ZelfAI turns social signals into creator insights.",
           "transcript": "We walk through how ZelfAI ranks creators by brand fit.",
           "platform_url": "https://www.instagram.com/zelfai",
-          "ai_summary": "A product walkthrough of ZelfAI creator analytics.",
           "last_keyword": "zelf creators",
+          "ai_summary": "A product walkthrough of ZelfAI creator analytics.",
           "hashtags": [
             "zelfai",
             "creatoreconomy"
