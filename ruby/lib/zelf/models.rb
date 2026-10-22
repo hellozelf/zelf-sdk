@@ -24,7 +24,7 @@ module Zelf
     # Accepted values for ContentFormEnum.
     ContentFormEnum = [
       "VIDEO",
-      "IMAGE",
+      "PHOTO",
     ].freeze
 
     # Accepted values for KindEnum.

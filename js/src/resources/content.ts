@@ -10,7 +10,7 @@ import type {
 } from '../models.js'
 
 export type Platforms = 'instagram' | 'tiktok' | 'youtube'
-export type ContentForm = 'VIDEO' | 'IMAGE'
+export type ContentForm = 'VIDEO' | 'PHOTO'
 export type MentionType = 'content' | 'comment'
 export type OrderBy =
   | 'posted_at'
