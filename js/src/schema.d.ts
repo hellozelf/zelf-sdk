@@ -608,7 +608,7 @@ export interface paths {
      *
      *     **Disclosures.** When the vetting requested `DISCLOSURE`, the payload's `insight_json.disclosures` holds one entry per analyzed video: its `content_id` and a `result`. The `result` lists `evidence` items, each with the `source` it was found in (`frame` for on-screen text, `audio` for the speech transcription, `title`, `caption` or `metadata`), a `kind` (`sponsorship`, `affiliate`, `gifted` or `relationship` for a commercial relationship; `terms` or `risk` for offer conditions and warnings), the quoted `text` and, where known, `time_seconds`. It also gives each source a `channels` status: `present`, `absent` or `unknown` (not checked). Disclosures are not counted as violations.
      *
-     *     Limits: only videos up to 10 minutes are checked; on-screen text is read from sampled frames, so text shown only briefly can be missed; videos ZelfAI analyzed before the request are not re-analyzed for disclosures. An empty `evidence` list does not confirm that a video has no disclosure. Detection reports what was stated; it does not assess legal compliance.
+     *     Limits: only videos up to 10 minutes are checked; on-screen text is read from sampled frames, so text shown only briefly can be missed; videos Zelf analyzed before the request are not re-analyzed for disclosures. An empty `evidence` list does not confirm that a video has no disclosure. Detection reports what was stated; it does not assess legal compliance.
      */
     get: operations['creator_vetting.results']
     put?: never
@@ -1092,7 +1092,7 @@ export interface webhooks {
      *
      *     Delivered in `manifest` mode: `data.files` holds one signed, time-limited NDJSON download, and `data.statistics` carries the aggregate totals over the snapshot. `resource` is `content`.
      *
-     *     **Payload ZelfAI POSTs to the registered endpoint:**
+     *     **Payload Zelf POSTs to the registered endpoint:**
      *     ```json
      *     {
      *       "id": "whd_8f2c1d4e9a",
@@ -1152,7 +1152,7 @@ export interface webhooks {
      *       "creator": {
      *         "id": "cr_pfqPv0FLsBRimHfi",
      *         "username": "zelfai",
-     *         "name": "ZelfAI",
+     *         "name": "Zelf",
      *         "platform": "instagram",
      *         "platform_handle": "zelfai",
      *         "platform_url": "https://www.instagram.com/zelfai",
@@ -1167,12 +1167,12 @@ export interface webhooks {
      *       "is_tagged": true,
      *       "is_influencer": true,
      *       "mention_type": "content",
-     *       "caption": "Behind the scenes at ZelfAI.",
-     *       "description": "How ZelfAI turns social signals into creator insights.",
-     *       "transcript": "We walk through how ZelfAI ranks creators by brand fit.",
+     *       "caption": "Behind the scenes at Zelf.",
+     *       "description": "How Zelf turns social signals into creator insights.",
+     *       "transcript": "We walk through how Zelf ranks creators by brand fit.",
      *       "platform_url": "https://www.instagram.com/zelfai",
      *       "last_keyword": "zelf creators",
-     *       "ai_summary": "A product walkthrough of ZelfAI creator analytics.",
+     *       "ai_summary": "A product walkthrough of Zelf creator analytics.",
      *       "hashtags": [
      *         "zelfai",
      *         "creatoreconomy"
@@ -1223,7 +1223,7 @@ export interface webhooks {
      *
      *     Delivered in `manifest` mode: `data.files` holds one signed, time-limited NDJSON download. Unlike `content.snapshot`, no `data.statistics` block is included. `resource` is `creator`.
      *
-     *     **Payload ZelfAI POSTs to the registered endpoint:**
+     *     **Payload Zelf POSTs to the registered endpoint:**
      *     ```json
      *     {
      *       "id": "whd_8f2c1d4e9a",
@@ -1255,7 +1255,7 @@ export interface webhooks {
      *     {
      *       "id": "cr_pfqPv0FLsBRimHfi",
      *       "username": "zelfai",
-     *       "name": "ZelfAI",
+     *       "name": "Zelf",
      *       "email": "example@zelflive.com",
      *       "platform": "instagram",
      *       "platform_handle": "zelfai",
@@ -1310,7 +1310,7 @@ export interface webhooks {
      *
      *     Delivered in `inline` mode as a lightweight notification: `data.items[0]` carries the vetting id, its `analysis_type`, `modified_at`, and each run's `id` and `status`, rather than the full payload. Retrieve the `result` from `creator_vetting.results` (pass `vetting_id=<id>`). `resource` is `null`.
      *
-     *     **Payload ZelfAI POSTs to the registered endpoint:**
+     *     **Payload Zelf POSTs to the registered endpoint:**
      *     ```json
      *     {
      *       "id": "whd_8f2c1d4e9a",
@@ -1387,7 +1387,7 @@ export interface webhooks {
      *
      *     Delivered in `inline` mode as a lightweight notification: `data.items[0]` carries the analysis id, its `analysis_type`, `modified_at`, and each run's `id` and `status`, rather than the full payload. Retrieve the `result` from `ai_analysis.results` (pass `analysis_id=<id>`). `resource` is `null`. An analysis with multiple scopes fires once per run, as each reaches a terminal state.
      *
-     *     **Payload ZelfAI POSTs to the registered endpoint:**
+     *     **Payload Zelf POSTs to the registered endpoint:**
      *     ```json
      *     {
      *       "id": "whd_8f2c1d4e9a",
@@ -2780,7 +2780,7 @@ export interface components {
       download_url: string
     }
     /**
-     * @description The outer payload ZelfAI POSTs to receivers, uniform across all pushes.
+     * @description The outer payload Zelf POSTs to receivers, uniform across all pushes.
      *
      *     Top-level fields are delivery metadata and remain identical across
      *     modes. `data` carries the content; which key inside it is populated
@@ -2794,7 +2794,7 @@ export interface components {
       type: string
       /** @description Id of the subscription that produced this push. */
       subscription_id: string
-      /** @description Unix epoch seconds at which ZelfAI sent this push. */
+      /** @description Unix epoch seconds at which Zelf sent this push. */
       delivered_at: number
       /** @description `true` for production data; `false` for test deliveries. */
       livemode: boolean

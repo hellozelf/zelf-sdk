@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 
-/** The response wrapper every ZelfAI endpoint returns. */
+/** The response wrapper every Zelf endpoint returns. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record Envelope<T>(
         @JsonProperty("log_id") String logId,

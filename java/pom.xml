@@ -32,7 +32,7 @@
   </scm>
   <packaging>jar</packaging>
   <name>zelf</name>
-  <description>Java client for the ZelfAI APIs</description>
+  <description>Java client for the Zelf APIs</description>
 
   <properties>
     <skipITs>true</skipITs>

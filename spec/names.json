@@ -231,39 +231,6 @@
         }
       }
     },
-    "analytics.posted_comments": {
-      "cardinality": "single",
-      "symbols": {
-        "csharp": {
-          "method": "PostedCommentsAsync",
-          "resource": "Analytics"
-        },
-        "go": {
-          "method": "PostedComments",
-          "resource": "Analytics"
-        },
-        "java": {
-          "method": "postedComments",
-          "resource": "analytics"
-        },
-        "python": {
-          "method": "posted_comments",
-          "resource": "analytics"
-        },
-        "ruby": {
-          "method": "posted_comments",
-          "resource": "analytics"
-        },
-        "rust": {
-          "method": "posted_comments",
-          "resource": "analytics"
-        },
-        "typescript": {
-          "method": "postedComments",
-          "resource": "analytics"
-        }
-      }
-    },
     "brand_accounts.add": {
       "cardinality": "single",
       "symbols": {
@@ -1122,6 +1089,39 @@
         }
       }
     },
+    "engage.comment_statistics": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "CommentStatisticsAsync",
+          "resource": "Engage"
+        },
+        "go": {
+          "method": "CommentStatistics",
+          "resource": "Engage"
+        },
+        "java": {
+          "method": "commentStatistics",
+          "resource": "engage"
+        },
+        "python": {
+          "method": "comment_statistics",
+          "resource": "engage"
+        },
+        "ruby": {
+          "method": "comment_statistics",
+          "resource": "engage"
+        },
+        "rust": {
+          "method": "comment_statistics",
+          "resource": "engage"
+        },
+        "typescript": {
+          "method": "commentStatistics",
+          "resource": "engage"
+        }
+      }
+    },
     "sub_brands.create": {
       "cardinality": "single",
       "symbols": {
@@ -1684,5 +1684,5 @@
       }
     }
   },
-  "version": "1.1.0"
+  "version": "1.2.0"
 }

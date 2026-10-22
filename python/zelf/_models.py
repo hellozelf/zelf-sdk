@@ -2293,7 +2293,7 @@ class WebhookData(BaseModel):
 
 class WebhookPush(BaseModel):
     """
-    The outer payload ZelfAI POSTs to receivers, uniform across all pushes.
+    The outer payload Zelf POSTs to receivers, uniform across all pushes.
 
     Top-level fields are delivery metadata and remain identical across
     modes. `data` carries the content; which key inside it is populated
@@ -2320,7 +2320,7 @@ class WebhookPush(BaseModel):
         str, Field(description="Id of the subscription that produced this push.")
     ]
     delivered_at: Annotated[
-        int, Field(description="Unix epoch seconds at which ZelfAI sent this push.")
+        int, Field(description="Unix epoch seconds at which Zelf sent this push.")
     ]
     livemode: Annotated[
         bool, Field(description="`true` for production data; `false` for test deliveries.")

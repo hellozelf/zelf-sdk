@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /** Carries out the HTTP work: auth, retries, and envelope decoding. */
 public final class Transport {
 
-    /** The production ZelfAI API. */
+    /** The production Zelf API. */
     public static final String DEFAULT_BASE_URL = "https://api.hellozelf.com";
 
     /** Read when no key is set explicitly. */

@@ -1807,7 +1807,7 @@ pub struct WebhookFile {
     pub download_url: String,
 }
 
-/// The outer payload ZelfAI POSTs to receivers, uniform across all pushes. Top-level fields
+/// The outer payload Zelf POSTs to receivers, uniform across all pushes. Top-level fields
 /// are delivery metadata and remain identical across modes. `data` carries the content;
 /// which key inside it is populated (`files` or `items`) is determined by `delivery_mode`.
 /// `manifest` deliveries use `data.files`, while `inline` event pushes use `data.items`.
@@ -1821,7 +1821,7 @@ pub struct WebhookPush {
     pub r#type: String,
     /// Id of the subscription that produced this push.
     pub subscription_id: String,
-    /// Unix epoch seconds at which ZelfAI sent this push.
+    /// Unix epoch seconds at which Zelf sent this push.
     pub delivered_at: i64,
     /// `true` for production data; `false` for test deliveries.
     pub livemode: bool,

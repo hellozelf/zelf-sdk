@@ -14,7 +14,7 @@ public class ZelfException extends RuntimeException {
     /** The request never produced an HTTP response. */
     public static class Connection extends ZelfException {
         public Connection(String message, Throwable cause) {
-            super("Could not reach the ZelfAI API: " + message, cause);
+            super("Could not reach the Zelf API: " + message, cause);
         }
     }
 
@@ -155,7 +155,7 @@ public class ZelfException extends RuntimeException {
         String code = null;
         String logId = null;
         JsonNode details = null;
-        String message = "HTTP " + status + " from the ZelfAI API";
+        String message = "HTTP " + status + " from the Zelf API";
         try {
             JsonNode root = Transport.MAPPER.readTree(body);
             if (root.hasNonNull("log_id")) {

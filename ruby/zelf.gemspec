@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   # Published as `zelf-sdk`; still required as `zelf`.
   spec.name = 'zelf-sdk'
   spec.version = Zelf::VERSION
-  spec.summary = 'Ruby client for the ZelfAI APIs'
+  spec.summary = 'Ruby client for the Zelf APIs'
   spec.description = 'Official Ruby client for the Zelf API.'
   spec.authors = ['Zelf']
   spec.homepage = 'https://github.com/hellozelf/zelf-sdk'

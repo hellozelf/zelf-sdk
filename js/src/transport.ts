@@ -202,7 +202,7 @@ async function parseError(response: Response): Promise<ZelfAPIError> {
     body = {}
   }
   return statusError(response.status, {
-    message: body.error?.message ?? `HTTP ${response.status} from the ZelfAI API.`,
+    message: body.error?.message ?? `HTTP ${response.status} from the Zelf API.`,
     code: body.error?.code ?? null,
     details: body.error?.details ?? {},
     logId: body.log_id ?? null,

@@ -5,7 +5,7 @@ package zelf
 // Version is the SDK version sent in the User-Agent header.
 const Version = "1.2.0"
 
-// Client is the ZelfAI APIs client. Create one with New.
+// Client is the Zelf APIs client. Create one with New.
 type Client struct {
 	t *transport
 

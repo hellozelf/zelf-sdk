@@ -7,7 +7,7 @@ require 'openssl'
 require 'uri'
 
 module Zelf
-  # Verifies and routes the deliveries ZelfAI posts to a receiver.
+  # Verifies and routes the deliveries Zelf posts to a receiver.
   module Webhooks
     SIGNATURE_HEADER = 'Webhook-Signature'.freeze
     TIMESTAMP_HEADER = 'Webhook-Timestamp'.freeze

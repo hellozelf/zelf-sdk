@@ -37,7 +37,7 @@ API_KEY_ENV = "ZELF_API_KEY"
 
 
 class ZelfAPIClient:
-    """Synchronous client for the ZelfAI APIs.
+    """Synchronous client for the Zelf APIs.
 
     The key is read from the `api_key` argument, falling back to the
     `ZELF_API_KEY` environment variable. It is sent as the `x-api-key`
@@ -93,7 +93,7 @@ class ZelfAPIClient:
 
 
 class ZelfAPIClientAsync:
-    """Asynchronous client for the ZelfAI APIs.
+    """Asynchronous client for the Zelf APIs.
 
     The key is read from the `api_key` argument, falling back to the
     `ZELF_API_KEY` environment variable. It is sent as the `x-api-key`

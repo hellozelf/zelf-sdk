@@ -3,7 +3,7 @@ use std::fmt;
 /// Result alias used across the client.
 pub type Result<T> = std::result::Result<T, Error>;
 
-/// Everything that can go wrong talking to the ZelfAI API.
+/// Everything that can go wrong talking to the Zelf API.
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     /// The client was built wrong, for example with no API key.

@@ -5,7 +5,7 @@ edition = "2021"
 # resolver 3 keeps the lockfile buildable on the MSRV.
 resolver = "3"
 rust-version = "1.88"
-description = "Rust client for the ZelfAI APIs"
+description = "Rust client for the Zelf APIs"
 license = "Apache-2.0"
 repository = "https://github.com/hellozelf/zelf-sdk"
 homepage = "https://github.com/hellozelf/zelf-sdk"

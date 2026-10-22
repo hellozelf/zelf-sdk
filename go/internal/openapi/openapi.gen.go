@@ -1982,7 +1982,7 @@ type WebhookFile struct {
 	SizeBytes int `json:"size_bytes"`
 }
 
-// WebhookPush The outer payload ZelfAI POSTs to receivers, uniform across all pushes.
+// WebhookPush The outer payload Zelf POSTs to receivers, uniform across all pushes.
 //
 // Top-level fields are delivery metadata and remain identical across
 // modes. `data` carries the content; which key inside it is populated
@@ -1992,7 +1992,7 @@ type WebhookPush struct {
 	// Data The push payload. See `delivery_mode` for which key inside is populated.
 	Data WebhookData `json:"data"`
 
-	// DeliveredAt Unix epoch seconds at which ZelfAI sent this push.
+	// DeliveredAt Unix epoch seconds at which Zelf sent this push.
 	DeliveredAt int `json:"delivered_at"`
 
 	// DeliveryMode `manifest`: `data.files` holds downloadable snapshot files. `inline`: `data.items` holds the rows directly.

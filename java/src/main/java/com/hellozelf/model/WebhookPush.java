@@ -7,11 +7,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 
 /**
- * The outer payload ZelfAI POSTs to receivers, uniform across all pushes. Top-
- * level fields are delivery metadata and remain identical across modes. `data`
- * carries the content; which key inside it is populated (`files` or `items`) is
- * determined by `delivery_mode`. `manifest` deliveries use `data.files`, while
- * `inline` event pushes use `data.items`.
+ * The outer payload Zelf POSTs to receivers, uniform across all pushes. Top-level
+ * fields are delivery metadata and remain identical across modes. `data` carries
+ * the content; which key inside it is populated (`files` or `items`) is determined
+ * by `delivery_mode`. `manifest` deliveries use `data.files`, while `inline` event
+ * pushes use `data.items`.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record WebhookPush(

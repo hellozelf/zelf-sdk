@@ -10,7 +10,7 @@ use serde::Deserialize;
 use crate::error::{Error, Result};
 use crate::VERSION;
 
-/// The production ZelfAI API.
+/// The production Zelf API.
 pub const DEFAULT_BASE_URL: &str = "https://api.hellozelf.com";
 /// Read when no key is passed explicitly.
 pub const API_KEY_ENV: &str = "ZELF_API_KEY";
@@ -20,7 +20,7 @@ pub const BASE_URL_ENV: &str = "ZELF_BASE_URL";
 const MAX_BACKOFF: Duration = Duration::from_secs(8);
 const RETRY_STATUSES: [u16; 5] = [429, 500, 502, 503, 504];
 
-/// The response wrapper every ZelfAI endpoint returns.
+/// The response wrapper every Zelf endpoint returns.
 #[derive(Debug, Clone, Deserialize)]
 pub struct Envelope<T> {
     pub log_id: String,
@@ -333,7 +333,7 @@ async fn api_error(status: StatusCode, response: reqwest::Response) -> Error {
         code: detail.and_then(|d| d.code.clone()),
         message: detail
             .and_then(|d| d.message.clone())
-            .unwrap_or_else(|| format!("HTTP {} from the ZelfAI API", status.as_u16())),
+            .unwrap_or_else(|| format!("HTTP {} from the Zelf API", status.as_u16())),
         details: detail.and_then(|d| d.details.clone()),
         log_id: parsed.and_then(|body| body.log_id),
     }
