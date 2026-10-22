@@ -105,10 +105,9 @@ public class LiveTests(ITestOutputHelper output)
         await Check("webhooks.list_events", async () => $"events={(await client.Webhooks.ListEventsAsync()).Count}");
         await Check("brand_accounts.list", async () =>
         {
-            var rows = await client.BrandAccounts.ListAsync(
+            var groups = await client.BrandAccounts.ListAsync(
                 new BrandAccountsListParams { BrandId = Brand, AccountType = "tracked" });
-            var tracked = rows.Count == 0 ? 0 : rows[0].Tracked?.Count ?? 0;
-            return $"groups={rows.Count} tracked={tracked}";
+            return $"tracked={groups.Tracked?.Count ?? 0}";
         });
     }
 }
