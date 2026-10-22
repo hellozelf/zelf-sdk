@@ -10,7 +10,7 @@ import java.util.List;
  * Comments the brand posted on one category of content.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record PostedCommentCategory(
+public record CommentCategory(
         @JsonProperty("category") String category,
         @JsonProperty("comments") Long comments,
         @JsonProperty("likes") Long likes,

@@ -108,6 +108,8 @@ module Zelf
     class BrandStatistics < Zelf::Model; end
     class Comment < Zelf::Model; end
     class CommentAuthor < Zelf::Model; end
+    class CommentCategory < Zelf::Model; end
+    class CommentStatistics < Zelf::Model; end
     class Content < Zelf::Model; end
     class ContentActionRequestRequest < Zelf::Model; end
     class ContentActionResponse < Zelf::Model; end
@@ -143,8 +145,6 @@ module Zelf
     class FollowerTimeseries < Zelf::Model; end
     class PatchedBrandUpdateRequest < Zelf::Model; end
     class PatchedWebhookSubscriptionUpdateRequest < Zelf::Model; end
-    class PostedCommentCategory < Zelf::Model; end
-    class PostedComments < Zelf::Model; end
     class ResultFile < Zelf::Model; end
     class SafetyCheckRequest < Zelf::Model; end
     class Usage < Zelf::Model; end
@@ -431,6 +431,26 @@ module Zelf
       field :name, "name"
       # URL of the author's profile picture
       field :profile_picture_url, "profile_picture_url"
+    end
+
+    # Comments the brand posted on one category of content.
+    class CommentCategory
+      # brand, owned, competitors, themes or other
+      field :category, "category"
+      # Comments posted on this category
+      field :comments, "comments"
+      # Likes those comments received
+      field :likes, "likes"
+      # Replies those comments received
+      field :replies, "replies"
+    end
+
+    # Comments the brand posted, split by the content they were posted on.
+    class CommentStatistics
+      # Comments the brand posted in the window, across every category
+      field :total_comments_posted, "total_comments_posted"
+      # One entry per category
+      field :categories, "categories", cast: [CommentCategory]
     end
 
     # A piece of content (a post, video, or image) and its metrics.
@@ -1009,26 +1029,6 @@ module Zelf
       field :max_items, "max_items"
       # Whether this subscription is active and will be dispatched
       field :enabled, "enabled"
-    end
-
-    # Comments the brand posted on one category of content.
-    class PostedCommentCategory
-      # brand, owned, competitors, themes or other
-      field :category, "category"
-      # Comments posted on this category
-      field :comments, "comments"
-      # Likes those comments received
-      field :likes, "likes"
-      # Replies those comments received
-      field :replies, "replies"
-    end
-
-    # Comments the brand posted, split by the content they were posted on.
-    class PostedComments
-      # Comments the brand posted in the window, across every category
-      field :total_comments_posted, "total_comments_posted"
-      # One entry per category
-      field :categories, "categories", cast: [PostedCommentCategory]
     end
 
     # Signed, time-limited download of an analysis run's result payload.

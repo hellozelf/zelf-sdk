@@ -11,6 +11,7 @@ import com.hellozelf.resources.CreatorSyncResource;
 import com.hellozelf.resources.CreatorVettingResource;
 import com.hellozelf.resources.CreatorsResource;
 import com.hellozelf.resources.DetectionResource;
+import com.hellozelf.resources.EngageResource;
 import com.hellozelf.resources.SubBrandsResource;
 import com.hellozelf.resources.UsageResource;
 import com.hellozelf.resources.WebhooksResource;
@@ -19,7 +20,7 @@ import com.hellozelf.resources.WebhooksResource;
 public final class ZelfClient {
 
     /** The SDK version sent in the User-Agent header. */
-    public static final String VERSION = "1.1.1";
+    public static final String VERSION = "1.2.0";
 
     private final Transport transport;
 
@@ -33,6 +34,7 @@ public final class ZelfClient {
     private final CreatorVettingResource creatorVetting;
     private final CreatorsResource creators;
     private final DetectionResource detection;
+    private final EngageResource engage;
     private final SubBrandsResource subBrands;
     private final UsageResource usage;
     private final WebhooksResource webhooks;
@@ -49,6 +51,7 @@ public final class ZelfClient {
         this.creatorVetting = new CreatorVettingResource(transport);
         this.creators = new CreatorsResource(transport);
         this.detection = new DetectionResource(transport);
+        this.engage = new EngageResource(transport);
         this.subBrands = new SubBrandsResource(transport);
         this.usage = new UsageResource(transport);
         this.webhooks = new WebhooksResource(transport);
@@ -106,6 +109,11 @@ public final class ZelfClient {
     /** The detection endpoints. */
     public DetectionResource detection() {
         return detection;
+    }
+
+    /** The engage endpoints. */
+    public EngageResource engage() {
+        return engage;
     }
 
     /** The sub_brands endpoints. */

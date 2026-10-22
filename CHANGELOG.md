@@ -10,6 +10,18 @@ API did not cause.
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
 
+## 1.2.0
+
+### Added
+- `engage.comment_statistics` (GET /api/v1/engage/comment_statistics/)
+- `CommentCategory`
+- `CommentStatistics`
+
+### Removed
+- `analytics.posted_comments`
+- `PostedCommentCategory`
+- `PostedComments`
+
 ## 1.1.1
 
 ### Fixed

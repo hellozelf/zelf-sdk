@@ -87,15 +87,6 @@ const CALLS: Case[] = [
     call: (c: ZelfAPIClient) => c.analytics.followerTimeseries({ brandId: "brd_tp6wqSj7PlBzhPTC", period: "day", platform: ["instagram"], postedAfter: "2026-01-01T00:00:00Z", postedBefore: "2026-01-01T00:00:00Z", postedWithinDays: 42, postedWithinHours: 42 }),
   },
   {
-    operation: 'analytics.posted_comments',
-    method: 'GET',
-    path: '/api/v1/analytics/posted_comments/',
-    query: {"brand_id": ["brd_tp6wqSj7PlBzhPTC"], "platform": ["instagram"], "posted_after": ["2026-01-01T00:00:00Z"], "posted_before": ["2026-01-01T00:00:00Z"], "posted_within_days": ["42"], "posted_within_hours": ["42"]},
-    body: [],
-    cardinality: 'single',
-    call: (c: ZelfAPIClient) => c.analytics.postedComments({ brandId: "brd_tp6wqSj7PlBzhPTC", platform: ["instagram"], postedAfter: "2026-01-01T00:00:00Z", postedBefore: "2026-01-01T00:00:00Z", postedWithinDays: 42, postedWithinHours: 42 }),
-  },
-  {
     operation: 'brand_accounts.add',
     method: 'POST',
     path: '/api/v1/brands/accounts/',
@@ -328,6 +319,15 @@ const CALLS: Case[] = [
     body: [],
     cardinality: 'page',
     call: (c: ZelfAPIClient) => c.detection.list({ page: 1, pageSize: 1 }),
+  },
+  {
+    operation: 'engage.comment_statistics',
+    method: 'GET',
+    path: '/api/v1/engage/comment_statistics/',
+    query: {"brand_id": ["brd_tp6wqSj7PlBzhPTC"], "platform": ["instagram"], "posted_after": ["2026-01-01T00:00:00Z"], "posted_before": ["2026-01-01T00:00:00Z"], "posted_within_days": ["42"], "posted_within_hours": ["42"]},
+    body: [],
+    cardinality: 'single',
+    call: (c: ZelfAPIClient) => c.engage.commentStatistics({ brandId: "brd_tp6wqSj7PlBzhPTC", platform: ["instagram"], postedAfter: "2026-01-01T00:00:00Z", postedBefore: "2026-01-01T00:00:00Z", postedWithinDays: 42, postedWithinHours: 42 }),
   },
   {
     operation: 'sub_brands.create',

@@ -265,6 +265,42 @@ class CommentAuthor(BaseModel):
     ]
 
 
+class CommentCategory(BaseModel):
+    """
+    Comments the brand posted on one category of content.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    category: Annotated[
+        str,
+        Field(
+            description="`brand`, `owned`, `competitors`, `themes` or `other`. `other` covers content outside the brand's own tree."
+        ),
+    ]
+    comments: Annotated[int, Field(description="Comments posted on this category.")]
+    likes: Annotated[int, Field(description="Likes those comments received.")]
+    replies: Annotated[int, Field(description="Replies those comments received.")]
+
+
+class CommentStatistics(BaseModel):
+    """
+    Comments the brand posted, split by the content they were posted on.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    total_comments_posted: Annotated[
+        int, Field(description="Comments the brand posted in the window, across every category.")
+    ]
+    categories: Annotated[
+        list[CommentCategory],
+        Field(description="One entry per category. They add up to `total_comments_posted`."),
+    ]
+
+
 class ContentActionRequestRequest(BaseModel):
     """
     Request body for the content transcribe and AI summarize actions.
@@ -869,42 +905,6 @@ class PatchedWebhookSubscriptionUpdateRequest(BaseModel):
         bool | None,
         Field(description="Whether this subscription is active and will be dispatched."),
     ] = None
-
-
-class PostedCommentCategory(BaseModel):
-    """
-    Comments the brand posted on one category of content.
-    """
-
-    model_config = ConfigDict(
-        extra="allow",
-    )
-    category: Annotated[
-        str,
-        Field(
-            description="`brand`, `owned`, `competitors`, `themes` or `other`. `other` covers content outside the brand's own tree."
-        ),
-    ]
-    comments: Annotated[int, Field(description="Comments posted on this category.")]
-    likes: Annotated[int, Field(description="Likes those comments received.")]
-    replies: Annotated[int, Field(description="Replies those comments received.")]
-
-
-class PostedComments(BaseModel):
-    """
-    Comments the brand posted, split by the content they were posted on.
-    """
-
-    model_config = ConfigDict(
-        extra="allow",
-    )
-    total_comments_posted: Annotated[
-        int, Field(description="Comments the brand posted in the window, across every category.")
-    ]
-    categories: Annotated[
-        list[PostedCommentCategory],
-        Field(description="One entry per category. They add up to `total_comments_posted`."),
-    ]
 
 
 class ResultFile(BaseModel):

@@ -135,18 +135,6 @@ public class ConformanceGenerated
             null,
             null),
         [
-            "analytics.posted_comments"
-        ] = new Case(
-            "GET",
-            "/api/v1/analytics/posted_comments/",
-            new Dictionary<string, string[]> { { "brand_id", new[] { "brd_tp6wqSj7PlBzhPTC" } }, { "platform", new[] { "instagram" } }, { "posted_after", new[] { "2026-01-01T00:00:00.0000000+00:00" } }, { "posted_before", new[] { "2026-01-01T00:00:00.0000000+00:00" } }, { "posted_within_days", new[] { "42" } }, { "posted_within_hours", new[] { "42" } } },
-            [],
-            "single",
-            "{\"brand_id\": \"brd_tp6wqSj7PlBzhPTC\", \"platform\": [\"instagram\"], \"posted_after\": \"2026-01-01T00:00:00Z\", \"posted_before\": \"2026-01-01T00:00:00Z\", \"posted_within_days\": 42, \"posted_within_hours\": 42}",
-            async (client, json) => await client.Analytics.PostedCommentsAsync(Parse<AnalyticsPostedCommentsParams>(json)),
-            null,
-            null),
-        [
             "brand_accounts.add"
         ] = new Case(
             "POST",
@@ -538,6 +526,18 @@ public class ConformanceGenerated
                 }
                 return seen;
             }),
+        [
+            "engage.comment_statistics"
+        ] = new Case(
+            "GET",
+            "/api/v1/engage/comment_statistics/",
+            new Dictionary<string, string[]> { { "brand_id", new[] { "brd_tp6wqSj7PlBzhPTC" } }, { "platform", new[] { "instagram" } }, { "posted_after", new[] { "2026-01-01T00:00:00.0000000+00:00" } }, { "posted_before", new[] { "2026-01-01T00:00:00.0000000+00:00" } }, { "posted_within_days", new[] { "42" } }, { "posted_within_hours", new[] { "42" } } },
+            [],
+            "single",
+            "{\"brand_id\": \"brd_tp6wqSj7PlBzhPTC\", \"platform\": [\"instagram\"], \"posted_after\": \"2026-01-01T00:00:00Z\", \"posted_before\": \"2026-01-01T00:00:00Z\", \"posted_within_days\": 42, \"posted_within_hours\": 42}",
+            async (client, json) => await client.Engage.CommentStatisticsAsync(Parse<EngageCommentStatisticsParams>(json)),
+            null,
+            null),
         [
             "sub_brands.create"
         ] = new Case(

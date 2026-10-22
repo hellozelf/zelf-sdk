@@ -10,6 +10,7 @@ pub mod creator_sync;
 pub mod creator_vetting;
 pub mod creators;
 pub mod detection;
+pub mod engage;
 pub mod sub_brands;
 pub mod usage;
 pub mod webhooks;

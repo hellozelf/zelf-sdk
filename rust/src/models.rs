@@ -758,6 +758,30 @@ pub struct CommentAuthor {
     pub profile_picture_url: Option<String>,
 }
 
+/// Comments the brand posted on one category of content.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CommentCategory {
+    /// `brand`, `owned`, `competitors`, `themes` or `other`. `other` covers content outside the
+    /// brand's own tree.
+    pub category: String,
+    /// Comments posted on this category.
+    pub comments: i64,
+    /// Likes those comments received.
+    pub likes: i64,
+    /// Replies those comments received.
+    pub replies: i64,
+}
+
+/// Comments the brand posted, split by the content they were posted on.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CommentStatistics {
+    /// Comments the brand posted in the window, across every category.
+    pub total_comments_posted: i64,
+    /// One entry per category. They add up to `total_comments_posted`.
+    #[serde(default)]
+    pub categories: Vec<CommentCategory>,
+}
+
 /// A piece of content (a post, video, or image) and its metrics.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Content {
@@ -1568,30 +1592,6 @@ pub struct PatchedWebhookSubscriptionUpdateRequest {
     /// Whether this subscription is active and will be dispatched.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-}
-
-/// Comments the brand posted on one category of content.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PostedCommentCategory {
-    /// `brand`, `owned`, `competitors`, `themes` or `other`. `other` covers content outside the
-    /// brand's own tree.
-    pub category: String,
-    /// Comments posted on this category.
-    pub comments: i64,
-    /// Likes those comments received.
-    pub likes: i64,
-    /// Replies those comments received.
-    pub replies: i64,
-}
-
-/// Comments the brand posted, split by the content they were posted on.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PostedComments {
-    /// Comments the brand posted in the window, across every category.
-    pub total_comments_posted: i64,
-    /// One entry per category. They add up to `total_comments_posted`.
-    #[serde(default)]
-    pub categories: Vec<PostedCommentCategory>,
 }
 
 /// Signed, time-limited download of an analysis run's result payload.

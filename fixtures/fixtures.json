@@ -29,10 +29,6 @@
    "model": "FollowerTimeseries",
    "cardinality": "list"
   },
-  "analytics_posted_comments": {
-   "model": "PostedComments",
-   "cardinality": "single"
-  },
   "brand_accounts_add": {
    "model": "BrandAccountGroups",
    "cardinality": "single"
@@ -136,6 +132,10 @@
   "detection_list": {
    "model": "Detection",
    "cardinality": "page"
+  },
+  "engage_comment_statistics": {
+   "model": "CommentStatistics",
+   "cardinality": "single"
   },
   "sub_brands_create": {
    "model": "Brand",
@@ -626,51 +626,6 @@
     }
    ],
    "item_count": 2,
-   "page": 1,
-   "next": null,
-   "previous": null
-  },
-  "analytics_posted_comments": {
-   "log_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-   "timestamp": "2026-01-01T00:00:00Z",
-   "results": [
-    {
-     "total_comments_posted": 3600,
-     "categories": [
-      {
-       "category": "brand",
-       "comments": 1420,
-       "likes": 3860,
-       "replies": 512
-      },
-      {
-       "category": "owned",
-       "comments": 980,
-       "likes": 2140,
-       "replies": 361
-      },
-      {
-       "category": "competitors",
-       "comments": 640,
-       "likes": 1275,
-       "replies": 208
-      },
-      {
-       "category": "themes",
-       "comments": 415,
-       "likes": 702,
-       "replies": 97
-      },
-      {
-       "category": "other",
-       "comments": 145,
-       "likes": 233,
-       "replies": 34
-      }
-     ]
-    }
-   ],
-   "item_count": 1,
    "page": 1,
    "next": null,
    "previous": null
@@ -1629,6 +1584,51 @@
    "next": null,
    "previous": null
   },
+  "engage_comment_statistics": {
+   "log_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+   "timestamp": "2026-01-01T00:00:00Z",
+   "results": [
+    {
+     "total_comments_posted": 3600,
+     "categories": [
+      {
+       "category": "brand",
+       "comments": 1420,
+       "likes": 3860,
+       "replies": 512
+      },
+      {
+       "category": "owned",
+       "comments": 980,
+       "likes": 2140,
+       "replies": 361
+      },
+      {
+       "category": "competitors",
+       "comments": 640,
+       "likes": 1275,
+       "replies": 208
+      },
+      {
+       "category": "themes",
+       "comments": 415,
+       "likes": 702,
+       "replies": 97
+      },
+      {
+       "category": "other",
+       "comments": 145,
+       "likes": 233,
+       "replies": 34
+      }
+     ]
+    }
+   ],
+   "item_count": 1,
+   "page": 1,
+   "next": null,
+   "previous": null
+  },
   "sub_brands_create": {
    "log_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
    "timestamp": "2026-01-01T00:00:00Z",
@@ -2218,7 +2218,6 @@
   "ai_analysis_results",
   "analytics_brand_comparison",
   "analytics_follower_timeseries",
-  "analytics_posted_comments",
   "brand_accounts_add",
   "brand_accounts_list",
   "brand_accounts_remove",
@@ -2245,6 +2244,7 @@
   "detection_create",
   "detection_get",
   "detection_list",
+  "engage_comment_statistics",
   "sub_brands_create",
   "usage_retrieve"
  ],
@@ -2561,6 +2561,23 @@
    "username": "zelfai",
    "name": "Name",
    "profile_picture_url": "https://example.com/commentauthor/profile_picture_url"
+  },
+  "CommentCategory": {
+   "category": "Category",
+   "comments": 42,
+   "likes": 42,
+   "replies": 42
+  },
+  "CommentStatistics": {
+   "total_comments_posted": 7,
+   "categories": [
+    {
+     "category": "Category",
+     "comments": 42,
+     "likes": 42,
+     "replies": 42
+    }
+   ]
   },
   "Content": {
    "id": "con_CGL0YuuvnDFng7ca",
@@ -3105,23 +3122,6 @@
    "interval_hours": 12,
    "max_items": 10,
    "enabled": true
-  },
-  "PostedCommentCategory": {
-   "category": "Category",
-   "comments": 42,
-   "likes": 42,
-   "replies": 42
-  },
-  "PostedComments": {
-   "total_comments_posted": 7,
-   "categories": [
-    {
-     "category": "Category",
-     "comments": 42,
-     "likes": 42,
-     "replies": 42
-    }
-   ]
   },
   "ResultFile": {
    "expires_at": 7,

@@ -10,8 +10,8 @@ import java.util.List;
  * Comments the brand posted, split by the content they were posted on.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record PostedComments(
+public record CommentStatistics(
         @JsonProperty("total_comments_posted") Long totalCommentsPosted,
-        @JsonProperty("categories") List<PostedCommentCategory> categories
+        @JsonProperty("categories") List<CommentCategory> categories
 ) {
 }

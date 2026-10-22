@@ -3,7 +3,7 @@
 package zelf
 
 // Version is the SDK version sent in the User-Agent header.
-const Version = "1.1.1"
+const Version = "1.2.0"
 
 // Client is the ZelfAI APIs client. Create one with New.
 type Client struct {
@@ -19,6 +19,7 @@ type Client struct {
 	CreatorVetting *CreatorVettingResource
 	Creators       *CreatorsResource
 	Detection      *DetectionResource
+	Engage         *EngageResource
 	SubBrands      *SubBrandsResource
 	Usage          *UsageResource
 	Webhooks       *WebhooksResource
@@ -43,6 +44,7 @@ func New(opts ...Option) (*Client, error) {
 		CreatorVetting: &CreatorVettingResource{t: t},
 		Creators:       &CreatorsResource{t: t},
 		Detection:      &DetectionResource{t: t},
+		Engage:         &EngageResource{t: t},
 		SubBrands:      &SubBrandsResource{t: t},
 		Usage:          &UsageResource{t: t},
 		Webhooks:       &WebhooksResource{t: t},
