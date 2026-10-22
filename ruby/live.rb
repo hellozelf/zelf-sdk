@@ -49,5 +49,5 @@ check('brands.list') { "brands=#{client.brands.list.item_count}" }
 check('webhooks.list_events') { "events=#{client.webhooks.list_events.length}" }
 check('brand_accounts.list') do
   groups = client.brand_accounts.list(brand_id: BRAND, account_type: 'tracked')
-  "groups=#{groups.length} tracked=#{(groups[0].tracked || []).length}"
+  "tracked=#{(groups.tracked || []).length}"
 end

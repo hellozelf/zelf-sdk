@@ -56,7 +56,7 @@ await check('brands.list', async () => `brands=${(await client.brands.list({})).
 await check('webhooks.listEvents', async () => `events=${(await client.webhooks.listEvents()).length}`)
 await check('brand_accounts.list', async () => {
   const groups = await client.brandAccounts.list({ brandId: BRAND, accountType: 'tracked' })
-  return `groups=${groups.length} tracked=${groups[0]?.tracked?.length ?? 0}`
+  return `tracked=${groups.tracked?.length ?? 0}`
 })
 
 console.log(out.join('\n'))
