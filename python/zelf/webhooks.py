@@ -83,7 +83,7 @@ def verify(
     tolerance_seconds: int = DEFAULT_TOLERANCE_SECONDS,
     now: float | None = None,
 ) -> dict[str, Any]:
-    """Verify a ZelfAI webhook and return its decoded payload as a dict.
+    """Verify a Zelf webhook and return its decoded payload as a dict.
 
     Prefer `parse`, which returns the same thing as a typed WebhookEvent.
 

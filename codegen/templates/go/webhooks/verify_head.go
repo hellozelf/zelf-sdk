@@ -1,4 +1,4 @@
-// Package webhooks verifies the signature ZelfAI puts on every webhook delivery.
+// Package webhooks verifies the signature Zelf puts on every webhook delivery.
 package webhooks
 
 import (

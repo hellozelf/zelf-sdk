@@ -16,7 +16,7 @@ import com.hellozelf.resources.SubBrandsResource;
 import com.hellozelf.resources.UsageResource;
 import com.hellozelf.resources.WebhooksResource;
 
-/** Client for the ZelfAI APIs. */
+/** Client for the Zelf APIs. */
 public final class ZelfClient {
 
     /** The SDK version sent in the User-Agent header. */

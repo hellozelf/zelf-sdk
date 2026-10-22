@@ -12,7 +12,7 @@ T = TypeVar("T", bound=BaseModel)
 
 
 class Envelope(BaseModel):
-    """The response wrapper every ZelfAI endpoint returns."""
+    """The response wrapper every Zelf endpoint returns."""
 
     log_id: str
     timestamp: datetime

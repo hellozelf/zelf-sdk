@@ -15,7 +15,7 @@
     <PackageId>Zelf.Sdk</PackageId>
     <Version>1.2.0</Version>
     <Authors>Zelf</Authors>
-    <Description>.NET client for the ZelfAI APIs</Description>
+    <Description>.NET client for the Zelf APIs</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/hellozelf/zelf-sdk</PackageProjectUrl>
     <RepositoryUrl>https://github.com/hellozelf/zelf-sdk</RepositoryUrl>

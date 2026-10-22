@@ -191,7 +191,7 @@ func TestPagingBoundsAreValidated(t *testing.T) {
 }
 
 func TestAutoPagingStopsWhenTheVisitorFails(t *testing.T) {
-	row := `{"id":"brd_1","title":"ZelfAI","is_primary":true,"keywords":{}}`
+	row := `{"id":"brd_1","title":"Zelf","is_primary":true,"keywords":{}}`
 	first := `{"results":[` + row + `],"item_count":1,"page":1,"next":2}`
 	second := `{"results":[` + row + `],"item_count":1,"page":2,"next":null}`
 	rt := &scriptedRoundTripper{responses: []*http.Response{jsonResponse(200, first), jsonResponse(200, second)}}
@@ -208,7 +208,7 @@ func TestAutoPagingStopsWhenTheVisitorFails(t *testing.T) {
 }
 
 func TestAllYieldsEveryRow(t *testing.T) {
-	row := `{"id":"brd_1","title":"ZelfAI","is_primary":true,"keywords":{}}`
+	row := `{"id":"brd_1","title":"Zelf","is_primary":true,"keywords":{}}`
 	first := `{"results":[` + row + `],"item_count":1,"page":1,"next":2}`
 	second := `{"results":[` + row + `],"item_count":1,"page":2,"next":null}`
 	rt := &scriptedRoundTripper{responses: []*http.Response{jsonResponse(200, first), jsonResponse(200, second)}}
@@ -231,7 +231,7 @@ func TestAllYieldsEveryRow(t *testing.T) {
 }
 
 func TestAllStopsEarlyWhenTheCallerBreaks(t *testing.T) {
-	row := `{"id":"brd_1","title":"ZelfAI","is_primary":true,"keywords":{}}`
+	row := `{"id":"brd_1","title":"Zelf","is_primary":true,"keywords":{}}`
 	first := `{"results":[` + row + `,` + row + `],"item_count":2,"page":1,"next":2}`
 	rt := &scriptedRoundTripper{responses: []*http.Response{jsonResponse(200, first)}}
 	client := clientWith(t, rt)
@@ -523,7 +523,7 @@ func TestAnErrorBodyWithACodeButNoMessageKeepsTheDefault(t *testing.T) {
 }
 
 func TestPagingSurfacesAFailedFetch(t *testing.T) {
-	row := `{"id":"brd_1","title":"ZelfAI","is_primary":true,"keywords":{}}`
+	row := `{"id":"brd_1","title":"Zelf","is_primary":true,"keywords":{}}`
 	first := `{"results":[` + row + `],"item_count":1,"page":1,"next":2}`
 	rt := &scriptedRoundTripper{responses: []*http.Response{
 		jsonResponse(200, first),
@@ -556,7 +556,7 @@ func TestPagingSurfacesAFailedFetch(t *testing.T) {
 }
 
 func TestAutoPagingStopsAtMaxItems(t *testing.T) {
-	row := `{"id":"brd_1","title":"ZelfAI","is_primary":true,"keywords":{}}`
+	row := `{"id":"brd_1","title":"Zelf","is_primary":true,"keywords":{}}`
 	first := `{"results":[` + row + `,` + row + `],"item_count":2,"page":1,"next":2}`
 	rt := &scriptedRoundTripper{responses: []*http.Response{jsonResponse(200, first)}}
 	client := clientWith(t, rt)

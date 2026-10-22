@@ -2,7 +2,7 @@
 # Published as `zelf-sdk`; imports as `zelf`.
 name = "zelf-sdk"
 version = "1.2.0"
-description = "Python client for the ZelfAI APIs"
+description = "Python client for the Zelf APIs"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"

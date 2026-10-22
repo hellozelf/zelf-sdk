@@ -113,7 +113,7 @@ func (r *CreatorVettingResource) List(ctx context.Context, params *CreatorVettin
 // It also gives each source a `channels` status: `present`, `absent` or `unknown` (not
 // checked). Disclosures are not counted as violations. Limits: only videos up to 10
 // minutes are checked; on-screen text is read from sampled frames, so text shown only
-// briefly can be missed; videos ZelfAI analyzed before the request are not re-analyzed for
+// briefly can be missed; videos Zelf analyzed before the request are not re-analyzed for
 // disclosures. An empty `evidence` list does not confirm that a video has no disclosure.
 // Detection reports what was stated; it does not assess legal compliance.
 //

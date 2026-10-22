@@ -51,7 +51,7 @@ func readAPIError(resp *http.Response) error {
 	defer drain(resp)
 	out := &APIError{
 		Status:  resp.StatusCode,
-		Message: fmt.Sprintf("HTTP %d from the ZelfAI API", resp.StatusCode),
+		Message: fmt.Sprintf("HTTP %d from the Zelf API", resp.StatusCode),
 	}
 	body, err := io.ReadAll(io.LimitReader(resp.Body, maxBodyBytes))
 	if err != nil {

@@ -136,7 +136,7 @@ def errors_module(api: Api) -> str:
         "      detail = body['error'].is_a?(Hash) ? body['error'] : {}",
         "      status = response.code.to_i",
         "      klass = STATUS_MAP.fetch(status, APIError)",
-        "      klass.new(detail['message'] || \"HTTP #{status} from the ZelfAI API\",",
+        "      klass.new(detail['message'] || \"HTTP #{status} from the Zelf API\",",
         "                status: status, code: detail['code'],",
         "                details: detail['details'], log_id: body['log_id'])",
         "    end",

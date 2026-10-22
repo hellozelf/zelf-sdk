@@ -144,7 +144,7 @@ public sealed class WebhookEvent
     }
 }
 
-/// <summary>Verifies and routes the deliveries ZelfAI posts to a receiver.</summary>
+/// <summary>Verifies and routes the deliveries Zelf posts to a receiver.</summary>
 public static class Webhook
 {
     public const string SignatureHeader = "Webhook-Signature";

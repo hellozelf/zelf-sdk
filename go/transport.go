@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	// DefaultBaseURL is the production ZelfAI API.
+	// DefaultBaseURL is the production Zelf API.
 	DefaultBaseURL = "https://api.hellozelf.com"
 	// APIKeyEnv is read when no key is passed explicitly.
 	APIKeyEnv = "ZELF_API_KEY"

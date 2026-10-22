@@ -17,7 +17,7 @@ import { UsageResource } from './resources/usage.js'
 import { WebhooksResource } from './resources/webhooks.js'
 
 /**
- * Client for the ZelfAI APIs. The key is read from `options.apiKey`, falling back to the
+ * Client for the Zelf APIs. The key is read from `options.apiKey`, falling back to the
  * ZELF_API_KEY environment variable. It is sent as the x-api-key header and never appears
  * in a URL or in JSON.stringify output.
  */

@@ -13,7 +13,7 @@ public class ZelfConnectionException(string message, Exception? inner = null)
 
 /// <summary>The request exceeded the configured timeout.</summary>
 public sealed class ZelfTimeoutException()
-    : ZelfConnectionException("The request to the ZelfAI API timed out.");
+    : ZelfConnectionException("The request to the Zelf API timed out.");
 
 /// <summary>An error response from the API, with the envelope's own fields.</summary>
 public class ZelfApiException(
@@ -43,7 +43,7 @@ public class ZelfApiException(
         string? code = null;
         string? logId = null;
         JsonElement? details = null;
-        var message = $"HTTP {(int)response.StatusCode} from the ZelfAI API.";
+        var message = $"HTTP {(int)response.StatusCode} from the Zelf API.";
         try
         {
             var raw = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);

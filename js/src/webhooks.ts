@@ -90,7 +90,7 @@ function toBytes(payload: Uint8Array | ArrayBuffer | string): Uint8Array<ArrayBu
 }
 
 /**
- * Verify a ZelfAI webhook and return its decoded payload as a plain object.
+ * Verify a Zelf webhook and return its decoded payload as a plain object.
  *
  * Prefer `parse`, which returns the same thing as a typed WebhookEvent.
  *

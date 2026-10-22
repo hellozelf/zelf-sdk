@@ -5,7 +5,7 @@
 GEN := uv run --no-project --with pyyaml --with datamodel-code-generator python codegen
 LANGS := python js go rust ruby csharp java
 
-.PHONY: all $(LANGS) fixtures test cov e2e \
+.PHONY: all $(LANGS) fixtures names test cov e2e \
 	$(addprefix test-,$(LANGS)) $(addprefix cov-,$(LANGS)) $(addprefix e2e-,$(LANGS)) clean
 
 all: fixtures
@@ -16,6 +16,14 @@ $(LANGS):
 
 fixtures:
 	uv run --no-project --with pyyaml python codegen/make_fixtures.py
+
+# Just the name manifest the developer portal renders snippets from. Pure
+# python, so a caller that only wants the names needs no other toolchain.
+names:
+	uv run --no-project --with pyyaml python -c "import sys; sys.path.insert(0, 'codegen'); \
+		import emit_manifest, spec; from pathlib import Path; \
+		emit_manifest.emit(spec.load(Path('spec/openapi.yaml')), Path('spec/names.json'))"
+	@echo "spec/names.json"
 
 test: test-python test-js test-go test-rust test-ruby test-csharp test-java
 

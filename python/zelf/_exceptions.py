@@ -11,12 +11,12 @@ class ZelfError(Exception):
 
 
 class ZelfConnectionError(ZelfError):
-    def __init__(self, message: str = "Could not reach the ZelfAI API.") -> None:
+    def __init__(self, message: str = "Could not reach the Zelf API.") -> None:
         super().__init__(message)
 
 
 class ZelfTimeoutError(ZelfConnectionError):
-    def __init__(self, message: str = "Request to the ZelfAI API timed out.") -> None:
+    def __init__(self, message: str = "Request to the Zelf API timed out.") -> None:
         super().__init__(message)
 
 
@@ -96,7 +96,7 @@ def parse(response: httpx.Response) -> ZelfAPIError:
             details = error.get("details") or {}
     cls = STATUS_MAP.get(response.status_code, ZelfAPIError)
     return cls(
-        message or f"HTTP {response.status_code} from the ZelfAI API.",
+        message or f"HTTP {response.status_code} from the Zelf API.",
         status_code=response.status_code,
         code=code,
         details=details,

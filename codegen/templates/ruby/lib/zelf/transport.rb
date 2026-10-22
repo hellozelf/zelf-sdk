@@ -4,7 +4,7 @@ require 'uri'
 require 'time'
 
 module Zelf
-  # The production ZelfAI API.
+  # The production Zelf API.
   DEFAULT_BASE_URL = 'https://api.hellozelf.com'.freeze
   # Read when no key is passed explicitly.
   API_KEY_ENV = 'ZELF_API_KEY'.freeze

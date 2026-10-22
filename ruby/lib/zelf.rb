@@ -21,9 +21,9 @@ require_relative 'zelf/resources/sub_brands'
 require_relative 'zelf/resources/usage'
 require_relative 'zelf/resources/webhooks'
 
-# Ruby client for the ZelfAI APIs (spec version 1.2.0).
+# Ruby client for the Zelf APIs (spec version 1.2.0).
 module Zelf
-  # Client for the ZelfAI APIs.
+  # Client for the Zelf APIs.
   #
   # The key comes from the api_key: argument, falling back to the
   # ZELF_API_KEY environment variable. It is sent as the x-api-key header

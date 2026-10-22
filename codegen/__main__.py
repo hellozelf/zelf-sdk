@@ -8,7 +8,8 @@ import emit_conformance  # noqa: E402
 import emit_python  # noqa: E402
 import emit_go  # noqa: E402
 import emit_csharp  # noqa: E402
-import emit_java  # noqa: E402
+import emit_java
+import emit_manifest  # noqa: E402
 import emit_ruby  # noqa: E402
 import emit_rust  # noqa: E402
 import emit_ts  # noqa: E402
@@ -21,6 +22,7 @@ SPEC = SDK / "spec" / "openapi.yaml"
 def main() -> int:
     targets = sys.argv[1:] or ["python", "js", "go", "rust", "ruby", "csharp", "java"]
     api = spec.load(SPEC)
+    emit_manifest.emit(api, SDK / "spec" / "names.json")
     print(f"{api.title} {api.version}: {len(api.operations)} operations, {len(api.resources)} resources")
     if "python" in targets:
         emit_python.emit(api, SPEC, SDK / "python", ROOT / "templates" / "python")

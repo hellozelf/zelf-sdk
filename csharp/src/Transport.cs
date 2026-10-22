@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace Zelf;
 
-/// <summary>The response wrapper every ZelfAI endpoint returns.</summary>
+/// <summary>The response wrapper every Zelf endpoint returns.</summary>
 public sealed record Envelope<T>(
     [property: JsonPropertyName("log_id")] string LogId,
     [property: JsonPropertyName("timestamp")] string Timestamp,
@@ -21,7 +21,7 @@ public sealed record Envelope<T>(
 /// <summary>Settings for a <see cref="ZelfClient"/>.</summary>
 public sealed class ZelfClientOptions
 {
-    /// <summary>The production ZelfAI API.</summary>
+    /// <summary>The production Zelf API.</summary>
     public const string DefaultBaseUrl = "https://api.hellozelf.com";
 
     /// <summary>Read when no key is set explicitly.</summary>

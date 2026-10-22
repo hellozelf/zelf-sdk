@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-/** Verifies and routes the deliveries ZelfAI posts to a receiver. */
+/** Verifies and routes the deliveries Zelf posts to a receiver. */
 public final class Webhook {
 
     public static final String SIGNATURE_HEADER = "Webhook-Signature";

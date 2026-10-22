@@ -1,22 +1,22 @@
 openapi: 3.1.0
 info:
-  title: ZelfAI APIs
+  title: Zelf APIs
   version: 1.2.0
   description: |-
-    The ZelfAI API provides programmatic access to ZelfAI's creator and content intelligence. Use it to search the content and creators tracked for your brand, run AI analyses over that content, vet individual creators, and subscribe to webhooks that deliver results as they are produced.
+    The Zelf API provides programmatic access to Zelf's creator and content intelligence. Use it to search the content and creators tracked for your brand, run AI analyses over that content, vet individual creators, and subscribe to webhooks that deliver results as they are produced.
 
     Your API key reaches your own brand and every brand linked to it, sub-brands included; these are your linked brands, `brands.list` returns exactly that set, and any `brand_id` parameter accepts any brand in it.
 
     The content and AI analysis endpoints also accept a `brand_id` from `brands.catalog`, the catalog of brands Zelf curates for competitive benchmarking. Those brands are readable by every key; the brand write endpoints accept only your linked brands.
 
-    This reference is organized by resource. A resource is a type of object in ZelfAI - such as a piece of content, a creator, or an analysis - and each resource is represented as a JSON object. For each one, the reference lists its fields and the methods it supports (`LIST`, `GET`, `POST`, and so on).
+    This reference is organized by resource. A resource is a type of object in Zelf - such as a piece of content, a creator, or an analysis - and each resource is represented as a JSON object. For each one, the reference lists its fields and the methods it supports (`LIST`, `GET`, `POST`, and so on).
 
     ## Glossary
 
     - **Brand** - the workspace an API key represents. A brand owns the content, creators, and analyses you access through the API.
     - **Workspace brand** - the brand an API key is issued for. It is the brand every endpoint acts on when `brand_id` is omitted, and the brand new sub-brands are created under.
     - **Sub-brand** - a brand nested under a parent brand, used to track a competitor (`COMPETITIVE`) or a content theme (`THEME`) separately.
-    - **Content** - a single social post (a video, image, or text post) from any platform ZelfAI covers.
+    - **Content** - a single social post (a video, image, or text post) from any platform Zelf covers.
     - **Creator** - a social account, identified by its platform and username.
     - **Tracked / influencer account** - creator accounts a brand follows: `tracked` identifies accounts the brand monitors, and `influencer` identifies potential partnership candidates.
     - **AI analysis** - an AI run over the content selected by `content_filters` (or its comments) for a `topic`. An analysis is divided into one or more runs.
@@ -140,12 +140,42 @@ info:
 
     ## Webhooks
 
-    Webhooks let your application receive data as it becomes available, without polling. Once you register an endpoint, ZelfAI sends an HTTP POST request to it for each subscribed event. Two categories are supported:
+    Zelf can send your data to you on a schedule. You register an endpoint once and we post to it, so nothing has to call the API to keep a warehouse, a database or a dashboard up to date.
+
+    **Scheduled export.** Choose how often you want the data: every 12 or 24 hours, weekly, or every 30 days. At each run we build the file and post a notification to your endpoint with a signed link to download it. The file is NDJSON, one JSON object per line, which loads into Snowflake, BigQuery, Postgres or a data frame without conversion.
+
+    **Row limit.** One delivery carries up to 100,000 rows. You can set a lower limit per subscription. If more rows match than the limit allows, the file stops at the limit and the next run picks up what is current then. There is no byte limit, and the notification carries the exact size and a checksum so you can confirm the download is complete.
+
+    **What you filter.** A subscription carries the same filters as the read endpoints, so a delivery is scoped to one brand, one platform, a date window, or whatever else you would have passed to `content.list`.
+
+    **Where it goes.** Deliveries go to an HTTPS endpoint you control. We do not post to email, nor write into a database or warehouse for you; your endpoint receives the link and loads the file wherever it belongs.
+
+    Use the read endpoints for interactive lookups and for the question you are answering right now. Use a webhook for anything regular and for anything large: the same pull over `content.list` is thousands of requests against your rate limit.
+
+    Two categories are supported:
 
     - **Snapshots** (`content.snapshot`, `creator.snapshot`) are delivered on a schedule and carry a signed, time-limited link to an NDJSON file containing the matching content or creators.
     - **Events** (`creator_vetting.completed`, `ai_analysis.completed`) are delivered when a run reaches a terminal state and carry a lightweight notification; retrieve the full result from the corresponding results operation (`ai_analysis.results` or `creator_vetting.results`).
 
     Every delivery shares a common envelope (`id`, `type`, `subscription_id`, `delivered_at`, `livemode`, `resource`, `delivery_mode`, `data`). Respond with any `2xx` status code to acknowledge receipt; a non-2xx response or a timeout is retried with exponential backoff. The **Webhooks** section documents each payload and the structure of the NDJSON files.
+
+    ### Snapshot limits
+
+    A snapshot carries at most 100,000 items. A subscription may set a lower `max_items`; leaving it empty or `0` applies that ceiling. Items count against the brand's data-record item quota, so a snapshot is cut to the remaining allowance, and a delivery is skipped and marked quota exhausted when none is left. When more items match than the limit allows, the file stops at the limit and the next scheduled snapshot carries whatever is current then. A test delivery always sends a sample of 10 items.
+
+    ### The file
+
+    There is no byte limit; size follows the item limit. The file is NDJSON, one JSON object per line, served as `application/x-ndjson` and not compressed. The notification carries the exact byte size and a SHA-256 checksum, so you can verify a download is complete before you read it.
+
+    The signed download link is valid for 24 hours from delivery, and `expires_at` (Unix seconds) carries the exact moment. The file is kept for 7 days and then deleted with its delivery record. A link cannot be reissued, so download within the window.
+
+    ### Schedule and retries
+
+    Snapshots run every 12, 24, 168 (weekly) or 720 hours (30 days), defaulting to 12 hours. The first one arrives within minutes of creating the subscription.
+
+    Any response other than `2xx` counts as a failure, including `3xx`, because redirects are not followed, as do timeouts and connection errors. The timeouts are 10 seconds to connect and 30 seconds to read, so answer `2xx` immediately and download the file afterwards rather than while we wait.
+
+    A delivery is attempted 5 times in total. Retries start about 60 seconds apart and double with jitter, up to 6 hours between tries. Each retry rebuilds the snapshot from current data and carries a new signed link under the same delivery id. After the last failure the delivery is marked exhausted and the next scheduled snapshot runs as usual. Items are charged to the quota only when a delivery succeeds, so a retry is never billed twice.
 
     ## Models
 
@@ -173,8 +203,8 @@ paths:
             examples:
               Example:
                 value:
-                  name: ZelfAI
-                  topic: ZelfAI
+                  name: Zelf
+                  topic: Zelf
                   analysis_scope:
                   - CONTENT
                   content_filters:
@@ -276,8 +306,8 @@ paths:
                     results:
                     - id: bod_huNssMQX4FTvALEY
                       analysis_type: AI_ANALYSIS
-                      name: ZelfAI
-                      topic: ZelfAI
+                      name: Zelf
+                      topic: Zelf
                       created_at: '2026-05-12T14:30:00Z'
                       modified_at: '2026-05-12T15:00:00Z'
                       analyses:
@@ -418,8 +448,8 @@ paths:
                     results:
                     - id: bod_huNssMQX4FTvALEY
                       analysis_type: AI_ANALYSIS
-                      name: ZelfAI
-                      topic: ZelfAI
+                      name: Zelf
+                      topic: Zelf
                       created_at: '2026-05-12T14:30:00Z'
                       modified_at: '2026-05-12T15:00:00Z'
                       analyses:
@@ -728,7 +758,7 @@ paths:
                       creator:
                         id: cr_pfqPv0FLsBRimHfi
                         username: zelfai
-                        name: ZelfAI
+                        name: Zelf
                         platform: instagram
                         platform_handle: zelfai
                         platform_url: https://www.instagram.com/zelfai
@@ -742,13 +772,13 @@ paths:
                       is_tagged: true
                       is_influencer: true
                       mention_type: content
-                      caption: Behind the scenes at ZelfAI.
-                      description: How ZelfAI turns social signals into creator insights.
-                      transcript: We walk through how ZelfAI ranks creators by brand
+                      caption: Behind the scenes at Zelf.
+                      description: How Zelf turns social signals into creator insights.
+                      transcript: We walk through how Zelf ranks creators by brand
                         fit.
                       platform_url: https://www.instagram.com/zelfai
                       last_keyword: zelf creators
-                      ai_summary: A product walkthrough of ZelfAI creator analytics.
+                      ai_summary: A product walkthrough of Zelf creator analytics.
                       hashtags:
                       - zelfai
                       - creatoreconomy
@@ -2917,7 +2947,7 @@ paths:
                     timestamp: '2026-01-01T00:00:00Z'
                     results:
                     - id: com_tfBrrZrU2Kp5VTsW
-                      text: Love what ZelfAI is building!
+                      text: Love what Zelf is building!
                       platform: instagram
                       like_count: 312
                       posted_at: '2026-05-12T16:00:00Z'
@@ -2927,7 +2957,7 @@ paths:
                       author:
                         id: cr_bxUfTmtAcXdlHwKO
                         username: zelfai
-                        name: ZelfAI
+                        name: Zelf
                         profile_picture_url: https://cdn.hellozelf.com/avatars/zelfai.png
                     item_count: 1
                     page: 1
@@ -3529,7 +3559,7 @@ paths:
                       creator:
                         id: cr_pfqPv0FLsBRimHfi
                         username: zelfai
-                        name: ZelfAI
+                        name: Zelf
                         platform: instagram
                         platform_handle: zelfai
                         platform_url: https://www.instagram.com/zelfai
@@ -3543,13 +3573,13 @@ paths:
                       is_tagged: true
                       is_influencer: true
                       mention_type: content
-                      caption: Behind the scenes at ZelfAI.
-                      description: How ZelfAI turns social signals into creator insights.
-                      transcript: We walk through how ZelfAI ranks creators by brand
+                      caption: Behind the scenes at Zelf.
+                      description: How Zelf turns social signals into creator insights.
+                      transcript: We walk through how Zelf ranks creators by brand
                         fit.
                       platform_url: https://www.instagram.com/zelfai
                       last_keyword: zelf creators
-                      ai_summary: A product walkthrough of ZelfAI creator analytics.
+                      ai_summary: A product walkthrough of Zelf creator analytics.
                       hashtags:
                       - zelfai
                       - creatoreconomy
@@ -4790,7 +4820,7 @@ paths:
                       creator:
                         id: cr_pfqPv0FLsBRimHfi
                         username: zelfai
-                        name: ZelfAI
+                        name: Zelf
                         platform: instagram
                         platform_handle: zelfai
                         platform_url: https://www.instagram.com/zelfai
@@ -4804,13 +4834,13 @@ paths:
                       is_tagged: true
                       is_influencer: true
                       mention_type: content
-                      caption: Behind the scenes at ZelfAI.
-                      description: How ZelfAI turns social signals into creator insights.
-                      transcript: We walk through how ZelfAI ranks creators by brand
+                      caption: Behind the scenes at Zelf.
+                      description: How Zelf turns social signals into creator insights.
+                      transcript: We walk through how Zelf ranks creators by brand
                         fit.
                       platform_url: https://www.instagram.com/zelfai
                       last_keyword: zelf creators
-                      ai_summary: A product walkthrough of ZelfAI creator analytics.
+                      ai_summary: A product walkthrough of Zelf creator analytics.
                       hashtags:
                       - zelfai
                       - creatoreconomy
@@ -4995,7 +5025,7 @@ paths:
                     results:
                     - id: cr_pfqPv0FLsBRimHfi
                       username: zelfai
-                      name: ZelfAI
+                      name: Zelf
                       email: example@zelflive.com
                       platform: instagram
                       platform_handle: zelfai
@@ -5148,7 +5178,7 @@ paths:
                       creator:
                         id: cr_pfqPv0FLsBRimHfi
                         username: zelfai
-                        name: ZelfAI
+                        name: Zelf
                         email: example@zelflive.com
                         platform: instagram
                         platform_handle: zelfai
@@ -5316,7 +5346,7 @@ paths:
                       creator:
                         id: cr_pfqPv0FLsBRimHfi
                         username: zelfai
-                        name: ZelfAI
+                        name: Zelf
                         email: example@zelflive.com
                         platform: instagram
                         platform_handle: zelfai
@@ -5403,7 +5433,7 @@ paths:
 
         **Disclosures.** When the vetting requested `DISCLOSURE`, the payload's `insight_json.disclosures` holds one entry per analyzed video: its `content_id` and a `result`. The `result` lists `evidence` items, each with the `source` it was found in (`frame` for on-screen text, `audio` for the speech transcription, `title`, `caption` or `metadata`), a `kind` (`sponsorship`, `affiliate`, `gifted` or `relationship` for a commercial relationship; `terms` or `risk` for offer conditions and warnings), the quoted `text` and, where known, `time_seconds`. It also gives each source a `channels` status: `present`, `absent` or `unknown` (not checked). Disclosures are not counted as violations.
 
-        Limits: only videos up to 10 minutes are checked; on-screen text is read from sampled frames, so text shown only briefly can be missed; videos ZelfAI analyzed before the request are not re-analyzed for disclosures. An empty `evidence` list does not confirm that a video has no disclosure. Detection reports what was stated; it does not assess legal compliance.
+        Limits: only videos up to 10 minutes are checked; on-screen text is read from sampled frames, so text shown only briefly can be missed; videos Zelf analyzed before the request are not re-analyzed for disclosures. An empty `evidence` list does not confirm that a video has no disclosure. Detection reports what was stated; it does not assess legal compliance.
       summary: Get Creator Vetting Results
       parameters:
       - in: query
@@ -5642,7 +5672,7 @@ paths:
                       creator:
                         id: cr_pfqPv0FLsBRimHfi
                         username: zelfai
-                        name: ZelfAI
+                        name: Zelf
                         platform: instagram
                         platform_handle: zelfai
                         platform_url: https://www.instagram.com/zelfai
@@ -5656,13 +5686,13 @@ paths:
                       is_tagged: true
                       is_influencer: true
                       mention_type: content
-                      caption: Behind the scenes at ZelfAI.
-                      description: How ZelfAI turns social signals into creator insights.
-                      transcript: We walk through how ZelfAI ranks creators by brand
+                      caption: Behind the scenes at Zelf.
+                      description: How Zelf turns social signals into creator insights.
+                      transcript: We walk through how Zelf ranks creators by brand
                         fit.
                       platform_url: https://www.instagram.com/zelfai
                       last_keyword: zelf creators
-                      ai_summary: A product walkthrough of ZelfAI creator analytics.
+                      ai_summary: A product walkthrough of Zelf creator analytics.
                       hashtags:
                       - zelfai
                       - creatoreconomy
@@ -11433,7 +11463,7 @@ components:
     WebhookPush:
       type: object
       description: |-
-        The outer payload ZelfAI POSTs to receivers, uniform across all pushes.
+        The outer payload Zelf POSTs to receivers, uniform across all pushes.
 
         Top-level fields are delivery metadata and remain identical across
         modes. `data` carries the content; which key inside it is populated
@@ -11453,7 +11483,7 @@ components:
           description: Id of the subscription that produced this push.
         delivered_at:
           type: integer
-          description: Unix epoch seconds at which ZelfAI sent this push.
+          description: Unix epoch seconds at which Zelf sent this push.
         livemode:
           type: boolean
           description: '`true` for production data; `false` for test deliveries.'
@@ -12160,7 +12190,7 @@ tags:
     benchmarking, which every key can read content for.
 - name: Content
   description: Search, list, and aggregate content (posts, videos, images) across
-    the platforms ZelfAI tracks. Supports rich filtering by metrics, platform, language,
+    the platforms Zelf tracks. Supports rich filtering by metrics, platform, language,
     date window, and creator, plus optional brand context.
 - name: Comment
   description: Search, list comments of a content including like count, author information
@@ -12187,11 +12217,11 @@ tags:
     or event pushes; the outbound payload shapes are documented under Webhook snapshots
     and Webhook events.
 - name: Webhook snapshots
-  description: Scheduled per-resource snapshot pushes. ZelfAI POSTs a manifest with
+  description: Scheduled per-resource snapshot pushes. Zelf POSTs a manifest with
     a signed NDJSON download of the matching content or creator set.
 - name: Webhook events
-  description: Event-driven pushes. ZelfAI POSTs the payload inline when a tracked
-    event (such as a completed creator vetting) occurs.
+  description: Event-driven pushes. Zelf POSTs the payload inline when a tracked event
+    (such as a completed creator vetting) occurs.
 webhooks:
   ContentSnapshot:
     post:
@@ -12202,7 +12232,7 @@ webhooks:
 
         Delivered in `manifest` mode: `data.files` holds one signed, time-limited NDJSON download, and `data.statistics` carries the aggregate totals over the snapshot. `resource` is `content`.
 
-        **Payload ZelfAI POSTs to the registered endpoint:**
+        **Payload Zelf POSTs to the registered endpoint:**
         ```json
         {
           "id": "whd_8f2c1d4e9a",
@@ -12262,7 +12292,7 @@ webhooks:
           "creator": {
             "id": "cr_pfqPv0FLsBRimHfi",
             "username": "zelfai",
-            "name": "ZelfAI",
+            "name": "Zelf",
             "platform": "instagram",
             "platform_handle": "zelfai",
             "platform_url": "https://www.instagram.com/zelfai",
@@ -12277,12 +12307,12 @@ webhooks:
           "is_tagged": true,
           "is_influencer": true,
           "mention_type": "content",
-          "caption": "Behind the scenes at ZelfAI.",
-          "description": "How ZelfAI turns social signals into creator insights.",
-          "transcript": "We walk through how ZelfAI ranks creators by brand fit.",
+          "caption": "Behind the scenes at Zelf.",
+          "description": "How Zelf turns social signals into creator insights.",
+          "transcript": "We walk through how Zelf ranks creators by brand fit.",
           "platform_url": "https://www.instagram.com/zelfai",
           "last_keyword": "zelf creators",
-          "ai_summary": "A product walkthrough of ZelfAI creator analytics.",
+          "ai_summary": "A product walkthrough of Zelf creator analytics.",
           "hashtags": [
             "zelfai",
             "creatoreconomy"
@@ -12342,7 +12372,7 @@ webhooks:
 
         Delivered in `manifest` mode: `data.files` holds one signed, time-limited NDJSON download. Unlike `content.snapshot`, no `data.statistics` block is included. `resource` is `creator`.
 
-        **Payload ZelfAI POSTs to the registered endpoint:**
+        **Payload Zelf POSTs to the registered endpoint:**
         ```json
         {
           "id": "whd_8f2c1d4e9a",
@@ -12374,7 +12404,7 @@ webhooks:
         {
           "id": "cr_pfqPv0FLsBRimHfi",
           "username": "zelfai",
-          "name": "ZelfAI",
+          "name": "Zelf",
           "email": "example@zelflive.com",
           "platform": "instagram",
           "platform_handle": "zelfai",
@@ -12427,7 +12457,7 @@ webhooks:
 
         Delivered in `inline` mode as a lightweight notification: `data.items[0]` carries the vetting id, its `analysis_type`, `modified_at`, and each run's `id` and `status`, rather than the full payload. Retrieve the `result` from `creator_vetting.results` (pass `vetting_id=<id>`). `resource` is `null`.
 
-        **Payload ZelfAI POSTs to the registered endpoint:**
+        **Payload Zelf POSTs to the registered endpoint:**
         ```json
         {
           "id": "whd_8f2c1d4e9a",
@@ -12504,7 +12534,7 @@ webhooks:
 
         Delivered in `inline` mode as a lightweight notification: `data.items[0]` carries the analysis id, its `analysis_type`, `modified_at`, and each run's `id` and `status`, rather than the full payload. Retrieve the `result` from `ai_analysis.results` (pass `analysis_id=<id>`). `resource` is `null`. An analysis with multiple scopes fires once per run, as each reaches a terminal state.
 
-        **Payload ZelfAI POSTs to the registered endpoint:**
+        **Payload Zelf POSTs to the registered endpoint:**
         ```json
         {
           "id": "whd_8f2c1d4e9a",

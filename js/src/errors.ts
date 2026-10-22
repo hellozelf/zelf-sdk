@@ -13,13 +13,13 @@ export class ZelfError extends Error {
 }
 
 export class ZelfConnectionError extends ZelfError {
-  constructor(message = 'Could not reach the ZelfAI API.') {
+  constructor(message = 'Could not reach the Zelf API.') {
     super(message)
   }
 }
 
 export class ZelfTimeoutError extends ZelfConnectionError {
-  constructor(message = 'Request to the ZelfAI API timed out.') {
+  constructor(message = 'Request to the Zelf API timed out.') {
     super(message)
   }
 }

@@ -1441,7 +1441,7 @@ public sealed record WebhookFile(
 );
 
 /// <summary>
-/// The outer payload ZelfAI POSTs to receivers, uniform across all pushes. Top-level
+/// The outer payload Zelf POSTs to receivers, uniform across all pushes. Top-level
 /// fields are delivery metadata and remain identical across modes. `data` carries the
 /// content; which key inside it is populated (`files` or `items`) is determined by
 /// `delivery_mode`. `manifest` deliveries use `data.files`, while `inline` event pushes

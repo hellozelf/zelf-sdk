@@ -1203,7 +1203,7 @@ module Zelf
       field :download_url, "download_url"
     end
 
-    # The outer payload ZelfAI POSTs to receivers, uniform across all pushes. Top-level
+    # The outer payload Zelf POSTs to receivers, uniform across all pushes. Top-level
     # fields are delivery metadata and remain identical across modes. `data` carries the
     # content; which key inside it is populated (`files` or `items`) is determined by
     # `delivery_mode`. `manifest` deliveries use `data.files`, while `inline` event pushes
@@ -1215,7 +1215,7 @@ module Zelf
       field :type, "type"
       # Id of the subscription that produced this push
       field :subscription_id, "subscription_id"
-      # Unix epoch seconds at which ZelfAI sent this push
+      # Unix epoch seconds at which Zelf sent this push
       field :delivered_at, "delivered_at"
       # true for production data; false for test deliveries
       field :livemode, "livemode"
