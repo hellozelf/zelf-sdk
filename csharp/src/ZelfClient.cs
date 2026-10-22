@@ -10,7 +10,7 @@ namespace Zelf;
 public sealed class ZelfClient : IDisposable
 {
     /// <summary>The SDK version sent in the User-Agent header.</summary>
-    public const string Version = "1.1.1";
+    public const string Version = "1.2.0";
 
     private readonly Transport _transport;
 
@@ -27,6 +27,7 @@ public sealed class ZelfClient : IDisposable
         CreatorVetting = new CreatorVettingResource(_transport);
         Creators = new CreatorsResource(_transport);
         Detection = new DetectionResource(_transport);
+        Engage = new EngageResource(_transport);
         SubBrands = new SubBrandsResource(_transport);
         Usage = new UsageResource(_transport);
         Webhooks = new WebhooksResource(_transport);
@@ -66,6 +67,9 @@ public sealed class ZelfClient : IDisposable
 
     /// <summary>The detection endpoints.</summary>
     public DetectionResource Detection { get; }
+
+    /// <summary>The engage endpoints.</summary>
+    public EngageResource Engage { get; }
 
     /// <summary>The sub_brands endpoints.</summary>
     public SubBrandsResource SubBrands { get; }

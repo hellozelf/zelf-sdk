@@ -97,49 +97,6 @@ public sealed record AnalyticsFollowerTimeseriesParams
 
 }
 
-/// <summary>
-/// Parameters for analytics.posted_comments.
-/// </summary>
-public sealed record AnalyticsPostedCommentsParams
-{
-    /// <summary>
-    /// The top-level brand to analyse, as returned by brands.list
-    /// </summary>
-    [JsonPropertyName("brand_id")]
-    public required string BrandId { get; init; }
-
-    /// <summary>
-    /// Platforms to include, comma-separated
-    /// </summary>
-    [JsonPropertyName("platform")]
-    public IReadOnlyList<string>? Platform { get; init; }
-
-    /// <summary>
-    /// Start of the window (UTC, ISO 8601)
-    /// </summary>
-    [JsonPropertyName("posted_after")]
-    public DateTimeOffset? PostedAfter { get; init; }
-
-    /// <summary>
-    /// End of the window (UTC, ISO 8601)
-    /// </summary>
-    [JsonPropertyName("posted_before")]
-    public DateTimeOffset? PostedBefore { get; init; }
-
-    /// <summary>
-    /// Start of the window, counted back from posted_before or the current time, in days...
-    /// </summary>
-    [JsonPropertyName("posted_within_days")]
-    public long? PostedWithinDays { get; init; }
-
-    /// <summary>
-    /// Start of the window, counted back from posted_before or the current time, in...
-    /// </summary>
-    [JsonPropertyName("posted_within_hours")]
-    public long? PostedWithinHours { get; init; }
-
-}
-
 /// <summary>The analytics endpoints.</summary>
 public sealed class AnalyticsResource(Transport transport)
 {
@@ -223,43 +180,5 @@ public sealed class AnalyticsResource(Transport transport)
         var envelope = await _transport.SendAsync<FollowerTimeseries>(HttpMethod.Get, path, query, null, cancellationToken)
             .ConfigureAwait(false);
         return Envelopes.Rows(envelope);
-    }
-
-    /// <summary>
-    /// Get Posted Comment Analytics. Returns the comments the brand posted in the window,
-    /// grouped by the kind of content they were posted on, together with the likes and
-    /// replies those comments received. These are comments the brand wrote, not comments
-    /// left on its content; `comments.list` returns the latter. The five categories add up
-    /// to `total_comments_posted`.
-    /// </summary>
-    /// <remarks>Calls GET /api/v1/analytics/posted_comments/ (analytics.posted_comments).</remarks>
-    public async Task<PostedComments> PostedCommentsAsync(AnalyticsPostedCommentsParams parameters, CancellationToken cancellationToken = default)
-    {
-        var path = "/api/v1/analytics/posted_comments/";
-        var query = new List<KeyValuePair<string, string>>();
-        query.Add(new KeyValuePair<string, string>("brand_id", QueryValue.Format(parameters.BrandId)));
-        if (parameters.Platform is not null) foreach (var item in parameters.Platform!)
-        {
-            query.Add(new KeyValuePair<string, string>("platform", QueryValue.Format(item)));
-        }
-        if (parameters.PostedAfter is not null)
-        {
-            query.Add(new KeyValuePair<string, string>("posted_after", QueryValue.Format(parameters.PostedAfter)));
-        }
-        if (parameters.PostedBefore is not null)
-        {
-            query.Add(new KeyValuePair<string, string>("posted_before", QueryValue.Format(parameters.PostedBefore)));
-        }
-        if (parameters.PostedWithinDays is not null)
-        {
-            query.Add(new KeyValuePair<string, string>("posted_within_days", QueryValue.Format(parameters.PostedWithinDays)));
-        }
-        if (parameters.PostedWithinHours is not null)
-        {
-            query.Add(new KeyValuePair<string, string>("posted_within_hours", QueryValue.Format(parameters.PostedWithinHours)));
-        }
-        var envelope = await _transport.SendAsync<PostedComments>(HttpMethod.Get, path, query, null, cancellationToken)
-            .ConfigureAwait(false);
-        return Envelopes.One(envelope, "PostedComments");
     }
 }

@@ -5,8 +5,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::models::{BrandComparison, FollowerTimeseries, PlatformEnum, PostedComments};
-use crate::page::one;
+use crate::models::{BrandComparison, FollowerTimeseries, PlatformEnum};
 use crate::transport::{Envelope, Transport};
 
 /// Parameters for analytics.brand_comparison.
@@ -47,35 +46,6 @@ pub struct AnalyticsFollowerTimeseriesParams {
     /// Size of each bucket in the series. Defaults to `day`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub period: Option<String>,
-    /// Platforms to include, comma-separated. Defaults to all of them.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<Vec<PlatformEnum>>,
-    /// Start of the window (UTC, ISO 8601). Supplying more than one start is accepted and only
-    /// one applies: this one wins over `posted_within_hours`, which wins over
-    /// `posted_within_days`.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub posted_after: Option<String>,
-    /// End of the window (UTC, ISO 8601). Defaults to the current time, and a relative start is
-    /// counted back from it.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub posted_before: Option<String>,
-    /// Start of the window, counted back from `posted_before` or the current time, in days
-    /// (1-365). Defaults to 7 when no date parameter is supplied, and loses to `posted_after`
-    /// and `posted_within_hours`.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub posted_within_days: Option<i64>,
-    /// Start of the window, counted back from `posted_before` or the current time, in hours
-    /// (1-8760). `posted_after` wins over it; it wins over `posted_within_days`.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub posted_within_hours: Option<i64>,
-}
-
-/// Parameters for analytics.posted_comments.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AnalyticsPostedCommentsParams {
-    /// The top-level brand to analyse, as returned by `brands.list`. A sub-brand is refused
-    /// with the id of the parent to use instead.
-    pub brand_id: String,
     /// Platforms to include, comma-separated. Defaults to all of them.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<Vec<PlatformEnum>>,
@@ -205,54 +175,5 @@ impl AnalyticsResource {
             )
             .await?;
         Ok(envelope.results)
-    }
-
-    /// Get Posted Comment Analytics. Returns the comments the brand posted in the window,
-    /// grouped by the kind of content they were posted on, together with the likes and replies
-    /// those comments received. These are comments the brand wrote, not comments left on its
-    /// content; `comments.list` returns the latter. The five categories add up to
-    /// `total_comments_posted`.
-    ///
-    /// Calls `GET /api/v1/analytics/posted_comments/` (`analytics.posted_comments`).
-    pub async fn posted_comments(
-        &self,
-        params: AnalyticsPostedCommentsParams,
-    ) -> Result<PostedComments> {
-        #[allow(unused_mut)]
-        let mut query: Vec<(String, String)> = Vec::new();
-        {
-            let value = &params.brand_id;
-            query.push(("brand_id".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.platform {
-            for entry in value {
-                query.push(("platform".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.posted_after {
-            query.push(("posted_after".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_before {
-            query.push(("posted_before".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_within_days {
-            query.push(("posted_within_days".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_within_hours {
-            query.push(("posted_within_hours".to_string(), value.to_string()));
-        }
-        let path_params = [];
-        let body = None;
-        let envelope: Envelope<PostedComments> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/analytics/posted_comments/",
-                &path_params,
-                &query,
-                body,
-            )
-            .await?;
-        one(envelope, "PostedComments")
     }
 }

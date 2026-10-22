@@ -158,7 +158,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v1/analytics/posted_comments/': {
+  '/api/v1/engage/comment_statistics/': {
     parameters: {
       query?: never
       header?: never
@@ -166,14 +166,14 @@ export interface paths {
       cookie?: never
     }
     /**
-     * Get Posted Comment Analytics
-     * @description `analytics.posted_comments`
+     * Get Comment Statistics
+     * @description `engage.comment_statistics`
      *
      *     Returns the comments the brand posted in the window, grouped by the kind of content they were posted on, together with the likes and replies those comments received. These are comments the brand wrote, not comments left on its content; `comments.list` returns the latter.
      *
      *     The five categories add up to `total_comments_posted`.
      */
-    get: operations['analytics.posted_comments']
+    get: operations['engage.comment_statistics']
     put?: never
     post?: never
     delete?: never
@@ -1779,6 +1779,24 @@ export interface components {
       /** @description URL of the author's profile picture. */
       readonly profile_picture_url: string | null
     }
+    /** @description Comments the brand posted on one category of content. */
+    CommentCategory: {
+      /** @description `brand`, `owned`, `competitors`, `themes` or `other`. `other` covers content outside the brand's own tree. */
+      category: string
+      /** @description Comments posted on this category. */
+      comments: number
+      /** @description Likes those comments received. */
+      likes: number
+      /** @description Replies those comments received. */
+      replies: number
+    }
+    /** @description Comments the brand posted, split by the content they were posted on. */
+    CommentStatistics: {
+      /** @description Comments the brand posted in the window, across every category. */
+      total_comments_posted: number
+      /** @description One entry per category. They add up to `total_comments_posted`. */
+      categories: components['schemas']['CommentCategory'][]
+    }
     /** @description A piece of content (a post, video, or image) and its metrics. */
     Content: {
       /** @description Unique identifier for this piece of content. Use it to retrieve the content anywhere a content id is accepted. */
@@ -2543,24 +2561,6 @@ export interface components {
     }
     /** @enum {string} */
     PlatformEnum: 'instagram' | 'tiktok' | 'youtube'
-    /** @description Comments the brand posted on one category of content. */
-    PostedCommentCategory: {
-      /** @description `brand`, `owned`, `competitors`, `themes` or `other`. `other` covers content outside the brand's own tree. */
-      category: string
-      /** @description Comments posted on this category. */
-      comments: number
-      /** @description Likes those comments received. */
-      likes: number
-      /** @description Replies those comments received. */
-      replies: number
-    }
-    /** @description Comments the brand posted, split by the content they were posted on. */
-    PostedComments: {
-      /** @description Comments the brand posted in the window, across every category. */
-      total_comments_posted: number
-      /** @description One entry per category. They add up to `total_comments_posted`. */
-      categories: components['schemas']['PostedCommentCategory'][]
-    }
     /** @enum {string} */
     ResourceEnum: 'content' | 'creator'
     /** @description Signed, time-limited download of an analysis run's result payload. */
@@ -3959,7 +3959,7 @@ export interface operations {
       }
     }
   }
-  'analytics.posted_comments': {
+  'engage.comment_statistics': {
     parameters: {
       query: {
         /** @description The top-level brand to analyse, as returned by `brands.list`. A sub-brand is refused with the id of the parent to use instead. */
@@ -3990,7 +3990,7 @@ export interface operations {
             log_id: string
             /** Format: date-time */
             timestamp: string
-            results: components['schemas']['PostedComments'][]
+            results: components['schemas']['CommentStatistics'][]
             item_count: number
             page: number
             next: number | null

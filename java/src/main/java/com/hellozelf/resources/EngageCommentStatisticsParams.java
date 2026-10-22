@@ -8,10 +8,10 @@ import com.hellozelf.model.*;
 import java.util.List;
 
 /**
- * Parameters for analytics.posted_comments. Set what you need and leave the rest.
+ * Parameters for engage.comment_statistics. Set what you need and leave the rest.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public final class AnalyticsPostedCommentsParams {
+public final class EngageCommentStatisticsParams {
 
     @JsonProperty("brand_id")
     private String brandId;
@@ -34,7 +34,7 @@ public final class AnalyticsPostedCommentsParams {
     /**
      * The top-level brand to analyse, as returned by brands.list
      */
-    public AnalyticsPostedCommentsParams brandId(String value) {
+    public EngageCommentStatisticsParams brandId(String value) {
         this.brandId = value;
         return this;
     }
@@ -46,7 +46,7 @@ public final class AnalyticsPostedCommentsParams {
     /**
      * Platforms to include, comma-separated
      */
-    public AnalyticsPostedCommentsParams platform(List<String> value) {
+    public EngageCommentStatisticsParams platform(List<String> value) {
         this.platform = value;
         return this;
     }
@@ -58,7 +58,7 @@ public final class AnalyticsPostedCommentsParams {
     /**
      * Start of the window (UTC, ISO 8601)
      */
-    public AnalyticsPostedCommentsParams postedAfter(String value) {
+    public EngageCommentStatisticsParams postedAfter(String value) {
         this.postedAfter = value;
         return this;
     }
@@ -70,7 +70,7 @@ public final class AnalyticsPostedCommentsParams {
     /**
      * End of the window (UTC, ISO 8601)
      */
-    public AnalyticsPostedCommentsParams postedBefore(String value) {
+    public EngageCommentStatisticsParams postedBefore(String value) {
         this.postedBefore = value;
         return this;
     }
@@ -83,7 +83,7 @@ public final class AnalyticsPostedCommentsParams {
      * Start of the window, counted back from posted_before or the current time, in
      * days...
      */
-    public AnalyticsPostedCommentsParams postedWithinDays(Long value) {
+    public EngageCommentStatisticsParams postedWithinDays(Long value) {
         this.postedWithinDays = value;
         return this;
     }
@@ -95,7 +95,7 @@ public final class AnalyticsPostedCommentsParams {
     /**
      * Start of the window, counted back from posted_before or the current time, in...
      */
-    public AnalyticsPostedCommentsParams postedWithinHours(Long value) {
+    public EngageCommentStatisticsParams postedWithinHours(Long value) {
         this.postedWithinHours = value;
         return this;
     }

@@ -472,6 +472,24 @@ public sealed record CommentAuthor(
 );
 
 /// <summary>
+/// Comments the brand posted on one category of content.
+/// </summary>
+public sealed record CommentCategory(
+    [property: JsonPropertyName("category")] string Category,
+    [property: JsonPropertyName("comments")] long Comments,
+    [property: JsonPropertyName("likes")] long Likes,
+    [property: JsonPropertyName("replies")] long Replies
+);
+
+/// <summary>
+/// Comments the brand posted, split by the content they were posted on.
+/// </summary>
+public sealed record CommentStatistics(
+    [property: JsonPropertyName("total_comments_posted")] long TotalCommentsPosted,
+    [property: JsonPropertyName("categories")] IReadOnlyList<CommentCategory> Categories
+);
+
+/// <summary>
 /// A piece of content (a post, video, or image) and its metrics.
 /// </summary>
 public sealed record Content(
@@ -1273,24 +1291,6 @@ public sealed record PatchedWebhookSubscriptionUpdateRequest
     public bool? Enabled { get; init; }
 
 }
-
-/// <summary>
-/// Comments the brand posted on one category of content.
-/// </summary>
-public sealed record PostedCommentCategory(
-    [property: JsonPropertyName("category")] string Category,
-    [property: JsonPropertyName("comments")] long Comments,
-    [property: JsonPropertyName("likes")] long Likes,
-    [property: JsonPropertyName("replies")] long Replies
-);
-
-/// <summary>
-/// Comments the brand posted, split by the content they were posted on.
-/// </summary>
-public sealed record PostedComments(
-    [property: JsonPropertyName("total_comments_posted")] long TotalCommentsPosted,
-    [property: JsonPropertyName("categories")] IReadOnlyList<PostedCommentCategory> Categories
-);
 
 /// <summary>
 /// Signed, time-limited download of an analysis run's result payload.

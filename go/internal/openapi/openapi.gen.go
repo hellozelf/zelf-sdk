@@ -178,13 +178,6 @@ const (
 	AnalyticsFollowerTimeseriesParamsPlatformYoutube   AnalyticsFollowerTimeseriesParamsPlatform = "youtube"
 )
 
-// Defines values for AnalyticsPostedCommentsParamsPlatform.
-const (
-	AnalyticsPostedCommentsParamsPlatformInstagram AnalyticsPostedCommentsParamsPlatform = "instagram"
-	AnalyticsPostedCommentsParamsPlatformTiktok    AnalyticsPostedCommentsParamsPlatform = "tiktok"
-	AnalyticsPostedCommentsParamsPlatformYoutube   AnalyticsPostedCommentsParamsPlatform = "youtube"
-)
-
 // Defines values for BrandAccountsListParamsAccountType.
 const (
 	BrandAccountsListParamsAccountTypeInfluencer BrandAccountsListParamsAccountType = "influencer"
@@ -312,9 +305,16 @@ const (
 
 // Defines values for CreatorsListParamsPlatform.
 const (
-	Instagram CreatorsListParamsPlatform = "instagram"
-	Tiktok    CreatorsListParamsPlatform = "tiktok"
-	Youtube   CreatorsListParamsPlatform = "youtube"
+	CreatorsListParamsPlatformInstagram CreatorsListParamsPlatform = "instagram"
+	CreatorsListParamsPlatformTiktok    CreatorsListParamsPlatform = "tiktok"
+	CreatorsListParamsPlatformYoutube   CreatorsListParamsPlatform = "youtube"
+)
+
+// Defines values for EngageCommentStatisticsParamsPlatform.
+const (
+	Instagram EngageCommentStatisticsParamsPlatform = "instagram"
+	Tiktok    EngageCommentStatisticsParamsPlatform = "tiktok"
+	Youtube   EngageCommentStatisticsParamsPlatform = "youtube"
 )
 
 // Defines values for WebhooksListDeliveriesParamsSortBy.
@@ -735,6 +735,30 @@ type CommentAuthor struct {
 
 	// Username The author's username or handle on the platform (without the leading `@`).
 	Username nullable.Nullable[string] `json:"username"`
+}
+
+// CommentCategory Comments the brand posted on one category of content.
+type CommentCategory struct {
+	// Category `brand`, `owned`, `competitors`, `themes` or `other`. `other` covers content outside the brand's own tree.
+	Category string `json:"category"`
+
+	// Comments Comments posted on this category.
+	Comments int `json:"comments"`
+
+	// Likes Likes those comments received.
+	Likes int `json:"likes"`
+
+	// Replies Replies those comments received.
+	Replies int `json:"replies"`
+}
+
+// CommentStatistics Comments the brand posted, split by the content they were posted on.
+type CommentStatistics struct {
+	// Categories One entry per category. They add up to `total_comments_posted`.
+	Categories []CommentCategory `json:"categories"`
+
+	// TotalCommentsPosted Comments the brand posted in the window, across every category.
+	TotalCommentsPosted int `json:"total_comments_posted"`
 }
 
 // Content A piece of content (a post, video, or image) and its metrics.
@@ -1718,30 +1742,6 @@ type PatchedWebhookSubscriptionUpdateRequest_IntervalHours struct {
 // PlatformEnum defines model for PlatformEnum.
 type PlatformEnum string
 
-// PostedCommentCategory Comments the brand posted on one category of content.
-type PostedCommentCategory struct {
-	// Category `brand`, `owned`, `competitors`, `themes` or `other`. `other` covers content outside the brand's own tree.
-	Category string `json:"category"`
-
-	// Comments Comments posted on this category.
-	Comments int `json:"comments"`
-
-	// Likes Likes those comments received.
-	Likes int `json:"likes"`
-
-	// Replies Replies those comments received.
-	Replies int `json:"replies"`
-}
-
-// PostedComments Comments the brand posted, split by the content they were posted on.
-type PostedComments struct {
-	// Categories One entry per category. They add up to `total_comments_posted`.
-	Categories []PostedCommentCategory `json:"categories"`
-
-	// TotalCommentsPosted Comments the brand posted in the window, across every category.
-	TotalCommentsPosted int `json:"total_comments_posted"`
-}
-
 // ResourceEnum defines model for ResourceEnum.
 type ResourceEnum string
 
@@ -2328,30 +2328,6 @@ type AnalyticsFollowerTimeseriesParamsPeriod string
 // AnalyticsFollowerTimeseriesParamsPlatform defines parameters for AnalyticsFollowerTimeseries.
 type AnalyticsFollowerTimeseriesParamsPlatform string
 
-// AnalyticsPostedCommentsParams defines parameters for AnalyticsPostedComments.
-type AnalyticsPostedCommentsParams struct {
-	// BrandId The top-level brand to analyse, as returned by `brands.list`. A sub-brand is refused with the id of the parent to use instead.
-	BrandId string `form:"brand_id" json:"brand_id"`
-
-	// Platform Platforms to include, comma-separated. Defaults to all of them.
-	Platform *[]AnalyticsPostedCommentsParamsPlatform `form:"platform,omitempty" json:"platform,omitempty"`
-
-	// PostedAfter Start of the window (UTC, ISO 8601). Supplying more than one start is accepted and only one applies: this one wins over `posted_within_hours`, which wins over `posted_within_days`.
-	PostedAfter *time.Time `form:"posted_after,omitempty" json:"posted_after,omitempty"`
-
-	// PostedBefore End of the window (UTC, ISO 8601). Defaults to the current time, and a relative start is counted back from it.
-	PostedBefore *time.Time `form:"posted_before,omitempty" json:"posted_before,omitempty"`
-
-	// PostedWithinDays Start of the window, counted back from `posted_before` or the current time, in days (1-365). Defaults to 7 when no date parameter is supplied, and loses to `posted_after` and `posted_within_hours`.
-	PostedWithinDays *int `form:"posted_within_days,omitempty" json:"posted_within_days,omitempty"`
-
-	// PostedWithinHours Start of the window, counted back from `posted_before` or the current time, in hours (1-8760). `posted_after` wins over it; it wins over `posted_within_days`.
-	PostedWithinHours *int `form:"posted_within_hours,omitempty" json:"posted_within_hours,omitempty"`
-}
-
-// AnalyticsPostedCommentsParamsPlatform defines parameters for AnalyticsPostedComments.
-type AnalyticsPostedCommentsParamsPlatform string
-
 // BrandsListParams defines parameters for BrandsList.
 type BrandsListParams struct {
 	// Page Page number (1-based). Omit for the first page.
@@ -2893,6 +2869,30 @@ type DetectionListParams struct {
 	// PageSize Items per page (1-30). Defaults to 30; larger values are clamped down.
 	PageSize *int `form:"page_size,omitempty" json:"page_size,omitempty"`
 }
+
+// EngageCommentStatisticsParams defines parameters for EngageCommentStatistics.
+type EngageCommentStatisticsParams struct {
+	// BrandId The top-level brand to analyse, as returned by `brands.list`. A sub-brand is refused with the id of the parent to use instead.
+	BrandId string `form:"brand_id" json:"brand_id"`
+
+	// Platform Platforms to include, comma-separated. Defaults to all of them.
+	Platform *[]EngageCommentStatisticsParamsPlatform `form:"platform,omitempty" json:"platform,omitempty"`
+
+	// PostedAfter Start of the window (UTC, ISO 8601). Supplying more than one start is accepted and only one applies: this one wins over `posted_within_hours`, which wins over `posted_within_days`.
+	PostedAfter *time.Time `form:"posted_after,omitempty" json:"posted_after,omitempty"`
+
+	// PostedBefore End of the window (UTC, ISO 8601). Defaults to the current time, and a relative start is counted back from it.
+	PostedBefore *time.Time `form:"posted_before,omitempty" json:"posted_before,omitempty"`
+
+	// PostedWithinDays Start of the window, counted back from `posted_before` or the current time, in days (1-365). Defaults to 7 when no date parameter is supplied, and loses to `posted_after` and `posted_within_hours`.
+	PostedWithinDays *int `form:"posted_within_days,omitempty" json:"posted_within_days,omitempty"`
+
+	// PostedWithinHours Start of the window, counted back from `posted_before` or the current time, in hours (1-8760). `posted_after` wins over it; it wins over `posted_within_days`.
+	PostedWithinHours *int `form:"posted_within_hours,omitempty" json:"posted_within_hours,omitempty"`
+}
+
+// EngageCommentStatisticsParamsPlatform defines parameters for EngageCommentStatistics.
+type EngageCommentStatisticsParamsPlatform string
 
 // WebhooksListDeliveriesParams defines parameters for WebhooksListDeliveries.
 type WebhooksListDeliveriesParams struct {

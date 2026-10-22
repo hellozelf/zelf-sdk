@@ -195,26 +195,6 @@ var conformanceCases = []conformanceCase{
 		},
 	},
 	{
-		operation:   "analytics.posted_comments",
-		method:      "GET",
-		path:        "/api/v1/analytics/posted_comments/",
-		query:       map[string][]string{"brand_id": {"brd_tp6wqSj7PlBzhPTC"}, "platform": {"instagram"}, "posted_after": {"2026-01-01T00:00:00Z"}, "posted_before": {"2026-01-01T00:00:00Z"}, "posted_within_days": {"42"}, "posted_within_hours": {"42"}},
-		body:        nil,
-		cardinality: "single",
-		paramsJSON:  []byte(`{"brand_id": "brd_tp6wqSj7PlBzhPTC", "platform": ["instagram"], "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "posted_within_days": 42, "posted_within_hours": 42}`),
-		bodyJSON:    []byte(`{}`),
-		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
-			var params AnalyticsPostedCommentsParams
-			if err := json.Unmarshal(paramsJSON, &params); err != nil {
-				return nil, err
-			}
-			return c.Analytics.PostedComments(ctx, &params)
-		},
-		nilCall: func(c *Client, ctx context.Context, bodyJSON json.RawMessage) (any, error) {
-			return c.Analytics.PostedComments(ctx, nil)
-		},
-	},
-	{
 		operation:   "brand_accounts.add",
 		method:      "POST",
 		path:        "/api/v1/brands/accounts/",
@@ -774,6 +754,26 @@ var conformanceCases = []conformanceCase{
 		},
 		nilCall: func(c *Client, ctx context.Context, bodyJSON json.RawMessage) (any, error) {
 			return c.Detection.List(ctx, nil)
+		},
+	},
+	{
+		operation:   "engage.comment_statistics",
+		method:      "GET",
+		path:        "/api/v1/engage/comment_statistics/",
+		query:       map[string][]string{"brand_id": {"brd_tp6wqSj7PlBzhPTC"}, "platform": {"instagram"}, "posted_after": {"2026-01-01T00:00:00Z"}, "posted_before": {"2026-01-01T00:00:00Z"}, "posted_within_days": {"42"}, "posted_within_hours": {"42"}},
+		body:        nil,
+		cardinality: "single",
+		paramsJSON:  []byte(`{"brand_id": "brd_tp6wqSj7PlBzhPTC", "platform": ["instagram"], "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "posted_within_days": 42, "posted_within_hours": 42}`),
+		bodyJSON:    []byte(`{}`),
+		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
+			var params EngageCommentStatisticsParams
+			if err := json.Unmarshal(paramsJSON, &params); err != nil {
+				return nil, err
+			}
+			return c.Engage.CommentStatistics(ctx, &params)
+		},
+		nilCall: func(c *Client, ctx context.Context, bodyJSON json.RawMessage) (any, error) {
+			return c.Engage.CommentStatistics(ctx, nil)
 		},
 	},
 	{

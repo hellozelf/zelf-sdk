@@ -47,26 +47,6 @@ module Zelf
         envelope = @transport.request(:get, "/api/v1/analytics/follower_timeseries/", query: query)
         Zelf.rows(envelope, Models::FollowerTimeseries)
       end
-
-      # Get Posted Comment Analytics. Returns the comments the brand posted in the window,
-      # grouped by the kind of content they were posted on, together with the likes and
-      # replies those comments received. These are comments the brand wrote, not comments
-      # left on its content; `comments.list` returns the latter. The five categories add up
-      # to `total_comments_posted`.
-      #
-      # Calls GET /api/v1/analytics/posted_comments/ (analytics.posted_comments).
-      def posted_comments(brand_id:, platform: nil, posted_after: nil, posted_before: nil, posted_within_days: nil, posted_within_hours: nil)
-        query = {
-          "brand_id" => brand_id,
-          "platform" => platform,
-          "posted_after" => posted_after,
-          "posted_before" => posted_before,
-          "posted_within_days" => posted_within_days,
-          "posted_within_hours" => posted_within_hours,
-        }.reject { |_, value| value.nil? }
-        envelope = @transport.request(:get, "/api/v1/analytics/posted_comments/", query: query)
-        Zelf.one(envelope, Models::PostedComments, "PostedComments")
-      end
     end
   end
 end

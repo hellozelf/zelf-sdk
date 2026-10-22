@@ -16,11 +16,12 @@ require_relative 'zelf/resources/creator_sync'
 require_relative 'zelf/resources/creator_vetting'
 require_relative 'zelf/resources/creators'
 require_relative 'zelf/resources/detection'
+require_relative 'zelf/resources/engage'
 require_relative 'zelf/resources/sub_brands'
 require_relative 'zelf/resources/usage'
 require_relative 'zelf/resources/webhooks'
 
-# Ruby client for the ZelfAI APIs (spec version 1.1.0).
+# Ruby client for the ZelfAI APIs (spec version 1.2.0).
 module Zelf
   # Client for the ZelfAI APIs.
   #
@@ -28,7 +29,7 @@ module Zelf
   # ZELF_API_KEY environment variable. It is sent as the x-api-key header
   # and is kept out of inspect output.
   class Client
-    attr_reader :ai_analysis, :analytics, :brand_accounts, :brands, :comments, :content, :creator_sync, :creator_vetting, :creators, :detection, :sub_brands, :usage, :webhooks
+    attr_reader :ai_analysis, :analytics, :brand_accounts, :brands, :comments, :content, :creator_sync, :creator_vetting, :creators, :detection, :engage, :sub_brands, :usage, :webhooks
 
     def initialize(api_key: nil, base_url: nil, timeout: 60,
                    max_retries: 2, retry_writes: false, headers: {})
@@ -45,6 +46,7 @@ module Zelf
       @creator_vetting = Resources::CreatorVetting.new(@transport)
       @creators = Resources::Creators.new(@transport)
       @detection = Resources::Detection.new(@transport)
+      @engage = Resources::Engage.new(@transport)
       @sub_brands = Resources::SubBrands.new(@transport)
       @usage = Resources::Usage.new(@transport)
       @webhooks = Resources::Webhooks.new(@transport)

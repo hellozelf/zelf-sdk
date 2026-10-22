@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: ZelfAI APIs
-  version: 1.1.0
+  version: 1.2.0
   description: |-
     The ZelfAI API provides programmatic access to ZelfAI's creator and content intelligence. Use it to search the content and creators tracked for your brand, run AI analyses over that content, vet individual creators, and subscribe to webhooks that deliver results as they are produced.
 
@@ -1439,16 +1439,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error503'
-  /api/v1/analytics/posted_comments/:
+  /api/v1/engage/comment_statistics/:
     get:
-      operationId: analytics.posted_comments
+      operationId: engage.comment_statistics
       description: |-
-        `analytics.posted_comments`
+        `engage.comment_statistics`
 
         Returns the comments the brand posted in the window, grouped by the kind of content they were posted on, together with the likes and replies those comments received. These are comments the brand wrote, not comments left on its content; `comments.list` returns the latter.
 
         The five categories add up to `total_comments_posted`.
-      summary: Get Posted Comment Analytics
+      summary: Get Comment Statistics
       parameters:
       - in: query
         name: brand_id
@@ -1505,7 +1505,7 @@ paths:
           current time, in hours (1-8760). `posted_after` wins over it; it wins over
           `posted_within_days`.
       tags:
-      - Analytics
+      - Engage
       security:
       - ApiKey: []
       responses:
@@ -1523,7 +1523,7 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/PostedComments'
+                      $ref: '#/components/schemas/CommentStatistics'
                     maxItems: 1
                   item_count:
                     type: integer
@@ -9412,6 +9412,44 @@ components:
       - name
       - profile_picture_url
       - username
+    CommentCategory:
+      type: object
+      description: Comments the brand posted on one category of content.
+      properties:
+        category:
+          type: string
+          description: '`brand`, `owned`, `competitors`, `themes` or `other`. `other`
+            covers content outside the brand''s own tree.'
+        comments:
+          type: integer
+          description: Comments posted on this category.
+        likes:
+          type: integer
+          description: Likes those comments received.
+        replies:
+          type: integer
+          description: Replies those comments received.
+      required:
+      - category
+      - comments
+      - likes
+      - replies
+    CommentStatistics:
+      type: object
+      description: Comments the brand posted, split by the content they were posted
+        on.
+      properties:
+        total_comments_posted:
+          type: integer
+          description: Comments the brand posted in the window, across every category.
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentCategory'
+          description: One entry per category. They add up to `total_comments_posted`.
+      required:
+      - categories
+      - total_comments_posted
     Content:
       type: object
       description: A piece of content (a post, video, or image) and its metrics.
@@ -10977,44 +11015,6 @@ components:
       - youtube
       type: string
       x-internal: true
-    PostedCommentCategory:
-      type: object
-      description: Comments the brand posted on one category of content.
-      properties:
-        category:
-          type: string
-          description: '`brand`, `owned`, `competitors`, `themes` or `other`. `other`
-            covers content outside the brand''s own tree.'
-        comments:
-          type: integer
-          description: Comments posted on this category.
-        likes:
-          type: integer
-          description: Likes those comments received.
-        replies:
-          type: integer
-          description: Replies those comments received.
-      required:
-      - category
-      - comments
-      - likes
-      - replies
-    PostedComments:
-      type: object
-      description: Comments the brand posted, split by the content they were posted
-        on.
-      properties:
-        total_comments_posted:
-          type: integer
-          description: Comments the brand posted in the window, across every category.
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/PostedCommentCategory'
-          description: One entry per category. They add up to `total_comments_posted`.
-      required:
-      - categories
-      - total_comments_posted
     ResourceEnum:
       enum:
       - content
@@ -12147,9 +12147,12 @@ tags:
     topic and a content filter, poll its runs for status, then fetch each run's result
     payload from `ai_analysis.results`.
 - name: Analytics
-  description: 'Compare a brand against its competitors: totals per brand, follower
-    history over time, and the comments the brand posted. Every endpoint takes the
-    same brand, platform and date window.'
+  description: 'Compare a brand against its competitors: totals per brand and follower
+    history over time. Every endpoint takes the same brand, platform and date window.'
+- name: Engage
+  description: 'What the brand itself published: the comments it posted, by the kind
+    of content they were posted on, with the likes and replies they drew. Takes the
+    same brand, platform and date window as Analytics.'
 - name: Brands
   description: The brands (workspaces) an API key can access. Most content endpoints
     accept a `brand_id` from here to unlock brand-specific signals like ownership,
@@ -12582,6 +12585,7 @@ x-tagGroups:
   - Creator
   - Creator Sync
   - Detection
+  - Engage
   - Usage
   - Webhook Management
 - name: Webhooks (v1)

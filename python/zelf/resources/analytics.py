@@ -5,8 +5,8 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Literal
 
-from .._models import BrandComparison, FollowerTimeseries, PostedComments
-from .._pagination import one, rows
+from .._models import BrandComparison, FollowerTimeseries
+from .._pagination import rows
 from .._transport import AsyncTransport, SyncTransport
 from .._types import NOT_GIVEN, NotGiven, given
 
@@ -111,51 +111,6 @@ class AnalyticsResource:
             FollowerTimeseries,
         )
 
-    def posted_comments(
-        self,
-        *,
-        brand_id: str,
-        platform: list[Platform] | Platform | NotGiven = NOT_GIVEN,
-        posted_after: datetime | NotGiven = NOT_GIVEN,
-        posted_before: datetime | NotGiven = NOT_GIVEN,
-        posted_within_days: int | NotGiven = NOT_GIVEN,
-        posted_within_hours: int | NotGiven = NOT_GIVEN,
-    ) -> PostedComments:
-        """Get Posted Comment Analytics
-
-        Returns the comments the brand posted in the window, grouped by the kind of content
-        they were posted on, together with the likes and replies those comments received.
-        These are comments the brand wrote, not comments left on its content;
-        `comments.list` returns the latter. The five categories add up to
-        `total_comments_posted`.
-
-        Args:
-            brand_id: The top-level brand to analyse, as returned by brands.list.
-            platform: Platforms to include, comma-separated.
-            posted_after: Start of the window (UTC, ISO 8601).
-            posted_before: End of the window (UTC, ISO 8601).
-            posted_within_days: Start of the window, counted back from posted_before or the
-                current time, in days (1-365).
-            posted_within_hours: Start of the window, counted back from posted_before or the
-                current time, in hours (1-8760).
-
-        Calls `GET /api/v1/analytics/posted_comments/` (`analytics.posted_comments`).
-        """
-        query = given(
-            {
-                "brand_id": brand_id,
-                "platform": platform,
-                "posted_after": posted_after,
-                "posted_before": posted_before,
-                "posted_within_days": posted_within_days,
-                "posted_within_hours": posted_within_hours,
-            }
-        )
-        return one(
-            self._transport.request("GET", "/api/v1/analytics/posted_comments/", query=query),
-            PostedComments,
-        )
-
 
 class AsyncAnalyticsResource:
     def __init__(self, transport: AsyncTransport) -> None:
@@ -256,49 +211,4 @@ class AsyncAnalyticsResource:
                 "GET", "/api/v1/analytics/follower_timeseries/", query=query
             ),
             FollowerTimeseries,
-        )
-
-    async def posted_comments(
-        self,
-        *,
-        brand_id: str,
-        platform: list[Platform] | Platform | NotGiven = NOT_GIVEN,
-        posted_after: datetime | NotGiven = NOT_GIVEN,
-        posted_before: datetime | NotGiven = NOT_GIVEN,
-        posted_within_days: int | NotGiven = NOT_GIVEN,
-        posted_within_hours: int | NotGiven = NOT_GIVEN,
-    ) -> PostedComments:
-        """Get Posted Comment Analytics
-
-        Returns the comments the brand posted in the window, grouped by the kind of content
-        they were posted on, together with the likes and replies those comments received.
-        These are comments the brand wrote, not comments left on its content;
-        `comments.list` returns the latter. The five categories add up to
-        `total_comments_posted`.
-
-        Args:
-            brand_id: The top-level brand to analyse, as returned by brands.list.
-            platform: Platforms to include, comma-separated.
-            posted_after: Start of the window (UTC, ISO 8601).
-            posted_before: End of the window (UTC, ISO 8601).
-            posted_within_days: Start of the window, counted back from posted_before or the
-                current time, in days (1-365).
-            posted_within_hours: Start of the window, counted back from posted_before or the
-                current time, in hours (1-8760).
-
-        Calls `GET /api/v1/analytics/posted_comments/` (`analytics.posted_comments`).
-        """
-        query = given(
-            {
-                "brand_id": brand_id,
-                "platform": platform,
-                "posted_after": posted_after,
-                "posted_before": posted_before,
-                "posted_within_days": posted_within_days,
-                "posted_within_hours": posted_within_hours,
-            }
-        )
-        return one(
-            await self._transport.request("GET", "/api/v1/analytics/posted_comments/", query=query),
-            PostedComments,
         )

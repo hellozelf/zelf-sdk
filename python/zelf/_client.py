@@ -19,6 +19,7 @@ from .resources.creator_sync import AsyncCreatorSyncResource, CreatorSyncResourc
 from .resources.creator_vetting import AsyncCreatorVettingResource, CreatorVettingResource
 from .resources.creators import AsyncCreatorsResource, CreatorsResource
 from .resources.detection import AsyncDetectionResource, DetectionResource
+from .resources.engage import AsyncEngageResource, EngageResource
 from .resources.sub_brands import AsyncSubBrandsResource, SubBrandsResource
 from .resources.usage import AsyncUsageResource, UsageResource
 from .resources.webhooks import AsyncWebhooksResource, WebhooksResource
@@ -73,6 +74,7 @@ class ZelfAPIClient:
         self.creator_vetting = CreatorVettingResource(self._transport)
         self.creators = CreatorsResource(self._transport)
         self.detection = DetectionResource(self._transport)
+        self.engage = EngageResource(self._transport)
         self.sub_brands = SubBrandsResource(self._transport)
         self.usage = UsageResource(self._transport)
         self.webhooks = WebhooksResource(self._transport)
@@ -128,6 +130,7 @@ class ZelfAPIClientAsync:
         self.creator_vetting = AsyncCreatorVettingResource(self._transport)
         self.creators = AsyncCreatorsResource(self._transport)
         self.detection = AsyncDetectionResource(self._transport)
+        self.engage = AsyncEngageResource(self._transport)
         self.sub_brands = AsyncSubBrandsResource(self._transport)
         self.usage = AsyncUsageResource(self._transport)
         self.webhooks = AsyncWebhooksResource(self._transport)

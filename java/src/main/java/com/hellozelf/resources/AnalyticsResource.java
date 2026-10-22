@@ -99,47 +99,4 @@ public final class AnalyticsResource {
         Envelope<FollowerTimeseries> envelope = transport.send("GET", path, query, null, FollowerTimeseries.class);
         return envelope.results();
     }
-
-    /**
-     * Get Posted Comment Analytics. Returns the comments the brand posted in the
-     * window, grouped by the kind of content they were posted on, together with the
-     * likes and replies those comments received. These are comments the brand wrote,
-     * not comments left on its content; `comments.list` returns the latter. The five
-     * categories add up to `total_comments_posted`. Calls GET
-     * /api/v1/analytics/posted_comments/ (analytics.posted_comments).
-     */
-    public PostedComments postedComments(AnalyticsPostedCommentsParams parameters) {
-        if (parameters == null) {
-            parameters = new AnalyticsPostedCommentsParams();
-        }
-        String path = "/api/v1/analytics/posted_comments/";
-        List<Map.Entry<String, String>> query = new ArrayList<>();
-        if (parameters.brandId() != null) {
-            query.add(Map.entry("brand_id", String.valueOf(parameters.brandId())));
-        }
-        if (parameters.platform() != null) {
-            for (Object item : parameters.platform()) {
-                query.add(Map.entry("platform", String.valueOf(item)));
-            }
-        }
-        if (parameters.postedAfter() != null) {
-            query.add(Map.entry("posted_after", String.valueOf(parameters.postedAfter())));
-        }
-        if (parameters.postedBefore() != null) {
-            query.add(Map.entry("posted_before", String.valueOf(parameters.postedBefore())));
-        }
-        if (parameters.postedWithinDays() != null) {
-            query.add(Map.entry("posted_within_days", String.valueOf(parameters.postedWithinDays())));
-        }
-        if (parameters.postedWithinHours() != null) {
-            query.add(Map.entry("posted_within_hours", String.valueOf(parameters.postedWithinHours())));
-        }
-        Envelope<PostedComments> envelope = transport.send("GET", path, query, null, PostedComments.class);
-        if (envelope.results().isEmpty()) {
-            throw new ZelfException.NotFound(
-                    "No PostedComments matched the request.", 404, "NOT_FOUND", null,
-                    envelope.logId());
-        }
-        return envelope.results().get(0);
-    }
 }

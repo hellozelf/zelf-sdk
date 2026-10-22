@@ -27,8 +27,6 @@ type (
 	AnalyticsFollowerTimeseriesParams                     = openapi.AnalyticsFollowerTimeseriesParams
 	AnalyticsFollowerTimeseriesParamsPeriod               = openapi.AnalyticsFollowerTimeseriesParamsPeriod
 	AnalyticsFollowerTimeseriesParamsPlatform             = openapi.AnalyticsFollowerTimeseriesParamsPlatform
-	AnalyticsPostedCommentsParams                         = openapi.AnalyticsPostedCommentsParams
-	AnalyticsPostedCommentsParamsPlatform                 = openapi.AnalyticsPostedCommentsParamsPlatform
 	BlankEnum                                             = openapi.BlankEnum
 	Brand                                                 = openapi.Brand
 	BrandAccount                                          = openapi.BrandAccount
@@ -57,6 +55,8 @@ type (
 	BrandsUpdateMultipartRequestBody                      = openapi.BrandsUpdateMultipartRequestBody
 	Comment                                               = openapi.Comment
 	CommentAuthor                                         = openapi.CommentAuthor
+	CommentCategory                                       = openapi.CommentCategory
+	CommentStatistics                                     = openapi.CommentStatistics
 	CommentsListParams                                    = openapi.CommentsListParams
 	CommentsListParamsOrderBy                             = openapi.CommentsListParamsOrderBy
 	Content                                               = openapi.Content
@@ -130,6 +130,8 @@ type (
 	DetectionResult                                       = openapi.DetectionResult
 	DetectionSummary                                      = openapi.DetectionSummary
 	DetectionVideo                                        = openapi.DetectionVideo
+	EngageCommentStatisticsParams                         = openapi.EngageCommentStatisticsParams
+	EngageCommentStatisticsParamsPlatform                 = openapi.EngageCommentStatisticsParamsPlatform
 	Error400                                              = openapi.Error400
 	Error400ErrorCode                                     = openapi.Error400ErrorCode
 	Error401                                              = openapi.Error401
@@ -158,8 +160,6 @@ type (
 	PatchedWebhookSubscriptionUpdateRequest               = openapi.PatchedWebhookSubscriptionUpdateRequest
 	PatchedWebhookSubscriptionUpdateRequest_IntervalHours = openapi.PatchedWebhookSubscriptionUpdateRequest_IntervalHours
 	PlatformEnum                                          = openapi.PlatformEnum
-	PostedCommentCategory                                 = openapi.PostedCommentCategory
-	PostedComments                                        = openapi.PostedComments
 	ResourceEnum                                          = openapi.ResourceEnum
 	ResultFile                                            = openapi.ResultFile
 	SafetyCheckRequest                                    = openapi.SafetyCheckRequest

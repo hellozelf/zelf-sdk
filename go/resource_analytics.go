@@ -44,22 +44,3 @@ func (r *AnalyticsResource) FollowerTimeseries(ctx context.Context, params *Anal
 	}
 	return env.Results, nil
 }
-
-// PostedComments returns the comments the brand posted in the window, grouped by the kind
-// of content they were posted on, together with the likes and replies those comments
-// received. These are comments the brand wrote, not comments left on its content;
-// `comments.list` returns the latter. The five categories add up to
-// `total_comments_posted`.
-//
-// Calls GET /api/v1/analytics/posted_comments/ (analytics.posted_comments).
-func (r *AnalyticsResource) PostedComments(ctx context.Context, params *AnalyticsPostedCommentsParams) (*PostedComments, error) {
-	if params == nil {
-		params = &AnalyticsPostedCommentsParams{}
-	}
-	env, err := request[PostedComments](ctx, r.t, "GET", "/api/v1/analytics/posted_comments/",
-		nil, params, nil)
-	if err != nil {
-		return nil, err
-	}
-	return one(env, "PostedComments")
-}

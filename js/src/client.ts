@@ -11,6 +11,7 @@ import { CreatorSyncResource } from './resources/creator_sync.js'
 import { CreatorVettingResource } from './resources/creator_vetting.js'
 import { CreatorsResource } from './resources/creators.js'
 import { DetectionResource } from './resources/detection.js'
+import { EngageResource } from './resources/engage.js'
 import { SubBrandsResource } from './resources/sub_brands.js'
 import { UsageResource } from './resources/usage.js'
 import { WebhooksResource } from './resources/webhooks.js'
@@ -32,6 +33,7 @@ export class ZelfAPIClient {
   readonly creatorVetting: CreatorVettingResource
   readonly creators: CreatorsResource
   readonly detection: DetectionResource
+  readonly engage: EngageResource
   readonly subBrands: SubBrandsResource
   readonly usage: UsageResource
   readonly webhooks: WebhooksResource
@@ -48,6 +50,7 @@ export class ZelfAPIClient {
     this.creatorVetting = new CreatorVettingResource(this.transport)
     this.creators = new CreatorsResource(this.transport)
     this.detection = new DetectionResource(this.transport)
+    this.engage = new EngageResource(this.transport)
     this.subBrands = new SubBrandsResource(this.transport)
     this.usage = new UsageResource(this.transport)
     this.webhooks = new WebhooksResource(this.transport)

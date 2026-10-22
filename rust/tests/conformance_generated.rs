@@ -12,7 +12,6 @@ use zelf::resources::ai_analysis::AiAnalysisListParams;
 use zelf::resources::ai_analysis::AiAnalysisResultsParams;
 use zelf::resources::analytics::AnalyticsBrandComparisonParams;
 use zelf::resources::analytics::AnalyticsFollowerTimeseriesParams;
-use zelf::resources::analytics::AnalyticsPostedCommentsParams;
 use zelf::resources::brand_accounts::BrandAccountsAddParams;
 use zelf::resources::brand_accounts::BrandAccountsListParams;
 use zelf::resources::brand_accounts::BrandAccountsRemoveParams;
@@ -36,6 +35,7 @@ use zelf::resources::creator_vetting::CreatorVettingResultsParams;
 use zelf::resources::creators::CreatorsListParams;
 use zelf::resources::detection::DetectionCreateParams;
 use zelf::resources::detection::DetectionListParams;
+use zelf::resources::engage::EngageCommentStatisticsParams;
 use zelf::resources::sub_brands::SubBrandsCreateParams;
 use zelf::resources::webhooks::WebhooksCreateSecretParams;
 use zelf::resources::webhooks::WebhooksCreateSubscriptionParams;
@@ -687,90 +687,6 @@ async fn errors_propagate_analytics_follower_timeseries() {
         .follower_timeseries(params)
         .await
         .expect_err("analytics.follower_timeseries swallowed a 500");
-}
-
-#[tokio::test]
-async fn maps_analytics_posted_comments() {
-    let server = MockServer::start().await;
-    mount(
-        &server,
-        "GET",
-        "/api/v1/analytics/posted_comments/",
-        envelope_for("analytics_posted_comments"),
-    )
-    .await;
-    let client = client_for(&server);
-    let params: AnalyticsPostedCommentsParams =
-        serde_json::from_str(r##"{"brand_id": "brd_tp6wqSj7PlBzhPTC", "platform": ["instagram"], "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "posted_within_days": 42, "posted_within_hours": 42}"##).unwrap();
-    client
-        .analytics()
-        .posted_comments(params)
-        .await
-        .expect("analytics.posted_comments");
-
-    let requests = server.received_requests().await.unwrap();
-    assert_eq!(requests.len(), 1, "analytics.posted_comments");
-    let request = &requests[0];
-    assert_eq!(request.method.as_str(), "GET");
-    assert_eq!(request.url.path(), "/api/v1/analytics/posted_comments/");
-    {
-        let pairs: Vec<(String, String)> = request
-            .url
-            .query_pairs()
-            .map(|(name, value)| (name.to_string(), value.to_string()))
-            .collect();
-        let sent = |name: &str| -> Vec<String> {
-            pairs
-                .iter()
-                .filter(|(key, _)| key == name)
-                .map(|(_, value)| value.clone())
-                .collect()
-        };
-        assert_eq!(
-            sent("brand_id"),
-            vec!["brd_tp6wqSj7PlBzhPTC"],
-            "analytics.posted_comments sent a wrong ?brand_id"
-        );
-        assert_eq!(
-            sent("platform"),
-            vec!["instagram"],
-            "analytics.posted_comments sent a wrong ?platform"
-        );
-        assert_eq!(
-            sent("posted_after"),
-            vec!["2026-01-01T00:00:00Z"],
-            "analytics.posted_comments sent a wrong ?posted_after"
-        );
-        assert_eq!(
-            sent("posted_before"),
-            vec!["2026-01-01T00:00:00Z"],
-            "analytics.posted_comments sent a wrong ?posted_before"
-        );
-        assert_eq!(
-            sent("posted_within_days"),
-            vec!["42"],
-            "analytics.posted_comments sent a wrong ?posted_within_days"
-        );
-        assert_eq!(
-            sent("posted_within_hours"),
-            vec!["42"],
-            "analytics.posted_comments sent a wrong ?posted_within_hours"
-        );
-    }
-}
-
-#[tokio::test]
-async fn errors_propagate_analytics_posted_comments() {
-    let server = MockServer::start().await;
-    mount_error(&server, "GET", "/api/v1/analytics/posted_comments/").await;
-    let client = client_for(&server);
-    let params: AnalyticsPostedCommentsParams =
-        serde_json::from_str(r##"{"brand_id": "brd_tp6wqSj7PlBzhPTC", "platform": ["instagram"], "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "posted_within_days": 42, "posted_within_hours": 42}"##).unwrap();
-    client
-        .analytics()
-        .posted_comments(params)
-        .await
-        .expect_err("analytics.posted_comments swallowed a 500");
 }
 
 #[tokio::test]
@@ -3035,6 +2951,90 @@ async fn walks_detection_list() {
 
     assert!(!rows.is_empty());
     assert_eq!(server.received_requests().await.unwrap().len(), 2);
+}
+
+#[tokio::test]
+async fn maps_engage_comment_statistics() {
+    let server = MockServer::start().await;
+    mount(
+        &server,
+        "GET",
+        "/api/v1/engage/comment_statistics/",
+        envelope_for("engage_comment_statistics"),
+    )
+    .await;
+    let client = client_for(&server);
+    let params: EngageCommentStatisticsParams =
+        serde_json::from_str(r##"{"brand_id": "brd_tp6wqSj7PlBzhPTC", "platform": ["instagram"], "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "posted_within_days": 42, "posted_within_hours": 42}"##).unwrap();
+    client
+        .engage()
+        .comment_statistics(params)
+        .await
+        .expect("engage.comment_statistics");
+
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 1, "engage.comment_statistics");
+    let request = &requests[0];
+    assert_eq!(request.method.as_str(), "GET");
+    assert_eq!(request.url.path(), "/api/v1/engage/comment_statistics/");
+    {
+        let pairs: Vec<(String, String)> = request
+            .url
+            .query_pairs()
+            .map(|(name, value)| (name.to_string(), value.to_string()))
+            .collect();
+        let sent = |name: &str| -> Vec<String> {
+            pairs
+                .iter()
+                .filter(|(key, _)| key == name)
+                .map(|(_, value)| value.clone())
+                .collect()
+        };
+        assert_eq!(
+            sent("brand_id"),
+            vec!["brd_tp6wqSj7PlBzhPTC"],
+            "engage.comment_statistics sent a wrong ?brand_id"
+        );
+        assert_eq!(
+            sent("platform"),
+            vec!["instagram"],
+            "engage.comment_statistics sent a wrong ?platform"
+        );
+        assert_eq!(
+            sent("posted_after"),
+            vec!["2026-01-01T00:00:00Z"],
+            "engage.comment_statistics sent a wrong ?posted_after"
+        );
+        assert_eq!(
+            sent("posted_before"),
+            vec!["2026-01-01T00:00:00Z"],
+            "engage.comment_statistics sent a wrong ?posted_before"
+        );
+        assert_eq!(
+            sent("posted_within_days"),
+            vec!["42"],
+            "engage.comment_statistics sent a wrong ?posted_within_days"
+        );
+        assert_eq!(
+            sent("posted_within_hours"),
+            vec!["42"],
+            "engage.comment_statistics sent a wrong ?posted_within_hours"
+        );
+    }
+}
+
+#[tokio::test]
+async fn errors_propagate_engage_comment_statistics() {
+    let server = MockServer::start().await;
+    mount_error(&server, "GET", "/api/v1/engage/comment_statistics/").await;
+    let client = client_for(&server);
+    let params: EngageCommentStatisticsParams =
+        serde_json::from_str(r##"{"brand_id": "brd_tp6wqSj7PlBzhPTC", "platform": ["instagram"], "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "posted_within_days": 42, "posted_within_hours": 42}"##).unwrap();
+    client
+        .engage()
+        .comment_statistics(params)
+        .await
+        .expect_err("engage.comment_statistics swallowed a 500");
 }
 
 #[tokio::test]
