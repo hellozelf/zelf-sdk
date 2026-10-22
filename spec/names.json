@@ -1,0 +1,1688 @@
+{
+  "operations": {
+    "ai_analysis.content_statistics": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "ContentStatisticsAsync",
+          "resource": "AiAnalysis"
+        },
+        "go": {
+          "method": "ContentStatistics",
+          "resource": "AIAnalysis"
+        },
+        "java": {
+          "method": "contentStatistics",
+          "resource": "aiAnalysis"
+        },
+        "python": {
+          "method": "content_statistics",
+          "resource": "ai_analysis"
+        },
+        "ruby": {
+          "method": "content_statistics",
+          "resource": "ai_analysis"
+        },
+        "rust": {
+          "method": "content_statistics",
+          "resource": "ai_analysis"
+        },
+        "typescript": {
+          "method": "contentStatistics",
+          "resource": "ai_analysis"
+        }
+      }
+    },
+    "ai_analysis.contents": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ContentsAsync",
+          "resource": "AiAnalysis"
+        },
+        "go": {
+          "method": "Contents",
+          "resource": "AIAnalysis"
+        },
+        "java": {
+          "method": "contents",
+          "resource": "aiAnalysis"
+        },
+        "python": {
+          "method": "contents",
+          "resource": "ai_analysis"
+        },
+        "ruby": {
+          "method": "contents",
+          "resource": "ai_analysis"
+        },
+        "rust": {
+          "method": "contents",
+          "resource": "ai_analysis"
+        },
+        "typescript": {
+          "method": "contents",
+          "resource": "ai_analysis"
+        }
+      }
+    },
+    "ai_analysis.create": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "CreateAsync",
+          "resource": "AiAnalysis"
+        },
+        "go": {
+          "method": "Create",
+          "resource": "AIAnalysis"
+        },
+        "java": {
+          "method": "create",
+          "resource": "aiAnalysis"
+        },
+        "python": {
+          "method": "create",
+          "resource": "ai_analysis"
+        },
+        "ruby": {
+          "method": "create",
+          "resource": "ai_analysis"
+        },
+        "rust": {
+          "method": "create",
+          "resource": "ai_analysis"
+        },
+        "typescript": {
+          "method": "create",
+          "resource": "ai_analysis"
+        }
+      }
+    },
+    "ai_analysis.list": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ListAsync",
+          "resource": "AiAnalysis"
+        },
+        "go": {
+          "method": "List",
+          "resource": "AIAnalysis"
+        },
+        "java": {
+          "method": "list",
+          "resource": "aiAnalysis"
+        },
+        "python": {
+          "method": "list",
+          "resource": "ai_analysis"
+        },
+        "ruby": {
+          "method": "list",
+          "resource": "ai_analysis"
+        },
+        "rust": {
+          "method": "list",
+          "resource": "ai_analysis"
+        },
+        "typescript": {
+          "method": "list",
+          "resource": "ai_analysis"
+        }
+      }
+    },
+    "ai_analysis.results": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ResultsAsync",
+          "resource": "AiAnalysis"
+        },
+        "go": {
+          "method": "Results",
+          "resource": "AIAnalysis"
+        },
+        "java": {
+          "method": "results",
+          "resource": "aiAnalysis"
+        },
+        "python": {
+          "method": "results",
+          "resource": "ai_analysis"
+        },
+        "ruby": {
+          "method": "results",
+          "resource": "ai_analysis"
+        },
+        "rust": {
+          "method": "results",
+          "resource": "ai_analysis"
+        },
+        "typescript": {
+          "method": "results",
+          "resource": "ai_analysis"
+        }
+      }
+    },
+    "analytics.brand_comparison": {
+      "cardinality": "list",
+      "symbols": {
+        "csharp": {
+          "method": "BrandComparisonAsync",
+          "resource": "Analytics"
+        },
+        "go": {
+          "method": "BrandComparison",
+          "resource": "Analytics"
+        },
+        "java": {
+          "method": "brandComparison",
+          "resource": "analytics"
+        },
+        "python": {
+          "method": "brand_comparison",
+          "resource": "analytics"
+        },
+        "ruby": {
+          "method": "brand_comparison",
+          "resource": "analytics"
+        },
+        "rust": {
+          "method": "brand_comparison",
+          "resource": "analytics"
+        },
+        "typescript": {
+          "method": "brandComparison",
+          "resource": "analytics"
+        }
+      }
+    },
+    "analytics.follower_timeseries": {
+      "cardinality": "list",
+      "symbols": {
+        "csharp": {
+          "method": "FollowerTimeseriesAsync",
+          "resource": "Analytics"
+        },
+        "go": {
+          "method": "FollowerTimeseries",
+          "resource": "Analytics"
+        },
+        "java": {
+          "method": "followerTimeseries",
+          "resource": "analytics"
+        },
+        "python": {
+          "method": "follower_timeseries",
+          "resource": "analytics"
+        },
+        "ruby": {
+          "method": "follower_timeseries",
+          "resource": "analytics"
+        },
+        "rust": {
+          "method": "follower_timeseries",
+          "resource": "analytics"
+        },
+        "typescript": {
+          "method": "followerTimeseries",
+          "resource": "analytics"
+        }
+      }
+    },
+    "analytics.posted_comments": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "PostedCommentsAsync",
+          "resource": "Analytics"
+        },
+        "go": {
+          "method": "PostedComments",
+          "resource": "Analytics"
+        },
+        "java": {
+          "method": "postedComments",
+          "resource": "analytics"
+        },
+        "python": {
+          "method": "posted_comments",
+          "resource": "analytics"
+        },
+        "ruby": {
+          "method": "posted_comments",
+          "resource": "analytics"
+        },
+        "rust": {
+          "method": "posted_comments",
+          "resource": "analytics"
+        },
+        "typescript": {
+          "method": "postedComments",
+          "resource": "analytics"
+        }
+      }
+    },
+    "brand_accounts.add": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "AddAsync",
+          "resource": "BrandAccounts"
+        },
+        "go": {
+          "method": "Add",
+          "resource": "BrandAccounts"
+        },
+        "java": {
+          "method": "add",
+          "resource": "brandAccounts"
+        },
+        "python": {
+          "method": "add",
+          "resource": "brand_accounts"
+        },
+        "ruby": {
+          "method": "add",
+          "resource": "brand_accounts"
+        },
+        "rust": {
+          "method": "add",
+          "resource": "brand_accounts"
+        },
+        "typescript": {
+          "method": "add",
+          "resource": "brand_accounts"
+        }
+      }
+    },
+    "brand_accounts.list": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "ListAsync",
+          "resource": "BrandAccounts"
+        },
+        "go": {
+          "method": "List",
+          "resource": "BrandAccounts"
+        },
+        "java": {
+          "method": "list",
+          "resource": "brandAccounts"
+        },
+        "python": {
+          "method": "list",
+          "resource": "brand_accounts"
+        },
+        "ruby": {
+          "method": "list",
+          "resource": "brand_accounts"
+        },
+        "rust": {
+          "method": "list",
+          "resource": "brand_accounts"
+        },
+        "typescript": {
+          "method": "list",
+          "resource": "brand_accounts"
+        }
+      }
+    },
+    "brand_accounts.remove": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "RemoveAsync",
+          "resource": "BrandAccounts"
+        },
+        "go": {
+          "method": "Remove",
+          "resource": "BrandAccounts"
+        },
+        "java": {
+          "method": "remove",
+          "resource": "brandAccounts"
+        },
+        "python": {
+          "method": "remove",
+          "resource": "brand_accounts"
+        },
+        "ruby": {
+          "method": "remove",
+          "resource": "brand_accounts"
+        },
+        "rust": {
+          "method": "remove",
+          "resource": "brand_accounts"
+        },
+        "typescript": {
+          "method": "remove",
+          "resource": "brand_accounts"
+        }
+      }
+    },
+    "brands.catalog": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "CatalogAsync",
+          "resource": "Brands"
+        },
+        "go": {
+          "method": "Catalog",
+          "resource": "Brands"
+        },
+        "java": {
+          "method": "catalog",
+          "resource": "brands"
+        },
+        "python": {
+          "method": "catalog",
+          "resource": "brands"
+        },
+        "ruby": {
+          "method": "catalog",
+          "resource": "brands"
+        },
+        "rust": {
+          "method": "catalog",
+          "resource": "brands"
+        },
+        "typescript": {
+          "method": "catalog",
+          "resource": "brands"
+        }
+      }
+    },
+    "brands.catalog_categories": {
+      "cardinality": "list",
+      "symbols": {
+        "csharp": {
+          "method": "CatalogCategoriesAsync",
+          "resource": "Brands"
+        },
+        "go": {
+          "method": "CatalogCategories",
+          "resource": "Brands"
+        },
+        "java": {
+          "method": "catalogCategories",
+          "resource": "brands"
+        },
+        "python": {
+          "method": "catalog_categories",
+          "resource": "brands"
+        },
+        "ruby": {
+          "method": "catalog_categories",
+          "resource": "brands"
+        },
+        "rust": {
+          "method": "catalog_categories",
+          "resource": "brands"
+        },
+        "typescript": {
+          "method": "catalogCategories",
+          "resource": "brands"
+        }
+      }
+    },
+    "brands.list": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ListAsync",
+          "resource": "Brands"
+        },
+        "go": {
+          "method": "List",
+          "resource": "Brands"
+        },
+        "java": {
+          "method": "list",
+          "resource": "brands"
+        },
+        "python": {
+          "method": "list",
+          "resource": "brands"
+        },
+        "ruby": {
+          "method": "list",
+          "resource": "brands"
+        },
+        "rust": {
+          "method": "list",
+          "resource": "brands"
+        },
+        "typescript": {
+          "method": "list",
+          "resource": "brands"
+        }
+      }
+    },
+    "brands.update": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "UpdateAsync",
+          "resource": "Brands"
+        },
+        "go": {
+          "method": "Update",
+          "resource": "Brands"
+        },
+        "java": {
+          "method": "update",
+          "resource": "brands"
+        },
+        "python": {
+          "method": "update",
+          "resource": "brands"
+        },
+        "ruby": {
+          "method": "update",
+          "resource": "brands"
+        },
+        "rust": {
+          "method": "update",
+          "resource": "brands"
+        },
+        "typescript": {
+          "method": "update",
+          "resource": "brands"
+        }
+      }
+    },
+    "comments.list": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ListAsync",
+          "resource": "Comments"
+        },
+        "go": {
+          "method": "List",
+          "resource": "Comments"
+        },
+        "java": {
+          "method": "list",
+          "resource": "comments"
+        },
+        "python": {
+          "method": "list",
+          "resource": "comments"
+        },
+        "ruby": {
+          "method": "list",
+          "resource": "comments"
+        },
+        "rust": {
+          "method": "list",
+          "resource": "comments"
+        },
+        "typescript": {
+          "method": "list",
+          "resource": "comments"
+        }
+      }
+    },
+    "content.ai_summarize": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "AiSummarizeAsync",
+          "resource": "Content"
+        },
+        "go": {
+          "method": "AISummarize",
+          "resource": "Content"
+        },
+        "java": {
+          "method": "aiSummarize",
+          "resource": "content"
+        },
+        "python": {
+          "method": "ai_summarize",
+          "resource": "content"
+        },
+        "ruby": {
+          "method": "ai_summarize",
+          "resource": "content"
+        },
+        "rust": {
+          "method": "ai_summarize",
+          "resource": "content"
+        },
+        "typescript": {
+          "method": "aiSummarize",
+          "resource": "content"
+        }
+      }
+    },
+    "content.details": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "DetailsAsync",
+          "resource": "Content"
+        },
+        "go": {
+          "method": "Details",
+          "resource": "Content"
+        },
+        "java": {
+          "method": "details",
+          "resource": "content"
+        },
+        "python": {
+          "method": "details",
+          "resource": "content"
+        },
+        "ruby": {
+          "method": "details",
+          "resource": "content"
+        },
+        "rust": {
+          "method": "details",
+          "resource": "content"
+        },
+        "typescript": {
+          "method": "details",
+          "resource": "content"
+        }
+      }
+    },
+    "content.discover": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "DiscoverAsync",
+          "resource": "Content"
+        },
+        "go": {
+          "method": "Discover",
+          "resource": "Content"
+        },
+        "java": {
+          "method": "discover",
+          "resource": "content"
+        },
+        "python": {
+          "method": "discover",
+          "resource": "content"
+        },
+        "ruby": {
+          "method": "discover",
+          "resource": "content"
+        },
+        "rust": {
+          "method": "discover",
+          "resource": "content"
+        },
+        "typescript": {
+          "method": "discover",
+          "resource": "content"
+        }
+      }
+    },
+    "content.list": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ListAsync",
+          "resource": "Content"
+        },
+        "go": {
+          "method": "List",
+          "resource": "Content"
+        },
+        "java": {
+          "method": "list",
+          "resource": "content"
+        },
+        "python": {
+          "method": "list",
+          "resource": "content"
+        },
+        "ruby": {
+          "method": "list",
+          "resource": "content"
+        },
+        "rust": {
+          "method": "list",
+          "resource": "content"
+        },
+        "typescript": {
+          "method": "list",
+          "resource": "content"
+        }
+      }
+    },
+    "content.statistics": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "StatisticsAsync",
+          "resource": "Content"
+        },
+        "go": {
+          "method": "Statistics",
+          "resource": "Content"
+        },
+        "java": {
+          "method": "statistics",
+          "resource": "content"
+        },
+        "python": {
+          "method": "statistics",
+          "resource": "content"
+        },
+        "ruby": {
+          "method": "statistics",
+          "resource": "content"
+        },
+        "rust": {
+          "method": "statistics",
+          "resource": "content"
+        },
+        "typescript": {
+          "method": "statistics",
+          "resource": "content"
+        }
+      }
+    },
+    "content.transcribe": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "TranscribeAsync",
+          "resource": "Content"
+        },
+        "go": {
+          "method": "Transcribe",
+          "resource": "Content"
+        },
+        "java": {
+          "method": "transcribe",
+          "resource": "content"
+        },
+        "python": {
+          "method": "transcribe",
+          "resource": "content"
+        },
+        "ruby": {
+          "method": "transcribe",
+          "resource": "content"
+        },
+        "rust": {
+          "method": "transcribe",
+          "resource": "content"
+        },
+        "typescript": {
+          "method": "transcribe",
+          "resource": "content"
+        }
+      }
+    },
+    "creator_sync.create": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "CreateAsync",
+          "resource": "CreatorSync"
+        },
+        "go": {
+          "method": "Create",
+          "resource": "CreatorSync"
+        },
+        "java": {
+          "method": "create",
+          "resource": "creatorSync"
+        },
+        "python": {
+          "method": "create",
+          "resource": "creator_sync"
+        },
+        "ruby": {
+          "method": "create",
+          "resource": "creator_sync"
+        },
+        "rust": {
+          "method": "create",
+          "resource": "creator_sync"
+        },
+        "typescript": {
+          "method": "create",
+          "resource": "creator_sync"
+        }
+      }
+    },
+    "creator_sync.get": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "GetAsync",
+          "resource": "CreatorSync"
+        },
+        "go": {
+          "method": "Get",
+          "resource": "CreatorSync"
+        },
+        "java": {
+          "method": "get",
+          "resource": "creatorSync"
+        },
+        "python": {
+          "method": "get",
+          "resource": "creator_sync"
+        },
+        "ruby": {
+          "method": "get",
+          "resource": "creator_sync"
+        },
+        "rust": {
+          "method": "get",
+          "resource": "creator_sync"
+        },
+        "typescript": {
+          "method": "get",
+          "resource": "creator_sync"
+        }
+      }
+    },
+    "creator_sync.list": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ListAsync",
+          "resource": "CreatorSync"
+        },
+        "go": {
+          "method": "List",
+          "resource": "CreatorSync"
+        },
+        "java": {
+          "method": "list",
+          "resource": "creatorSync"
+        },
+        "python": {
+          "method": "list",
+          "resource": "creator_sync"
+        },
+        "ruby": {
+          "method": "list",
+          "resource": "creator_sync"
+        },
+        "rust": {
+          "method": "list",
+          "resource": "creator_sync"
+        },
+        "typescript": {
+          "method": "list",
+          "resource": "creator_sync"
+        }
+      }
+    },
+    "creator_vetting.content_statistics": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "ContentStatisticsAsync",
+          "resource": "CreatorVetting"
+        },
+        "go": {
+          "method": "ContentStatistics",
+          "resource": "CreatorVetting"
+        },
+        "java": {
+          "method": "contentStatistics",
+          "resource": "creatorVetting"
+        },
+        "python": {
+          "method": "content_statistics",
+          "resource": "creator_vetting"
+        },
+        "ruby": {
+          "method": "content_statistics",
+          "resource": "creator_vetting"
+        },
+        "rust": {
+          "method": "content_statistics",
+          "resource": "creator_vetting"
+        },
+        "typescript": {
+          "method": "contentStatistics",
+          "resource": "creator_vetting"
+        }
+      }
+    },
+    "creator_vetting.contents": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ContentsAsync",
+          "resource": "CreatorVetting"
+        },
+        "go": {
+          "method": "Contents",
+          "resource": "CreatorVetting"
+        },
+        "java": {
+          "method": "contents",
+          "resource": "creatorVetting"
+        },
+        "python": {
+          "method": "contents",
+          "resource": "creator_vetting"
+        },
+        "ruby": {
+          "method": "contents",
+          "resource": "creator_vetting"
+        },
+        "rust": {
+          "method": "contents",
+          "resource": "creator_vetting"
+        },
+        "typescript": {
+          "method": "contents",
+          "resource": "creator_vetting"
+        }
+      }
+    },
+    "creator_vetting.create": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "CreateAsync",
+          "resource": "CreatorVetting"
+        },
+        "go": {
+          "method": "Create",
+          "resource": "CreatorVetting"
+        },
+        "java": {
+          "method": "create",
+          "resource": "creatorVetting"
+        },
+        "python": {
+          "method": "create",
+          "resource": "creator_vetting"
+        },
+        "ruby": {
+          "method": "create",
+          "resource": "creator_vetting"
+        },
+        "rust": {
+          "method": "create",
+          "resource": "creator_vetting"
+        },
+        "typescript": {
+          "method": "create",
+          "resource": "creator_vetting"
+        }
+      }
+    },
+    "creator_vetting.list": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ListAsync",
+          "resource": "CreatorVetting"
+        },
+        "go": {
+          "method": "List",
+          "resource": "CreatorVetting"
+        },
+        "java": {
+          "method": "list",
+          "resource": "creatorVetting"
+        },
+        "python": {
+          "method": "list",
+          "resource": "creator_vetting"
+        },
+        "ruby": {
+          "method": "list",
+          "resource": "creator_vetting"
+        },
+        "rust": {
+          "method": "list",
+          "resource": "creator_vetting"
+        },
+        "typescript": {
+          "method": "list",
+          "resource": "creator_vetting"
+        }
+      }
+    },
+    "creator_vetting.results": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ResultsAsync",
+          "resource": "CreatorVetting"
+        },
+        "go": {
+          "method": "Results",
+          "resource": "CreatorVetting"
+        },
+        "java": {
+          "method": "results",
+          "resource": "creatorVetting"
+        },
+        "python": {
+          "method": "results",
+          "resource": "creator_vetting"
+        },
+        "ruby": {
+          "method": "results",
+          "resource": "creator_vetting"
+        },
+        "rust": {
+          "method": "results",
+          "resource": "creator_vetting"
+        },
+        "typescript": {
+          "method": "results",
+          "resource": "creator_vetting"
+        }
+      }
+    },
+    "creators.list": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ListAsync",
+          "resource": "Creators"
+        },
+        "go": {
+          "method": "List",
+          "resource": "Creators"
+        },
+        "java": {
+          "method": "list",
+          "resource": "creators"
+        },
+        "python": {
+          "method": "list",
+          "resource": "creators"
+        },
+        "ruby": {
+          "method": "list",
+          "resource": "creators"
+        },
+        "rust": {
+          "method": "list",
+          "resource": "creators"
+        },
+        "typescript": {
+          "method": "list",
+          "resource": "creators"
+        }
+      }
+    },
+    "detection.create": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "CreateAsync",
+          "resource": "Detection"
+        },
+        "go": {
+          "method": "Create",
+          "resource": "Detection"
+        },
+        "java": {
+          "method": "create",
+          "resource": "detection"
+        },
+        "python": {
+          "method": "create",
+          "resource": "detection"
+        },
+        "ruby": {
+          "method": "create",
+          "resource": "detection"
+        },
+        "rust": {
+          "method": "create",
+          "resource": "detection"
+        },
+        "typescript": {
+          "method": "create",
+          "resource": "detection"
+        }
+      }
+    },
+    "detection.get": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "GetAsync",
+          "resource": "Detection"
+        },
+        "go": {
+          "method": "Get",
+          "resource": "Detection"
+        },
+        "java": {
+          "method": "get",
+          "resource": "detection"
+        },
+        "python": {
+          "method": "get",
+          "resource": "detection"
+        },
+        "ruby": {
+          "method": "get",
+          "resource": "detection"
+        },
+        "rust": {
+          "method": "get",
+          "resource": "detection"
+        },
+        "typescript": {
+          "method": "get",
+          "resource": "detection"
+        }
+      }
+    },
+    "detection.list": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ListAsync",
+          "resource": "Detection"
+        },
+        "go": {
+          "method": "List",
+          "resource": "Detection"
+        },
+        "java": {
+          "method": "list",
+          "resource": "detection"
+        },
+        "python": {
+          "method": "list",
+          "resource": "detection"
+        },
+        "ruby": {
+          "method": "list",
+          "resource": "detection"
+        },
+        "rust": {
+          "method": "list",
+          "resource": "detection"
+        },
+        "typescript": {
+          "method": "list",
+          "resource": "detection"
+        }
+      }
+    },
+    "sub_brands.create": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "CreateAsync",
+          "resource": "SubBrands"
+        },
+        "go": {
+          "method": "Create",
+          "resource": "SubBrands"
+        },
+        "java": {
+          "method": "create",
+          "resource": "subBrands"
+        },
+        "python": {
+          "method": "create",
+          "resource": "sub_brands"
+        },
+        "ruby": {
+          "method": "create",
+          "resource": "sub_brands"
+        },
+        "rust": {
+          "method": "create",
+          "resource": "sub_brands"
+        },
+        "typescript": {
+          "method": "create",
+          "resource": "sub_brands"
+        }
+      }
+    },
+    "usage.retrieve": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "RetrieveAsync",
+          "resource": "Usage"
+        },
+        "go": {
+          "method": "Retrieve",
+          "resource": "Usage"
+        },
+        "java": {
+          "method": "retrieve",
+          "resource": "usage"
+        },
+        "python": {
+          "method": "retrieve",
+          "resource": "usage"
+        },
+        "ruby": {
+          "method": "retrieve",
+          "resource": "usage"
+        },
+        "rust": {
+          "method": "retrieve",
+          "resource": "usage"
+        },
+        "typescript": {
+          "method": "retrieve",
+          "resource": "usage"
+        }
+      }
+    },
+    "webhooks.create_secret": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "CreateSecretAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "CreateSecret",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "createSecret",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "create_secret",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "create_secret",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "create_secret",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "createSecret",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.create_subscription": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "CreateSubscriptionAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "CreateSubscription",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "createSubscription",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "create_subscription",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "create_subscription",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "create_subscription",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "createSubscription",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.delete_secret": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "DeleteSecretAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "DeleteSecret",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "deleteSecret",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "delete_secret",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "delete_secret",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "delete_secret",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "deleteSecret",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.delete_subscription": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "DeleteSubscriptionAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "DeleteSubscription",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "deleteSubscription",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "delete_subscription",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "delete_subscription",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "delete_subscription",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "deleteSubscription",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.get_delivery": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "GetDeliveryAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "GetDelivery",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "getDelivery",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "get_delivery",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "get_delivery",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "get_delivery",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "getDelivery",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.get_secret": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "GetSecretAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "GetSecret",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "getSecret",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "get_secret",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "get_secret",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "get_secret",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "getSecret",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.get_subscription": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "GetSubscriptionAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "GetSubscription",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "getSubscription",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "get_subscription",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "get_subscription",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "get_subscription",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "getSubscription",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.list_deliveries": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ListDeliveriesAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "ListDeliveries",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "listDeliveries",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "list_deliveries",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "list_deliveries",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "list_deliveries",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "listDeliveries",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.list_events": {
+      "cardinality": "list",
+      "symbols": {
+        "csharp": {
+          "method": "ListEventsAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "ListEvents",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "listEvents",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "list_events",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "list_events",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "list_events",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "listEvents",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.list_secrets": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ListSecretsAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "ListSecrets",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "listSecrets",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "list_secrets",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "list_secrets",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "list_secrets",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "listSecrets",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.list_subscriptions": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ListSubscriptionsAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "ListSubscriptions",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "listSubscriptions",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "list_subscriptions",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "list_subscriptions",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "list_subscriptions",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "listSubscriptions",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.rotate_subscription_secret": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "RotateSubscriptionSecretAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "RotateSubscriptionSecret",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "rotateSubscriptionSecret",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "rotate_subscription_secret",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "rotate_subscription_secret",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "rotate_subscription_secret",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "rotateSubscriptionSecret",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.send_test": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "SendTestAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "SendTest",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "sendTest",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "send_test",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "send_test",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "send_test",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "sendTest",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.set_default_secret": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "SetDefaultSecretAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "SetDefaultSecret",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "setDefaultSecret",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "set_default_secret",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "set_default_secret",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "set_default_secret",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "setDefaultSecret",
+          "resource": "webhooks"
+        }
+      }
+    },
+    "webhooks.update_subscription": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "UpdateSubscriptionAsync",
+          "resource": "Webhooks"
+        },
+        "go": {
+          "method": "UpdateSubscription",
+          "resource": "Webhooks"
+        },
+        "java": {
+          "method": "updateSubscription",
+          "resource": "webhooks"
+        },
+        "python": {
+          "method": "update_subscription",
+          "resource": "webhooks"
+        },
+        "ruby": {
+          "method": "update_subscription",
+          "resource": "webhooks"
+        },
+        "rust": {
+          "method": "update_subscription",
+          "resource": "webhooks"
+        },
+        "typescript": {
+          "method": "updateSubscription",
+          "resource": "webhooks"
+        }
+      }
+    }
+  },
+  "version": "1.1.0"
+}
