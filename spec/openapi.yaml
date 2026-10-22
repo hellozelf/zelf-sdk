@@ -147,6 +147,24 @@ info:
 
     Every delivery shares a common envelope (`id`, `type`, `subscription_id`, `delivered_at`, `livemode`, `resource`, `delivery_mode`, `data`). Respond with any `2xx` status code to acknowledge receipt; a non-2xx response or a timeout is retried with exponential backoff. The **Webhooks** section documents each payload and the structure of the NDJSON files.
 
+    ### Snapshot limits
+
+    A snapshot carries at most 100,000 items. A subscription may set a lower `max_items`; leaving it empty or `0` applies that ceiling. Items count against the brand's data-record item quota, so a snapshot is cut to the remaining allowance, and a delivery is skipped and marked quota exhausted when none is left. When more items match than the limit allows, the file stops at the limit and the next scheduled snapshot carries whatever is current then. A test delivery always sends a sample of 10 items.
+
+    ### The file
+
+    There is no byte limit; size follows the item limit. The file is NDJSON, one JSON object per line, served as `application/x-ndjson` and not compressed. The notification carries the exact byte size and a SHA-256 checksum, so you can verify a download is complete before you read it.
+
+    The signed download link is valid for 24 hours from delivery, and `expires_at` (Unix seconds) carries the exact moment. The file is kept for 7 days and then deleted with its delivery record. A link cannot be reissued, so download within the window.
+
+    ### Schedule and retries
+
+    Snapshots run every 12, 24, 168 (weekly) or 720 hours (30 days), defaulting to 12 hours. The first one arrives within minutes of creating the subscription.
+
+    Any response other than `2xx` counts as a failure, including `3xx`, because redirects are not followed, as do timeouts and connection errors. The timeouts are 10 seconds to connect and 30 seconds to read, so answer `2xx` immediately and download the file afterwards rather than while we wait.
+
+    A delivery is attempted 5 times in total. Retries start about 60 seconds apart and double with jitter, up to 6 hours between tries. Each retry rebuilds the snapshot from current data and carries a new signed link under the same delivery id. After the last failure the delivery is marked exhausted and the next scheduled snapshot runs as usual. Items are charged to the quota only when a delivery succeeds, so a retry is never billed twice.
+
     ## Models
 
     The **Models** section describes the JSON representations the API returns and delivers through webhooks. Every list method wraps its items in the response envelope described above.
