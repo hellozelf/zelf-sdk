@@ -30,10 +30,11 @@ class AnalyticsResource:
     ) -> BrandComparison:
         """Compare Brand Performance
 
-        Returns one row of totals per brand: the top-level brand named by `brand_id`,
-        followed by each of its competitor sub-brands. The statistics block matches
-        `content.statistics`, so the same parsing works for both. `brand_id` must name a
-        top-level brand. A sub-brand is refused with the id of the parent to use instead.
+        Returns one row of totals per brand: the top-level brand named by `brand_id` first,
+        then each of its competitor sub-brands by title. Theme sub-brands are not
+        competitors and are left out. The statistics block matches `content.statistics`, so
+        the same parsing works for both. `brand_id` must name a top-level brand. A sub-brand
+        is refused with the id of the parent to use instead.
 
         Args:
             brand_id: The top-level brand to analyse, as returned by brands.list.
@@ -75,10 +76,11 @@ class AnalyticsResource:
     ) -> FollowerTimeseries:
         """Get Brand Follower Time Series
 
-        Returns follower history for the top-level brand named by `brand_id` and each of its
-        competitor sub-brands, bucketed by `period`. A brand appears only for the periods in
-        which one of its owned handles was measured. Follower counts carry forward: a handle
-        with no reading in a period keeps the last one recorded before it.
+        Returns follower history for the top-level brand named by `brand_id` first, then
+        each of its competitor sub-brands by title, bucketed by `period`. A brand appears
+        only for the periods in which one of its owned handles was measured. Follower counts
+        carry forward: a handle with no reading in a period keeps the last one recorded
+        before it.
 
         Args:
             brand_id: The top-level brand to analyse, as returned by brands.list.
@@ -171,10 +173,11 @@ class AsyncAnalyticsResource:
     ) -> BrandComparison:
         """Compare Brand Performance
 
-        Returns one row of totals per brand: the top-level brand named by `brand_id`,
-        followed by each of its competitor sub-brands. The statistics block matches
-        `content.statistics`, so the same parsing works for both. `brand_id` must name a
-        top-level brand. A sub-brand is refused with the id of the parent to use instead.
+        Returns one row of totals per brand: the top-level brand named by `brand_id` first,
+        then each of its competitor sub-brands by title. Theme sub-brands are not
+        competitors and are left out. The statistics block matches `content.statistics`, so
+        the same parsing works for both. `brand_id` must name a top-level brand. A sub-brand
+        is refused with the id of the parent to use instead.
 
         Args:
             brand_id: The top-level brand to analyse, as returned by brands.list.
@@ -218,10 +221,11 @@ class AsyncAnalyticsResource:
     ) -> FollowerTimeseries:
         """Get Brand Follower Time Series
 
-        Returns follower history for the top-level brand named by `brand_id` and each of its
-        competitor sub-brands, bucketed by `period`. A brand appears only for the periods in
-        which one of its owned handles was measured. Follower counts carry forward: a handle
-        with no reading in a period keeps the last one recorded before it.
+        Returns follower history for the top-level brand named by `brand_id` first, then
+        each of its competitor sub-brands by title, bucketed by `period`. A brand appears
+        only for the periods in which one of its owned handles was measured. Follower counts
+        carry forward: a handle with no reading in a period keeps the last one recorded
+        before it.
 
         Args:
             brand_id: The top-level brand to analyse, as returned by brands.list.
