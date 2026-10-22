@@ -89,13 +89,13 @@ public sealed class BrandAccountsResource(Transport transport)
     /// linked top-level brands and their sub-brands.
     /// </summary>
     /// <remarks>Calls POST /api/v1/brands/accounts/ (brand_accounts.add).</remarks>
-    public async Task<IReadOnlyList<BrandAccountGroups>> AddAsync(BrandAccountsAddParams parameters, CancellationToken cancellationToken = default)
+    public async Task<BrandAccountGroups> AddAsync(BrandAccountsAddParams parameters, CancellationToken cancellationToken = default)
     {
         var path = "/api/v1/brands/accounts/";
         var query = new List<KeyValuePair<string, string>>();
         var envelope = await _transport.SendAsync<BrandAccountGroups>(HttpMethod.Post, path, query, parameters, cancellationToken)
             .ConfigureAwait(false);
-        return Envelopes.Rows(envelope);
+        return Envelopes.One(envelope, "BrandAccountGroups");
     }
 
     /// <summary>
@@ -106,7 +106,7 @@ public sealed class BrandAccountsResource(Transport transport)
     /// single list with the `account_type` parameter (`tracked`, `influencer` or `owned`).
     /// </summary>
     /// <remarks>Calls GET /api/v1/brands/accounts/ (brand_accounts.list).</remarks>
-    public async Task<IReadOnlyList<BrandAccountGroups>> ListAsync(BrandAccountsListParams? parameters = null, CancellationToken cancellationToken = default)
+    public async Task<BrandAccountGroups> ListAsync(BrandAccountsListParams? parameters = null, CancellationToken cancellationToken = default)
     {
         parameters ??= new BrandAccountsListParams();
         var path = "/api/v1/brands/accounts/";
@@ -121,7 +121,7 @@ public sealed class BrandAccountsResource(Transport transport)
         }
         var envelope = await _transport.SendAsync<BrandAccountGroups>(HttpMethod.Get, path, query, null, cancellationToken)
             .ConfigureAwait(false);
-        return Envelopes.Rows(envelope);
+        return Envelopes.One(envelope, "BrandAccountGroups");
     }
 
     /// <summary>
@@ -134,12 +134,12 @@ public sealed class BrandAccountsResource(Transport transport)
     /// and their sub-brands.
     /// </summary>
     /// <remarks>Calls DELETE /api/v1/brands/accounts/ (brand_accounts.remove).</remarks>
-    public async Task<IReadOnlyList<BrandAccountGroups>> RemoveAsync(BrandAccountsRemoveParams parameters, CancellationToken cancellationToken = default)
+    public async Task<BrandAccountGroups> RemoveAsync(BrandAccountsRemoveParams parameters, CancellationToken cancellationToken = default)
     {
         var path = "/api/v1/brands/accounts/";
         var query = new List<KeyValuePair<string, string>>();
         var envelope = await _transport.SendAsync<BrandAccountGroups>(HttpMethod.Delete, path, query, parameters, cancellationToken)
             .ConfigureAwait(false);
-        return Envelopes.Rows(envelope);
+        return Envelopes.One(envelope, "BrandAccountGroups");
     }
 }

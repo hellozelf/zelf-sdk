@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-from naming import FORCE_LIST, FORCE_SINGLE, OPERATION_RENAMES, snake
+from naming import OPERATION_RENAMES, snake
 
 ENVELOPE_KEYS = {
     "log_id", "timestamp", "applied_filters", "results",
@@ -180,14 +180,21 @@ def success_response(op: dict) -> tuple[int, dict]:
     return 200, {}
 
 
-def classify(operation_id: str, query_params: list[Param]) -> str:
-    if operation_id in FORCE_LIST:
-        return "list"
-    if operation_id in FORCE_SINGLE:
-        return "single"
+def classify(response_schema: dict, query_params: list[Param]) -> str:
+    """How many rows an operation answers with, read off the document.
+
+    The envelope wraps everything in `results`, so the array alone says
+    nothing. A `page` parameter marks a paginated list, and apollo stamps
+    `maxItems: 1` on the wrap it builds around a single object. Anything else
+    returns however many rows it has.
+    """
     if any(p.name == "page" for p in query_params):
         return "page"
-    return "single"
+    results = (response_schema.get("properties") or {}).get("results")
+    if results is None:
+        # No body to decode, such as a 204 or an accepted write.
+        return "single"
+    return "single" if results.get("maxItems") == 1 else "list"
 
 
 def body_params(ref: str | None, schemas: dict) -> list[Param]:
@@ -308,7 +315,7 @@ def load(path: Path) -> Api:
                     body_fields=body_params(body_ref, schemas),
                     status=status,
                     item=unwrap_paginated_alias(item_schema_name(response_schema), schemas),
-                    cardinality=classify(operation_id, query_params),
+                    cardinality=classify(response_schema, query_params),
                     summary=(raw.get("summary") or "").strip(),
                     description=(raw.get("description") or "").strip(),
                 )

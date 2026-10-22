@@ -8,12 +8,13 @@ import "context"
 type AnalyticsResource struct{ t *transport }
 
 // BrandComparison returns one row of totals per brand: the top-level brand named by
-// `brand_id`, followed by each of its competitor sub-brands. The statistics block matches
-// `content.statistics`, so the same parsing works for both. `brand_id` must name a top-
-// level brand. A sub-brand is refused with the id of the parent to use instead.
+// `brand_id` first, then each of its competitor sub-brands by title. Theme sub-brands are
+// not competitors and are left out. The statistics block matches `content.statistics`, so
+// the same parsing works for both. `brand_id` must name a top-level brand. A sub-brand is
+// refused with the id of the parent to use instead.
 //
 // Calls GET /api/v1/analytics/brand_comparison/ (analytics.brand_comparison).
-func (r *AnalyticsResource) BrandComparison(ctx context.Context, params *AnalyticsBrandComparisonParams) (*BrandComparison, error) {
+func (r *AnalyticsResource) BrandComparison(ctx context.Context, params *AnalyticsBrandComparisonParams) ([]BrandComparison, error) {
 	if params == nil {
 		params = &AnalyticsBrandComparisonParams{}
 	}
@@ -22,16 +23,17 @@ func (r *AnalyticsResource) BrandComparison(ctx context.Context, params *Analyti
 	if err != nil {
 		return nil, err
 	}
-	return one(env, "BrandComparison")
+	return env.Results, nil
 }
 
 // FollowerTimeseries returns follower history for the top-level brand named by `brand_id`
-// and each of its competitor sub-brands, bucketed by `period`. A brand appears only for
-// the periods in which one of its owned handles was measured. Follower counts carry
-// forward: a handle with no reading in a period keeps the last one recorded before it.
+// first, then each of its competitor sub-brands by title, bucketed by `period`. A brand
+// appears only for the periods in which one of its owned handles was measured. Follower
+// counts carry forward: a handle with no reading in a period keeps the last one recorded
+// before it.
 //
 // Calls GET /api/v1/analytics/follower_timeseries/ (analytics.follower_timeseries).
-func (r *AnalyticsResource) FollowerTimeseries(ctx context.Context, params *AnalyticsFollowerTimeseriesParams) (*FollowerTimeseries, error) {
+func (r *AnalyticsResource) FollowerTimeseries(ctx context.Context, params *AnalyticsFollowerTimeseriesParams) ([]FollowerTimeseries, error) {
 	if params == nil {
 		params = &AnalyticsFollowerTimeseriesParams{}
 	}
@@ -40,7 +42,7 @@ func (r *AnalyticsResource) FollowerTimeseries(ctx context.Context, params *Anal
 	if err != nil {
 		return nil, err
 	}
-	return one(env, "FollowerTimeseries")
+	return env.Results, nil
 }
 
 // PostedComments returns the comments the brand posted in the window, grouped by the kind

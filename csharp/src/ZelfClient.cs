@@ -10,7 +10,7 @@ namespace Zelf;
 public sealed class ZelfClient : IDisposable
 {
     /// <summary>The SDK version sent in the User-Agent header.</summary>
-    public const string Version = "1.1.0";
+    public const string Version = "1.1.1";
 
     private readonly Transport _transport;
 

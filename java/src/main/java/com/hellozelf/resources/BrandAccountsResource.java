@@ -30,14 +30,19 @@ public final class BrandAccountsResource {
      * is a valid target, which includes linked top-level brands and their sub-brands.
      * Calls POST /api/v1/brands/accounts/ (brand_accounts.add).
      */
-    public List<BrandAccountGroups> add(BrandAccountsAddParams parameters) {
+    public BrandAccountGroups add(BrandAccountsAddParams parameters) {
         if (parameters == null) {
             parameters = new BrandAccountsAddParams();
         }
         String path = "/api/v1/brands/accounts/";
         List<Map.Entry<String, String>> query = new ArrayList<>();
         Envelope<BrandAccountGroups> envelope = transport.send("POST", path, query, parameters, BrandAccountGroups.class);
-        return envelope.results();
+        if (envelope.results().isEmpty()) {
+            throw new ZelfException.NotFound(
+                    "No BrandAccountGroups matched the request.", 404, "NOT_FOUND", null,
+                    envelope.logId());
+        }
+        return envelope.results().get(0);
     }
 
     /**
@@ -49,7 +54,7 @@ public final class BrandAccountsResource {
      * `influencer` or `owned`). Calls GET /api/v1/brands/accounts/
      * (brand_accounts.list).
      */
-    public List<BrandAccountGroups> list(BrandAccountsListParams parameters) {
+    public BrandAccountGroups list(BrandAccountsListParams parameters) {
         if (parameters == null) {
             parameters = new BrandAccountsListParams();
         }
@@ -62,7 +67,12 @@ public final class BrandAccountsResource {
             query.add(Map.entry("brand_id", String.valueOf(parameters.brandId())));
         }
         Envelope<BrandAccountGroups> envelope = transport.send("GET", path, query, null, BrandAccountGroups.class);
-        return envelope.results();
+        if (envelope.results().isEmpty()) {
+            throw new ZelfException.NotFound(
+                    "No BrandAccountGroups matched the request.", 404, "NOT_FOUND", null,
+                    envelope.logId());
+        }
+        return envelope.results().get(0);
     }
 
     /**
@@ -75,13 +85,18 @@ public final class BrandAccountsResource {
      * top-level brands and their sub-brands. Calls DELETE /api/v1/brands/accounts/
      * (brand_accounts.remove).
      */
-    public List<BrandAccountGroups> remove(BrandAccountsRemoveParams parameters) {
+    public BrandAccountGroups remove(BrandAccountsRemoveParams parameters) {
         if (parameters == null) {
             parameters = new BrandAccountsRemoveParams();
         }
         String path = "/api/v1/brands/accounts/";
         List<Map.Entry<String, String>> query = new ArrayList<>();
         Envelope<BrandAccountGroups> envelope = transport.send("DELETE", path, query, parameters, BrandAccountGroups.class);
-        return envelope.results();
+        if (envelope.results().isEmpty()) {
+            throw new ZelfException.NotFound(
+                    "No BrandAccountGroups matched the request.", 404, "NOT_FOUND", null,
+                    envelope.logId());
+        }
+        return envelope.results().get(0);
     }
 }

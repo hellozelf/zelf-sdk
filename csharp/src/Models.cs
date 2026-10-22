@@ -501,8 +501,8 @@ public sealed record Content(
     [property: JsonPropertyName("description")] string Description,
     [property: JsonPropertyName("transcript")] string? Transcript,
     [property: JsonPropertyName("platform_url")] string PlatformUrl,
-    [property: JsonPropertyName("ai_summary")] string? AiSummary,
     [property: JsonPropertyName("last_keyword")] string? LastKeyword,
+    [property: JsonPropertyName("ai_summary")] string? AiSummary,
     [property: JsonPropertyName("hashtags")] IReadOnlyList<string> Hashtags
 );
 

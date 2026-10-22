@@ -125,11 +125,12 @@ Two things in the spec need a workaround table in `codegen/naming.py`:
 - `usage_retrieve` is not dotted, and the webhook operations use a singular
   `webhook.` prefix with colliding list and get names, so `OPERATION_RENAMES`
   patches them.
-- The envelope always wraps `results` in an array, so cardinality cannot be
-  read off the response schema. `FORCE_LIST` and `FORCE_SINGLE` classify the
-  operations a `page` query parameter does not settle.
-
-Both would be better fixed in the spec, and both tables shrink when they are.
+- The envelope always wraps `results` in an array, so the array alone says
+  nothing about how many rows an operation answers with. The document carries
+  the answer instead: a `page` query parameter marks a paginated list, and
+  apollo stamps `maxItems: 1` on the wrap it builds around a single object.
+  `classify` in `codegen/spec.py` reads those two, and nothing is keyed on an
+  operation name.
 
 ## Toolchains
 

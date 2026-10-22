@@ -8,10 +8,10 @@ module Zelf
       end
 
       # Compare Brand Performance. Returns one row of totals per brand: the top-level brand
-      # named by `brand_id`, followed by each of its competitor sub-brands. The statistics
-      # block matches `content.statistics`, so the same parsing works for both. `brand_id`
-      # must name a top-level brand. A sub-brand is refused with the id of the parent to use
-      # instead.
+      # named by `brand_id` first, then each of its competitor sub-brands by title. Theme
+      # sub-brands are not competitors and are left out. The statistics block matches
+      # `content.statistics`, so the same parsing works for both. `brand_id` must name a
+      # top-level brand. A sub-brand is refused with the id of the parent to use instead.
       #
       # Calls GET /api/v1/analytics/brand_comparison/ (analytics.brand_comparison).
       def brand_comparison(brand_id:, platform: nil, posted_after: nil, posted_before: nil, posted_within_days: nil, posted_within_hours: nil)
@@ -24,14 +24,14 @@ module Zelf
           "posted_within_hours" => posted_within_hours,
         }.reject { |_, value| value.nil? }
         envelope = @transport.request(:get, "/api/v1/analytics/brand_comparison/", query: query)
-        Zelf.one(envelope, Models::BrandComparison, "BrandComparison")
+        Zelf.rows(envelope, Models::BrandComparison)
       end
 
       # Get Brand Follower Time Series. Returns follower history for the top-level brand
-      # named by `brand_id` and each of its competitor sub-brands, bucketed by `period`. A
-      # brand appears only for the periods in which one of its owned handles was measured.
-      # Follower counts carry forward: a handle with no reading in a period keeps the last
-      # one recorded before it.
+      # named by `brand_id` first, then each of its competitor sub-brands by title, bucketed
+      # by `period`. A brand appears only for the periods in which one of its owned handles
+      # was measured. Follower counts carry forward: a handle with no reading in a period
+      # keeps the last one recorded before it.
       #
       # Calls GET /api/v1/analytics/follower_timeseries/ (analytics.follower_timeseries).
       def follower_timeseries(brand_id:, period: nil, platform: nil, posted_after: nil, posted_before: nil, posted_within_days: nil, posted_within_hours: nil)
@@ -45,7 +45,7 @@ module Zelf
           "posted_within_hours" => posted_within_hours,
         }.reject { |_, value| value.nil? }
         envelope = @transport.request(:get, "/api/v1/analytics/follower_timeseries/", query: query)
-        Zelf.one(envelope, Models::FollowerTimeseries, "FollowerTimeseries")
+        Zelf.rows(envelope, Models::FollowerTimeseries)
       end
 
       # Get Posted Comment Analytics. Returns the comments the brand posted in the window,

@@ -1788,14 +1788,14 @@ class Content(BaseModel):
             description="Direct URL to the post on its platform.\n\nExamples:\n- `https://instagram.com/reel/abcd`\n- `https://www.tiktok.com/@username/video/12345678`"
         ),
     ]
-    ai_summary: Annotated[
-        str | None, Field(description="Short AI-generated summary of the content.")
-    ]
     last_keyword: Annotated[
         str | None,
         Field(
             description="The search term the content was most recently found by. Null when the content was not picked up through a keyword search."
         ),
+    ]
+    ai_summary: Annotated[
+        str | None, Field(description="Short AI-generated summary of the content.")
     ]
     hashtags: Annotated[
         list[str],

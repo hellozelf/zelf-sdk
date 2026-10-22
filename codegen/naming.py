@@ -6,24 +6,6 @@ import re
 OPERATION_RENAMES: dict[str, str] = {}
 
 
-# The envelope always wraps `results` in an array, even for single-object reads,
-# so cardinality cannot be read off the response schema. `page` in the query
-# params marks a real paginated list; the rest are classified here.
-# An `x-zelf-cardinality` extension in the spec would remove this table.
-FORCE_LIST = {
-    "brands.catalog_categories",
-    "webhooks.list_events",
-    "brand_accounts.add",
-    "brand_accounts.remove",
-    "brand_accounts.list",
-}
-FORCE_SINGLE = {
-    "content.statistics",
-    "ai_analysis.content_statistics",
-    "creator_vetting.content_statistics",
-    "usage.retrieve",
-}
-
 PYTHON_KEYWORDS = {
     "and",
     "as",

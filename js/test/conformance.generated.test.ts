@@ -74,7 +74,7 @@ const CALLS: Case[] = [
     path: '/api/v1/analytics/brand_comparison/',
     query: {"brand_id": ["brd_tp6wqSj7PlBzhPTC"], "platform": ["instagram"], "posted_after": ["2026-01-01T00:00:00Z"], "posted_before": ["2026-01-01T00:00:00Z"], "posted_within_days": ["42"], "posted_within_hours": ["42"]},
     body: [],
-    cardinality: 'single',
+    cardinality: 'list',
     call: (c: ZelfAPIClient) => c.analytics.brandComparison({ brandId: "brd_tp6wqSj7PlBzhPTC", platform: ["instagram"], postedAfter: "2026-01-01T00:00:00Z", postedBefore: "2026-01-01T00:00:00Z", postedWithinDays: 42, postedWithinHours: 42 }),
   },
   {
@@ -83,7 +83,7 @@ const CALLS: Case[] = [
     path: '/api/v1/analytics/follower_timeseries/',
     query: {"brand_id": ["brd_tp6wqSj7PlBzhPTC"], "period": ["day"], "platform": ["instagram"], "posted_after": ["2026-01-01T00:00:00Z"], "posted_before": ["2026-01-01T00:00:00Z"], "posted_within_days": ["42"], "posted_within_hours": ["42"]},
     body: [],
-    cardinality: 'single',
+    cardinality: 'list',
     call: (c: ZelfAPIClient) => c.analytics.followerTimeseries({ brandId: "brd_tp6wqSj7PlBzhPTC", period: "day", platform: ["instagram"], postedAfter: "2026-01-01T00:00:00Z", postedBefore: "2026-01-01T00:00:00Z", postedWithinDays: 42, postedWithinHours: 42 }),
   },
   {
@@ -101,7 +101,7 @@ const CALLS: Case[] = [
     path: '/api/v1/brands/accounts/',
     query: {},
     body: ["account_type", "brand_id", "profile_urls"],
-    cardinality: 'list',
+    cardinality: 'single',
     call: (c: ZelfAPIClient) => c.brandAccounts.add({ accountType: "tracked", profileUrls: ["Profile urls"], brandId: "brd_tp6wqSj7PlBzhPTC" }),
   },
   {
@@ -110,7 +110,7 @@ const CALLS: Case[] = [
     path: '/api/v1/brands/accounts/',
     query: {"account_type": ["influencer"], "brand_id": ["brd_tp6wqSj7PlBzhPTC"]},
     body: [],
-    cardinality: 'list',
+    cardinality: 'single',
     call: (c: ZelfAPIClient) => c.brandAccounts.list({ accountType: "influencer", brandId: "brd_tp6wqSj7PlBzhPTC" }),
   },
   {
@@ -119,7 +119,7 @@ const CALLS: Case[] = [
     path: '/api/v1/brands/accounts/',
     query: {},
     body: ["account_type", "brand_id", "profile_urls"],
-    cardinality: 'list',
+    cardinality: 'single',
     call: (c: ZelfAPIClient) => c.brandAccounts.remove({ accountType: "tracked", profileUrls: ["Profile urls"], brandId: "brd_tp6wqSj7PlBzhPTC" }),
   },
   {

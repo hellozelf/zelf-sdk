@@ -23,7 +23,7 @@ module Zelf
           "brand_id" => brand_id,
         }.reject { |_, value| value.nil? }
         envelope = @transport.request(:post, "/api/v1/brands/accounts/", body: body)
-        Zelf.rows(envelope, Models::BrandAccountGroups)
+        Zelf.one(envelope, Models::BrandAccountGroups, "BrandAccountGroups")
       end
 
       # List Brand Accounts. Returns a brand's tracked and influencer creator accounts, plus
@@ -39,7 +39,7 @@ module Zelf
           "brand_id" => brand_id,
         }.reject { |_, value| value.nil? }
         envelope = @transport.request(:get, "/api/v1/brands/accounts/", query: query)
-        Zelf.rows(envelope, Models::BrandAccountGroups)
+        Zelf.one(envelope, Models::BrandAccountGroups, "BrandAccountGroups")
       end
 
       # Remove Brand Accounts. Removes profiles from a brand's `tracked`, `influencer` or
@@ -58,7 +58,7 @@ module Zelf
           "brand_id" => brand_id,
         }.reject { |_, value| value.nil? }
         envelope = @transport.request(:delete, "/api/v1/brands/accounts/", body: body)
-        Zelf.rows(envelope, Models::BrandAccountGroups)
+        Zelf.one(envelope, Models::BrandAccountGroups, "BrandAccountGroups")
       end
     end
   end

@@ -125,7 +125,7 @@ CALLS = [
             "posted_within_hours": ["42"],
         },
         [],
-        "single",
+        "list",
         lambda c: c.analytics.brand_comparison(
             brand_id="brd_tp6wqSj7PlBzhPTC",
             platform=["instagram"],
@@ -149,7 +149,7 @@ CALLS = [
             "posted_within_hours": ["42"],
         },
         [],
-        "single",
+        "list",
         lambda c: c.analytics.follower_timeseries(
             brand_id="brd_tp6wqSj7PlBzhPTC",
             period="day",
@@ -189,7 +189,7 @@ CALLS = [
         "/api/v1/brands/accounts/",
         {},
         ["account_type", "brand_id", "profile_urls"],
-        "list",
+        "single",
         lambda c: c.brand_accounts.add(
             account_type="tracked", profile_urls=["Profile urls"], brand_id="brd_tp6wqSj7PlBzhPTC"
         ),
@@ -200,7 +200,7 @@ CALLS = [
         "/api/v1/brands/accounts/",
         {"account_type": ["influencer"], "brand_id": ["brd_tp6wqSj7PlBzhPTC"]},
         [],
-        "list",
+        "single",
         lambda c: c.brand_accounts.list(account_type="influencer", brand_id="brd_tp6wqSj7PlBzhPTC"),
     ),
     (
@@ -209,7 +209,7 @@ CALLS = [
         "/api/v1/brands/accounts/",
         {},
         ["account_type", "brand_id", "profile_urls"],
-        "list",
+        "single",
         lambda c: c.brand_accounts.remove(
             account_type="tracked", profile_urls=["Profile urls"], brand_id="brd_tp6wqSj7PlBzhPTC"
         ),

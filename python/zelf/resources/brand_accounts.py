@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Literal
 
 from .._models import BrandAccountGroups
-from .._pagination import rows
+from .._pagination import one
 from .._transport import AsyncTransport, SyncTransport
 from .._types import NOT_GIVEN, NotGiven, body, given
 
@@ -23,7 +23,7 @@ class BrandAccountsResource:
         account_type: AccountType,
         profile_urls: list[str],
         brand_id: str | NotGiven = NOT_GIVEN,
-    ) -> list[BrandAccountGroups]:
+    ) -> BrandAccountGroups:
         """Add Brand Accounts
 
         Adds profiles to a brand's `tracked`, `influencer` or `owned` list. Use `owned` for
@@ -50,7 +50,7 @@ class BrandAccountsResource:
                 "brand_id": brand_id,
             }
         )
-        return rows(
+        return one(
             self._transport.request("POST", "/api/v1/brands/accounts/", body=payload),
             BrandAccountGroups,
         )
@@ -60,7 +60,7 @@ class BrandAccountsResource:
         *,
         account_type: ListAccountType | NotGiven = NOT_GIVEN,
         brand_id: str | NotGiven = NOT_GIVEN,
-    ) -> list[BrandAccountGroups]:
+    ) -> BrandAccountGroups:
         """List Brand Accounts
 
         Returns a brand's tracked and influencer creator accounts, plus the `owned` accounts
@@ -82,7 +82,7 @@ class BrandAccountsResource:
                 "brand_id": brand_id,
             }
         )
-        return rows(
+        return one(
             self._transport.request("GET", "/api/v1/brands/accounts/", query=query),
             BrandAccountGroups,
         )
@@ -93,7 +93,7 @@ class BrandAccountsResource:
         account_type: AccountType,
         profile_urls: list[str],
         brand_id: str | NotGiven = NOT_GIVEN,
-    ) -> list[BrandAccountGroups]:
+    ) -> BrandAccountGroups:
         """Remove Brand Accounts
 
         Removes profiles from a brand's `tracked`, `influencer` or `owned` list. This
@@ -120,7 +120,7 @@ class BrandAccountsResource:
                 "brand_id": brand_id,
             }
         )
-        return rows(
+        return one(
             self._transport.request("DELETE", "/api/v1/brands/accounts/", body=payload),
             BrandAccountGroups,
         )
@@ -136,7 +136,7 @@ class AsyncBrandAccountsResource:
         account_type: AccountType,
         profile_urls: list[str],
         brand_id: str | NotGiven = NOT_GIVEN,
-    ) -> list[BrandAccountGroups]:
+    ) -> BrandAccountGroups:
         """Add Brand Accounts
 
         Adds profiles to a brand's `tracked`, `influencer` or `owned` list. Use `owned` for
@@ -163,7 +163,7 @@ class AsyncBrandAccountsResource:
                 "brand_id": brand_id,
             }
         )
-        return rows(
+        return one(
             await self._transport.request("POST", "/api/v1/brands/accounts/", body=payload),
             BrandAccountGroups,
         )
@@ -173,7 +173,7 @@ class AsyncBrandAccountsResource:
         *,
         account_type: ListAccountType | NotGiven = NOT_GIVEN,
         brand_id: str | NotGiven = NOT_GIVEN,
-    ) -> list[BrandAccountGroups]:
+    ) -> BrandAccountGroups:
         """List Brand Accounts
 
         Returns a brand's tracked and influencer creator accounts, plus the `owned` accounts
@@ -195,7 +195,7 @@ class AsyncBrandAccountsResource:
                 "brand_id": brand_id,
             }
         )
-        return rows(
+        return one(
             await self._transport.request("GET", "/api/v1/brands/accounts/", query=query),
             BrandAccountGroups,
         )
@@ -206,7 +206,7 @@ class AsyncBrandAccountsResource:
         account_type: AccountType,
         profile_urls: list[str],
         brand_id: str | NotGiven = NOT_GIVEN,
-    ) -> list[BrandAccountGroups]:
+    ) -> BrandAccountGroups:
         """Remove Brand Accounts
 
         Removes profiles from a brand's `tracked`, `influencer` or `owned` list. This
@@ -233,7 +233,7 @@ class AsyncBrandAccountsResource:
                 "brand_id": brand_id,
             }
         )
-        return rows(
+        return one(
             await self._transport.request("DELETE", "/api/v1/brands/accounts/", body=payload),
             BrandAccountGroups,
         )
