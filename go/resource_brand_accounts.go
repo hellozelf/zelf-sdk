@@ -16,13 +16,13 @@ type BrandAccountsResource struct{ t *transport }
 // brands.
 //
 // Calls POST /api/v1/brands/accounts/ (brand_accounts.add).
-func (r *BrandAccountsResource) Add(ctx context.Context, body BrandAccountsAddJSONRequestBody) ([]BrandAccountGroups, error) {
+func (r *BrandAccountsResource) Add(ctx context.Context, body BrandAccountsAddJSONRequestBody) (*BrandAccountGroups, error) {
 	env, err := request[BrandAccountGroups](ctx, r.t, "POST", "/api/v1/brands/accounts/",
 		nil, nil, body)
 	if err != nil {
 		return nil, err
 	}
-	return env.Results, nil
+	return one(env, "BrandAccountGroups")
 }
 
 // List returns a brand's tracked and influencer creator accounts, plus the `owned`
@@ -32,7 +32,7 @@ func (r *BrandAccountsResource) Add(ctx context.Context, body BrandAccountsAddJS
 // `account_type` parameter (`tracked`, `influencer` or `owned`).
 //
 // Calls GET /api/v1/brands/accounts/ (brand_accounts.list).
-func (r *BrandAccountsResource) List(ctx context.Context, params *BrandAccountsListParams) ([]BrandAccountGroups, error) {
+func (r *BrandAccountsResource) List(ctx context.Context, params *BrandAccountsListParams) (*BrandAccountGroups, error) {
 	if params == nil {
 		params = &BrandAccountsListParams{}
 	}
@@ -41,7 +41,7 @@ func (r *BrandAccountsResource) List(ctx context.Context, params *BrandAccountsL
 	if err != nil {
 		return nil, err
 	}
-	return env.Results, nil
+	return one(env, "BrandAccountGroups")
 }
 
 // Remove removes profiles from a brand's `tracked`, `influencer` or `owned` list. This
@@ -52,11 +52,11 @@ func (r *BrandAccountsResource) List(ctx context.Context, params *BrandAccountsL
 // valid target, which includes linked top-level brands and their sub-brands.
 //
 // Calls DELETE /api/v1/brands/accounts/ (brand_accounts.remove).
-func (r *BrandAccountsResource) Remove(ctx context.Context, body BrandAccountsRemoveJSONRequestBody) ([]BrandAccountGroups, error) {
+func (r *BrandAccountsResource) Remove(ctx context.Context, body BrandAccountsRemoveJSONRequestBody) (*BrandAccountGroups, error) {
 	env, err := request[BrandAccountGroups](ctx, r.t, "DELETE", "/api/v1/brands/accounts/",
 		nil, nil, body)
 	if err != nil {
 		return nil, err
 	}
-	return env.Results, nil
+	return one(env, "BrandAccountGroups")
 }

@@ -846,13 +846,13 @@ pub struct Content {
     /// Direct URL to the post on its platform. Examples:; `https://instagram.com/reel/abcd`;
     /// `https://www.tiktok.com/@username/video/12345678`
     pub platform_url: String,
-    /// Short AI-generated summary of the content.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub ai_summary: Option<String>,
     /// The search term the content was most recently found by. Null when the content was not
     /// picked up through a keyword search.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub last_keyword: Option<String>,
+    /// Short AI-generated summary of the content.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ai_summary: Option<String>,
     /// Hashtags used in the post, normalized to lowercase and without the leading `#`.
     #[serde(default)]
     pub hashtags: Vec<String>,

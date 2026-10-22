@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import Literal
 
 from .._models import BrandComparison, FollowerTimeseries, PostedComments
-from .._pagination import one
+from .._pagination import one, rows
 from .._transport import AsyncTransport, SyncTransport
 from .._types import NOT_GIVEN, NotGiven, given
 
@@ -27,13 +27,14 @@ class AnalyticsResource:
         posted_before: datetime | NotGiven = NOT_GIVEN,
         posted_within_days: int | NotGiven = NOT_GIVEN,
         posted_within_hours: int | NotGiven = NOT_GIVEN,
-    ) -> BrandComparison:
+    ) -> list[BrandComparison]:
         """Compare Brand Performance
 
-        Returns one row of totals per brand: the top-level brand named by `brand_id`,
-        followed by each of its competitor sub-brands. The statistics block matches
-        `content.statistics`, so the same parsing works for both. `brand_id` must name a
-        top-level brand. A sub-brand is refused with the id of the parent to use instead.
+        Returns one row of totals per brand: the top-level brand named by `brand_id` first,
+        then each of its competitor sub-brands by title. Theme sub-brands are not
+        competitors and are left out. The statistics block matches `content.statistics`, so
+        the same parsing works for both. `brand_id` must name a top-level brand. A sub-brand
+        is refused with the id of the parent to use instead.
 
         Args:
             brand_id: The top-level brand to analyse, as returned by brands.list.
@@ -57,7 +58,7 @@ class AnalyticsResource:
                 "posted_within_hours": posted_within_hours,
             }
         )
-        return one(
+        return rows(
             self._transport.request("GET", "/api/v1/analytics/brand_comparison/", query=query),
             BrandComparison,
         )
@@ -72,13 +73,14 @@ class AnalyticsResource:
         posted_before: datetime | NotGiven = NOT_GIVEN,
         posted_within_days: int | NotGiven = NOT_GIVEN,
         posted_within_hours: int | NotGiven = NOT_GIVEN,
-    ) -> FollowerTimeseries:
+    ) -> list[FollowerTimeseries]:
         """Get Brand Follower Time Series
 
-        Returns follower history for the top-level brand named by `brand_id` and each of its
-        competitor sub-brands, bucketed by `period`. A brand appears only for the periods in
-        which one of its owned handles was measured. Follower counts carry forward: a handle
-        with no reading in a period keeps the last one recorded before it.
+        Returns follower history for the top-level brand named by `brand_id` first, then
+        each of its competitor sub-brands by title, bucketed by `period`. A brand appears
+        only for the periods in which one of its owned handles was measured. Follower counts
+        carry forward: a handle with no reading in a period keeps the last one recorded
+        before it.
 
         Args:
             brand_id: The top-level brand to analyse, as returned by brands.list.
@@ -104,7 +106,7 @@ class AnalyticsResource:
                 "posted_within_hours": posted_within_hours,
             }
         )
-        return one(
+        return rows(
             self._transport.request("GET", "/api/v1/analytics/follower_timeseries/", query=query),
             FollowerTimeseries,
         )
@@ -168,13 +170,14 @@ class AsyncAnalyticsResource:
         posted_before: datetime | NotGiven = NOT_GIVEN,
         posted_within_days: int | NotGiven = NOT_GIVEN,
         posted_within_hours: int | NotGiven = NOT_GIVEN,
-    ) -> BrandComparison:
+    ) -> list[BrandComparison]:
         """Compare Brand Performance
 
-        Returns one row of totals per brand: the top-level brand named by `brand_id`,
-        followed by each of its competitor sub-brands. The statistics block matches
-        `content.statistics`, so the same parsing works for both. `brand_id` must name a
-        top-level brand. A sub-brand is refused with the id of the parent to use instead.
+        Returns one row of totals per brand: the top-level brand named by `brand_id` first,
+        then each of its competitor sub-brands by title. Theme sub-brands are not
+        competitors and are left out. The statistics block matches `content.statistics`, so
+        the same parsing works for both. `brand_id` must name a top-level brand. A sub-brand
+        is refused with the id of the parent to use instead.
 
         Args:
             brand_id: The top-level brand to analyse, as returned by brands.list.
@@ -198,7 +201,7 @@ class AsyncAnalyticsResource:
                 "posted_within_hours": posted_within_hours,
             }
         )
-        return one(
+        return rows(
             await self._transport.request(
                 "GET", "/api/v1/analytics/brand_comparison/", query=query
             ),
@@ -215,13 +218,14 @@ class AsyncAnalyticsResource:
         posted_before: datetime | NotGiven = NOT_GIVEN,
         posted_within_days: int | NotGiven = NOT_GIVEN,
         posted_within_hours: int | NotGiven = NOT_GIVEN,
-    ) -> FollowerTimeseries:
+    ) -> list[FollowerTimeseries]:
         """Get Brand Follower Time Series
 
-        Returns follower history for the top-level brand named by `brand_id` and each of its
-        competitor sub-brands, bucketed by `period`. A brand appears only for the periods in
-        which one of its owned handles was measured. Follower counts carry forward: a handle
-        with no reading in a period keeps the last one recorded before it.
+        Returns follower history for the top-level brand named by `brand_id` first, then
+        each of its competitor sub-brands by title, bucketed by `period`. A brand appears
+        only for the periods in which one of its owned handles was measured. Follower counts
+        carry forward: a handle with no reading in a period keeps the last one recorded
+        before it.
 
         Args:
             brand_id: The top-level brand to analyse, as returned by brands.list.
@@ -247,7 +251,7 @@ class AsyncAnalyticsResource:
                 "posted_within_hours": posted_within_hours,
             }
         )
-        return one(
+        return rows(
             await self._transport.request(
                 "GET", "/api/v1/analytics/follower_timeseries/", query=query
             ),

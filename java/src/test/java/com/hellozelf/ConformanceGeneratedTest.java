@@ -90,7 +90,7 @@ class ConformanceGeneratedTest {
             "/api/v1/analytics/brand_comparison/",
             java.util.Map.ofEntries(java.util.Map.entry("brand_id", java.util.List.of("brd_tp6wqSj7PlBzhPTC")), java.util.Map.entry("platform", java.util.List.of("instagram")), java.util.Map.entry("posted_after", java.util.List.of("2026-01-01T00:00:00Z")), java.util.Map.entry("posted_before", java.util.List.of("2026-01-01T00:00:00Z")), java.util.Map.entry("posted_within_days", java.util.List.of("42")), java.util.Map.entry("posted_within_hours", java.util.List.of("42"))),
             java.util.List.of(),
-            "single",
+            "list",
             client -> client.analytics().brandComparison(new AnalyticsBrandComparisonParams().brandId("brd_tp6wqSj7PlBzhPTC").platform(java.util.List.of("instagram")).postedAfter("2026-01-01T00:00:00Z").postedBefore("2026-01-01T00:00:00Z").postedWithinDays(42L).postedWithinHours(42L)),
             client -> client.analytics().brandComparison(null)),
         new Case(
@@ -99,7 +99,7 @@ class ConformanceGeneratedTest {
             "/api/v1/analytics/follower_timeseries/",
             java.util.Map.ofEntries(java.util.Map.entry("brand_id", java.util.List.of("brd_tp6wqSj7PlBzhPTC")), java.util.Map.entry("period", java.util.List.of("day")), java.util.Map.entry("platform", java.util.List.of("instagram")), java.util.Map.entry("posted_after", java.util.List.of("2026-01-01T00:00:00Z")), java.util.Map.entry("posted_before", java.util.List.of("2026-01-01T00:00:00Z")), java.util.Map.entry("posted_within_days", java.util.List.of("42")), java.util.Map.entry("posted_within_hours", java.util.List.of("42"))),
             java.util.List.of(),
-            "single",
+            "list",
             client -> client.analytics().followerTimeseries(new AnalyticsFollowerTimeseriesParams().brandId("brd_tp6wqSj7PlBzhPTC").period("day").platform(java.util.List.of("instagram")).postedAfter("2026-01-01T00:00:00Z").postedBefore("2026-01-01T00:00:00Z").postedWithinDays(42L).postedWithinHours(42L)),
             client -> client.analytics().followerTimeseries(null)),
         new Case(
@@ -117,7 +117,7 @@ class ConformanceGeneratedTest {
             "/api/v1/brands/accounts/",
             java.util.Map.of(),
             java.util.List.of("account_type", "brand_id", "profile_urls"),
-            "list",
+            "single",
             client -> client.brandAccounts().add(new BrandAccountsAddParams().accountType("tracked").profileUrls(java.util.List.of("Profile urls")).brandId("brd_tp6wqSj7PlBzhPTC")),
             client -> client.brandAccounts().add(null)),
         new Case(
@@ -126,7 +126,7 @@ class ConformanceGeneratedTest {
             "/api/v1/brands/accounts/",
             java.util.Map.ofEntries(java.util.Map.entry("account_type", java.util.List.of("influencer")), java.util.Map.entry("brand_id", java.util.List.of("brd_tp6wqSj7PlBzhPTC"))),
             java.util.List.of(),
-            "list",
+            "single",
             client -> client.brandAccounts().list(new BrandAccountsListParams().accountType("influencer").brandId("brd_tp6wqSj7PlBzhPTC")),
             client -> client.brandAccounts().list(null)),
         new Case(
@@ -135,7 +135,7 @@ class ConformanceGeneratedTest {
             "/api/v1/brands/accounts/",
             java.util.Map.of(),
             java.util.List.of("account_type", "brand_id", "profile_urls"),
-            "list",
+            "single",
             client -> client.brandAccounts().remove(new BrandAccountsRemoveParams().accountType("tracked").profileUrls(java.util.List.of("Profile urls")).brandId("brd_tp6wqSj7PlBzhPTC")),
             client -> client.brandAccounts().remove(null)),
         new Case(

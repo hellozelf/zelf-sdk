@@ -1,7 +1,7 @@
 [project]
 # Published as `zelf-sdk`; imports as `zelf`.
 name = "zelf-sdk"
-version = "1.1.0"
+version = "1.1.1"
 description = "Python client for the ZelfAI APIs"
 readme = "README.md"
 requires-python = ">=3.10"

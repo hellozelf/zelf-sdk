@@ -10,6 +10,23 @@ API did not cause.
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
 
+## 1.1.1
+
+### Fixed
+- `analytics.brand_comparison` and `analytics.follower_timeseries` return every
+  row. Both were typed as a single object, so each client decoded `results[0]`
+  and dropped the rest: a caller saw one brand and never a competitor. They now
+  return a list, in every client.
+- `brand_accounts.list`, `.add` and `.remove` return one `BrandAccountGroups`
+  rather than a one-element list of it. The response is a single object holding
+  `tracked`, `influencer` and `owned`, and the clients now say so.
+
+### Changed
+- Cardinality is read from the document rather than a table of operation names:
+  a `page` parameter means a page, `results` with `maxItems: 1` means one row,
+  anything else means a list. A new endpoint can no longer inherit the wrong
+  shape by being absent from a list someone forgot to edit.
+
 ## 1.1.0
 
 ### Added

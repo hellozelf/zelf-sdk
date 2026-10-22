@@ -147,13 +147,13 @@ public sealed class AnalyticsResource(Transport transport)
 
     /// <summary>
     /// Compare Brand Performance. Returns one row of totals per brand: the top-level brand
-    /// named by `brand_id`, followed by each of its competitor sub-brands. The statistics
-    /// block matches `content.statistics`, so the same parsing works for both. `brand_id`
-    /// must name a top-level brand. A sub-brand is refused with the id of the parent to use
-    /// instead.
+    /// named by `brand_id` first, then each of its competitor sub-brands by title. Theme
+    /// sub-brands are not competitors and are left out. The statistics block matches
+    /// `content.statistics`, so the same parsing works for both. `brand_id` must name a
+    /// top-level brand. A sub-brand is refused with the id of the parent to use instead.
     /// </summary>
     /// <remarks>Calls GET /api/v1/analytics/brand_comparison/ (analytics.brand_comparison).</remarks>
-    public async Task<BrandComparison> BrandComparisonAsync(AnalyticsBrandComparisonParams parameters, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<BrandComparison>> BrandComparisonAsync(AnalyticsBrandComparisonParams parameters, CancellationToken cancellationToken = default)
     {
         var path = "/api/v1/analytics/brand_comparison/";
         var query = new List<KeyValuePair<string, string>>();
@@ -180,18 +180,18 @@ public sealed class AnalyticsResource(Transport transport)
         }
         var envelope = await _transport.SendAsync<BrandComparison>(HttpMethod.Get, path, query, null, cancellationToken)
             .ConfigureAwait(false);
-        return Envelopes.One(envelope, "BrandComparison");
+        return Envelopes.Rows(envelope);
     }
 
     /// <summary>
     /// Get Brand Follower Time Series. Returns follower history for the top-level brand
-    /// named by `brand_id` and each of its competitor sub-brands, bucketed by `period`. A
-    /// brand appears only for the periods in which one of its owned handles was measured.
-    /// Follower counts carry forward: a handle with no reading in a period keeps the last
-    /// one recorded before it.
+    /// named by `brand_id` first, then each of its competitor sub-brands by title, bucketed
+    /// by `period`. A brand appears only for the periods in which one of its owned handles
+    /// was measured. Follower counts carry forward: a handle with no reading in a period
+    /// keeps the last one recorded before it.
     /// </summary>
     /// <remarks>Calls GET /api/v1/analytics/follower_timeseries/ (analytics.follower_timeseries).</remarks>
-    public async Task<FollowerTimeseries> FollowerTimeseriesAsync(AnalyticsFollowerTimeseriesParams parameters, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<FollowerTimeseries>> FollowerTimeseriesAsync(AnalyticsFollowerTimeseriesParams parameters, CancellationToken cancellationToken = default)
     {
         var path = "/api/v1/analytics/follower_timeseries/";
         var query = new List<KeyValuePair<string, string>>();
@@ -222,7 +222,7 @@ public sealed class AnalyticsResource(Transport transport)
         }
         var envelope = await _transport.SendAsync<FollowerTimeseries>(HttpMethod.Get, path, query, null, cancellationToken)
             .ConfigureAwait(false);
-        return Envelopes.One(envelope, "FollowerTimeseries");
+        return Envelopes.Rows(envelope);
     }
 
     /// <summary>

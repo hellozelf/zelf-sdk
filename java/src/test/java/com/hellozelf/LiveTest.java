@@ -83,11 +83,10 @@ class LiveTest {
         check("brands.list", () -> "brands=" + client.brands().list(null).itemCount());
         check("webhooks.list_events", () -> "events=" + client.webhooks().listEvents().size());
         check("brand_accounts.list", () -> {
-            var rows = client.brandAccounts().list(
+            var groups = client.brandAccounts().list(
                     new BrandAccountsListParams().brandId(BRAND).accountType("tracked"));
-            var tracked = rows.isEmpty() || rows.get(0).tracked() == null
-                    ? 0 : rows.get(0).tracked().size();
-            return "groups=" + rows.size() + " tracked=" + tracked;
+            var tracked = groups.tracked() == null ? 0 : groups.tracked().size();
+            return "tracked=" + tracked;
         });
     }
 }

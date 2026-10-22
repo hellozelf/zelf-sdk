@@ -160,7 +160,7 @@ var conformanceCases = []conformanceCase{
 		path:        "/api/v1/analytics/brand_comparison/",
 		query:       map[string][]string{"brand_id": {"brd_tp6wqSj7PlBzhPTC"}, "platform": {"instagram"}, "posted_after": {"2026-01-01T00:00:00Z"}, "posted_before": {"2026-01-01T00:00:00Z"}, "posted_within_days": {"42"}, "posted_within_hours": {"42"}},
 		body:        nil,
-		cardinality: "single",
+		cardinality: "list",
 		paramsJSON:  []byte(`{"brand_id": "brd_tp6wqSj7PlBzhPTC", "platform": ["instagram"], "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "posted_within_days": 42, "posted_within_hours": 42}`),
 		bodyJSON:    []byte(`{}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
@@ -180,7 +180,7 @@ var conformanceCases = []conformanceCase{
 		path:        "/api/v1/analytics/follower_timeseries/",
 		query:       map[string][]string{"brand_id": {"brd_tp6wqSj7PlBzhPTC"}, "period": {"day"}, "platform": {"instagram"}, "posted_after": {"2026-01-01T00:00:00Z"}, "posted_before": {"2026-01-01T00:00:00Z"}, "posted_within_days": {"42"}, "posted_within_hours": {"42"}},
 		body:        nil,
-		cardinality: "single",
+		cardinality: "list",
 		paramsJSON:  []byte(`{"brand_id": "brd_tp6wqSj7PlBzhPTC", "period": "day", "platform": ["instagram"], "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "posted_within_days": 42, "posted_within_hours": 42}`),
 		bodyJSON:    []byte(`{}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
@@ -220,7 +220,7 @@ var conformanceCases = []conformanceCase{
 		path:        "/api/v1/brands/accounts/",
 		query:       nil,
 		body:        []string{"account_type", "brand_id", "profile_urls"},
-		cardinality: "list",
+		cardinality: "single",
 		paramsJSON:  []byte(`{}`),
 		bodyJSON:    []byte(`{"account_type": "tracked", "profile_urls": ["Profile urls"], "brand_id": "brd_tp6wqSj7PlBzhPTC"}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
@@ -237,7 +237,7 @@ var conformanceCases = []conformanceCase{
 		path:        "/api/v1/brands/accounts/",
 		query:       map[string][]string{"account_type": {"influencer"}, "brand_id": {"brd_tp6wqSj7PlBzhPTC"}},
 		body:        nil,
-		cardinality: "list",
+		cardinality: "single",
 		paramsJSON:  []byte(`{"account_type": "influencer", "brand_id": "brd_tp6wqSj7PlBzhPTC"}`),
 		bodyJSON:    []byte(`{}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
@@ -257,7 +257,7 @@ var conformanceCases = []conformanceCase{
 		path:        "/api/v1/brands/accounts/",
 		query:       nil,
 		body:        []string{"account_type", "brand_id", "profile_urls"},
-		cardinality: "list",
+		cardinality: "single",
 		paramsJSON:  []byte(`{}`),
 		bodyJSON:    []byte(`{"account_type": "tracked", "profile_urls": ["Profile urls"], "brand_id": "brd_tp6wqSj7PlBzhPTC"}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {

@@ -158,7 +158,7 @@ async fn main() {
 
     let started = Instant::now();
     report(
-        "brand_accounts.list (spec bug)",
+        "brand_accounts.list",
         started,
         client
             .brand_accounts()
@@ -167,13 +167,10 @@ async fn main() {
                 account_type: Some("tracked".into()),
             })
             .await
-            .map(|rows| {
+            .map(|groups| {
                 format!(
-                    "groups={} tracked={}",
-                    rows.len(),
-                    rows.first()
-                        .and_then(|r| r.tracked.as_ref())
-                        .map_or(0, |tracked| tracked.len())
+                    "tracked={}",
+                    groups.tracked.as_ref().map_or(0, |tracked| tracked.len())
                 )
             })
             .map_err(|e| e.to_string()),

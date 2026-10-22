@@ -121,7 +121,7 @@ export interface paths {
      * Compare Brand Performance
      * @description `analytics.brand_comparison`
      *
-     *     Returns one row of totals per brand: the top-level brand named by `brand_id`, followed by each of its competitor sub-brands. The statistics block matches `content.statistics`, so the same parsing works for both.
+     *     Returns one row of totals per brand: the top-level brand named by `brand_id` first, then each of its competitor sub-brands by title. Theme sub-brands are not competitors and are left out. The statistics block matches `content.statistics`, so the same parsing works for both.
      *
      *     `brand_id` must name a top-level brand. A sub-brand is refused with the id of the parent to use instead.
      */
@@ -145,7 +145,7 @@ export interface paths {
      * Get Brand Follower Time Series
      * @description `analytics.follower_timeseries`
      *
-     *     Returns follower history for the top-level brand named by `brand_id` and each of its competitor sub-brands, bucketed by `period`. A brand appears only for the periods in which one of its owned handles was measured.
+     *     Returns follower history for the top-level brand named by `brand_id` first, then each of its competitor sub-brands by title, bucketed by `period`. A brand appears only for the periods in which one of its owned handles was measured.
      *
      *     Follower counts carry forward: a handle with no reading in a period keeps the last one recorded before it.
      */
@@ -1171,8 +1171,8 @@ export interface webhooks {
      *       "description": "How ZelfAI turns social signals into creator insights.",
      *       "transcript": "We walk through how ZelfAI ranks creators by brand fit.",
      *       "platform_url": "https://www.instagram.com/zelfai",
-     *       "ai_summary": "A product walkthrough of ZelfAI creator analytics.",
      *       "last_keyword": "zelf creators",
+     *       "ai_summary": "A product walkthrough of ZelfAI creator analytics.",
      *       "hashtags": [
      *         "zelfai",
      *         "creatoreconomy"
@@ -1854,10 +1854,10 @@ export interface components {
        *     - `https://www.tiktok.com/@username/video/12345678`
        */
       platform_url: string
-      /** @description Short AI-generated summary of the content. */
-      ai_summary: string | null
       /** @description The search term the content was most recently found by. Null when the content was not picked up through a keyword search. */
       last_keyword: string | null
+      /** @description Short AI-generated summary of the content. */
+      ai_summary: string | null
       /** @description Hashtags used in the post, normalized to lowercase and without the leading `#`. */
       hashtags: string[]
     }

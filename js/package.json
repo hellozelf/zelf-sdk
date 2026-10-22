@@ -1,6 +1,6 @@
 {
   "name": "zelf-sdk",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Official TypeScript client for the Zelf API.",
   "license": "Apache-2.0",
   "author": "Zelf",

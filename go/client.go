@@ -3,7 +3,7 @@
 package zelf
 
 // Version is the SDK version sent in the User-Agent header.
-const Version = "1.1.0"
+const Version = "1.1.1"
 
 // Client is the ZelfAI APIs client. Create one with New.
 type Client struct {

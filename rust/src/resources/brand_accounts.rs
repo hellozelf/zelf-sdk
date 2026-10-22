@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
 use crate::models::{AccountTypeEnum, BrandAccountGroups};
+use crate::page::one;
 use crate::transport::{Envelope, Transport};
 
 /// Parameters for brand_accounts.add.
@@ -64,7 +65,7 @@ impl BrandAccountsResource {
     /// their sub-brands.
     ///
     /// Calls `POST /api/v1/brands/accounts/` (`brand_accounts.add`).
-    pub async fn add(&self, params: BrandAccountsAddParams) -> Result<Vec<BrandAccountGroups>> {
+    pub async fn add(&self, params: BrandAccountsAddParams) -> Result<BrandAccountGroups> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
@@ -82,7 +83,7 @@ impl BrandAccountsResource {
                 body,
             )
             .await?;
-        Ok(envelope.results)
+        one(envelope, "BrandAccountGroups")
     }
 
     /// List Brand Accounts. Returns a brand's tracked and influencer creator accounts, plus the
@@ -92,7 +93,7 @@ impl BrandAccountsResource {
     /// `account_type` parameter (`tracked`, `influencer` or `owned`).
     ///
     /// Calls `GET /api/v1/brands/accounts/` (`brand_accounts.list`).
-    pub async fn list(&self, params: BrandAccountsListParams) -> Result<Vec<BrandAccountGroups>> {
+    pub async fn list(&self, params: BrandAccountsListParams) -> Result<BrandAccountGroups> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         if let Some(value) = &params.account_type {
@@ -113,7 +114,7 @@ impl BrandAccountsResource {
                 body,
             )
             .await?;
-        Ok(envelope.results)
+        one(envelope, "BrandAccountGroups")
     }
 
     /// Remove Brand Accounts. Removes profiles from a brand's `tracked`, `influencer` or
@@ -125,10 +126,7 @@ impl BrandAccountsResource {
     /// brands.
     ///
     /// Calls `DELETE /api/v1/brands/accounts/` (`brand_accounts.remove`).
-    pub async fn remove(
-        &self,
-        params: BrandAccountsRemoveParams,
-    ) -> Result<Vec<BrandAccountGroups>> {
+    pub async fn remove(&self, params: BrandAccountsRemoveParams) -> Result<BrandAccountGroups> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
@@ -146,6 +144,6 @@ impl BrandAccountsResource {
                 body,
             )
             .await?;
-        Ok(envelope.results)
+        one(envelope, "BrandAccountGroups")
     }
 }
