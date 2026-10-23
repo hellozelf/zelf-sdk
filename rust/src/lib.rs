@@ -32,7 +32,7 @@ pub use page::{Limits, Page};
 pub use transport::{ClientBuilder, API_KEY_ENV, DEFAULT_BASE_URL};
 
 /// The SDK version sent in the User-Agent header.
-pub const VERSION: &str = "1.3.1";
+pub const VERSION: &str = "1.3.0";
 
 use std::sync::Arc;
 

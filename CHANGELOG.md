@@ -10,7 +10,7 @@ generated from, which has a version of its own.
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
 
-## 1.3.1
+## 1.3.0
 
 ### Added
 - `ContentFormEnum`: `PHOTO`
