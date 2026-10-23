@@ -1908,7 +1908,7 @@ class ContentFilterInputRequest(BaseModel):
         list[str] | None, Field(description="Language codes to include, for example `en` or `es`.")
     ] = None
     content_form: Annotated[
-        Literal["VIDEO", "IMAGE"] | None, Field(description="Content medium. One of: VIDEO, IMAGE.")
+        Literal["VIDEO", "PHOTO"] | None, Field(description="Content medium. One of: VIDEO, PHOTO.")
     ] = None
     search: Annotated[
         str | None,

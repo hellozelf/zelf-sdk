@@ -21,7 +21,7 @@ require_relative 'zelf/resources/sub_brands'
 require_relative 'zelf/resources/usage'
 require_relative 'zelf/resources/webhooks'
 
-# Ruby client for the Zelf APIs (spec version 1.2.0).
+# Ruby client for the Zelf APIs (spec version 1.3.0).
 module Zelf
   # Client for the Zelf APIs.
   #

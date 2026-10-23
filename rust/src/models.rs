@@ -81,8 +81,8 @@ impl std::fmt::Display for BlankEnum {
 pub enum ContentFormEnum {
     #[serde(rename = "VIDEO")]
     Video,
-    #[serde(rename = "IMAGE")]
-    Image,
+    #[serde(rename = "PHOTO")]
+    Photo,
 }
 
 impl ContentFormEnum {
@@ -90,7 +90,7 @@ impl ContentFormEnum {
     pub fn as_str(&self) -> &'static str {
         match self {
             ContentFormEnum::Video => "VIDEO",
-            ContentFormEnum::Image => "IMAGE",
+            ContentFormEnum::Photo => "PHOTO",
         }
     }
 }
@@ -1033,7 +1033,7 @@ pub struct ContentFilterInputRequest {
     /// Language codes to include, for example `en` or `es`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub language: Option<Vec<String>>,
-    /// Content medium. One of: VIDEO, IMAGE.
+    /// Content medium. One of: VIDEO, PHOTO.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub content_form: Option<ContentFormEnum>,
     /// Full-text search across caption, transcript, and summary. Space-separated terms are AND-

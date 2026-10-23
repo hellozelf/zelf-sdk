@@ -13,7 +13,7 @@
 
   <PropertyGroup>
     <PackageId>Zelf.Sdk</PackageId>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <Authors>Zelf</Authors>
     <Description>.NET client for the Zelf APIs</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

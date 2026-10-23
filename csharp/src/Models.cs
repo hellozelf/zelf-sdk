@@ -46,10 +46,10 @@ public static class BlankEnum
 public static class ContentFormEnum
 {
     public const string Video = "VIDEO";
-    public const string Image = "IMAGE";
+    public const string Photo = "PHOTO";
 
     /// <summary>Every value the API accepts here.</summary>
-    public static readonly IReadOnlyList<string> All = [Video, Image];
+    public static readonly IReadOnlyList<string> All = [Video, Photo];
 }
 
 /// <summary>

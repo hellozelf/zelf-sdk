@@ -10,6 +10,19 @@ API did not cause.
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
 
+## 1.3.0
+
+### Added
+- `ContentFormEnum`: `PHOTO`
+
+### Changed
+- `content.list`: `content_form` changed type
+- `content.statistics`: `content_form` changed type
+- `ContentFilterInputRequest.content_form` changed type
+
+### Removed
+- `ContentFormEnum`: `IMAGE`
+
 ## 1.2.0
 
 ### Added

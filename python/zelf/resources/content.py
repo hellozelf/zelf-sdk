@@ -11,7 +11,7 @@ from .._transport import AsyncTransport, SyncTransport
 from .._types import NOT_GIVEN, NotGiven, body, given
 
 Platforms = Literal["instagram", "tiktok", "youtube"]
-ContentForm = Literal["VIDEO", "IMAGE"]
+ContentForm = Literal["VIDEO", "PHOTO"]
 MentionType = Literal["content", "comment"]
 OrderBy = Literal[
     "posted_at",
