@@ -10,6 +10,17 @@ generated from, which has a version of its own.
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
 
+## 1.3.1
+
+No change to the API surface.
+
+### Changed
+- `last_keyword` says what it actually is: what the content was most
+  recently collected under, which may be a hashtag, a creator handle, a
+  search term or a brand identifier.
+- A refused request carries the field and the limit in the exception
+  message, not only in its details.
+
 ## 1.3.0
 
 ### Added

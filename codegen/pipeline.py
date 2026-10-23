@@ -193,8 +193,8 @@ def cmd_changelog() -> int:
             # The surface did not move, but the version did. The release still
             # happens, because the version is what a caller pins to.
             entry = (
-                f"## {version}\n\nNo change to the API surface. Released to "
-                f"track the API version.\n"
+                f"## {version}\n\nNo change to the API surface. Corrected "
+                f"documentation, or a fix in the clients themselves.\n"
             )
         if entry and f"\n## {version}\n" in "\n" + CHANGELOG.read_text():
             print(f"CHANGELOG.md already has an entry for {version}")
