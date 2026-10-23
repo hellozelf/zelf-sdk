@@ -1872,7 +1872,7 @@ export interface components {
        *     - `https://www.tiktok.com/@username/video/12345678`
        */
       platform_url: string
-      /** @description The search term the content was most recently found by. Null when the content was not picked up through a keyword search. */
+      /** @description What the content was most recently collected under: a hashtag, a creator handle, a search term, or a brand identifier. Null when the content did not arrive through a collection task. */
       last_keyword: string | null
       /** @description Short AI-generated summary of the content. */
       ai_summary: string | null
@@ -2017,7 +2017,7 @@ export interface components {
       platform?: components['schemas']['PlatformEnum'][]
       /** @description Language codes to include, for example `en` or `es`. */
       language?: string[]
-      /** @description Content medium. One of: VIDEO, IMAGE. */
+      /** @description Content medium. One of: VIDEO, PHOTO. */
       content_form?: components['schemas']['ContentFormEnum']
       /** @description Full-text search across caption, transcript, and summary. Space-separated terms are AND-ed. */
       search?: string
@@ -2065,7 +2065,7 @@ export interface components {
       order_by?: string[]
     }
     /** @enum {string} */
-    ContentFormEnum: 'VIDEO' | 'IMAGE'
+    ContentFormEnum: 'VIDEO' | 'PHOTO'
     /**
      * @description Specifies which of the creator's content relationships feed the analysis.
      *
@@ -5046,7 +5046,7 @@ export interface operations {
         /** @description Number of comments on the post. (Inclusive Lower Bound) */
         comment_count_min?: number
         /** @description Content medium. Case-sensitive; values are stored and returned in uppercase. */
-        content_form?: 'VIDEO' | 'IMAGE'
+        content_form?: 'VIDEO' | 'PHOTO'
         /** @description Follower count of the post's creator. */
         creator_follower_count?: number
         /** @description Follower count of the post's creator. (Inclusive Upper Bound) */
@@ -5296,7 +5296,7 @@ export interface operations {
         /** @description Number of comments on the post. (Inclusive Lower Bound) */
         comment_count_min?: number
         /** @description Content medium. Case-sensitive; values are stored and returned in uppercase. */
-        content_form?: 'VIDEO' | 'IMAGE'
+        content_form?: 'VIDEO' | 'PHOTO'
         /** @description Follower count of the post's creator. */
         creator_follower_count?: number
         /** @description Follower count of the post's creator. (Inclusive Upper Bound) */

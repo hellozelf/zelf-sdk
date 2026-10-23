@@ -2,13 +2,26 @@
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-Versions track the API, not the clients. The major and minor come from the
-OpenAPI document, so every client carries the version of the API it was
-generated from. The patch belongs to the SDK, for a fix in a client that the
-API did not cause.
+The clients carry their own version, set in `spec/sdk-version.txt` and shared
+by all of them. A moved API surface costs a minor; a corrected description or a
+fix in a client is a patch. Each entry names the OpenAPI document it was
+generated from, which has a version of its own.
 
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
+
+## 1.3.1
+
+### Added
+- `ContentFormEnum`: `PHOTO`
+
+### Changed
+- `content.list`: `content_form` changed type
+- `content.statistics`: `content_form` changed type
+- `ContentFilterInputRequest.content_form` changed type
+
+### Removed
+- `ContentFormEnum`: `IMAGE`
 
 ## 1.2.0
 

@@ -81,8 +81,8 @@ impl std::fmt::Display for BlankEnum {
 pub enum ContentFormEnum {
     #[serde(rename = "VIDEO")]
     Video,
-    #[serde(rename = "IMAGE")]
-    Image,
+    #[serde(rename = "PHOTO")]
+    Photo,
 }
 
 impl ContentFormEnum {
@@ -90,7 +90,7 @@ impl ContentFormEnum {
     pub fn as_str(&self) -> &'static str {
         match self {
             ContentFormEnum::Video => "VIDEO",
-            ContentFormEnum::Image => "IMAGE",
+            ContentFormEnum::Photo => "PHOTO",
         }
     }
 }
@@ -870,8 +870,9 @@ pub struct Content {
     /// Direct URL to the post on its platform. Examples:; `https://instagram.com/reel/abcd`;
     /// `https://www.tiktok.com/@username/video/12345678`
     pub platform_url: String,
-    /// The search term the content was most recently found by. Null when the content was not
-    /// picked up through a keyword search.
+    /// What the content was most recently collected under: a hashtag, a creator handle, a
+    /// search term, or a brand identifier. Null when the content did not arrive through a
+    /// collection task.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub last_keyword: Option<String>,
     /// Short AI-generated summary of the content.
@@ -1033,7 +1034,7 @@ pub struct ContentFilterInputRequest {
     /// Language codes to include, for example `en` or `es`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub language: Option<Vec<String>>,
-    /// Content medium. One of: VIDEO, IMAGE.
+    /// Content medium. One of: VIDEO, PHOTO.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub content_form: Option<ContentFormEnum>,
     /// Full-text search across caption, transcript, and summary. Space-separated terms are AND-

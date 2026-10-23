@@ -31,7 +31,7 @@ const (
 
 // Defines values for ContentFormEnum.
 const (
-	ContentFormEnumIMAGE ContentFormEnum = "IMAGE"
+	ContentFormEnumPHOTO ContentFormEnum = "PHOTO"
 	ContentFormEnumVIDEO ContentFormEnum = "VIDEO"
 )
 
@@ -199,7 +199,7 @@ const (
 
 // Defines values for ContentListParamsContentForm.
 const (
-	ContentListParamsContentFormIMAGE ContentListParamsContentForm = "IMAGE"
+	ContentListParamsContentFormPHOTO ContentListParamsContentForm = "PHOTO"
 	ContentListParamsContentFormVIDEO ContentListParamsContentForm = "VIDEO"
 )
 
@@ -248,7 +248,7 @@ const (
 
 // Defines values for ContentStatisticsParamsContentForm.
 const (
-	IMAGE ContentStatisticsParamsContentForm = "IMAGE"
+	PHOTO ContentStatisticsParamsContentForm = "PHOTO"
 	VIDEO ContentStatisticsParamsContentForm = "VIDEO"
 )
 
@@ -808,7 +808,7 @@ type Content struct {
 	// Language ISO 639 code of the content's primary language.
 	Language nullable.Nullable[string] `json:"language"`
 
-	// LastKeyword The search term the content was most recently found by. Null when the content was not picked up through a keyword search.
+	// LastKeyword What the content was most recently collected under: a hashtag, a creator handle, a search term, or a brand identifier. Null when the content did not arrive through a collection task.
 	LastKeyword nullable.Nullable[string] `json:"last_keyword"`
 
 	// LikeCount Total number of likes the content has received.
@@ -965,7 +965,7 @@ type ContentFilterInputRequest struct {
 	// CommentCountMin Include only content with at least this many comments.
 	CommentCountMin *int `json:"comment_count_min,omitempty"`
 
-	// ContentForm Content medium. One of: VIDEO, IMAGE.
+	// ContentForm Content medium. One of: VIDEO, PHOTO.
 	ContentForm *ContentFormEnum `json:"content_form,omitempty"`
 
 	// CreatorFollowerCountMax Include only content whose creator has at most this many followers.

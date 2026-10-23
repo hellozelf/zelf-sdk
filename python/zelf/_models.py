@@ -1791,7 +1791,7 @@ class Content(BaseModel):
     last_keyword: Annotated[
         str | None,
         Field(
-            description="The search term the content was most recently found by. Null when the content was not picked up through a keyword search."
+            description="What the content was most recently collected under: a hashtag, a creator handle, a search term, or a brand identifier. Null when the content did not arrive through a collection task."
         ),
     ]
     ai_summary: Annotated[
@@ -1908,7 +1908,7 @@ class ContentFilterInputRequest(BaseModel):
         list[str] | None, Field(description="Language codes to include, for example `en` or `es`.")
     ] = None
     content_form: Annotated[
-        Literal["VIDEO", "IMAGE"] | None, Field(description="Content medium. One of: VIDEO, IMAGE.")
+        Literal["VIDEO", "PHOTO"] | None, Field(description="Content medium. One of: VIDEO, PHOTO.")
     ] = None
     search: Annotated[
         str | None,

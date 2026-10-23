@@ -41,7 +41,19 @@ jobs:
       - id: classify
         run: uv run --with pyyaml python codegen/pipeline.py classify
 
-      - name: The spec obeys the version rules
+      # The clients carry their own version, so a corrected description ships
+      # as a patch and only a moved surface costs a minor. The bump lands
+      # before generation because every manifest is written from it.
+      - id: bump
+        env:
+          KIND: ${{ steps.classify.outputs.kind }}
+        run: |
+          position=patch
+          [ "$KIND" = "structural" ] && position=minor
+          uv run --with pyyaml python codegen/pipeline.py bump "$position"
+          echo "version=$(cat spec/sdk-version.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: The bump is at least as large as the change
         run: uv run --with pyyaml python codegen/pipeline.py check-spec
 
       - working-directory: js
@@ -49,11 +61,10 @@ jobs:
 
       - run: make all
 
-      - name: Every client sits on the spec version
+      - name: Every client ships the one SDK version
         run: uv run --with pyyaml python codegen/pipeline.py check-manifests
 
       - name: Write the changelog and refresh the lock
-        if: steps.classify.outputs.kind != 'docs-only'
         run: uv run --with pyyaml python codegen/pipeline.py changelog
 
       - name: Commit the regenerated tree
@@ -81,7 +92,8 @@ jobs:
           KIND: ${{ steps.classify.outputs.kind }}
           BRANCH: ${{ github.ref_name }}
         run: |
-          version=$(grep -m1 '^  version:' spec/openapi.yaml | awk '{print $2}')
+          version=$(cat spec/sdk-version.txt)
+          spec=$(grep -m1 '^  version:' spec/openapi.yaml | awk '{print $2}')
 
           gh label create "spec:${KIND}" --color ededed --force >/dev/null
 
@@ -96,10 +108,12 @@ jobs:
             --base main \
             --head "$BRANCH" \
             --label "spec:${KIND}" \
-            --title "feat: update the OpenAPI document to v${version}" \
+            --title "feat: release the clients at v${version}" \
             --body "$(printf '%s\n' \
-              "The OpenAPI document moved to \`${version}\`." \
+              "The clients move to \`${version}\`, built from OpenAPI \`${spec}\`." \
               "" \
-              "The clients, their versions and the changelog were regenerated before this pull request opened, so one diff carries the document and everything that follows from it." \
+              "This is a \`${KIND}\` change: \`structural\` means the API surface moved and costs a minor, anything else is a patch over the same surface." \
+              "" \
+              "The clients, their versions and the changelog were regenerated before this pull request opened, so one diff carries everything that follows from the document." \
               "" \
               "Merging publishes every released client at this version.")"

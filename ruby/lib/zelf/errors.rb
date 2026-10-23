@@ -14,7 +14,12 @@ module Zelf
     attr_reader :status, :code, :details, :log_id
 
     def initialize(message, status:, code: nil, details: nil, log_id: nil)
-      super(message)
+      # The message alone says a request was refused but never which
+      # field or which limit, and that is the part a caller can act on.
+      reasons = (details || {}).map do |field, said|
+        "#{field}: #{said.is_a?(Array) ? said.join(' ') : said}"
+      end.join(' ')
+      super(reasons.empty? ? message : "#{message} #{reasons}")
       @status = status
       @code = code
       @details = details || {}

@@ -5,7 +5,7 @@
 GEN := uv run --no-project --with pyyaml --with datamodel-code-generator python codegen
 LANGS := python js go rust ruby csharp java
 
-.PHONY: all $(LANGS) fixtures names test cov e2e \
+.PHONY: all $(LANGS) fixtures names version bump-patch bump-minor bump-major test cov e2e \
 	$(addprefix test-,$(LANGS)) $(addprefix cov-,$(LANGS)) $(addprefix e2e-,$(LANGS)) clean
 
 all: fixtures
@@ -24,6 +24,23 @@ names:
 		import emit_manifest, spec; from pathlib import Path; \
 		emit_manifest.emit(spec.load(Path('spec/openapi.yaml')), Path('spec/names.json'))"
 	@echo "spec/names.json"
+
+# The SDK's own version, which every client ships and every tag is cut from.
+# A corrected description is a patch here; the API's version moves only when
+# its surface does.
+PIPE := uv run --no-project --with pyyaml python codegen/pipeline.py
+
+version:
+	@cat spec/sdk-version.txt
+
+bump-patch:
+	$(PIPE) bump patch
+
+bump-minor:
+	$(PIPE) bump minor
+
+bump-major:
+	$(PIPE) bump major
 
 test: test-python test-js test-go test-rust test-ruby test-csharp test-java
 

@@ -4,10 +4,12 @@ from pathlib import Path
 
 SDK = Path(__file__).resolve().parent.parent
 SPEC = SDK / "spec" / "openapi.yaml"
+VERSION_FILE = SDK / "spec" / "sdk-version.txt"
 
-# X.Y belong to the API and arrive in the spec. Z belongs to the SDK and lives
-# in each manifest, so a client can ship a fix of its own without the API
-# moving. A spec bump resets Z, which is what keeps the clients level.
+# The SDK owns its whole version and this file is the only place it is set.
+# The spec's own version is recorded beside the clients as SPEC_VERSION rather
+# than deriving theirs, so correcting a description ships as a patch instead of
+# moving nine clients a minor for prose the API never changed.
 SEMVER = re.compile(r"^(\d+)\.(\d+)\.(\d+)$")
 
 SOURCES = {
@@ -34,11 +36,34 @@ SOURCES = {
 
 
 def spec_version() -> str:
-    """`info.version` from the document, which owns X and Y."""
+    """`info.version` from the document, recorded by the clients, not their own."""
     found = re.search(r"(?m)^  version: (\S+)", SPEC.read_text())
     if not found:
         raise SystemExit(f"{SPEC} has no info.version")
     return found.group(1)
+
+
+def sdk_version() -> str:
+    """The version every client ships at."""
+    if not VERSION_FILE.exists():
+        raise SystemExit(f"{VERSION_FILE} is missing")
+    return VERSION_FILE.read_text().strip()
+
+
+def bump(position: str) -> str:
+    """Move the SDK version and write it back. Returns the new version."""
+    major, minor, patch = parts(sdk_version())
+    if position == "major":
+        major, minor, patch = major + 1, 0, 0
+    elif position == "minor":
+        minor, patch = minor + 1, 0
+    elif position == "patch":
+        patch += 1
+    else:
+        raise SystemExit(f"{position} is not major, minor or patch")
+    moved = f"{major}.{minor}.{patch}"
+    VERSION_FILE.write_text(f"{moved}\n")
+    return moved
 
 
 def manifest_version(language: str) -> str | None:
@@ -59,42 +84,24 @@ def parts(version: str) -> tuple[int, int, int]:
 
 
 def version_for(language: str) -> str:
-    """What this client's manifest should say.
-
-    The spec sets X.Y. Z carries over only while X.Y has not moved, so a
-    client-only fix survives a regeneration but a spec bump levels everyone.
-    """
-    major, minor, _ = parts(spec_version())
-    current = manifest_version(language)
-    patch = 0
-    if current:
-        was_major, was_minor, was_patch = parts(current)
-        if (was_major, was_minor) == (major, minor):
-            patch = was_patch
-    return f"{major}.{minor}.{patch}"
+    """What this client's manifest should say: the one version, for all of them."""
+    return sdk_version()
 
 
 def check() -> list[str]:
-    """The two rules, as a list of complaints. Empty means the tree is legal."""
+    """The one rule, as a list of complaints. Empty means the tree is legal."""
     problems = []
-    declared = spec_version()
-    major, minor, patch = parts(declared)
-
-    if patch != 0:
-        problems.append(
-            f"spec/openapi.yaml declares {declared}; the patch position belongs to "
-            f"the SDK, so the spec must end in .0"
-        )
+    declared = sdk_version()
+    parts(declared)
 
     for language in SOURCES:
         current = manifest_version(language)
         if current is None:
             continue
-        was_major, was_minor, _ = parts(current)
-        if (was_major, was_minor) != (major, minor):
+        if current != declared:
             problems.append(
-                f"{language} is at {current} but the spec is at {declared}; "
-                f"major and minor belong to the API, so only the patch may differ"
+                f"{language} is at {current} but the SDK is at {declared}; "
+                f"every client ships the version in spec/sdk-version.txt"
             )
     return problems
 

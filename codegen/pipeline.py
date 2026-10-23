@@ -71,7 +71,7 @@ def cmd_classify() -> int:
     the clients are regenerated and nothing is tagged.
     """
     before, after = locked(), current()
-    declared = release.spec_version()
+    declared = release.sdk_version()
 
     if before is None:
         emit("kind", "structural")
@@ -93,23 +93,18 @@ def cmd_classify() -> int:
         return 0
 
     emit("kind", "docs-only")
-    print("nothing moved but prose; regenerate and commit, do not release")
+    print("nothing moved but prose; regenerate and commit, then bump the patch")
     return 0
 
 
 def cmd_check_spec() -> int:
     """The rules that hold before anything is regenerated.
 
-    The spec may not touch the patch position, and the bump it declares has to
-    be at least as large as the change deserves.
+    The bump the SDK declares has to be at least as large as the change to the
+    surface deserves. The document's own version is recorded, not obeyed.
     """
     problems = []
-    declared = release.spec_version()
-    if release.parts(declared)[2] != 0:
-        problems.append(
-            f"spec/openapi.yaml declares {declared}; the patch position belongs "
-            f"to the SDK, so the spec must end in .0"
-        )
+    declared = release.sdk_version()
 
     before = locked()
     if before is not None and (previous := _previous_version()):
@@ -143,7 +138,7 @@ def cmd_check_spec() -> int:
 
 
 def cmd_check_manifests() -> int:
-    """Every client sits on the spec's major and minor. Run after `make all`."""
+    """Every client ships the one SDK version. Run after `make all`."""
     problems = release.check()
     for line in problems:
         print(f"error: {line}")
@@ -175,7 +170,7 @@ def _previous_version() -> str | None:
 def cmd_changelog() -> int:
     """Prepend this version's entry to CHANGELOG.md and refresh the lock."""
     before, after = locked(), current()
-    version = release.spec_version()
+    version = release.sdk_version()
 
     if before is None or not released_before():
         # A diff against nothing is meaningless, so the opening entry lists the
@@ -295,8 +290,16 @@ def cmd_matrix() -> int:
 
 
 def cmd_lock() -> int:
-    write_lock(current(), release.spec_version())
+    write_lock(current(), release.sdk_version())
     print(f"wrote {LOCK.relative_to(SDK)}")
+    return 0
+
+
+def cmd_bump() -> int:
+    """Move the SDK version. The position is the second argument."""
+    position = sys.argv[2] if len(sys.argv) > 2 else "patch"
+    was = release.sdk_version()
+    print(f"{was} -> {release.bump(position)}")
     return 0
 
 
@@ -307,10 +310,11 @@ COMMANDS = {
     "changelog": cmd_changelog,
     "matrix": cmd_matrix,
     "lock": cmd_lock,
+    "bump": cmd_bump,
 }
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2 or sys.argv[1] not in COMMANDS:
+    if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:
         print(f"usage: python codegen/pipeline.py [{'|'.join(COMMANDS)}]")
         raise SystemExit(2)
     raise SystemExit(COMMANDS[sys.argv[1]]())

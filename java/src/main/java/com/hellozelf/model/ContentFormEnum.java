@@ -12,8 +12,8 @@ public final class ContentFormEnum {
     }
 
     public static final String VIDEO = "VIDEO";
-    public static final String IMAGE = "IMAGE";
+    public static final String PHOTO = "PHOTO";
 
     /** Every value the API accepts here. */
-    public static final List<String> ALL = List.of(VIDEO, IMAGE);
+    public static final List<String> ALL = List.of(VIDEO, PHOTO);
 }

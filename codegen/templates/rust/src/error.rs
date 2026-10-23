@@ -30,7 +30,7 @@ pub enum Error {
     },
 
     /// An error response from the API, carrying the envelope's own fields.
-    #[error("{}", format_api(.status, .code.as_deref(), .message, .log_id.as_deref()))]
+    #[error("{}", format_api(.status, .code.as_deref(), .message, .details.as_ref(), .log_id.as_deref()))]
     Api {
         status: u16,
         code: Option<String>,
@@ -40,7 +40,37 @@ pub enum Error {
     },
 }
 
-fn format_api(status: &u16, code: Option<&str>, message: &str, log_id: Option<&str>) -> String {
+/// The field-level reasons the API gave, as one readable clause.
+pub fn render_details(details: Option<&serde_json::Value>) -> String {
+    let Some(serde_json::Value::Object(fields)) = details else {
+        return String::new();
+    };
+    let mut parts = Vec::with_capacity(fields.len());
+    for (field, reasons) in fields {
+        let text = match reasons {
+            serde_json::Value::Array(items) => items
+                .iter()
+                .map(|item| match item {
+                    serde_json::Value::String(s) => s.clone(),
+                    other => other.to_string(),
+                })
+                .collect::<Vec<_>>()
+                .join(" "),
+            serde_json::Value::String(s) => s.clone(),
+            other => other.to_string(),
+        };
+        parts.push(format!("{field}: {text}"));
+    }
+    parts.join(" ")
+}
+
+fn format_api(
+    status: &u16,
+    code: Option<&str>,
+    message: &str,
+    details: Option<&serde_json::Value>,
+    log_id: Option<&str>,
+) -> String {
     let mut out = format!("zelf: {status}");
     if let Some(code) = code {
         out.push(' ');
@@ -48,6 +78,13 @@ fn format_api(status: &u16, code: Option<&str>, message: &str, log_id: Option<&s
     }
     out.push_str(": ");
     out.push_str(message);
+    // The message alone says a request was refused but never which field or
+    // which limit, and that is the part a caller can act on.
+    let detail = render_details(details);
+    if !detail.is_empty() {
+        out.push(' ');
+        out.push_str(&detail);
+    }
     if let Some(log_id) = log_id {
         out.push_str(&format!(" (log_id={log_id})"));
     }
