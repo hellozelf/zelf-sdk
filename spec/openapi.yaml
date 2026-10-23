@@ -113,7 +113,6 @@ info:
     | --- | --- |
     | General | `global` |
     | AI Analysis | `ai_analysis` |
-    | Creator Vetting | `creator_vetting` |
     | Data Records | `data_records` |
 
     **Requests an AI client makes**
@@ -122,7 +121,6 @@ info:
     | --- | --- |
     | General | `mcp` |
     | AI Analysis | `mcp.ai_analysis` |
-    | Creator Vetting | `mcp.creator_vetting` |
     | Data Records | `mcp.data_records` |
 
     ## Testing
@@ -6930,26 +6928,16 @@ paths:
                           used: 500
                           remaining: 4500
                           reset_in: 43200
-                      - scope: creator_vetting
-                        human_name: Creator Vetting
-                        kind: request
+                      - scope: data_records
+                        human_name: Data Records
+                        kind: item
                         section: api
                         windows:
-                        - window: rps
-                          limit: 100
-                          used: 10
-                          remaining: 90
-                          reset_in: 1
-                        - window: rph
-                          limit: 1000
-                          used: 100
-                          remaining: 900
-                          reset_in: 1800
-                        - window: rpd
+                        - window: items_per_month
                           limit: 10000
                           used: 1000
                           remaining: 9000
-                          reset_in: 43200
+                          reset_in: 1296000
                       - scope: mcp
                         human_name: General
                         kind: request
@@ -6990,26 +6978,16 @@ paths:
                           used: 1000
                           remaining: 9000
                           reset_in: 43200
-                      - scope: mcp.creator_vetting
-                        human_name: Creator Vetting
-                        kind: request
+                      - scope: mcp.data_records
+                        human_name: Data Records
+                        kind: item
                         section: mcp
                         windows:
-                        - window: rps
-                          limit: 5
-                          used: 1
-                          remaining: 4
-                          reset_in: 1
-                        - window: rph
-                          limit: 2500
-                          used: 250
-                          remaining: 2250
-                          reset_in: 1800
-                        - window: rpd
+                        - window: items_per_month
                           limit: 10000
                           used: 1000
                           remaining: 9000
-                          reset_in: 43200
+                          reset_in: 1296000
                       history:
                         start_date: '2026-05-01'
                         end_date: '2026-10-21'
@@ -7017,15 +6995,13 @@ paths:
                         - date: '2026-10-20'
                           source: api
                           general: 4820
-                          ai_analysis: 36
-                          creator_vetting: 12
+                          ai_analysis: 48
                           data_records: 4772
                           data_records_items: 143160
                         - date: '2026-10-21'
                           source: mcp
                           general: 311
                           ai_analysis: 4
-                          creator_vetting: 0
                           data_records: 307
                           data_records_items: 9210
                     item_count: 1
@@ -11166,10 +11142,8 @@ components:
           description: Every counted call that day.
         ai_analysis:
           type: integer
-          description: Calls counted against the AI analysis group.
-        creator_vetting:
-          type: integer
-          description: Calls counted against creator vetting.
+          description: Calls counted against the AI analysis group, creator vetting
+            included.
         data_records:
           type: integer
           description: Calls counted against data records.
@@ -11182,7 +11156,6 @@ components:
           description: The day, in the brand's billing timezone.
       required:
       - ai_analysis
-      - creator_vetting
       - data_records
       - data_records_items
       - date
