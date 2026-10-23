@@ -14,7 +14,6 @@ public record UsageDay(
         @JsonProperty("source") String source,
         @JsonProperty("general") Long general,
         @JsonProperty("ai_analysis") Long aiAnalysis,
-        @JsonProperty("creator_vetting") Long creatorVetting,
         @JsonProperty("data_records") Long dataRecords,
         @JsonProperty("data_records_items") Long dataRecordsItems,
         @JsonProperty("date") String date

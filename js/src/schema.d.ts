@@ -2624,10 +2624,8 @@ export interface components {
       source: string
       /** @description Every counted call that day. */
       general: number
-      /** @description Calls counted against the AI analysis group. */
+      /** @description Calls counted against the AI analysis group, creator vetting included. */
       ai_analysis: number
-      /** @description Calls counted against creator vetting. */
-      creator_vetting: number
       /** @description Calls counted against data records. */
       data_records: number
       /** @description Records those calls returned. */

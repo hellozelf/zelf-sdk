@@ -3585,15 +3585,6 @@
             }
           },
           {
-            "name": "creator_vetting",
-            "nullable": false,
-            "read_only": false,
-            "required": true,
-            "type": {
-              "kind": "int"
-            }
-          },
-          {
             "name": "data_records",
             "nullable": false,
             "read_only": false,
@@ -7799,5 +7790,5 @@
       }
     ]
   },
-  "version": "1.3.2"
+  "version": "1.4.0"
 }

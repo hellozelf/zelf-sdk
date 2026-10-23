@@ -939,8 +939,10 @@ class UsageDay(BaseModel):
         str, Field(description="``api`` for direct requests, ``mcp`` for AI clients.")
     ]
     general: Annotated[int, Field(description="Every counted call that day.")]
-    ai_analysis: Annotated[int, Field(description="Calls counted against the AI analysis group.")]
-    creator_vetting: Annotated[int, Field(description="Calls counted against creator vetting.")]
+    ai_analysis: Annotated[
+        int,
+        Field(description="Calls counted against the AI analysis group, creator vetting included."),
+    ]
     data_records: Annotated[int, Field(description="Calls counted against data records.")]
     data_records_items: Annotated[int, Field(description="Records those calls returned.")]
     date: Annotated[date_aliased, Field(description="The day, in the brand's billing timezone.")]

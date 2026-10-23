@@ -1649,10 +1649,8 @@ pub struct UsageDay {
     pub source: String,
     /// Every counted call that day.
     pub general: i64,
-    /// Calls counted against the AI analysis group.
+    /// Calls counted against the AI analysis group, creator vetting included.
     pub ai_analysis: i64,
-    /// Calls counted against creator vetting.
-    pub creator_vetting: i64,
     /// Calls counted against data records.
     pub data_records: i64,
     /// Records those calls returned.

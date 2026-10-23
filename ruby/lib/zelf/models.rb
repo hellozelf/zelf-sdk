@@ -1069,10 +1069,8 @@ module Zelf
       field :source, "source"
       # Every counted call that day
       field :general, "general"
-      # Calls counted against the AI analysis group
+      # Calls counted against the AI analysis group, creator vetting included
       field :ai_analysis, "ai_analysis"
-      # Calls counted against creator vetting
-      field :creator_vetting, "creator_vetting"
       # Calls counted against data records
       field :data_records, "data_records"
       # Records those calls returned
