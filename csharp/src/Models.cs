@@ -1339,7 +1339,6 @@ public sealed record UsageDay(
     [property: JsonPropertyName("source")] string Source,
     [property: JsonPropertyName("general")] long General,
     [property: JsonPropertyName("ai_analysis")] long AiAnalysis,
-    [property: JsonPropertyName("creator_vetting")] long CreatorVetting,
     [property: JsonPropertyName("data_records")] long DataRecords,
     [property: JsonPropertyName("data_records_items")] long DataRecordsItems,
     [property: JsonPropertyName("date")] string Date

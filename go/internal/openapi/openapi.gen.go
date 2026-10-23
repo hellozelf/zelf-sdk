@@ -1801,11 +1801,8 @@ type Usage struct {
 
 // UsageDay One day of consumption for one source.
 type UsageDay struct {
-	// AiAnalysis Calls counted against the AI analysis group.
+	// AiAnalysis Calls counted against the AI analysis group, creator vetting included.
 	AiAnalysis int `json:"ai_analysis"`
-
-	// CreatorVetting Calls counted against creator vetting.
-	CreatorVetting int `json:"creator_vetting"`
 
 	// DataRecords Calls counted against data records.
 	DataRecords int `json:"data_records"`
