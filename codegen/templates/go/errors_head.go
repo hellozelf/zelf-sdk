@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"sort"
 	"strconv"
+	"strings"
 )
 
 // ConnectionError wraps a transport failure: the request never produced an
@@ -25,12 +27,47 @@ type APIError struct {
 	LogID   string
 }
 
+// RenderDetails gives the field-level reasons the API sent as one readable
+// clause, with the fields in a stable order.
+func RenderDetails(details map[string]any) string {
+	if len(details) == 0 {
+		return ""
+	}
+	fields := make([]string, 0, len(details))
+	for field := range details {
+		fields = append(fields, field)
+	}
+	sort.Strings(fields)
+	parts := make([]string, 0, len(fields))
+	for _, field := range fields {
+		parts = append(parts, field+": "+joinReasons(details[field]))
+	}
+	return strings.Join(parts, " ")
+}
+
+func joinReasons(value any) string {
+	list, ok := value.([]any)
+	if !ok {
+		return fmt.Sprint(value)
+	}
+	out := make([]string, 0, len(list))
+	for _, item := range list {
+		out = append(out, fmt.Sprint(item))
+	}
+	return strings.Join(out, " ")
+}
+
 func (e *APIError) Error() string {
 	out := "zelf: " + strconv.Itoa(e.Status)
 	if e.Code != "" {
 		out += " " + e.Code
 	}
 	out += ": " + e.Message
+	// The message alone says a request was refused but never which field or
+	// which limit, and that is the part a caller can act on.
+	if detail := RenderDetails(e.Details); detail != "" {
+		out += " " + detail
+	}
 	if e.LogID != "" {
 		out += " (log_id=" + e.LogID + ")"
 	}

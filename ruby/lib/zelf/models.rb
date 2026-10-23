@@ -507,7 +507,7 @@ module Zelf
       field :transcript, "transcript"
       # Direct URL to the post on its platform
       field :platform_url, "platform_url"
-      # The search term the content was most recently found by
+      # What the content was most recently collected under: a hashtag, a creator handle,...
       field :last_keyword, "last_keyword"
       # Short AI-generated summary of the content
       field :ai_summary, "ai_summary"

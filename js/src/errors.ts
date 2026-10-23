@@ -24,6 +24,17 @@ export class ZelfTimeoutError extends ZelfConnectionError {
   }
 }
 
+/** The field-level reasons the API gave, as one readable clause. */
+export function renderDetails(details: Record<string, unknown> | null | undefined): string {
+  if (!details) return ''
+  return Object.entries(details)
+    .map(
+      ([field, reasons]) =>
+        `${field}: ${Array.isArray(reasons) ? reasons.join(' ') : String(reasons)}`,
+    )
+    .join(' ')
+}
+
 export class ZelfAPIError extends ZelfError {
   readonly status: number
   readonly code: string | null
@@ -51,6 +62,10 @@ export class ZelfAPIError extends ZelfError {
 
   override toString(): string {
     const parts = [String(this.status), this.code, this.message].filter(Boolean)
+    // The message alone says a request was refused but never which field or
+    // which limit, and that is the part a caller can act on.
+    const detail = renderDetails(this.details)
+    if (detail) parts.push(detail)
     return this.logId ? `${parts.join(' ')} (log_id=${this.logId})` : parts.join(' ')
   }
 }

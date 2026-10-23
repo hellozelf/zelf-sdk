@@ -294,3 +294,56 @@ async fn a_client_error_is_never_retried() {
 
     assert_eq!(server.received_requests().await.unwrap().len(), 1);
 }
+
+// A caller reads the error, not its details, so the reason belongs there.
+#[tokio::test]
+async fn a_refusal_names_the_field_and_the_limit() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .respond_with(ResponseTemplate::new(400).set_body_json(json!({
+            "log_id": "log_1",
+            "error": {
+                "code": "VALIDATION_ERROR",
+                "message": "Request validation failed.",
+                "details": {"posted_after": ["Must not exceed 366 days."]}
+            }
+        })))
+        .mount(&server)
+        .await;
+
+    let client = Client::builder()
+        .api_key(KEY)
+        .base_url(server.uri())
+        .build()
+        .unwrap();
+    let err = client
+        .content()
+        .list(ContentListParams::default())
+        .await
+        .unwrap_err();
+
+    let printed = err.to_string();
+    assert!(
+        printed.contains("posted_after: Must not exceed 366 days."),
+        "the field and the limit are missing from {printed}"
+    );
+}
+
+#[test]
+fn details_render_whatever_shape_they_arrive_in() {
+    use zelf::render_details;
+
+    assert_eq!(render_details(None), "");
+    assert_eq!(render_details(Some(&json!("not an object"))), "");
+    // The API usually sends a list per field, but one string is just as valid.
+    assert_eq!(
+        render_details(Some(&json!({"page": "Must be 1 or greater."}))),
+        "page: Must be 1 or greater."
+    );
+    assert_eq!(
+        render_details(Some(&json!({"page": ["a", "b"]}))),
+        "page: a b"
+    );
+    assert_eq!(render_details(Some(&json!({"page": 7}))), "page: 7");
+    assert_eq!(render_details(Some(&json!({"page": [7]}))), "page: 7");
+}

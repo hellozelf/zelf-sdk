@@ -49,6 +49,18 @@ class ResponseParseError(ZelfError):
         return " ".join(parts)
 
 
+def render_details(details: dict[str, Any] | None) -> str:
+    """The field-level reasons the API gave, as one readable clause."""
+    if not details:
+        return ""
+    return " ".join(
+        f"{field}: {' '.join(str(m) for m in reasons)}"
+        if isinstance(reasons, list)
+        else f"{field}: {reasons}"
+        for field, reasons in details.items()
+    )
+
+
 class ZelfAPIError(ZelfError):
     status_code: int = 0
 
@@ -75,6 +87,10 @@ class ZelfAPIError(ZelfError):
         if self.code:
             parts.append(self.code)
         parts.append(self.message)
+        # The message alone says a request was refused but never which field or
+        # which limit, and that is the part a caller can act on.
+        if rendered := render_details(self.details):
+            parts.append(rendered)
         if self.log_id:
             parts.append(f"(log_id={self.log_id})")
         return " ".join(parts)

@@ -391,7 +391,7 @@ def lib_module(api: Api) -> str:
     out.append("pub mod resources;")
     out += [
         "",
-        "pub use error::{Error, Result};",
+        "pub use error::{render_details, Error, Result};",
         "pub use models::*;",
         "pub use page::{Limits, Page};",
         "pub use transport::{ClientBuilder, API_KEY_ENV, DEFAULT_BASE_URL};",

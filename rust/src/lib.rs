@@ -26,13 +26,13 @@ pub mod webhooks;
 
 pub mod resources;
 
-pub use error::{Error, Result};
+pub use error::{render_details, Error, Result};
 pub use models::*;
 pub use page::{Limits, Page};
 pub use transport::{ClientBuilder, API_KEY_ENV, DEFAULT_BASE_URL};
 
 /// The SDK version sent in the User-Agent header.
-pub const VERSION: &str = "1.3.0";
+pub const VERSION: &str = "1.3.1";
 
 use std::sync::Arc;
 
