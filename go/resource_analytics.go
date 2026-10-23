@@ -9,9 +9,11 @@ type AnalyticsResource struct{ t *transport }
 
 // BrandComparison returns one row of totals per brand: the top-level brand named by
 // `brand_id` first, then each of its competitor sub-brands by title. Theme sub-brands are
-// not competitors and are left out. The statistics block matches `content.statistics`, so
-// the same parsing works for both. `brand_id` must name a top-level brand. A sub-brand is
-// refused with the id of the parent to use instead.
+// not competitors and are left out. The statistics block has the same shape as
+// `content.statistics`, so the same parsing works for both. It counts the same window, and
+// it leaves out mentions that appear only in a comment, which `content.statistics`
+// includes. `brand_id` must name a top-level brand. A sub-brand is refused with the id of
+// the parent to use instead.
 //
 // Calls GET /api/v1/analytics/brand_comparison/ (analytics.brand_comparison).
 func (r *AnalyticsResource) BrandComparison(ctx context.Context, params *AnalyticsBrandComparisonParams) ([]BrandComparison, error) {

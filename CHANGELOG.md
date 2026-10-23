@@ -10,6 +10,10 @@ generated from, which has a version of its own.
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
 
+## 1.3.2
+
+No change to the API surface. Corrected documentation, or a fix in the clients themselves.
+
 ## 1.3.1
 
 No change to the API surface.
