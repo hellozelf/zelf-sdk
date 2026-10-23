@@ -298,3 +298,36 @@ func TestContextCancellationStopsTheCall(t *testing.T) {
 		t.Fatalf("expected context.Canceled, got %v", err)
 	}
 }
+
+// A caller reads the error, not its Details map, so the reason belongs there.
+func TestARefusalNamesTheFieldAndTheLimit(t *testing.T) {
+	client, _ := newServer(t, func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, `{"log_id":"log_1","error":{"code":"VALIDATION_ERROR",`+
+			`"message":"Request validation failed.",`+
+			`"details":{"posted_after":["Must not exceed 366 days."]}}}`)
+	})
+
+	_, err := client.Content.List(context.Background(), &ContentListParams{Search: Ptr("x")})
+	if err == nil {
+		t.Fatal("expected a refusal")
+	}
+	if !strings.Contains(err.Error(), "posted_after: Must not exceed 366 days.") {
+		t.Errorf("the field and the limit are missing from %q", err.Error())
+	}
+}
+
+// The API usually sends a list per field, but one string is just as valid.
+func TestAReasonThatIsNotAListIsPrintedAsItCame(t *testing.T) {
+	if got := RenderDetails(map[string]any{"page": "Must be 1 or greater."}); got != "page: Must be 1 or greater." {
+		t.Errorf("got %q", got)
+	}
+	if got := RenderDetails(nil); got != "" {
+		t.Errorf("no details should render as empty, got %q", got)
+	}
+	// Fields come back in a stable order so a message does not shuffle.
+	both := RenderDetails(map[string]any{"b": []any{"second"}, "a": []any{"first"}})
+	if both != "a: first b: second" {
+		t.Errorf("got %q", both)
+	}
+}

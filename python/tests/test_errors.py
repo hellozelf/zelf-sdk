@@ -60,3 +60,31 @@ def test_a_timeout_raises_a_timeout_error(client):
 
     with pytest.raises(zelf.ZelfTimeoutError):
         client.content.list(search="x")
+
+
+@respx.mock
+def test_a_refusal_prints_the_field_and_the_limit(client):
+    """A caller reads the exception, not its `.details`, so the reason belongs there."""
+    body = error("VALIDATION_ERROR", "Request validation failed.")
+    body["error"]["details"] = {"posted_after": ["Must not exceed 366 days."]}
+    respx.get(f"{BASE}/api/v1/content/").mock(return_value=httpx.Response(400, json=body))
+
+    with pytest.raises(zelf.BadRequestError) as caught:
+        client.content.list(search="x")
+
+    printed = str(caught.value)
+    assert "posted_after: Must not exceed 366 days." in printed
+    assert "VALIDATION_ERROR" in printed
+
+
+@respx.mock
+def test_a_reason_that_is_not_a_list_is_printed_as_it_came(client):
+    """The API usually sends a list per field, but one string is just as valid."""
+    body = error("VALIDATION_ERROR", "Request validation failed.")
+    body["error"]["details"] = {"page": "Must be 1 or greater."}
+    respx.get(f"{BASE}/api/v1/content/").mock(return_value=httpx.Response(400, json=body))
+
+    with pytest.raises(zelf.BadRequestError) as caught:
+        client.content.list(search="x")
+
+    assert "page: Must be 1 or greater." in str(caught.value)

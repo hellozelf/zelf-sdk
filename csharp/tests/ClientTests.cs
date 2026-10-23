@@ -183,4 +183,47 @@ public class ClientTests
         Assert.Contains("is_owned=true", query);
         Assert.DoesNotContain("brand_id", query);
     }
+
+    // A caller reads the exception, not its Details, so the reason belongs there.
+    [Fact]
+    public async Task ARefusalNamesTheFieldAndTheLimit()
+    {
+        var stub = new Stub((_, _) => (HttpStatusCode.BadRequest,
+            """{"log_id":"log_1","error":{"code":"VALIDATION_ERROR","message":"Request validation failed.","details":{"posted_after":["Must not exceed 366 days."]}}}""", null));
+        using var client = Fixtures.Client(stub);
+
+        var error = await Assert.ThrowsAsync<ZelfBadRequestException>(
+            () => client.Content.ListAsync(new ContentListParams()));
+
+        Assert.Contains("posted_after: Must not exceed 366 days.", error.ToString());
+        Assert.Equal("posted_after: Must not exceed 366 days.", error.RenderedDetails);
+    }
+
+    // The API usually sends a list per field, but one string is just as valid.
+    [Fact]
+    public async Task AReasonThatIsNotAListIsPrintedAsItCame()
+    {
+        var stub = new Stub((_, _) => (HttpStatusCode.BadRequest,
+            """{"error":{"code":"VALIDATION_ERROR","message":"Bad.","details":{"page":"Must be 1 or greater."}}}""", null));
+        using var client = Fixtures.Client(stub);
+
+        var error = await Assert.ThrowsAsync<ZelfBadRequestException>(
+            () => client.Content.ListAsync(new ContentListParams()));
+
+        Assert.Contains("page: Must be 1 or greater.", error.ToString());
+    }
+
+    // No details at all leaves the message exactly as the API wrote it.
+    [Fact]
+    public async Task ARefusalWithoutDetailsReadsAsItCame()
+    {
+        var stub = new Stub((_, _) => (HttpStatusCode.BadRequest,
+            """{"error":{"code":"VALIDATION_ERROR","message":"Bad."}}""", null));
+        using var client = Fixtures.Client(stub);
+
+        var error = await Assert.ThrowsAsync<ZelfBadRequestException>(
+            () => client.Content.ListAsync(new ContentListParams()));
+
+        Assert.Equal("", error.RenderedDetails);
+    }
 }

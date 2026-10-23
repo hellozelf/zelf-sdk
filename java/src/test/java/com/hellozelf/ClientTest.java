@@ -170,4 +170,50 @@ class ClientTest {
             assertTrue(sent.contains("\"topic\":\"sentiment\""));
         }
     }
+
+    // A caller reads the exception, not its details, so the reason belongs there.
+    @Test
+    void aRefusalNamesTheFieldAndTheLimit() throws IOException {
+        String body = "{\"log_id\":\"log_1\",\"error\":{\"code\":\"VALIDATION_ERROR\","
+                + "\"message\":\"Request validation failed.\","
+                + "\"details\":{\"posted_after\":[\"Must not exceed 366 days.\"]}}}";
+        try (Stub stub = new Stub((n, call) -> new Stub.Reply(400, body, null))) {
+            ZelfClient client = stub.client(0);
+
+            ZelfException.Api error = assertThrows(ZelfException.BadRequest.class,
+                    () -> client.content().list(new ContentListParams()));
+
+            assertEquals("posted_after: Must not exceed 366 days.", error.renderedDetails());
+            assertTrue(error.toString().contains("posted_after: Must not exceed 366 days."));
+        }
+    }
+
+    // The API usually sends a list per field, but one string is just as valid.
+    @Test
+    void aReasonThatIsNotAListIsPrintedAsItCame() throws IOException {
+        String body = "{\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Bad.\","
+                + "\"details\":{\"page\":\"Must be 1 or greater.\"}}}";
+        try (Stub stub = new Stub((n, call) -> new Stub.Reply(400, body, null))) {
+            ZelfClient client = stub.client(0);
+
+            ZelfException.Api error = assertThrows(ZelfException.BadRequest.class,
+                    () -> client.content().list(new ContentListParams()));
+
+            assertEquals("page: Must be 1 or greater.", error.renderedDetails());
+        }
+    }
+
+    // No details at all leaves the message exactly as the API wrote it.
+    @Test
+    void aRefusalWithoutDetailsReadsAsItCame() throws IOException {
+        String body = "{\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"Bad.\"}}";
+        try (Stub stub = new Stub((n, call) -> new Stub.Reply(400, body, null))) {
+            ZelfClient client = stub.client(0);
+
+            ZelfException.Api error = assertThrows(ZelfException.BadRequest.class,
+                    () -> client.content().list(new ContentListParams()));
+
+            assertEquals("", error.renderedDetails());
+        }
+    }
 }
