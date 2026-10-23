@@ -808,7 +808,7 @@ type Content struct {
 	// Language ISO 639 code of the content's primary language.
 	Language nullable.Nullable[string] `json:"language"`
 
-	// LastKeyword The search term the content was most recently found by. Null when the content was not picked up through a keyword search.
+	// LastKeyword What the content was most recently collected under: a hashtag, a creator handle, a search term, or a brand identifier. Null when the content did not arrive through a collection task.
 	LastKeyword nullable.Nullable[string] `json:"last_keyword"`
 
 	// LikeCount Total number of likes the content has received.

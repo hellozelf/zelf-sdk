@@ -1872,7 +1872,7 @@ export interface components {
        *     - `https://www.tiktok.com/@username/video/12345678`
        */
       platform_url: string
-      /** @description The search term the content was most recently found by. Null when the content was not picked up through a keyword search. */
+      /** @description What the content was most recently collected under: a hashtag, a creator handle, a search term, or a brand identifier. Null when the content did not arrive through a collection task. */
       last_keyword: string | null
       /** @description Short AI-generated summary of the content. */
       ai_summary: string | null
