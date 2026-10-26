@@ -43,14 +43,20 @@ jobs:
 
       # The clients carry their own version, so a corrected description ships
       # as a patch and only a moved surface costs a minor. The bump lands
-      # before generation because every manifest is written from it.
+      # before generation because every manifest is written from it. A
+      # spec/sdk-version-pin.txt, when present, names the version outright.
       - id: bump
         env:
           KIND: ${{ steps.classify.outputs.kind }}
         run: |
-          position=patch
-          [ "$KIND" = "structural" ] && position=minor
-          uv run --with pyyaml python codegen/pipeline.py bump "$position"
+          if [ -f spec/sdk-version-pin.txt ]; then
+            tr -d '[:space:]' < spec/sdk-version-pin.txt > spec/sdk-version.txt
+            echo "pinned to $(cat spec/sdk-version.txt)"
+          else
+            position=patch
+            [ "$KIND" = "structural" ] && position=minor
+            uv run --with pyyaml python codegen/pipeline.py bump "$position"
+          fi
           echo "version=$(cat spec/sdk-version.txt)" >> "$GITHUB_OUTPUT"
 
       - name: The bump is at least as large as the change
