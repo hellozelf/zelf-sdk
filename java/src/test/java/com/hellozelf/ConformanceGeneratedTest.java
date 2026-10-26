@@ -379,7 +379,7 @@ class ConformanceGeneratedTest {
             java.util.Map.of(),
             java.util.List.of("custom_headers", "event_types", "interval_hours", "kind", "max_items", "resource", "resource_filters", "secret_type", "url"),
             "single",
-            client -> client.webhooks().createSubscription(new WebhooksCreateSubscriptionParams().url("https://example.com/request/url").kind("snapshot").resource("content").eventTypes(java.util.List.of("Event types")).resourceFilters(json("{}", JsonNode.class)).customHeaders(json("{}", JsonNode.class)).intervalHours(12L).maxItems(10L).secretType("default")),
+            client -> client.webhooks().createSubscription(new WebhooksCreateSubscriptionParams().url("https://example.com/request/url").kind("snapshot").resource("content").eventTypes(java.util.List.of("Event types")).resourceFilters(json("{}", JsonNode.class)).customHeaders(json("{}", JsonNode.class)).intervalHours(4L).maxItems(10L).secretType("default")),
             client -> client.webhooks().createSubscription(null)),
         new Case(
             "webhooks.delete_secret",
@@ -496,7 +496,7 @@ class ConformanceGeneratedTest {
             java.util.Map.of(),
             java.util.List.of("custom_headers", "enabled", "interval_hours", "max_items", "resource_filters", "url"),
             "single",
-            client -> client.webhooks().updateSubscription("whs_BeCimgZiCdOSa6ee", new WebhooksUpdateSubscriptionParams().url("https://example.com/request/url").resourceFilters(json("{}", JsonNode.class)).customHeaders(json("{}", JsonNode.class)).intervalHours(12L).maxItems(10L).enabled(true)),
+            client -> client.webhooks().updateSubscription("whs_BeCimgZiCdOSa6ee", new WebhooksUpdateSubscriptionParams().url("https://example.com/request/url").resourceFilters(json("{}", JsonNode.class)).customHeaders(json("{}", JsonNode.class)).intervalHours(4L).maxItems(10L).enabled(true)),
             client -> client.webhooks().updateSubscription("whs_BeCimgZiCdOSa6ee", null)),
             new Case("", "", "", Map.of(), List.of(), "", client -> null, client -> null));
 

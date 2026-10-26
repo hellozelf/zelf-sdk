@@ -3214,7 +3214,7 @@ async fn maps_webhooks_create_subscription() {
     .await;
     let client = client_for(&server);
     let params: WebhooksCreateSubscriptionParams =
-        serde_json::from_str(r##"{"url": "https://example.com/request/url", "kind": "snapshot", "resource": "content", "event_types": ["Event types"], "resource_filters": {}, "custom_headers": {}, "interval_hours": 12, "max_items": 10, "secret_type": "default"}"##).unwrap();
+        serde_json::from_str(r##"{"url": "https://example.com/request/url", "kind": "snapshot", "resource": "content", "event_types": ["Event types"], "resource_filters": {}, "custom_headers": {}, "interval_hours": 4, "max_items": 10, "secret_type": "default"}"##).unwrap();
     client
         .webhooks()
         .create_subscription(params)
@@ -3274,7 +3274,7 @@ async fn errors_propagate_webhooks_create_subscription() {
     mount_error(&server, "POST", "/api/v1/webhooks/subscriptions/").await;
     let client = client_for(&server);
     let params: WebhooksCreateSubscriptionParams =
-        serde_json::from_str(r##"{"url": "https://example.com/request/url", "kind": "snapshot", "resource": "content", "event_types": ["Event types"], "resource_filters": {}, "custom_headers": {}, "interval_hours": 12, "max_items": 10, "secret_type": "default"}"##).unwrap();
+        serde_json::from_str(r##"{"url": "https://example.com/request/url", "kind": "snapshot", "resource": "content", "event_types": ["Event types"], "resource_filters": {}, "custom_headers": {}, "interval_hours": 4, "max_items": 10, "secret_type": "default"}"##).unwrap();
     client
         .webhooks()
         .create_subscription(params)
@@ -3990,7 +3990,7 @@ async fn maps_webhooks_update_subscription() {
     .await;
     let client = client_for(&server);
     let params: WebhooksUpdateSubscriptionParams =
-        serde_json::from_str(r##"{"url": "https://example.com/request/url", "resource_filters": {}, "custom_headers": {}, "interval_hours": 12, "max_items": 10, "enabled": true}"##).unwrap();
+        serde_json::from_str(r##"{"url": "https://example.com/request/url", "resource_filters": {}, "custom_headers": {}, "interval_hours": 4, "max_items": 10, "enabled": true}"##).unwrap();
     client
         .webhooks()
         .update_subscription("whs_BeCimgZiCdOSa6ee", params)
@@ -4046,7 +4046,7 @@ async fn errors_propagate_webhooks_update_subscription() {
     .await;
     let client = client_for(&server);
     let params: WebhooksUpdateSubscriptionParams =
-        serde_json::from_str(r##"{"url": "https://example.com/request/url", "resource_filters": {}, "custom_headers": {}, "interval_hours": 12, "max_items": 10, "enabled": true}"##).unwrap();
+        serde_json::from_str(r##"{"url": "https://example.com/request/url", "resource_filters": {}, "custom_headers": {}, "interval_hours": 4, "max_items": 10, "enabled": true}"##).unwrap();
     client
         .webhooks()
         .update_subscription("whs_BeCimgZiCdOSa6ee", params)

@@ -10,6 +10,17 @@ generated from, which has a version of its own.
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
 
+## 1.3.3
+
+### Changed
+- `webhooks.create_subscription`: `interval_hours` changed type
+- `webhooks.update_subscription`: `interval_hours` changed type
+- `PatchedWebhookSubscriptionUpdateRequest.interval_hours` changed type
+- `WebhookSubscriptionCreateRequest.interval_hours` changed type
+
+### Removed
+- `UsageDay.creator_vetting`
+
 ## 1.3.2
 
 No change to the API surface. Corrected documentation, or a fix in the clients themselves.

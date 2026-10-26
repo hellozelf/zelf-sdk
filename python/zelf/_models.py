@@ -893,9 +893,9 @@ class PatchedWebhookSubscriptionUpdateRequest(BaseModel):
         Any | None, Field(description="Extra HTTP headers sent with each webhook request.")
     ] = None
     interval_hours: Annotated[
-        Literal[12, 24, 168, 720] | None,
+        Literal[4, 6, 12, 24, 168, 720] | None,
         Field(
-            description="Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed."
+            description="Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed."
         ),
     ] = None
     max_items: Annotated[
@@ -939,8 +939,10 @@ class UsageDay(BaseModel):
         str, Field(description="``api`` for direct requests, ``mcp`` for AI clients.")
     ]
     general: Annotated[int, Field(description="Every counted call that day.")]
-    ai_analysis: Annotated[int, Field(description="Calls counted against the AI analysis group.")]
-    creator_vetting: Annotated[int, Field(description="Calls counted against creator vetting.")]
+    ai_analysis: Annotated[
+        int,
+        Field(description="Calls counted against the AI analysis group, creator vetting included."),
+    ]
     data_records: Annotated[int, Field(description="Calls counted against data records.")]
     data_records_items: Annotated[int, Field(description="Records those calls returned.")]
     date: Annotated[date_aliased, Field(description="The day, in the brand's billing timezone.")]
@@ -1259,9 +1261,9 @@ class WebhookSubscriptionCreateRequest(BaseModel):
         Any | None, Field(description="Extra HTTP headers sent with each webhook request.")
     ] = None
     interval_hours: Annotated[
-        Literal[12, 24, 168, 720] | None,
+        Literal[4, 6, 12, 24, 168, 720] | None,
         Field(
-            description="Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed."
+            description="Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed."
         ),
     ] = None
     max_items: Annotated[

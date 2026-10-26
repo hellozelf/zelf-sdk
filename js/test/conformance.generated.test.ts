@@ -363,7 +363,7 @@ const CALLS: Case[] = [
     query: {},
     body: ["custom_headers", "event_types", "interval_hours", "kind", "max_items", "resource", "resource_filters", "secret_type", "url"],
     cardinality: 'single',
-    call: (c: ZelfAPIClient) => c.webhooks.createSubscription({ url: "https://example.com/request/url", kind: "snapshot", resource: "content", eventTypes: ["Event types"], resourceFilters: {}, customHeaders: {}, intervalHours: 12, maxItems: 10, secretType: "default" }),
+    call: (c: ZelfAPIClient) => c.webhooks.createSubscription({ url: "https://example.com/request/url", kind: "snapshot", resource: "content", eventTypes: ["Event types"], resourceFilters: {}, customHeaders: {}, intervalHours: 4, maxItems: 10, secretType: "default" }),
   },
   {
     operation: 'webhooks.delete_secret',
@@ -480,7 +480,7 @@ const CALLS: Case[] = [
     query: {},
     body: ["custom_headers", "enabled", "interval_hours", "max_items", "resource_filters", "url"],
     cardinality: 'single',
-    call: (c: ZelfAPIClient) => c.webhooks.updateSubscription("whs_BeCimgZiCdOSa6ee", { url: "https://example.com/request/url", resourceFilters: {}, customHeaders: {}, intervalHours: 12, maxItems: 10, enabled: true }),
+    call: (c: ZelfAPIClient) => c.webhooks.updateSubscription("whs_BeCimgZiCdOSa6ee", { url: "https://example.com/request/url", resourceFilters: {}, customHeaders: {}, intervalHours: 4, maxItems: 10, enabled: true }),
   },
 ]
 

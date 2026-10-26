@@ -1738,31 +1738,17 @@
        ]
       },
       {
-       "scope": "creator_vetting",
-       "human_name": "Creator Vetting",
-       "kind": "request",
+       "scope": "data_records",
+       "human_name": "Data Records",
+       "kind": "item",
        "section": "api",
        "windows": [
         {
-         "window": "rps",
-         "limit": 100,
-         "used": 10,
-         "remaining": 90,
-         "reset_in": 1
-        },
-        {
-         "window": "rph",
-         "limit": 1000,
-         "used": 100,
-         "remaining": 900,
-         "reset_in": 1800
-        },
-        {
-         "window": "rpd",
+         "window": "items_per_month",
          "limit": 10000,
          "used": 1000,
          "remaining": 9000,
-         "reset_in": 43200
+         "reset_in": 1296000
         }
        ]
       },
@@ -1825,31 +1811,17 @@
        ]
       },
       {
-       "scope": "mcp.creator_vetting",
-       "human_name": "Creator Vetting",
-       "kind": "request",
+       "scope": "mcp.data_records",
+       "human_name": "Data Records",
+       "kind": "item",
        "section": "mcp",
        "windows": [
         {
-         "window": "rps",
-         "limit": 5,
-         "used": 1,
-         "remaining": 4,
-         "reset_in": 1
-        },
-        {
-         "window": "rph",
-         "limit": 2500,
-         "used": 250,
-         "remaining": 2250,
-         "reset_in": 1800
-        },
-        {
-         "window": "rpd",
+         "window": "items_per_month",
          "limit": 10000,
          "used": 1000,
          "remaining": 9000,
-         "reset_in": 43200
+         "reset_in": 1296000
         }
        ]
       }
@@ -1862,8 +1834,7 @@
         "date": "2026-10-20",
         "source": "api",
         "general": 4820,
-        "ai_analysis": 36,
-        "creator_vetting": 12,
+        "ai_analysis": 48,
         "data_records": 4772,
         "data_records_items": 143160
        },
@@ -1872,7 +1843,6 @@
         "source": "mcp",
         "general": 311,
         "ai_analysis": 4,
-        "creator_vetting": 0,
         "data_records": 307,
         "data_records_items": 9210
        }
@@ -3119,7 +3089,7 @@
    "url": "https://example.com/patchedwebhooksubscriptionupdaterequest/url",
    "resource_filters": {},
    "custom_headers": {},
-   "interval_hours": 12,
+   "interval_hours": 4,
    "max_items": 10,
    "enabled": true
   },
@@ -3160,7 +3130,6 @@
       "source": "Source",
       "general": 7,
       "ai_analysis": 42,
-      "creator_vetting": 7,
       "data_records": 42,
       "data_records_items": 42,
       "date": "2026-01-01"
@@ -3172,7 +3141,6 @@
    "source": "Source",
    "general": 7,
    "ai_analysis": 42,
-   "creator_vetting": 7,
    "data_records": 42,
    "data_records_items": 42,
    "date": "2026-01-01"
@@ -3185,7 +3153,6 @@
      "source": "Source",
      "general": 7,
      "ai_analysis": 42,
-     "creator_vetting": 7,
      "data_records": 42,
      "data_records_items": 42,
      "date": "2026-01-01"
@@ -3343,7 +3310,7 @@
    "resource_filters": {},
    "url": "https://example.com/webhooksubscriptioncreaterequest/url",
    "custom_headers": {},
-   "interval_hours": 12,
+   "interval_hours": 4,
    "max_items": 10,
    "secret_type": "default"
   },

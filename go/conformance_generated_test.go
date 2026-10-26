@@ -831,7 +831,7 @@ var conformanceCases = []conformanceCase{
 		body:        []string{"custom_headers", "event_types", "interval_hours", "kind", "max_items", "resource", "resource_filters", "secret_type", "url"},
 		cardinality: "single",
 		paramsJSON:  []byte(`{}`),
-		bodyJSON:    []byte(`{"url": "https://example.com/request/url", "kind": "snapshot", "resource": "content", "event_types": ["Event types"], "resource_filters": {}, "custom_headers": {}, "interval_hours": 12, "max_items": 10, "secret_type": "default"}`),
+		bodyJSON:    []byte(`{"url": "https://example.com/request/url", "kind": "snapshot", "resource": "content", "event_types": ["Event types"], "resource_filters": {}, "custom_headers": {}, "interval_hours": 4, "max_items": 10, "secret_type": "default"}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
 			var body WebhooksCreateSubscriptionJSONRequestBody
 			if err := json.Unmarshal(bodyJSON, &body); err != nil {
@@ -1052,7 +1052,7 @@ var conformanceCases = []conformanceCase{
 		body:        []string{"custom_headers", "enabled", "interval_hours", "max_items", "resource_filters", "url"},
 		cardinality: "single",
 		paramsJSON:  []byte(`{}`),
-		bodyJSON:    []byte(`{"url": "https://example.com/request/url", "resource_filters": {}, "custom_headers": {}, "interval_hours": 12, "max_items": 10, "enabled": true}`),
+		bodyJSON:    []byte(`{"url": "https://example.com/request/url", "resource_filters": {}, "custom_headers": {}, "interval_hours": 4, "max_items": 10, "enabled": true}`),
 		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
 			var body WebhooksUpdateSubscriptionJSONRequestBody
 			if err := json.Unmarshal(bodyJSON, &body); err != nil {

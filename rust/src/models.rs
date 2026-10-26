@@ -1582,9 +1582,9 @@ pub struct PatchedWebhookSubscriptionUpdateRequest {
     /// Extra HTTP headers sent with each webhook request.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub custom_headers: Option<serde_json::Value>,
-    /// Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot
-    /// is sent within minutes of the subscription being saved, not after a full interval has
-    /// passed.
+    /// Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first
+    /// snapshot is sent within minutes of the subscription being saved, not after a full
+    /// interval has passed.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub interval_hours: Option<i64>,
     /// Maximum number of items per delivery.
@@ -1649,10 +1649,8 @@ pub struct UsageDay {
     pub source: String,
     /// Every counted call that day.
     pub general: i64,
-    /// Calls counted against the AI analysis group.
+    /// Calls counted against the AI analysis group, creator vetting included.
     pub ai_analysis: i64,
-    /// Calls counted against creator vetting.
-    pub creator_vetting: i64,
     /// Calls counted against data records.
     pub data_records: i64,
     /// Records those calls returned.
@@ -1953,9 +1951,9 @@ pub struct WebhookSubscriptionCreateRequest {
     /// Extra HTTP headers sent with each webhook request.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub custom_headers: Option<serde_json::Value>,
-    /// Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot
-    /// is sent within minutes of the subscription being saved, not after a full interval has
-    /// passed.
+    /// Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first
+    /// snapshot is sent within minutes of the subscription being saved, not after a full
+    /// interval has passed.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub interval_hours: Option<i64>,
     /// Maximum number of items per delivery.

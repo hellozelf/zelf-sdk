@@ -113,7 +113,6 @@ info:
     | --- | --- |
     | General | `global` |
     | AI Analysis | `ai_analysis` |
-    | Creator Vetting | `creator_vetting` |
     | Data Records | `data_records` |
 
     **Requests an AI client makes**
@@ -122,7 +121,6 @@ info:
     | --- | --- |
     | General | `mcp` |
     | AI Analysis | `mcp.ai_analysis` |
-    | Creator Vetting | `mcp.creator_vetting` |
     | Data Records | `mcp.data_records` |
 
     ## Testing
@@ -142,7 +140,7 @@ info:
 
     Zelf can send your data to you on a schedule. You register an endpoint once and we post to it, so nothing has to call the API to keep a warehouse, a database or a dashboard up to date.
 
-    **Scheduled export.** Choose how often you want the data: every 12 or 24 hours, weekly, or every 30 days. At each run we build the file and post a notification to your endpoint with a signed link to download it. The file is NDJSON, one JSON object per line, which loads into Snowflake, BigQuery, Postgres or a data frame without conversion.
+    **Scheduled export.** Choose how often you want the data: every 4, 6, 12 or 24 hours, weekly, or every 30 days. At each run we build the file and post a notification to your endpoint with a signed link to download it. The file is NDJSON, one JSON object per line, which loads into Snowflake, BigQuery, Postgres or a data frame without conversion.
 
     **Row limit.** One delivery carries up to 100,000 rows. You can set a lower limit per subscription. If more rows match than the limit allows, the file stops at the limit and the next run picks up what is current then. There is no byte limit, and the notification carries the exact size and a checksum so you can confirm the download is complete.
 
@@ -171,7 +169,7 @@ info:
 
     ### Schedule and retries
 
-    Snapshots run every 12, 24, 168 (weekly) or 720 hours (30 days), defaulting to 12 hours. The first one arrives within minutes of creating the subscription.
+    Snapshots run every 4, 6, 12, 24, 168 (weekly) or 720 hours (30 days), defaulting to 12 hours. The first one arrives within minutes of creating the subscription.
 
     Any response other than `2xx` counts as a failure, including `3xx`, because redirects are not followed, as do timeouts and connection errors. The timeouts are 10 seconds to connect and 30 seconds to read, so answer `2xx` immediately and download the file afterwards rather than while we wait.
 
@@ -6930,26 +6928,16 @@ paths:
                           used: 500
                           remaining: 4500
                           reset_in: 43200
-                      - scope: creator_vetting
-                        human_name: Creator Vetting
-                        kind: request
+                      - scope: data_records
+                        human_name: Data Records
+                        kind: item
                         section: api
                         windows:
-                        - window: rps
-                          limit: 100
-                          used: 10
-                          remaining: 90
-                          reset_in: 1
-                        - window: rph
-                          limit: 1000
-                          used: 100
-                          remaining: 900
-                          reset_in: 1800
-                        - window: rpd
+                        - window: items_per_month
                           limit: 10000
                           used: 1000
                           remaining: 9000
-                          reset_in: 43200
+                          reset_in: 1296000
                       - scope: mcp
                         human_name: General
                         kind: request
@@ -6990,26 +6978,16 @@ paths:
                           used: 1000
                           remaining: 9000
                           reset_in: 43200
-                      - scope: mcp.creator_vetting
-                        human_name: Creator Vetting
-                        kind: request
+                      - scope: mcp.data_records
+                        human_name: Data Records
+                        kind: item
                         section: mcp
                         windows:
-                        - window: rps
-                          limit: 5
-                          used: 1
-                          remaining: 4
-                          reset_in: 1
-                        - window: rph
-                          limit: 2500
-                          used: 250
-                          remaining: 2250
-                          reset_in: 1800
-                        - window: rpd
+                        - window: items_per_month
                           limit: 10000
                           used: 1000
                           remaining: 9000
-                          reset_in: 43200
+                          reset_in: 1296000
                       history:
                         start_date: '2026-05-01'
                         end_date: '2026-10-21'
@@ -7017,15 +6995,13 @@ paths:
                         - date: '2026-10-20'
                           source: api
                           general: 4820
-                          ai_analysis: 36
-                          creator_vetting: 12
+                          ai_analysis: 48
                           data_records: 4772
                           data_records_items: 143160
                         - date: '2026-10-21'
                           source: mcp
                           general: 311
                           ai_analysis: 4
-                          creator_vetting: 0
                           data_records: 307
                           data_records_items: 9210
                     item_count: 1
@@ -10793,6 +10769,8 @@ components:
       - periods
     IntervalHoursEnum:
       enum:
+      - 4
+      - 6
       - 12
       - 24
       - 168
@@ -11023,8 +11001,8 @@ components:
         custom_headers:
           description: Extra HTTP headers sent with each webhook request.
         interval_hours:
-          description: 'Hours between snapshot deliveries. Allowed values: 12, 24,
-            168, 720. The first snapshot is sent within minutes of the subscription
+          description: 'Hours between snapshot deliveries. Allowed values: 4, 6, 12,
+            24, 168, 720. The first snapshot is sent within minutes of the subscription
             being saved, not after a full interval has passed.'
           oneOf:
           - $ref: '#/components/schemas/IntervalHoursEnum'
@@ -11166,10 +11144,8 @@ components:
           description: Every counted call that day.
         ai_analysis:
           type: integer
-          description: Calls counted against the AI analysis group.
-        creator_vetting:
-          type: integer
-          description: Calls counted against creator vetting.
+          description: Calls counted against the AI analysis group, creator vetting
+            included.
         data_records:
           type: integer
           description: Calls counted against data records.
@@ -11182,7 +11158,6 @@ components:
           description: The day, in the brand's billing timezone.
       required:
       - ai_analysis
-      - creator_vetting
       - data_records
       - data_records_items
       - date
@@ -11755,8 +11730,8 @@ components:
         custom_headers:
           description: Extra HTTP headers sent with each webhook request.
         interval_hours:
-          description: 'Hours between snapshot deliveries. Allowed values: 12, 24,
-            168, 720. The first snapshot is sent within minutes of the subscription
+          description: 'Hours between snapshot deliveries. Allowed values: 4, 6, 12,
+            24, 168, 720. The first snapshot is sent within minutes of the subscription
             being saved, not after a full interval has passed.'
           oneOf:
           - $ref: '#/components/schemas/IntervalHoursEnum'
