@@ -2461,7 +2461,7 @@ export interface components {
       periods: components['schemas']['FollowerPeriod'][]
     }
     /** @enum {integer} */
-    IntervalHoursEnum: 12 | 24 | 168 | 720
+    IntervalHoursEnum: 4 | 6 | 12 | 24 | 168 | 720
     /** @enum {string} */
     KindEnum: 'snapshot' | 'event'
     /** @enum {string} */
@@ -2551,7 +2551,7 @@ export interface components {
       resource_filters?: unknown
       /** @description Extra HTTP headers sent with each webhook request. */
       custom_headers?: unknown
-      /** @description Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed. */
+      /** @description Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed. */
       interval_hours?:
         components['schemas']['IntervalHoursEnum'] | components['schemas']['NullEnum']
       /** @description Maximum number of items per delivery. */
@@ -2624,10 +2624,8 @@ export interface components {
       source: string
       /** @description Every counted call that day. */
       general: number
-      /** @description Calls counted against the AI analysis group. */
+      /** @description Calls counted against the AI analysis group, creator vetting included. */
       ai_analysis: number
-      /** @description Calls counted against creator vetting. */
-      creator_vetting: number
       /** @description Calls counted against data records. */
       data_records: number
       /** @description Records those calls returned. */
@@ -2939,7 +2937,7 @@ export interface components {
       url: string
       /** @description Extra HTTP headers sent with each webhook request. */
       custom_headers?: unknown
-      /** @description Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed. */
+      /** @description Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed. */
       interval_hours?:
         components['schemas']['IntervalHoursEnum'] | components['schemas']['NullEnum']
       /** @description Maximum number of items per delivery. */

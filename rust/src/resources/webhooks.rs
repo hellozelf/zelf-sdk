@@ -44,9 +44,9 @@ pub struct WebhooksCreateSubscriptionParams {
     /// Extra HTTP headers sent with each webhook request.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_headers: Option<serde_json::Value>,
-    /// Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot
-    /// is sent within minutes of the subscription being saved, not after a full interval has
-    /// passed.
+    /// Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first
+    /// snapshot is sent within minutes of the subscription being saved, not after a full
+    /// interval has passed.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interval_hours: Option<i64>,
     /// Maximum number of items per delivery.
@@ -123,9 +123,9 @@ pub struct WebhooksUpdateSubscriptionParams {
     /// Extra HTTP headers sent with each webhook request.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_headers: Option<serde_json::Value>,
-    /// Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot
-    /// is sent within minutes of the subscription being saved, not after a full interval has
-    /// passed.
+    /// Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first
+    /// snapshot is sent within minutes of the subscription being saved, not after a full
+    /// interval has passed.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interval_hours: Option<i64>,
     /// Maximum number of items per delivery.

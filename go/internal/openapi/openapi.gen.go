@@ -84,6 +84,8 @@ const (
 	N12  IntervalHoursEnum = 12
 	N168 IntervalHoursEnum = 168
 	N24  IntervalHoursEnum = 24
+	N4   IntervalHoursEnum = 4
+	N6   IntervalHoursEnum = 6
 	N720 IntervalHoursEnum = 720
 )
 
@@ -1721,7 +1723,7 @@ type PatchedWebhookSubscriptionUpdateRequest struct {
 	// Enabled Whether this subscription is active and will be dispatched.
 	Enabled *bool `json:"enabled,omitempty"`
 
-	// IntervalHours Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed.
+	// IntervalHours Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed.
 	IntervalHours *PatchedWebhookSubscriptionUpdateRequest_IntervalHours `json:"interval_hours,omitempty"`
 
 	// MaxItems Maximum number of items per delivery.
@@ -1734,7 +1736,7 @@ type PatchedWebhookSubscriptionUpdateRequest struct {
 	Url *string `json:"url,omitempty"`
 }
 
-// PatchedWebhookSubscriptionUpdateRequest_IntervalHours Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed.
+// PatchedWebhookSubscriptionUpdateRequest_IntervalHours Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed.
 type PatchedWebhookSubscriptionUpdateRequest_IntervalHours struct {
 	union json.RawMessage
 }
@@ -1801,11 +1803,8 @@ type Usage struct {
 
 // UsageDay One day of consumption for one source.
 type UsageDay struct {
-	// AiAnalysis Calls counted against the AI analysis group.
+	// AiAnalysis Calls counted against the AI analysis group, creator vetting included.
 	AiAnalysis int `json:"ai_analysis"`
-
-	// CreatorVetting Calls counted against creator vetting.
-	CreatorVetting int `json:"creator_vetting"`
 
 	// DataRecords Calls counted against data records.
 	DataRecords int `json:"data_records"`
@@ -2148,7 +2147,7 @@ type WebhookSubscriptionCreateRequest struct {
 	// EventTypes Event names the subscription listens for.
 	EventTypes *[]string `json:"event_types,omitempty"`
 
-	// IntervalHours Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed.
+	// IntervalHours Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed.
 	IntervalHours *WebhookSubscriptionCreateRequest_IntervalHours `json:"interval_hours,omitempty"`
 
 	// Kind Whether the subscription is snapshot or event based.
@@ -2170,7 +2169,7 @@ type WebhookSubscriptionCreateRequest struct {
 	Url string `json:"url"`
 }
 
-// WebhookSubscriptionCreateRequest_IntervalHours Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed.
+// WebhookSubscriptionCreateRequest_IntervalHours Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first snapshot is sent within minutes of the subscription being saved, not after a full interval has passed.
 type WebhookSubscriptionCreateRequest_IntervalHours struct {
 	union json.RawMessage
 }

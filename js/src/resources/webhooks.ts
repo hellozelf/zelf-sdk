@@ -55,9 +55,9 @@ export interface WebhooksCreateSubscriptionParams {
    */
   customHeaders?: unknown
   /**
-   * Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot
-   * is sent within minutes of the subscription being saved, not after a full interval has
-   * passed.
+   * Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first
+   * snapshot is sent within minutes of the subscription being saved, not after a full
+   * interval has passed.
    */
   intervalHours?: number
   /**
@@ -142,9 +142,9 @@ export interface WebhooksUpdateSubscriptionParams {
    */
   customHeaders?: unknown
   /**
-   * Hours between snapshot deliveries. Allowed values: 12, 24, 168, 720. The first snapshot
-   * is sent within minutes of the subscription being saved, not after a full interval has
-   * passed.
+   * Hours between snapshot deliveries. Allowed values: 4, 6, 12, 24, 168, 720. The first
+   * snapshot is sent within minutes of the subscription being saved, not after a full
+   * interval has passed.
    */
   intervalHours?: number
   /**
