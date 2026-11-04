@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Zelf APIs
-  version: 1.3.0
+  version: 1.4.0
   description: |-
     The Zelf API provides programmatic access to Zelf's creator and content intelligence. Use it to search the content and creators tracked for your brand, run AI analyses over that content, vet individual creators, and subscribe to webhooks that deliver results as they are produced.
 
@@ -179,6 +179,791 @@ info:
 
     The **Models** section describes the JSON representations the API returns and delivers through webhooks. Every list method wraps its items in the response envelope described above.
 paths:
+  /api/v1/advanced_ai_analysis/:
+    post:
+      operationId: advanced_ai_analysis.create
+      description: |-
+        `advanced_ai_analysis.create`
+
+        Starts an advanced AI analysis over the content matched by `content_filters` for a given `topic`. The advanced engine goes further than `ai_analysis.create`: alongside sentiment and themes it reports creator stance, price and quality perception from both the audience and the creators, audience voice from the comments, speaker demographics, audience personas and creator intel. Runs complete asynchronously; this method returns immediately with the created analysis and its initial run.
+
+        The analysis runs over the highest-ranked matching content by `content_filters.order_by`, up to 500 posts or the limit configured for your workspace. When `order_by` is omitted, content is ranked by `earned_media_value_cents` descending.
+
+        The created analysis is returned as the single item in `results`. Take its `id` and poll `advanced_ai_analysis.list` until the run reports `COMPLETED`. An advanced analysis can take several hours, so prefer the `advanced_ai_analysis.completed` webhook over frequent polling, which can trigger `RATE_LIMIT_EXCEEDED`. Once complete, retrieve the payload from `advanced_ai_analysis.results`, passing `analysis_id=<id>`.
+      summary: Create Advanced AI Analysis
+      tags:
+      - AI Analysis
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdvancedAiAnalysisCreateRequest'
+            examples:
+              Example:
+                value:
+                  name: Zelf
+                  topic: Zelf
+                  content_filters:
+                    view_count_min: 42
+                    view_count_max: 42
+                    comment_count_min: 42
+                    comment_count_max: 42
+                    like_count_min: 42
+                    like_count_max: 42
+                    share_count_min: 42
+                    share_count_max: 42
+                    total_engagement_min: 42
+                    total_engagement_max: 42
+                    earned_media_value_cents_min: 42
+                    earned_media_value_cents_max: 42
+                    media_duration_min: 4.2
+                    media_duration_max: 4.2
+                    posted_after: '2025-01-01T00:00:00Z'
+                    posted_before: '2025-01-01T00:00:00Z'
+                    platform:
+                    - instagram
+                    language:
+                    - en
+                    content_form: VIDEO
+                    search: zelfai
+                    creator_id: cr_pfqPv0FLsBRimHfi
+                    brand_id: brd_Lw6ZZmNYhW0P9k0x
+                    is_owned: true
+                    is_tagged: true
+                    is_influencer: true
+                    external_id: '7376543210987654321'
+                    creator_username: zelfai
+                    mention_type:
+                    - content
+                    mention_type_not:
+                    - comment
+                    creator_follower_count_min: 42
+                    creator_follower_count_max: 42
+                    engagement_rate_min: 4.2
+                    engagement_rate_max: 4.2
+                    net_promoter_score_min: 42
+                    net_promoter_score_max: 42
+                    posted_within_days: 42
+                    posted_within_hours: 42
+                    order_by:
+                    - view_count
+                    - -posted_at
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdvancedAiAnalysisCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdvancedAiAnalysisCreateRequest'
+        required: true
+      security:
+      - ApiKey: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AdvancedAiAnalysis'
+                    maxItems: 1
+                  item_count:
+                    type: integer
+                  page:
+                    type: integer
+                  next:
+                    type:
+                    - integer
+                    - 'null'
+                  previous:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - log_id
+                - timestamp
+                - results
+                - item_count
+                - page
+                - next
+                - previous
+              examples:
+                Example:
+                  value:
+                    log_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    timestamp: '2026-01-01T00:00:00Z'
+                    results:
+                    - id: bod_huNssMQX4FTvALEY
+                      analysis_type: ADVANCED_AI_ANALYSIS
+                      name: Zelf
+                      topic: Zelf
+                      created_at: '2026-05-12T14:30:00Z'
+                      modified_at: '2026-05-12T15:00:00Z'
+                      analyses:
+                      - id: ban_xJZFbcWNkF9M3brf
+                        status: COMPLETED
+                        dashboard_url: https://insights.hellozelf.com/zelf-analysis?ir_access=1718000000.sig
+                    item_count: 1
+                    page: 1
+                    next: null
+                    previous: null
+          description: ''
+        '400':
+          description: Validation failed or a supplied id is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: The `x-api-key` header is missing, invalid, expired, or revoked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: The api key cannot access the requested brand or resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '404':
+          description: The resource does not exist or is outside this key's scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '406':
+          description: The requested response media type cannot be served.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error406'
+        '429':
+          description: A rate-limit quota was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error429'
+        '500':
+          description: Something went wrong on our side; include `log_id` when reporting.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '503':
+          description: The request took too long and was stopped; narrow the window
+            or pass `brand_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error503'
+    get:
+      operationId: advanced_ai_analysis.list
+      description: |-
+        `advanced_ai_analysis.list`
+
+        Returns the advanced AI analyses that have been created, ordered newest first, each with its runs and their current `status`. It lists the analyses available and tracks run progress without retrieving the full result payload.
+
+        An analysis `id` maps to `analysis_id` on `advanced_ai_analysis.results` and `advanced_ai_analysis.contents`, and each run's `id` maps to `id` on `advanced_ai_analysis.results`. The run `result` download is not included in this response; retrieve it from `advanced_ai_analysis.results` once a run reports `COMPLETED` (statuses: `IN_PROGRESS`, `COMPLETED`, `EMPTY_RESULT`, `FAILED`). Supply `id` to return a single analysis.
+
+        Ordinary analyses are listed by `ai_analysis.list` instead; the two sets never overlap.
+      summary: List Advanced AI Analyses
+      parameters:
+      - in: query
+        name: id
+        schema:
+          type: string
+        description: Optional analysis id. When supplied, only that analysis is returned.
+          Returns `INVALID_ID` if malformed.
+      - name: page
+        required: false
+        in: query
+        description: Page number (1-based). Omit for the first page.
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: page_size
+        required: false
+        in: query
+        description: Items per page (1-30). Defaults to 30; larger values are clamped
+          down.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 30
+          default: 30
+      tags:
+      - AI Analysis
+      security:
+      - ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  results:
+                    $ref: '#/components/schemas/PaginatedAdvancedAiAnalysisList'
+                  item_count:
+                    type: integer
+                  page:
+                    type: integer
+                  next:
+                    type:
+                    - integer
+                    - 'null'
+                  previous:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - log_id
+                - timestamp
+                - results
+                - item_count
+                - page
+                - next
+                - previous
+              examples:
+                Example:
+                  value:
+                    log_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    timestamp: '2026-01-01T00:00:00Z'
+                    results:
+                    - id: bod_huNssMQX4FTvALEY
+                      analysis_type: ADVANCED_AI_ANALYSIS
+                      name: Zelf
+                      topic: Zelf
+                      created_at: '2026-05-12T14:30:00Z'
+                      modified_at: '2026-05-12T15:00:00Z'
+                      analyses:
+                      - id: ban_xJZFbcWNkF9M3brf
+                        status: COMPLETED
+                        dashboard_url: https://insights.hellozelf.com/zelf-analysis?ir_access=1718000000.sig
+                    item_count: 1
+                    page: 1
+                    next: null
+                    previous: null
+          description: ''
+        '400':
+          description: Validation failed or a supplied id is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: The `x-api-key` header is missing, invalid, expired, or revoked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: The api key cannot access the requested brand or resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '404':
+          description: The resource does not exist or is outside this key's scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '406':
+          description: The requested response media type cannot be served.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error406'
+        '429':
+          description: A rate-limit quota was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error429'
+        '500':
+          description: Something went wrong on our side; include `log_id` when reporting.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '503':
+          description: The request took too long and was stopped; narrow the window
+            or pass `brand_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error503'
+  /api/v1/advanced_ai_analysis/results/:
+    get:
+      operationId: advanced_ai_analysis.results
+      description: |-
+        `advanced_ai_analysis.results`
+
+        Returns each run's `result`, a signed, time-limited download of the analysis payload, and `dashboard_url`, a link to the same analysis as an interactive dashboard. Call this method after a run reaches `COMPLETED`; for earlier statuses the row is returned with a `null` `result`.
+
+        The downloaded document follows the `AdvancedAiAnalysisReport` schema.
+
+        Supply `analysis_id` (the analysis `id` from `advanced_ai_analysis.list`) to return every run of that analysis, or `id` (a single run's `id`) to return one run. Exactly one is required. A malformed id returns `INVALID_ID`; omitting both returns `VALIDATION_ERROR`.
+      summary: Get Advanced AI Analysis Results
+      parameters:
+      - in: query
+        name: analysis_id
+        schema:
+          type: string
+        description: Analysis id (from `advanced_ai_analysis.list`). Returns every
+          run of that analysis. Exactly one of `analysis_id` and `id` is required,
+          and a request carrying both is rejected. Returns `INVALID_ID` if malformed.
+      - in: query
+        name: id
+        schema:
+          type: string
+        description: Single run id. Returns only that run. Exactly one of `analysis_id`
+          and `id` is required, and a request carrying both is rejected. Returns `INVALID_ID`
+          if malformed.
+      - name: page
+        required: false
+        in: query
+        description: Page number (1-based). Omit for the first page.
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: page_size
+        required: false
+        in: query
+        description: Items per page (1-30). Defaults to 30; larger values are clamped
+          down.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 30
+          default: 30
+      tags:
+      - AI Analysis
+      security:
+      - ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  results:
+                    $ref: '#/components/schemas/PaginatedAdvancedAiAnalysisResultList'
+                  item_count:
+                    type: integer
+                  page:
+                    type: integer
+                  next:
+                    type:
+                    - integer
+                    - 'null'
+                  previous:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - log_id
+                - timestamp
+                - results
+                - item_count
+                - page
+                - next
+                - previous
+              examples:
+                Example:
+                  value:
+                    log_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    timestamp: '2026-01-01T00:00:00Z'
+                    results:
+                    - id: ban_xJZFbcWNkF9M3brf
+                      analysis_id: bod_huNssMQX4FTvALEY
+                      status: COMPLETED
+                      result:
+                        download_url: https://storage.googleapis.com/zelf-webhook-snapshots/ai_analysis/run_8f2c.json?X-Goog-Signature=...
+                        expires_at: 1718000000
+                        format: json
+                      dashboard_url: https://insights.hellozelf.com/zelf-analysis?ir_access=1718000000.sig
+                      created_at: '2026-05-12T14:30:00Z'
+                      modified_at: '2026-05-12T15:00:00Z'
+                    item_count: 1
+                    page: 1
+                    next: null
+                    previous: null
+          description: ''
+        '400':
+          description: Validation failed or a supplied id is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: The `x-api-key` header is missing, invalid, expired, or revoked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: The api key cannot access the requested brand or resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '404':
+          description: The resource does not exist or is outside this key's scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '406':
+          description: The requested response media type cannot be served.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error406'
+        '429':
+          description: A rate-limit quota was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error429'
+        '500':
+          description: Something went wrong on our side; include `log_id` when reporting.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '503':
+          description: The request took too long and was stopped; narrow the window
+            or pass `brand_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error503'
+  /api/v1/advanced_ai_analysis/contents/:
+    get:
+      operationId: advanced_ai_analysis.contents
+      description: |-
+        `advanced_ai_analysis.contents`
+
+        Returns the content an advanced AI analysis ran over, in the standard content shape. Use it to inspect the exact posts included in an analysis.
+
+        Requires `analysis_id` (an analysis `id` from `advanced_ai_analysis.list`). Brand-scoped fields (`is_owned`, `is_tagged`, `net_promoter_score`, ...) are `null` in this response.
+      summary: List Advanced AI Analysis Content
+      parameters:
+      - in: query
+        name: analysis_id
+        schema:
+          type: string
+        description: Analysis id, as returned by `advanced_ai_analysis.list`.
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: Page number (1-based). Omit for the first page.
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: page_size
+        required: false
+        in: query
+        description: Items per page (1-30). Defaults to 30; larger values are clamped
+          down.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 30
+          default: 30
+      tags:
+      - AI Analysis
+      security:
+      - ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  results:
+                    $ref: '#/components/schemas/PaginatedContentList'
+                  item_count:
+                    type: integer
+                  page:
+                    type: integer
+                  next:
+                    type:
+                    - integer
+                    - 'null'
+                  previous:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - log_id
+                - timestamp
+                - results
+                - item_count
+                - page
+                - next
+                - previous
+              examples:
+                Example:
+                  value:
+                    log_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    timestamp: '2026-01-01T00:00:00Z'
+                    results:
+                    - id: con_DZaWwnKo5HThZ9bu
+                      platform_post_id: '7376543210987654321'
+                      platform: instagram
+                      content_form: VIDEO
+                      thumbnail_url: https://cdn.hellozelf.com/thumbnails/zelfai-launch.png
+                      posted_at: '2026-05-12T16:00:00Z'
+                      view_count: 184230
+                      like_count: 12840
+                      comment_count: 932
+                      share_count: 415
+                      total_engagement: 14187
+                      language: en
+                      media_duration: 42.0
+                      engagement_rate: 0.077
+                      earned_media_value_cents: 248000
+                      creator:
+                        id: cr_pfqPv0FLsBRimHfi
+                        username: zelfai
+                        name: Zelf
+                        platform: instagram
+                        platform_handle: zelfai
+                        platform_url: https://www.instagram.com/zelfai
+                        profile_picture_url: https://cdn.hellozelf.com/avatars/zelfai.png
+                        profile_bio: Creator and content intelligence for modern brands.
+                        follower_count: 53120
+                        active_content_count: 217
+                      brand_id: brd_Lw6ZZmNYhW0P9k0x
+                      net_promoter_score: 1
+                      is_owned: true
+                      is_tagged: true
+                      is_influencer: true
+                      mention_type: content
+                      caption: Behind the scenes at Zelf.
+                      description: How Zelf turns social signals into creator insights.
+                      transcript: We walk through how Zelf ranks creators by brand
+                        fit.
+                      platform_url: https://www.instagram.com/zelfai
+                      last_keyword: zelf creators
+                      ai_summary: A product walkthrough of Zelf creator analytics.
+                      hashtags:
+                      - zelfai
+                      - creatoreconomy
+                    item_count: 1
+                    page: 1
+                    next: null
+                    previous: null
+          description: ''
+        '400':
+          description: Validation failed or a supplied id is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: The `x-api-key` header is missing, invalid, expired, or revoked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: The api key cannot access the requested brand or resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '404':
+          description: The resource does not exist or is outside this key's scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '406':
+          description: The requested response media type cannot be served.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error406'
+        '429':
+          description: A rate-limit quota was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error429'
+        '500':
+          description: Something went wrong on our side; include `log_id` when reporting.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '503':
+          description: The request took too long and was stopped; narrow the window
+            or pass `brand_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error503'
+  /api/v1/advanced_ai_analysis/contents/statistics/:
+    get:
+      operationId: advanced_ai_analysis.content_statistics
+      description: |-
+        `advanced_ai_analysis.content_statistics`
+
+        Returns aggregate totals (post count, views, engagement, earned media value, and unique creators) over the content an advanced AI analysis ran over.
+
+        Requires `analysis_id` (an analysis `id` from `advanced_ai_analysis.list`) and returns the same totals shape as `content.statistics`.
+      summary: Get Advanced AI Analysis Content Statistics
+      parameters:
+      - in: query
+        name: analysis_id
+        schema:
+          type: string
+        description: Analysis id, as returned by `advanced_ai_analysis.list`.
+        required: true
+      tags:
+      - AI Analysis
+      security:
+      - ApiKey: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ContentStatistics'
+                    maxItems: 1
+                  item_count:
+                    type: integer
+                  page:
+                    type: integer
+                  next:
+                    type:
+                    - integer
+                    - 'null'
+                  previous:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - log_id
+                - timestamp
+                - results
+                - item_count
+                - page
+                - next
+                - previous
+              examples:
+                Example:
+                  value:
+                    log_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    timestamp: '2026-01-01T00:00:00Z'
+                    results:
+                    - post_count: 1280
+                      total_views: 4500000
+                      total_likes: 320000
+                      total_comments: 18000
+                      total_shares: 9500
+                      total_engagement: 347500
+                      total_earned_media_value_cents: 12500000
+                      total_media_duration: 53400.0
+                      engagement_rate: 0.077
+                      unique_creator_count: 412
+                    item_count: 1
+                    page: 1
+                    next: null
+                    previous: null
+          description: ''
+        '400':
+          description: Validation failed or a supplied id is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: The `x-api-key` header is missing, invalid, expired, or revoked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: The api key cannot access the requested brand or resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '404':
+          description: The resource does not exist or is outside this key's scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '406':
+          description: The requested response media type cannot be served.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error406'
+        '429':
+          description: A rate-limit quota was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error429'
+        '500':
+          description: Something went wrong on our side; include `log_id` when reporting.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '503':
+          description: The request took too long and was stopped; narrow the window
+            or pass `brand_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error503'
   /api/v1/ai_analysis/:
     post:
       operationId: ai_analysis.create
@@ -5429,7 +6214,7 @@ paths:
 
         Supply `vetting_id` (the vetting `id` from `creator_vetting.list`) to return every run of that vetting, or `id` (a single run's `id`) to return one run. One of the two is required. A malformed identifier returns `INVALID_ID`; omitting both returns `VALIDATION_ERROR`.
 
-        **Disclosures.** When the vetting requested `DISCLOSURE`, the payload's `insight_json.disclosures` holds one entry per analyzed video: its `content_id` and a `result`. The `result` lists `evidence` items, each with the `source` it was found in (`frame` for on-screen text, `audio` for the speech transcription, `title`, `caption` or `metadata`), a `kind` (`sponsorship`, `affiliate`, `gifted` or `relationship` for a commercial relationship; `terms` or `risk` for offer conditions and warnings), the quoted `text` and, where known, `time_seconds`. It also gives each source a `channels` status: `present`, `absent` or `unknown` (not checked). Disclosures are not counted as violations.
+        **Disclosures.** When the vetting requested `DISCLOSURE`, the payload's `disclosures` holds one entry per signal found: its `content_id` and `content_url`, the `source` it was found in (`frame` for on-screen text, `audio` for the speech transcription, `title` or `caption`), a `kind` (`sponsorship`, `affiliate`, `gifted` or `relationship` for a commercial relationship; `terms` or `risk` for offer conditions and warnings), the quoted `text` and, where known, `time_seconds`. A video with no signal is simply absent. Disclosures are not counted as violations.
 
         Limits: only videos up to 10 minutes are checked; on-screen text is read from sampled frames, so text shown only briefly can be missed; videos Zelf analyzed before the request are not re-analyzed for disclosures. An empty `evidence` list does not confirm that a video has no disclosure. Detection reports what was stated; it does not assess legal compliance.
       summary: Get Creator Vetting Results
@@ -8716,6 +9501,1403 @@ components:
       - owned
       type: string
       x-internal: true
+    AdvancedAiAnalysis:
+      type: object
+      description: Response body for the advanced AI analysis root.
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: ID of the analysis. Use this value on follow-up calls.
+        analysis_type:
+          type: string
+          readOnly: true
+          description: Always `ADVANCED_AI_ANALYSIS` here.
+        name:
+          type: string
+          description: The analysis label.
+        topic:
+          type:
+          - string
+          - 'null'
+          description: The subject the analysis focuses on.
+        created_at:
+          type: string
+          format: date-time
+          description: When the analysis was created (UTC, ISO-8601).
+        modified_at:
+          type: string
+          format: date-time
+          description: When the analysis was last modified (UTC, ISO-8601).
+        analyses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedAiAnalysisRun'
+          description: The runs that make up this analysis, ordered newest first.
+      required:
+      - analyses
+      - analysis_type
+      - created_at
+      - id
+      - modified_at
+      - name
+      - topic
+    AdvancedAiAnalysisCreateRequest:
+      type: object
+      description: Request body for ``POST /api/v1/advanced_ai_analysis/``.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: A label for this analysis.
+        topic:
+          type: string
+          minLength: 1
+          description: 'The brand, product, person or event to analyze, as a short
+            term. For example `Levi''s` or `Running shoes`. Keep it under five words.
+            Do not write a question: a run reports sentiment, stance, themes, perception,
+            audience voice, personas and creator intel for the topic. To narrow the
+            posts, use `content_filters`.'
+        content_filters:
+          allOf:
+          - $ref: '#/components/schemas/ContentFilterInputRequest'
+          description: Selects which content the analysis runs over. At least one
+            of `search`, `creator_id`, `creator_username`, `external_id`, or `brand_id`
+            is required to scope it. When both `posted_after` and `posted_before`
+            are omitted, the analysis defaults to content from the last 7 days.
+      required:
+      - content_filters
+      - name
+      - topic
+      x-internal: true
+    AdvancedAiAnalysisReport:
+      type: object
+      description: |-
+        The JSON document behind an advanced AI analysis run's `result.download_url`.
+
+        Counts are whole numbers, shares and rates are decimals from 0 to 1, money
+        is in whole cents, and a value is `null` when there was not enough data to
+        work it out. A section is absent when the run could not produce it, so read
+        every one as optional, and ignore keys you do not recognise.
+      properties:
+        summary:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedSummary'
+          description: Totals over the analyzed set, and how much of it was analyzed.
+        sentiment:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelCount'
+          description: 'Videos by sentiment: `positive`, `neutral`, `negative`, `mixed`.'
+        stance:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelCount'
+          description: 'Videos by what the creator does with the topic: `promoting`,
+            `cautioning`, `neutral`, `critical`, `informational`.'
+        themes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedThemeCount'
+          description: Videos by theme. Themes come from this analysis' own set.
+        sentiment_by_theme:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedSentimentByTheme'
+          description: How sentiment splits inside each theme.
+        timeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedTimelinePoint'
+          description: Posts, views and engagements month by month.
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedLanguage'
+          description: Videos by language.
+        content_forms:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedContentForm'
+          description: Videos by format, with per-format averages.
+        top_creators:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedTopCreator'
+          description: The creators who brought the most reach.
+        speaker_demographics:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedSpeakerDemographics'
+          description: Inferred traits of the people on screen. Trends only.
+        signals:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedSignals'
+          description: 'Product context: stack, rivals, pain points, buying stage.'
+        love_dislike:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedLoveDislike'
+          description: What the audience loves and dislikes, bucket by bucket.
+        perception:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedPerception'
+          description: Price and quality perception, from the audience and the creators.
+        audience_voice:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedAudienceVoice'
+          description: What the comments say.
+        personas:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedPersonas'
+          description: Audience archetypes. Produced on request.
+        creator_intel:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedCreatorIntel'
+          description: Advocates, detractors, prospects and narratives. Produced on
+            request, and the largest section by far.
+      required:
+      - audience_voice
+      - content_forms
+      - languages
+      - love_dislike
+      - perception
+      - sentiment
+      - sentiment_by_theme
+      - signals
+      - speaker_demographics
+      - stance
+      - summary
+      - themes
+      - timeline
+      - top_creators
+    AdvancedAiAnalysisResult:
+      type: object
+      description: A single advanced run with its downloadable ``result``.
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: ID of the analysis run.
+        analysis_id:
+          type: string
+          readOnly: true
+          description: ID of the analysis this run belongs to.
+        status:
+          type: string
+          readOnly: true
+          description: 'Run status: one of `IN_PROGRESS`, `COMPLETED`, `EMPTY_RESULT`
+            (finished with no matching content), or `FAILED`.'
+        result:
+          readOnly: true
+          description: 'Signed, time-limited download of the run''s analysis payload:
+            `download_url` (request it to retrieve the JSON), `expires_at` (Unix epoch
+            seconds, approximately 24h TTL), and `format` (`json`). The document behind
+            it follows the `AdvancedAiAnalysisReport` schema. `null` until the run
+            completes.'
+          anyOf:
+          - $ref: '#/components/schemas/ResultFile'
+          - type: 'null'
+        dashboard_url:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: Signed link to the run's interactive dashboard. Valid for about
+            72 hours. `null` while a fresh link is being prepared; read the run again
+            to get it.
+        created_at:
+          type: string
+          format: date-time
+          description: When the run was created (UTC, ISO-8601).
+        modified_at:
+          type: string
+          format: date-time
+          description: When the run was last modified (UTC, ISO-8601).
+      required:
+      - analysis_id
+      - created_at
+      - dashboard_url
+      - id
+      - modified_at
+      - status
+    AdvancedAiAnalysisRun:
+      type: object
+      description: |-
+        A single advanced run, without its result payload.
+
+        The run ``result`` is not included; retrieve it from
+        `advanced_ai_analysis.results` once ``status`` is `COMPLETED`.
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: ID of the analysis run.
+        status:
+          type: string
+          readOnly: true
+          description: 'Run status: one of `IN_PROGRESS`, `COMPLETED`, `EMPTY_RESULT`
+            (finished with no matching content), or `FAILED`.'
+        dashboard_url:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: Signed link to the run's interactive dashboard, for showing
+            a person the analysis. Valid for about 72 hours. `null` while a fresh
+            link is being prepared; read the run again to get it.
+      required:
+      - dashboard_url
+      - id
+      - status
+    AdvancedAudienceVoice:
+      type: object
+      description: What the comments say, as a whole.
+      properties:
+        has_comments:
+          type: boolean
+          description: False when no comments were available; the lists are then empty.
+        totals:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedVoiceTotals'
+          description: Totals over the comments read.
+        sentiment:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedVoiceSentiment'
+          description: Comments by sentiment.
+        intent:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelCount'
+          description: Comments by what the commenter wants.
+        themes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedVoiceTheme'
+          description: Comments by theme.
+        timeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedVoiceTimeline'
+          description: Comments month by month.
+        top_comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedTopComment'
+          description: The comments worth reading.
+        theme_divergence:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedThemeDivergence'
+          description: Themes where creators and their audience part ways.
+        brands:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedVoiceBrand'
+          description: Brands the commenters bring up.
+      required:
+      - brands
+      - has_comments
+      - intent
+      - sentiment
+      - theme_divergence
+      - themes
+      - timeline
+      - top_comments
+      - totals
+    AdvancedContentForm:
+      type: object
+      description: One video format and how it performs.
+      properties:
+        form:
+          type: string
+          description: The format, for example `short`.
+        count:
+          type: integer
+          description: Videos in this format.
+        avg_views:
+          type: integer
+          description: Mean views per video.
+        avg_engagements:
+          type: integer
+          description: Mean engagements per video.
+      required:
+      - avg_engagements
+      - avg_views
+      - count
+      - form
+    AdvancedCoverage:
+      type: object
+      description: How many of the analyzed videos carry each kind of analysis.
+      properties:
+        total:
+          type: integer
+          description: Videos in the analysis.
+        enriched:
+          type: integer
+          description: Videos that were analyzed at all.
+        has_sentiment:
+          type: integer
+          description: Videos with a sentiment.
+        has_themes:
+          type: integer
+          description: Videos with themes.
+        has_love_dislike:
+          type: integer
+          description: Videos classified into a love or dislike bucket.
+        has_speaker_demographics:
+          type: integer
+          description: Videos with inferred on-screen demographics.
+        has_human_signals:
+          type: integer
+          description: Videos with product context signals.
+      required:
+      - enriched
+      - has_human_signals
+      - has_love_dislike
+      - has_sentiment
+      - has_speaker_demographics
+      - has_themes
+      - total
+    AdvancedCreatorIntel:
+      type: object
+      description: Creators sorted by posture, and the stories they carry.
+      properties:
+        totals:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedCreatorIntelTotals'
+          description: How the creators split across postures.
+        advocates:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedCreatorProfile'
+          description: Creators who back the topic.
+        detractors:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedCreatorProfile'
+          description: Creators who criticise it.
+        prospects:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedCreatorProfile'
+          description: Creators worth approaching.
+        posture_map:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedPostureMapEntry'
+          description: Every creator plotted by reach against stance.
+        narratives:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedNarrative'
+          description: The stories moving through the conversation.
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedCreatorIntelMeta'
+          description: How and when this section was built.
+      required:
+      - advocates
+      - detractors
+      - meta
+      - narratives
+      - posture_map
+      - prospects
+      - totals
+    AdvancedCreatorIntelMeta:
+      type: object
+      description: How and when this section was built.
+      properties:
+        generated_at:
+          type: string
+          description: When the section was built (UTC, ISO-8601).
+        model:
+          type: string
+          description: The model that built it.
+        enriched_count:
+          type: integer
+          description: Creators analyzed.
+        stale:
+          type: boolean
+          description: True when the section predates the analysis' latest content.
+        derived_from:
+          type:
+          - string
+          - 'null'
+          description: The content snapshot it was built from.
+      required:
+      - derived_from
+      - enriched_count
+      - generated_at
+      - model
+      - stale
+    AdvancedCreatorIntelTotals:
+      type: object
+      description: How the creators split across postures.
+      properties:
+        creators:
+          type: integer
+          description: Creators in the analysis.
+        advocates:
+          type: integer
+          description: Creators who back the topic.
+        detractors:
+          type: integer
+          description: Creators who criticise it.
+        prospects:
+          type: integer
+          description: Creators worth approaching.
+      required:
+      - advocates
+      - creators
+      - detractors
+      - prospects
+    AdvancedCreatorProfile:
+      type: object
+      description: A creator, scored on how they treat the topic.
+      properties:
+        handle:
+          type: string
+          description: The creator's handle.
+        posts:
+          type: integer
+          description: Videos they posted.
+        views:
+          type: integer
+          description: Views across those videos.
+        engagements:
+          type: integer
+          description: Engagements across them.
+        emv_cents:
+          type: integer
+          description: Earned media value, in cents.
+        avg_sentiment:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Average sentiment of their videos, -1 to 1.
+        stance_counts:
+          type: object
+          additionalProperties: {}
+          description: How many of their videos take each stance.
+        top_themes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedThemeCount'
+          description: What they post about most.
+        organic_share:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Share of their posts carrying no sponsorship marker, from 0
+            to 1. `1` means fully organic.
+        first_post:
+          type:
+          - string
+          - 'null'
+          description: Their earliest post, as `YYYY-MM-DD`.
+        last_post:
+          type:
+          - string
+          - 'null'
+          description: Their latest post, as `YYYY-MM-DD`.
+        reach_percentile:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Where their views rank among this analysis' creators, 0 to
+            1.
+        stance_lean:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Which way they lean, -1 critical to 1 promoting.
+        posture:
+          type: string
+          description: '`advocate`, `detractor`, `prospect` or `longtail`.'
+        partnership_fit:
+          type:
+          - integer
+          - 'null'
+          description: How good a partner they would be, 0 to 100.
+        detractor_severity:
+          type:
+          - integer
+          - 'null'
+          description: How much risk their criticism carries, 0 to 100.
+        consumer_resonance:
+          type:
+          - integer
+          - 'null'
+          description: How strongly commenters respond to them, 0 to 100. `0` when
+            none of their comments were analyzed.
+        read:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: Model summary of the creator. Its fields can grow.
+        profile:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: The creator's declared platform profile. Its fields can grow.
+      required:
+      - avg_sentiment
+      - consumer_resonance
+      - detractor_severity
+      - emv_cents
+      - engagements
+      - first_post
+      - handle
+      - last_post
+      - organic_share
+      - partnership_fit
+      - posts
+      - posture
+      - profile
+      - reach_percentile
+      - read
+      - stance_counts
+      - stance_lean
+      - top_themes
+      - views
+    AdvancedLanguage:
+      type: object
+      description: One language and its share of the set.
+      properties:
+        language:
+          type: string
+          description: Language code, for example `en`.
+        count:
+          type: integer
+          description: Videos in this language.
+        engagements:
+          type: integer
+          description: Engagements on those videos.
+      required:
+      - count
+      - engagements
+      - language
+    AdvancedLoveDislike:
+      type: object
+      description: What the audience loves and dislikes about the topic.
+      properties:
+        classified_count:
+          type: integer
+          description: Videos that fell into a love or dislike bucket.
+        total_count:
+          type: integer
+          description: Videos considered.
+        love:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedLoveDislikeBucket'
+          description: What people praise, strongest first.
+        dislike:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedLoveDislikeBucket'
+          description: What people criticise, strongest first.
+      required:
+      - classified_count
+      - dislike
+      - love
+      - total_count
+    AdvancedLoveDislikeBucket:
+      type: object
+      description: One thing people love or dislike, and what backs it.
+      properties:
+        slug:
+          type: string
+          description: Stable key for the bucket.
+        label:
+          type: string
+          description: Display name for the bucket.
+        definition:
+          type: string
+          description: What the bucket covers.
+        video_count:
+          type: integer
+          description: Videos in the bucket.
+        emv_cents:
+          type: integer
+          description: Earned media value of those videos, in cents.
+        total_views:
+          type: integer
+          description: Views on those videos.
+      required:
+      - definition
+      - emv_cents
+      - label
+      - slug
+      - total_views
+      - video_count
+    AdvancedNarrative:
+      type: object
+      description: A story moving through the conversation.
+      properties:
+        theme:
+          type: string
+          description: The theme the story is about.
+        total:
+          type: integer
+          description: Videos carrying it.
+        positive_share:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Share of those videos that are positive, 0 to 1.
+        negative_share:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Share of those videos that are negative, 0 to 1.
+        momentum:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Whether the theme is gaining or losing share, -1 to 1.
+        direction:
+          type: string
+          description: '`rising` or `falling`.'
+        carriers:
+          type: array
+          items:
+            type: string
+          description: The creators posting most on the theme.
+        play:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: A suggested response. Model output, so its fields can grow.
+      required:
+      - carriers
+      - direction
+      - momentum
+      - negative_share
+      - play
+      - positive_share
+      - theme
+      - total
+    AdvancedPerception:
+      type: object
+      description: Price and quality perception, measured from both sides.
+      properties:
+        audience:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedPerceptionSide'
+          description: What commenters say. Counts are comments.
+        creator:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedPerceptionSide'
+          description: How the videos frame it. Counts are videos.
+      required:
+      - audience
+      - creator
+    AdvancedPerceptionAxis:
+      type: object
+      description: One perception axis, price or quality, measured one way.
+      properties:
+        share_indicating:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Share of analyzed items that express any view on this axis,
+            from 0 to 1. `null` when nothing was analyzed.
+        classified_count:
+          type: integer
+          description: Items that express a view on this axis.
+        enriched_count:
+          type: integer
+          description: Items analyzed for this axis, those with no view included.
+        buckets:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedPerceptionBucket'
+          description: The bands on this axis, largest share first.
+      required:
+      - buckets
+      - classified_count
+      - enriched_count
+      - share_indicating
+    AdvancedPerceptionBucket:
+      type: object
+      description: One perception band and its share.
+      properties:
+        key:
+          type: string
+          description: The band. Price bands are `expensive`, `affordable`, `cheap`;
+            quality bands are `low`, `good`, `excellent`.
+        label:
+          type: string
+          description: Display name for the band.
+        pct:
+          type: number
+          format: double
+          description: This band's share of the classified items, from 0 to 1. The
+            bands on one axis add up to about 1.
+        video_count:
+          type: integer
+          description: Videos the band covers. On the audience side these are videos
+            with at least one comment in the band.
+        emv_cents:
+          type: integer
+          description: Earned media value of those videos, in cents.
+        total_views:
+          type: integer
+          description: Views on those videos.
+      required:
+      - emv_cents
+      - key
+      - label
+      - pct
+      - total_views
+      - video_count
+    AdvancedPerceptionSide:
+      type: object
+      description: Price and quality as seen from one side.
+      properties:
+        price:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedPerceptionAxis'
+          description: How price is read.
+        quality:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedPerceptionAxis'
+          description: How quality is read.
+      required:
+      - price
+      - quality
+    AdvancedPersona:
+      type: object
+      description: An audience archetype found across the analyzed videos.
+      properties:
+        id:
+          type: string
+          description: Stable key for the persona.
+        name:
+          type: string
+          description: Short label for the persona.
+        tagline:
+          type: string
+          description: One line describing them.
+        description:
+          type: string
+          description: Who this person is.
+        member_count:
+          type: integer
+          description: Videos that match the archetype.
+        avg_sentiment:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Average sentiment of those videos, -1 to 1.
+        total_views:
+          type: integer
+          description: Views across those videos.
+        top_similarity:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: How closely the best-matching video fits, from 0 to 1. A low
+            value means the archetype is only loosely present.
+        representatives:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedPersonaRepresentative'
+          description: The videos that stand for the persona.
+        breakdown:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: A deeper profile of the persona. Model output, so its fields
+            can grow. `null` when no breakdown was produced.
+      required:
+      - avg_sentiment
+      - breakdown
+      - description
+      - id
+      - member_count
+      - name
+      - representatives
+      - tagline
+      - top_similarity
+      - total_views
+    AdvancedPersonaRepresentative:
+      type: object
+      description: A video that stands for a persona.
+      properties:
+        record_id:
+          type: string
+          description: The video's id.
+        handle:
+          type: string
+          description: The creator's handle.
+        caption:
+          type: string
+          description: The video's caption.
+        gist:
+          type: string
+          description: One line summarising the video.
+        views:
+          type: integer
+          description: Views on the video.
+        likes:
+          type: integer
+          description: Likes on the video.
+        engagements:
+          type: integer
+          description: Engagements on the video.
+        emv_cents:
+          type: integer
+          description: Earned media value, in cents.
+        sentiment:
+          type: string
+          description: The video's sentiment band.
+        sentiment_score:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: The video's sentiment, -1 to 1.
+        stance:
+          type: string
+          description: The creator's stance in the video.
+        themes:
+          type: array
+          items:
+            type: string
+          description: Themes the video covers.
+        language:
+          type: string
+          description: The video's language code.
+        content_form:
+          type: string
+          description: The video's format.
+        duration_s:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: How long the video runs, in seconds.
+        posted_at:
+          type: string
+          description: When it was posted (UTC, ISO-8601).
+        thumbnail_url:
+          type:
+          - string
+          - 'null'
+          description: Link to the video's thumbnail.
+        video_url:
+          type:
+          - string
+          - 'null'
+          description: Link to the video.
+      required:
+      - caption
+      - content_form
+      - duration_s
+      - emv_cents
+      - engagements
+      - gist
+      - handle
+      - language
+      - likes
+      - posted_at
+      - record_id
+      - sentiment
+      - sentiment_score
+      - stance
+      - themes
+      - thumbnail_url
+      - video_url
+      - views
+    AdvancedPersonas:
+      type: object
+      description: The audience archetypes, and how they were derived.
+      properties:
+        vocab_source:
+          type: string
+          description: '`derived` when the archetypes came from this analysis'' own
+            vocabulary, `fallback` when a generic one was used. Treat fallback personas
+            with less weight.'
+        personas:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdvancedPersona'
+          description: The archetypes found.
+      required:
+      - personas
+      - vocab_source
+    AdvancedPostureMapEntry:
+      type: object
+      description: One creator plotted by reach against stance.
+      properties:
+        handle:
+          type: string
+          description: The creator's handle.
+        reach_percentile:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Where their views rank, 0 to 1.
+        stance_lean:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Which way they lean, -1 to 1.
+        posts:
+          type: integer
+          description: Videos they posted.
+        posture:
+          type: string
+          description: Their posture towards the topic.
+      required:
+      - handle
+      - posts
+      - posture
+      - reach_percentile
+      - stance_lean
+    AdvancedSentimentByTheme:
+      type: object
+      description: How sentiment splits inside one theme.
+      properties:
+        theme:
+          type: string
+          description: The theme.
+        positive:
+          type: integer
+          description: Positive videos on the theme.
+        neutral:
+          type: integer
+          description: Neutral videos on the theme.
+        negative:
+          type: integer
+          description: Negative videos on the theme.
+        mixed:
+          type: integer
+          description: Mixed videos on the theme.
+        total:
+          type: integer
+          description: Videos on the theme.
+      required:
+      - mixed
+      - negative
+      - neutral
+      - positive
+      - theme
+      - total
+    AdvancedSignals:
+      type: object
+      description: Product context drawn from what people show and say.
+      properties:
+        stack:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelCount'
+          description: Products shown or used alongside the subject.
+        competitors:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelCount'
+          description: Rival products that appear.
+        pain_points:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelCount'
+          description: Problems people keep raising.
+        journey_stage:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelCount'
+          description: Where the speaker is in their buying journey.
+      required:
+      - competitors
+      - journey_stage
+      - pain_points
+      - stack
+    AdvancedSpeakerDemographics:
+      type: object
+      description: |-
+        Inferred traits of the people on screen.
+
+        These are model inferences, not verified facts. Use them for trends across
+        the set, never as a statement about any one person.
+      properties:
+        gender:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelCount'
+          description: Videos by inferred gender.
+        age:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelCount'
+          description: Videos by inferred age band.
+        ethnicity:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelCount'
+          description: Videos by inferred ethnicity.
+        setting:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelCount'
+          description: Videos by the setting they were filmed in.
+      required:
+      - age
+      - ethnicity
+      - gender
+      - setting
+    AdvancedSummary:
+      type: object
+      description: Totals over the whole analyzed set.
+      properties:
+        videos:
+          type: integer
+          description: Videos analyzed.
+        creators:
+          type: integer
+          description: Distinct creators behind them.
+        total_views:
+          type: integer
+          description: Views summed over the set.
+        total_likes:
+          type: integer
+          description: Likes summed over the set.
+        total_comments:
+          type: integer
+          description: Comments summed over the set.
+        total_shares:
+          type: integer
+          description: Shares summed over the set.
+        total_engagements:
+          type: integer
+          description: Likes, comments and shares summed over the set.
+        mean_engagement_rate:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Average of each video's engagements divided by its views, from
+            0 to 1. Videos with no views are left out. This is not total engagements
+            over total views.
+        total_emv_cents:
+          type: integer
+          description: Earned media value in cents. `0` for sources without it.
+        first_post:
+          type:
+          - string
+          - 'null'
+          description: Date of the earliest video, as `YYYY-MM-DD`.
+        last_post:
+          type:
+          - string
+          - 'null'
+          description: Date of the latest video, as `YYYY-MM-DD`.
+        coverage:
+          allOf:
+          - $ref: '#/components/schemas/AdvancedCoverage'
+          description: 'How many videos carry each kind of analysis. Read the other
+            sections in this light: a section only describes the videos it could be
+            computed for.'
+      required:
+      - coverage
+      - creators
+      - first_post
+      - last_post
+      - mean_engagement_rate
+      - total_comments
+      - total_emv_cents
+      - total_engagements
+      - total_likes
+      - total_shares
+      - total_views
+      - videos
+    AdvancedThemeCount:
+      type: object
+      description: A theme and how many videos carry it.
+      properties:
+        theme:
+          type: string
+          description: The theme, from this analysis' own set.
+        count:
+          type: integer
+          description: Videos carrying it.
+      required:
+      - count
+      - theme
+    AdvancedThemeDivergence:
+      type: object
+      description: A theme where creators and their audience disagree.
+      properties:
+        theme:
+          type: string
+          description: The theme.
+        videos:
+          type: integer
+          description: Videos on the theme.
+        comments:
+          type: integer
+          description: Comments on the theme.
+        creator_score:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: How the creators lean, -1 to 1.
+        audience_score:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: How the audience leans, -1 to 1.
+        gap:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: '`audience_score` minus `creator_score`. A negative gap means
+            the audience is more critical than the creators.'
+      required:
+      - audience_score
+      - comments
+      - creator_score
+      - gap
+      - theme
+      - videos
+    AdvancedTimelinePoint:
+      type: object
+      description: One month of posting activity.
+      properties:
+        month:
+          type: string
+          description: The month, as `YYYY-MM`.
+        posts:
+          type: integer
+          description: Videos posted that month.
+        views:
+          type: integer
+          description: Views on those videos.
+        engagements:
+          type: integer
+          description: Engagements on those videos.
+      required:
+      - engagements
+      - month
+      - posts
+      - views
+    AdvancedTopComment:
+      type: object
+      description: A comment worth reading, with the video it sits under.
+      properties:
+        comment_id:
+          type: string
+          description: The comment's id.
+        text:
+          type: string
+          description: What the comment says.
+        likes:
+          type: integer
+          description: Likes on the comment.
+        posted_at:
+          type: string
+          description: When it was posted (UTC, ISO-8601).
+        sentiment:
+          type: string
+          description: Its sentiment band.
+        intent:
+          type: string
+          description: What the commenter is doing, for example `question`.
+        gist:
+          type: string
+          description: One line summarising the comment.
+        video_record_id:
+          type: string
+          description: The video it sits under.
+        video_handle:
+          type: string
+          description: That video's creator handle.
+        video_caption:
+          type: string
+          description: That video's caption.
+      required:
+      - comment_id
+      - gist
+      - intent
+      - likes
+      - posted_at
+      - sentiment
+      - text
+      - video_caption
+      - video_handle
+      - video_record_id
+    AdvancedTopCreator:
+      type: object
+      description: A creator ranked by the reach they brought.
+      properties:
+        handle:
+          type: string
+          description: The creator's handle.
+        posts:
+          type: integer
+          description: Videos they posted.
+        views:
+          type: integer
+          description: Views across those videos.
+        engagements:
+          type: integer
+          description: Engagements across them.
+        emv_cents:
+          type: integer
+          description: Earned media value in cents.
+      required:
+      - emv_cents
+      - engagements
+      - handle
+      - posts
+      - views
+    AdvancedVoiceBrand:
+      type: object
+      description: A brand the commenters bring up.
+      properties:
+        brand:
+          type: string
+          description: The brand named.
+        count:
+          type: integer
+          description: Comments naming it.
+        avg_score:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Average sentiment of those comments, -1 to 1.
+        total_likes:
+          type: integer
+          description: Likes on those comments.
+      required:
+      - avg_score
+      - brand
+      - count
+      - total_likes
+    AdvancedVoiceSentiment:
+      type: object
+      description: Comments in one sentiment band.
+      properties:
+        label:
+          type: string
+          description: 'The band: `positive`, `neutral`, `negative` or `mixed`.'
+        count:
+          type: integer
+          description: Comments in the band.
+        likes:
+          type: integer
+          description: Likes on those comments.
+      required:
+      - count
+      - label
+      - likes
+    AdvancedVoiceTheme:
+      type: object
+      description: How the comments on one theme break down.
+      properties:
+        theme:
+          type: string
+          description: The theme.
+        count:
+          type: integer
+          description: Comments on the theme.
+        positive:
+          type: integer
+          description: Positive comments on it.
+        negative:
+          type: integer
+          description: Negative comments on it.
+        like_weighted_score:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Like-weighted sentiment on the theme, -1 to 1.
+      required:
+      - count
+      - like_weighted_score
+      - negative
+      - positive
+      - theme
+    AdvancedVoiceTimeline:
+      type: object
+      description: One month of comment activity.
+      properties:
+        month:
+          type: string
+          description: The month, as `YYYY-MM`.
+        count:
+          type: integer
+          description: Comments that month.
+        net_sentiment:
+          type: integer
+          description: Positive comments minus negative comments.
+        like_weighted_score:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Like-weighted sentiment that month, -1 to 1.
+      required:
+      - count
+      - like_weighted_score
+      - month
+      - net_sentiment
+    AdvancedVoiceTotals:
+      type: object
+      description: Totals over the comments that were read.
+      properties:
+        videos:
+          type: integer
+          description: Videos considered.
+        comments:
+          type: integer
+          description: Comments read.
+        enriched:
+          type: integer
+          description: Comments that were analyzed.
+        total_likes:
+          type: integer
+          description: Likes on those comments.
+        videos_with_comments:
+          type: integer
+          description: Videos that had at least one comment.
+        like_weighted_sentiment:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Average comment sentiment weighted towards comments with more
+            likes, from -1 to 1. `null` when no comment has a score.
+      required:
+      - comments
+      - enriched
+      - like_weighted_sentiment
+      - total_likes
+      - videos
+      - videos_with_comments
     AiAnalysis:
       type: object
       description: Response body for the AI analysis root.
@@ -8793,6 +10975,32 @@ components:
       - name
       - topic
       x-internal: true
+    AiAnalysisReport:
+      type: object
+      description: |-
+        The JSON document behind an AI analysis run's `result.download_url`.
+
+        Every section under `general_insights` is optional: a section the run could
+        not produce is left out rather than returned empty. Which sections appear
+        depends on the run's scope, `CONTENT` or `COMMENT`. New sections and fields
+        can be added at any time, so ignore keys you do not recognise.
+      properties:
+        brand_name:
+          type: string
+          description: The topic the analysis ran on, as it was submitted.
+        general_insights:
+          type: object
+          additionalProperties: {}
+          description: The sections the run produced. Content runs can carry `customer_communication`,
+            `competitor_overview`, `trending_now`, `favorite_products_and_features`,
+            `user_personas`, `brand_perception` and `overall_sentiment`. Comment runs
+            can carry `customer_communication`, `trending_now`, `favorite_products_and_features`,
+            `brand_perception`, `overall_sentiment`, `notable_themes` and `key_findings`.
+            Every section carries a `grounding` object whose keys match that section's
+            own fields, each a list of grounding entries.
+      required:
+      - brand_name
+      - general_insights
     AiAnalysisResult:
       type: object
       description: A single analysis run with its downloadable ``result``.
@@ -8817,8 +11025,8 @@ components:
           readOnly: true
           description: 'Signed, time-limited download of the run''s analysis payload:
             `download_url` (request it to retrieve the JSON), `expires_at` (Unix epoch
-            seconds, approximately 24h TTL), and `format` (`json`). `null` until the
-            run completes.'
+            seconds, approximately 24h TTL), and `format` (`json`). The document behind
+            it follows the `AiAnalysisReport` schema. `null` until the run completes.'
           anyOf:
           - $ref: '#/components/schemas/ResultFile'
           - type: 'null'
@@ -10273,6 +12481,48 @@ components:
       - sync_job_id
       - type
       - updated_at
+    CreatorVettingReport:
+      type: object
+      description: |-
+        The JSON document behind a creator vetting run's `result.download_url`.
+
+        `disclosures` is present only when the run asked for the `DISCLOSURE`
+        safety check. New fields can be added at any time, so ignore keys you do
+        not recognise.
+      properties:
+        profile_summary:
+          type:
+          - string
+          - 'null'
+          description: Two or three sentences describing the creator.
+        top_themes:
+          oneOf:
+          - $ref: '#/components/schemas/VettingTopThemes'
+          - type: 'null'
+          description: The creator's recurring subjects.
+        violation_summary:
+          oneOf:
+          - $ref: '#/components/schemas/VettingSummary'
+          - type: 'null'
+          description: How much of the catalogue raised a flag.
+        violations:
+          type: array
+          items:
+            $ref: '#/components/schemas/VettingViolation'
+          description: Every flag raised, one row per criterion per content item.
+        disclosures:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/VettingDisclosure'
+          description: Paid-partnership signals, one row per signal. Present only
+            when the run requested the `DISCLOSURE` safety check.
+      required:
+      - profile_summary
+      - top_themes
+      - violation_summary
+      - violations
     CreatorVettingRequest:
       type: object
       description: Request body for ``POST /api/v1/creator/vetting/``.
@@ -10348,7 +12598,8 @@ components:
           description: Signed, time-limited download of the run's analysis payload.
             Contains `download_url` (request it to retrieve the JSON), `expires_at`
             (Unix epoch seconds, approximately 24-hour TTL), and `format` (`json`).
-            Returns `null` until the run completes.
+            The document behind it follows the `CreatorVettingReport` schema. Returns
+            `null` until the run completes.
           anyOf:
           - $ref: '#/components/schemas/ResultFile'
           - type: 'null'
@@ -10783,6 +13034,19 @@ components:
       - event
       type: string
       x-internal: true
+    LabelCount:
+      type: object
+      description: A label and how many videos carry it.
+      properties:
+        label:
+          type: string
+          description: The label.
+        count:
+          type: integer
+          description: Videos carrying it.
+      required:
+      - count
+      - label
     LastStatusEnum:
       enum:
       - SUCCESS
@@ -10797,6 +13061,22 @@ components:
       x-internal: true
     NullEnum:
       type: 'null'
+      x-internal: true
+    PaginatedAdvancedAiAnalysisList:
+      type: array
+      items:
+        $ref: '#/components/schemas/AdvancedAiAnalysis'
+      description: Paginated response envelope. `results` holds this page of `AdvancedAiAnalysis`
+        objects; the envelope fields (`log_id`, `timestamp`, `item_count`, `page`,
+        `next`, `previous`) are described under Response shape.
+      x-internal: true
+    PaginatedAdvancedAiAnalysisResultList:
+      type: array
+      items:
+        $ref: '#/components/schemas/AdvancedAiAnalysisResult'
+      description: Paginated response envelope. `results` holds this page of `AdvancedAiAnalysisResult`
+        objects; the envelope fields (`log_id`, `timestamp`, `item_count`, `page`,
+        `next`, `previous`) are described under Response shape.
       x-internal: true
     PaginatedAiAnalysisList:
       type: array
@@ -11045,6 +13325,9 @@ components:
           type: string
           format: uri
           description: Signed URL to request the JSON payload. Expires at `expires_at`.
+            The document it returns follows `AiAnalysisReport`, `CreatorVettingReport`
+            or `AdvancedAiAnalysisReport`, depending on which kind of run produced
+            it.
       required:
       - download_url
       - expires_at
@@ -11064,7 +13347,7 @@ components:
           description: |-
             Category of the safety criterion. One of `USER_DEFINED_SAFETY_CRITERION`, `ADULT_CONTENT`, `ARMS_AND_AMMUNITION`, `MISINFORMATION`, `PROFANITY`, `POLITICS`, `DISCLOSURE`.
 
-            `DISCLOSURE` looks for explicit sponsorship disclosures (for example `#ad`, a paid partnership, an affiliate commission or a gifted product) in each video's on-screen text, speech transcription, title and caption. It is not scored as a violation: findings are listed per video under `insight_json.disclosures` in the result payload.
+            `DISCLOSURE` looks for explicit sponsorship disclosures (for example `#ad`, a paid partnership, an affiliate commission or a gifted product) in each video's on-screen text, speech transcription, title and caption. It is not scored as a violation: findings are listed under `disclosures` in the result payload, one entry per signal found.
         extra:
           type:
           - string
@@ -11239,6 +13522,116 @@ components:
       - reset_in
       - used
       - window
+    VettingDisclosure:
+      type: object
+      description: A paid-partnership signal found in one piece of content.
+      properties:
+        content_id:
+          type: string
+          description: The content the signal is in.
+        content_url:
+          type: string
+          description: Link to that content, blank when unknown.
+        source:
+          type: string
+          description: 'Where it was found: `frame`, `title`, `caption` or `audio`.'
+        kind:
+          type: string
+          description: What kind of signal it is, for example `sponsorship`.
+        text:
+          type: string
+          description: The disclosure wording itself.
+        time_seconds:
+          type:
+          - integer
+          - 'null'
+          description: Seconds into the video, or `null` when it is not timed.
+      required:
+      - content_id
+      - content_url
+      - kind
+      - source
+      - text
+      - time_seconds
+    VettingSummary:
+      type: object
+      description: How much of the creator's catalogue raised a flag.
+      properties:
+        total_violations:
+          type: integer
+          description: Flags raised across every criterion.
+        affected_contents:
+          type: integer
+          description: Distinct content items carrying at least one flag.
+      required:
+      - affected_contents
+      - total_violations
+    VettingTopThemes:
+      type: object
+      description: The creator's recurring subjects, with what each is based on.
+      properties:
+        top_themes:
+          type: array
+          items:
+            type: string
+          description: The themes, strongest first.
+        grounding:
+          type: object
+          additionalProperties: {}
+          description: '`top_themes`: one grounded entry per theme.'
+      required:
+      - grounding
+      - top_themes
+    VettingViolation:
+      type: object
+      description: One criterion raised against one piece of the creator's content.
+      properties:
+        violation_id:
+          type: string
+          description: Stable id for this flag, as `{content_id}_{type}`.
+        type:
+          type: string
+          description: The criterion. One of `ILLEGAL_ACTS`, `HATE_SPEECH`, `MINOR_SAFETY`,
+            `TERRORISM`, `GRAPHIC_VIOLENCE`, `ADULT_CONTENT`, `ARMS_AND_AMMUNITION`,
+            `SENSITIVE_NEWS_TRAGEDY`, `MISINFORMATION`, `PROFANITY`, `ALCOHOL_AND_TOBACCO`,
+            `POLITICS`, or `USER_DEFINED` for a criterion you supplied.
+        value:
+          type: string
+          description: The criterion's display name.
+        description:
+          type: string
+          description: What the criterion covers.
+        reason:
+          type: string
+          description: Why this content was judged to breach the criterion.
+        evidence_quote:
+          type: string
+          description: The passage the judgement rests on, verbatim.
+        evidence_field:
+          type: string
+          description: 'Where the quote came from: `title`, `ai_summary`, `transcription`,
+            `text_overlay`, `vetting_observations` or `none`. New values can be added,
+            so treat an unknown one as `none` rather than failing.'
+        content_id:
+          type: string
+          description: The content the flag is against.
+        violation:
+          type: string
+          description: Always `yes`. Content that passed is not listed.
+        severity:
+          type: string
+          description: 'How serious the flag is: `high`, `medium`, `low` or `N/A`.'
+      required:
+      - content_id
+      - description
+      - evidence_field
+      - evidence_quote
+      - reason
+      - severity
+      - type
+      - value
+      - violation
+      - violation_id
     WebhookAvailableEvent:
       type: object
       description: An event type a subscription may ask for.
@@ -12149,9 +14542,10 @@ servers:
 - url: https://api.hellozelf.com
 tags:
 - name: AI Analysis
-  description: Run AI analyses over content and comments. Start an analysis with a
-    topic and a content filter, poll its runs for status, then fetch each run's result
-    payload from `ai_analysis.results`.
+  description: |-
+    Run AI analyses over content and comments. Start an analysis with a topic and a content filter, poll its runs for status, then fetch each run's result payload from `ai_analysis.results`.
+
+    Two engines sit here. `ai_analysis.*` is the standard one. `advanced_ai_analysis.*` goes further, adding creator stance, price and quality perception from both sides, audience voice from the comments, personas and creator intel, and it also returns a link to an interactive dashboard. The two are metered and granted separately, and their listings never overlap.
 - name: Analytics
   description: 'Compare a brand against its competitors: totals per brand and follower
     history over time. Every endpoint takes the same brand, platform and date window.'
@@ -12574,6 +14968,85 @@ webhooks:
                       - id: ban_Nc7m1Pe6Qd4Kf0Az
                         status: IN_PROGRESS
                 summary: ai_analysis.completed
+        required: true
+      responses:
+        '200':
+          description: Return a `2xx` status within the endpoint's timeout to acknowledge
+            receipt. Any non-2xx status, or a timeout, is treated as a failed delivery
+            and retried with backoff.
+  AdvancedAiAnalysisCompleted:
+    post:
+      description: |
+        Fires once an advanced AI analysis run has finished and its results are stored.
+
+        Delivered in `inline` mode as a lightweight notification: `data.items[0]` carries the analysis id, its `analysis_type`, `modified_at`, and the run's `id` and `status`, rather than the full payload. Retrieve the `result` from `advanced_ai_analysis.results` (pass `analysis_id=<id>`). `resource` is `null`.
+
+        Unlike `ai_analysis.completed`, this event waits for the analysis payload to be stored, not just for the run to report done, so the `result` download is ready when it arrives.
+
+        **Payload Zelf POSTs to the registered endpoint:**
+        ```json
+        {
+          "id": "whd_8f2c1d4e9a",
+          "type": "advanced_ai_analysis.completed",
+          "subscription_id": "whs_5Kq9Wd2pBxLm",
+          "delivered_at": 1718000000,
+          "livemode": true,
+          "resource": null,
+          "resource_filters": {},
+          "delivery_mode": "inline",
+          "data": {
+            "item_count": 1,
+            "items": [
+              {
+                "id": "bod_huNssMQX4FTvALEY",
+                "analysis_type": "ADVANCED_AI_ANALYSIS",
+                "modified_at": "2026-06-21T12:00:00Z",
+                "analyses": [
+                  {
+                    "id": "ban_xJZFbcWNkF9M3brf",
+                    "status": "COMPLETED"
+                  },
+                  {
+                    "id": "ban_Nc7m1Pe6Qd4Kf0Az",
+                    "status": "IN_PROGRESS"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+        ```
+      summary: advanced_ai_analysis.completed
+      tags:
+      - webhook events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookPush'
+            examples:
+              AdvancedAiAnalysis.completed:
+                value:
+                  id: whd_8f2c1d4e9a
+                  type: advanced_ai_analysis.completed
+                  subscription_id: whs_5Kq9Wd2pBxLm
+                  delivered_at: 1718000000
+                  livemode: true
+                  resource: null
+                  resource_filters: {}
+                  delivery_mode: inline
+                  data:
+                    item_count: 1
+                    items:
+                    - id: bod_huNssMQX4FTvALEY
+                      analysis_type: ADVANCED_AI_ANALYSIS
+                      modified_at: '2026-06-21T12:00:00Z'
+                      analyses:
+                      - id: ban_xJZFbcWNkF9M3brf
+                        status: COMPLETED
+                      - id: ban_Nc7m1Pe6Qd4Kf0Az
+                        status: IN_PROGRESS
+                summary: advanced_ai_analysis.completed
         required: true
       responses:
         '200':
