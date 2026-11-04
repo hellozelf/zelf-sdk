@@ -90,8 +90,47 @@ module Zelf
       "DISCLOSURE",
     ].freeze
 
+    class AdvancedAiAnalysis < Zelf::Model; end
+    class AdvancedAiAnalysisCreateRequest < Zelf::Model; end
+    class AdvancedAiAnalysisReport < Zelf::Model; end
+    class AdvancedAiAnalysisResult < Zelf::Model; end
+    class AdvancedAiAnalysisRun < Zelf::Model; end
+    class AdvancedAudienceVoice < Zelf::Model; end
+    class AdvancedContentForm < Zelf::Model; end
+    class AdvancedCoverage < Zelf::Model; end
+    class AdvancedCreatorIntel < Zelf::Model; end
+    class AdvancedCreatorIntelMeta < Zelf::Model; end
+    class AdvancedCreatorIntelTotals < Zelf::Model; end
+    class AdvancedCreatorProfile < Zelf::Model; end
+    class AdvancedLanguage < Zelf::Model; end
+    class AdvancedLoveDislike < Zelf::Model; end
+    class AdvancedLoveDislikeBucket < Zelf::Model; end
+    class AdvancedNarrative < Zelf::Model; end
+    class AdvancedPerception < Zelf::Model; end
+    class AdvancedPerceptionAxis < Zelf::Model; end
+    class AdvancedPerceptionBucket < Zelf::Model; end
+    class AdvancedPerceptionSide < Zelf::Model; end
+    class AdvancedPersona < Zelf::Model; end
+    class AdvancedPersonaRepresentative < Zelf::Model; end
+    class AdvancedPersonas < Zelf::Model; end
+    class AdvancedPostureMapEntry < Zelf::Model; end
+    class AdvancedSentimentByTheme < Zelf::Model; end
+    class AdvancedSignals < Zelf::Model; end
+    class AdvancedSpeakerDemographics < Zelf::Model; end
+    class AdvancedSummary < Zelf::Model; end
+    class AdvancedThemeCount < Zelf::Model; end
+    class AdvancedThemeDivergence < Zelf::Model; end
+    class AdvancedTimelinePoint < Zelf::Model; end
+    class AdvancedTopComment < Zelf::Model; end
+    class AdvancedTopCreator < Zelf::Model; end
+    class AdvancedVoiceBrand < Zelf::Model; end
+    class AdvancedVoiceSentiment < Zelf::Model; end
+    class AdvancedVoiceTheme < Zelf::Model; end
+    class AdvancedVoiceTimeline < Zelf::Model; end
+    class AdvancedVoiceTotals < Zelf::Model; end
     class AiAnalysis < Zelf::Model; end
     class AiAnalysisCreateRequest < Zelf::Model; end
+    class AiAnalysisReport < Zelf::Model; end
     class AiAnalysisResult < Zelf::Model; end
     class AiAnalysisRun < Zelf::Model; end
     class AnalyticsBrand < Zelf::Model; end
@@ -123,6 +162,7 @@ module Zelf
     class CreatorSync < Zelf::Model; end
     class CreatorSyncCreateRequest < Zelf::Model; end
     class CreatorVetting < Zelf::Model; end
+    class CreatorVettingReport < Zelf::Model; end
     class CreatorVettingRequest < Zelf::Model; end
     class CreatorVettingResult < Zelf::Model; end
     class CreatorVettingRun < Zelf::Model; end
@@ -143,6 +183,7 @@ module Zelf
     class FollowerAccount < Zelf::Model; end
     class FollowerPeriod < Zelf::Model; end
     class FollowerTimeseries < Zelf::Model; end
+    class LabelCount < Zelf::Model; end
     class PatchedBrandUpdateRequest < Zelf::Model; end
     class PatchedWebhookSubscriptionUpdateRequest < Zelf::Model; end
     class ResultFile < Zelf::Model; end
@@ -152,6 +193,10 @@ module Zelf
     class UsageHistory < Zelf::Model; end
     class UsageScope < Zelf::Model; end
     class UsageWindow < Zelf::Model; end
+    class VettingDisclosure < Zelf::Model; end
+    class VettingSummary < Zelf::Model; end
+    class VettingTopThemes < Zelf::Model; end
+    class VettingViolation < Zelf::Model; end
     class WebhookAvailableEvent < Zelf::Model; end
     class WebhookData < Zelf::Model; end
     class WebhookDeleteAcknowledgement < Zelf::Model; end
@@ -164,6 +209,638 @@ module Zelf
     class WebhookSubscription < Zelf::Model; end
     class WebhookSubscriptionCreateRequest < Zelf::Model; end
     class WebhookSubscriptionCreated < Zelf::Model; end
+
+    # Response body for the advanced AI analysis root.
+    class AdvancedAiAnalysis
+      # ID of the analysis
+      field :id, "id"
+      # Always ADVANCED_AI_ANALYSIS here
+      field :analysis_type, "analysis_type"
+      # The analysis label
+      field :name, "name"
+      # The subject the analysis focuses on
+      field :topic, "topic"
+      # When the analysis was created (UTC, ISO-8601)
+      field :created_at, "created_at", cast: :time
+      # When the analysis was last modified (UTC, ISO-8601)
+      field :modified_at, "modified_at", cast: :time
+      # The runs that make up this analysis, ordered newest first
+      field :analyses, "analyses", cast: [AdvancedAiAnalysisRun]
+    end
+
+    # Request body for ``POST /api/v1/advanced_ai_analysis/``.
+    class AdvancedAiAnalysisCreateRequest
+      # A label for this analysis
+      field :name, "name"
+      # The brand, product, person or event to analyze, as a short term
+      field :topic, "topic"
+      # Selects which content the analysis runs over
+      field :content_filters, "content_filters", cast: ContentFilterInputRequest
+    end
+
+    # The JSON document behind an advanced AI analysis run's `result.download_url`. Counts
+    # are whole numbers, shares and rates are decimals from 0 to 1, money is in whole
+    # cents, and a value is `null` when there was not enough data to work it out. A
+    # section is absent when the run could not produce it, so read every one as optional,
+    # and ignore keys you do not recognise.
+    class AdvancedAiAnalysisReport
+      # Totals over the analyzed set, and how much of it was analyzed
+      field :summary, "summary", cast: AdvancedSummary
+      # Videos by sentiment: positive, neutral, negative, mixed
+      field :sentiment, "sentiment", cast: [LabelCount]
+      # Videos by what the creator does with the topic: promoting, cautioning, neutral,...
+      field :stance, "stance", cast: [LabelCount]
+      # Videos by theme
+      field :themes, "themes", cast: [AdvancedThemeCount]
+      # How sentiment splits inside each theme
+      field :sentiment_by_theme, "sentiment_by_theme", cast: [AdvancedSentimentByTheme]
+      # Posts, views and engagements month by month
+      field :timeline, "timeline", cast: [AdvancedTimelinePoint]
+      # Videos by language
+      field :languages, "languages", cast: [AdvancedLanguage]
+      # Videos by format, with per-format averages
+      field :content_forms, "content_forms", cast: [AdvancedContentForm]
+      # The creators who brought the most reach
+      field :top_creators, "top_creators", cast: [AdvancedTopCreator]
+      # Inferred traits of the people on screen
+      field :speaker_demographics, "speaker_demographics", cast: AdvancedSpeakerDemographics
+      # Product context: stack, rivals, pain points, buying stage
+      field :signals, "signals", cast: AdvancedSignals
+      # What the audience loves and dislikes, bucket by bucket
+      field :love_dislike, "love_dislike", cast: AdvancedLoveDislike
+      # Price and quality perception, from the audience and the creators
+      field :perception, "perception", cast: AdvancedPerception
+      # What the comments say
+      field :audience_voice, "audience_voice", cast: AdvancedAudienceVoice
+      # Audience archetypes
+      field :personas, "personas", cast: AdvancedPersonas
+      # Advocates, detractors, prospects and narratives
+      field :creator_intel, "creator_intel", cast: AdvancedCreatorIntel
+    end
+
+    # A single advanced run with its downloadable ``result``.
+    class AdvancedAiAnalysisResult
+      # ID of the analysis run
+      field :id, "id"
+      # ID of the analysis this run belongs to
+      field :analysis_id, "analysis_id"
+      # Run status: one of IN_PROGRESS, COMPLETED, EMPTY_RESULT (finished with no...
+      field :status, "status"
+      # Signed, time-limited download of the run's analysis payload: download_url...
+      field :result, "result", cast: ResultFile
+      # Signed link to the run's interactive dashboard
+      field :dashboard_url, "dashboard_url"
+      # When the run was created (UTC, ISO-8601)
+      field :created_at, "created_at", cast: :time
+      # When the run was last modified (UTC, ISO-8601)
+      field :modified_at, "modified_at", cast: :time
+    end
+
+    # A single advanced run, without its result payload. The run ``result`` is not
+    # included; retrieve it from `advanced_ai_analysis.results` once ``status`` is
+    # `COMPLETED`.
+    class AdvancedAiAnalysisRun
+      # ID of the analysis run
+      field :id, "id"
+      # Run status: one of IN_PROGRESS, COMPLETED, EMPTY_RESULT (finished with no...
+      field :status, "status"
+      # Signed link to the run's interactive dashboard, for showing a person the analysis
+      field :dashboard_url, "dashboard_url"
+    end
+
+    # What the comments say, as a whole.
+    class AdvancedAudienceVoice
+      # False when no comments were available; the lists are then empty
+      field :has_comments, "has_comments"
+      # Totals over the comments read
+      field :totals, "totals", cast: AdvancedVoiceTotals
+      # Comments by sentiment
+      field :sentiment, "sentiment", cast: [AdvancedVoiceSentiment]
+      # Comments by what the commenter wants
+      field :intent, "intent", cast: [LabelCount]
+      # Comments by theme
+      field :themes, "themes", cast: [AdvancedVoiceTheme]
+      # Comments month by month
+      field :timeline, "timeline", cast: [AdvancedVoiceTimeline]
+      # The comments worth reading
+      field :top_comments, "top_comments", cast: [AdvancedTopComment]
+      # Themes where creators and their audience part ways
+      field :theme_divergence, "theme_divergence", cast: [AdvancedThemeDivergence]
+      # Brands the commenters bring up
+      field :brands, "brands", cast: [AdvancedVoiceBrand]
+    end
+
+    # One video format and how it performs.
+    class AdvancedContentForm
+      # The format, for example short
+      field :form, "form"
+      # Videos in this format
+      field :count, "count"
+      # Mean views per video
+      field :avg_views, "avg_views"
+      # Mean engagements per video
+      field :avg_engagements, "avg_engagements"
+    end
+
+    # How many of the analyzed videos carry each kind of analysis.
+    class AdvancedCoverage
+      # Videos in the analysis
+      field :total, "total"
+      # Videos that were analyzed at all
+      field :enriched, "enriched"
+      # Videos with a sentiment
+      field :has_sentiment, "has_sentiment"
+      # Videos with themes
+      field :has_themes, "has_themes"
+      # Videos classified into a love or dislike bucket
+      field :has_love_dislike, "has_love_dislike"
+      # Videos with inferred on-screen demographics
+      field :has_speaker_demographics, "has_speaker_demographics"
+      # Videos with product context signals
+      field :has_human_signals, "has_human_signals"
+    end
+
+    # Creators sorted by posture, and the stories they carry.
+    class AdvancedCreatorIntel
+      # How the creators split across postures
+      field :totals, "totals", cast: AdvancedCreatorIntelTotals
+      # Creators who back the topic
+      field :advocates, "advocates", cast: [AdvancedCreatorProfile]
+      # Creators who criticise it
+      field :detractors, "detractors", cast: [AdvancedCreatorProfile]
+      # Creators worth approaching
+      field :prospects, "prospects", cast: [AdvancedCreatorProfile]
+      # Every creator plotted by reach against stance
+      field :posture_map, "posture_map", cast: [AdvancedPostureMapEntry]
+      # The stories moving through the conversation
+      field :narratives, "narratives", cast: [AdvancedNarrative]
+      # How and when this section was built
+      field :meta, "meta", cast: AdvancedCreatorIntelMeta
+    end
+
+    # How and when this section was built.
+    class AdvancedCreatorIntelMeta
+      # When the section was built (UTC, ISO-8601)
+      field :generated_at, "generated_at"
+      # The model that built it
+      field :model, "model"
+      # Creators analyzed
+      field :enriched_count, "enriched_count"
+      # True when the section predates the analysis' latest content
+      field :stale, "stale"
+      # The content snapshot it was built from
+      field :derived_from, "derived_from"
+    end
+
+    # How the creators split across postures.
+    class AdvancedCreatorIntelTotals
+      # Creators in the analysis
+      field :creators, "creators"
+      # Creators who back the topic
+      field :advocates, "advocates"
+      # Creators who criticise it
+      field :detractors, "detractors"
+      # Creators worth approaching
+      field :prospects, "prospects"
+    end
+
+    # A creator, scored on how they treat the topic.
+    class AdvancedCreatorProfile
+      # The creator's handle
+      field :handle, "handle"
+      # Videos they posted
+      field :posts, "posts"
+      # Views across those videos
+      field :views, "views"
+      # Engagements across them
+      field :engagements, "engagements"
+      # Earned media value, in cents
+      field :emv_cents, "emv_cents"
+      # Average sentiment of their videos, -1 to 1
+      field :avg_sentiment, "avg_sentiment"
+      # How many of their videos take each stance
+      field :stance_counts, "stance_counts"
+      # What they post about most
+      field :top_themes, "top_themes", cast: [AdvancedThemeCount]
+      # Share of their posts carrying no sponsorship marker, from 0 to 1
+      field :organic_share, "organic_share"
+      # Their earliest post, as YYYY-MM-DD
+      field :first_post, "first_post"
+      # Their latest post, as YYYY-MM-DD
+      field :last_post, "last_post"
+      # Where their views rank among this analysis' creators, 0 to 1
+      field :reach_percentile, "reach_percentile"
+      # Which way they lean, -1 critical to 1 promoting
+      field :stance_lean, "stance_lean"
+      # advocate, detractor, prospect or longtail
+      field :posture, "posture"
+      # How good a partner they would be, 0 to 100
+      field :partnership_fit, "partnership_fit"
+      # How much risk their criticism carries, 0 to 100
+      field :detractor_severity, "detractor_severity"
+      # How strongly commenters respond to them, 0 to 100
+      field :consumer_resonance, "consumer_resonance"
+      # Model summary of the creator
+      field :read, "read"
+      # The creator's declared platform profile
+      field :profile, "profile"
+    end
+
+    # One language and its share of the set.
+    class AdvancedLanguage
+      # Language code, for example en
+      field :language, "language"
+      # Videos in this language
+      field :count, "count"
+      # Engagements on those videos
+      field :engagements, "engagements"
+    end
+
+    # What the audience loves and dislikes about the topic.
+    class AdvancedLoveDislike
+      # Videos that fell into a love or dislike bucket
+      field :classified_count, "classified_count"
+      # Videos considered
+      field :total_count, "total_count"
+      # What people praise, strongest first
+      field :love, "love", cast: [AdvancedLoveDislikeBucket]
+      # What people criticise, strongest first
+      field :dislike, "dislike", cast: [AdvancedLoveDislikeBucket]
+    end
+
+    # One thing people love or dislike, and what backs it.
+    class AdvancedLoveDislikeBucket
+      # Stable key for the bucket
+      field :slug, "slug"
+      # Display name for the bucket
+      field :label, "label"
+      # What the bucket covers
+      field :definition, "definition"
+      # Videos in the bucket
+      field :video_count, "video_count"
+      # Earned media value of those videos, in cents
+      field :emv_cents, "emv_cents"
+      # Views on those videos
+      field :total_views, "total_views"
+    end
+
+    # A story moving through the conversation.
+    class AdvancedNarrative
+      # The theme the story is about
+      field :theme, "theme"
+      # Videos carrying it
+      field :total, "total"
+      # Share of those videos that are positive, 0 to 1
+      field :positive_share, "positive_share"
+      # Share of those videos that are negative, 0 to 1
+      field :negative_share, "negative_share"
+      # Whether the theme is gaining or losing share, -1 to 1
+      field :momentum, "momentum"
+      # rising or falling
+      field :direction, "direction"
+      # The creators posting most on the theme
+      field :carriers, "carriers"
+      # A suggested response
+      field :play, "play"
+    end
+
+    # Price and quality perception, measured from both sides.
+    class AdvancedPerception
+      # What commenters say
+      field :audience, "audience", cast: AdvancedPerceptionSide
+      # How the videos frame it
+      field :creator, "creator", cast: AdvancedPerceptionSide
+    end
+
+    # One perception axis, price or quality, measured one way.
+    class AdvancedPerceptionAxis
+      # Share of analyzed items that express any view on this axis, from 0 to 1
+      field :share_indicating, "share_indicating"
+      # Items that express a view on this axis
+      field :classified_count, "classified_count"
+      # Items analyzed for this axis, those with no view included
+      field :enriched_count, "enriched_count"
+      # The bands on this axis, largest share first
+      field :buckets, "buckets", cast: [AdvancedPerceptionBucket]
+    end
+
+    # One perception band and its share.
+    class AdvancedPerceptionBucket
+      # The band
+      field :key, "key"
+      # Display name for the band
+      field :label, "label"
+      # This band's share of the classified items, from 0 to 1
+      field :pct, "pct"
+      # Videos the band covers
+      field :video_count, "video_count"
+      # Earned media value of those videos, in cents
+      field :emv_cents, "emv_cents"
+      # Views on those videos
+      field :total_views, "total_views"
+    end
+
+    # Price and quality as seen from one side.
+    class AdvancedPerceptionSide
+      # How price is read
+      field :price, "price", cast: AdvancedPerceptionAxis
+      # How quality is read
+      field :quality, "quality", cast: AdvancedPerceptionAxis
+    end
+
+    # An audience archetype found across the analyzed videos.
+    class AdvancedPersona
+      # Stable key for the persona
+      field :id, "id"
+      # Short label for the persona
+      field :name, "name"
+      # One line describing them
+      field :tagline, "tagline"
+      # Who this person is
+      field :description, "description"
+      # Videos that match the archetype
+      field :member_count, "member_count"
+      # Average sentiment of those videos, -1 to 1
+      field :avg_sentiment, "avg_sentiment"
+      # Views across those videos
+      field :total_views, "total_views"
+      # How closely the best-matching video fits, from 0 to 1
+      field :top_similarity, "top_similarity"
+      # The videos that stand for the persona
+      field :representatives, "representatives", cast: [AdvancedPersonaRepresentative]
+      # A deeper profile of the persona
+      field :breakdown, "breakdown"
+    end
+
+    # A video that stands for a persona.
+    class AdvancedPersonaRepresentative
+      # The video's id
+      field :record_id, "record_id"
+      # The creator's handle
+      field :handle, "handle"
+      # The video's caption
+      field :caption, "caption"
+      # One line summarising the video
+      field :gist, "gist"
+      # Views on the video
+      field :views, "views"
+      # Likes on the video
+      field :likes, "likes"
+      # Engagements on the video
+      field :engagements, "engagements"
+      # Earned media value, in cents
+      field :emv_cents, "emv_cents"
+      # The video's sentiment band
+      field :sentiment, "sentiment"
+      # The video's sentiment, -1 to 1
+      field :sentiment_score, "sentiment_score"
+      # The creator's stance in the video
+      field :stance, "stance"
+      # Themes the video covers
+      field :themes, "themes"
+      # The video's language code
+      field :language, "language"
+      # The video's format
+      field :content_form, "content_form"
+      # How long the video runs, in seconds
+      field :duration_s, "duration_s"
+      # When it was posted (UTC, ISO-8601)
+      field :posted_at, "posted_at"
+      # Link to the video's thumbnail
+      field :thumbnail_url, "thumbnail_url"
+      # Link to the video
+      field :video_url, "video_url"
+    end
+
+    # The audience archetypes, and how they were derived.
+    class AdvancedPersonas
+      # derived when the archetypes came from this analysis' own vocabulary, fallback...
+      field :vocab_source, "vocab_source"
+      # The archetypes found
+      field :personas, "personas", cast: [AdvancedPersona]
+    end
+
+    # One creator plotted by reach against stance.
+    class AdvancedPostureMapEntry
+      # The creator's handle
+      field :handle, "handle"
+      # Where their views rank, 0 to 1
+      field :reach_percentile, "reach_percentile"
+      # Which way they lean, -1 to 1
+      field :stance_lean, "stance_lean"
+      # Videos they posted
+      field :posts, "posts"
+      # Their posture towards the topic
+      field :posture, "posture"
+    end
+
+    # How sentiment splits inside one theme.
+    class AdvancedSentimentByTheme
+      # The theme
+      field :theme, "theme"
+      # Positive videos on the theme
+      field :positive, "positive"
+      # Neutral videos on the theme
+      field :neutral, "neutral"
+      # Negative videos on the theme
+      field :negative, "negative"
+      # Mixed videos on the theme
+      field :mixed, "mixed"
+      # Videos on the theme
+      field :total, "total"
+    end
+
+    # Product context drawn from what people show and say.
+    class AdvancedSignals
+      # Products shown or used alongside the subject
+      field :stack, "stack", cast: [LabelCount]
+      # Rival products that appear
+      field :competitors, "competitors", cast: [LabelCount]
+      # Problems people keep raising
+      field :pain_points, "pain_points", cast: [LabelCount]
+      # Where the speaker is in their buying journey
+      field :journey_stage, "journey_stage", cast: [LabelCount]
+    end
+
+    # Inferred traits of the people on screen. These are model inferences, not verified
+    # facts. Use them for trends across the set, never as a statement about any one
+    # person.
+    class AdvancedSpeakerDemographics
+      # Videos by inferred gender
+      field :gender, "gender", cast: [LabelCount]
+      # Videos by inferred age band
+      field :age, "age", cast: [LabelCount]
+      # Videos by inferred ethnicity
+      field :ethnicity, "ethnicity", cast: [LabelCount]
+      # Videos by the setting they were filmed in
+      field :setting, "setting", cast: [LabelCount]
+    end
+
+    # Totals over the whole analyzed set.
+    class AdvancedSummary
+      # Videos analyzed
+      field :videos, "videos"
+      # Distinct creators behind them
+      field :creators, "creators"
+      # Views summed over the set
+      field :total_views, "total_views"
+      # Likes summed over the set
+      field :total_likes, "total_likes"
+      # Comments summed over the set
+      field :total_comments, "total_comments"
+      # Shares summed over the set
+      field :total_shares, "total_shares"
+      # Likes, comments and shares summed over the set
+      field :total_engagements, "total_engagements"
+      # Average of each video's engagements divided by its views, from 0 to 1
+      field :mean_engagement_rate, "mean_engagement_rate"
+      # Earned media value in cents
+      field :total_emv_cents, "total_emv_cents"
+      # Date of the earliest video, as YYYY-MM-DD
+      field :first_post, "first_post"
+      # Date of the latest video, as YYYY-MM-DD
+      field :last_post, "last_post"
+      # How many videos carry each kind of analysis
+      field :coverage, "coverage", cast: AdvancedCoverage
+    end
+
+    # A theme and how many videos carry it.
+    class AdvancedThemeCount
+      # The theme, from this analysis' own set
+      field :theme, "theme"
+      # Videos carrying it
+      field :count, "count"
+    end
+
+    # A theme where creators and their audience disagree.
+    class AdvancedThemeDivergence
+      # The theme
+      field :theme, "theme"
+      # Videos on the theme
+      field :videos, "videos"
+      # Comments on the theme
+      field :comments, "comments"
+      # How the creators lean, -1 to 1
+      field :creator_score, "creator_score"
+      # How the audience leans, -1 to 1
+      field :audience_score, "audience_score"
+      # audience_score minus creator_score
+      field :gap, "gap"
+    end
+
+    # One month of posting activity.
+    class AdvancedTimelinePoint
+      # The month, as YYYY-MM
+      field :month, "month"
+      # Videos posted that month
+      field :posts, "posts"
+      # Views on those videos
+      field :views, "views"
+      # Engagements on those videos
+      field :engagements, "engagements"
+    end
+
+    # A comment worth reading, with the video it sits under.
+    class AdvancedTopComment
+      # The comment's id
+      field :comment_id, "comment_id"
+      # What the comment says
+      field :text, "text"
+      # Likes on the comment
+      field :likes, "likes"
+      # When it was posted (UTC, ISO-8601)
+      field :posted_at, "posted_at"
+      # Its sentiment band
+      field :sentiment, "sentiment"
+      # What the commenter is doing, for example question
+      field :intent, "intent"
+      # One line summarising the comment
+      field :gist, "gist"
+      # The video it sits under
+      field :video_record_id, "video_record_id"
+      # That video's creator handle
+      field :video_handle, "video_handle"
+      # That video's caption
+      field :video_caption, "video_caption"
+    end
+
+    # A creator ranked by the reach they brought.
+    class AdvancedTopCreator
+      # The creator's handle
+      field :handle, "handle"
+      # Videos they posted
+      field :posts, "posts"
+      # Views across those videos
+      field :views, "views"
+      # Engagements across them
+      field :engagements, "engagements"
+      # Earned media value in cents
+      field :emv_cents, "emv_cents"
+    end
+
+    # A brand the commenters bring up.
+    class AdvancedVoiceBrand
+      # The brand named
+      field :brand, "brand"
+      # Comments naming it
+      field :count, "count"
+      # Average sentiment of those comments, -1 to 1
+      field :avg_score, "avg_score"
+      # Likes on those comments
+      field :total_likes, "total_likes"
+    end
+
+    # Comments in one sentiment band.
+    class AdvancedVoiceSentiment
+      # The band: positive, neutral, negative or mixed
+      field :label, "label"
+      # Comments in the band
+      field :count, "count"
+      # Likes on those comments
+      field :likes, "likes"
+    end
+
+    # How the comments on one theme break down.
+    class AdvancedVoiceTheme
+      # The theme
+      field :theme, "theme"
+      # Comments on the theme
+      field :count, "count"
+      # Positive comments on it
+      field :positive, "positive"
+      # Negative comments on it
+      field :negative, "negative"
+      # Like-weighted sentiment on the theme, -1 to 1
+      field :like_weighted_score, "like_weighted_score"
+    end
+
+    # One month of comment activity.
+    class AdvancedVoiceTimeline
+      # The month, as YYYY-MM
+      field :month, "month"
+      # Comments that month
+      field :count, "count"
+      # Positive comments minus negative comments
+      field :net_sentiment, "net_sentiment"
+      # Like-weighted sentiment that month, -1 to 1
+      field :like_weighted_score, "like_weighted_score"
+    end
+
+    # Totals over the comments that were read.
+    class AdvancedVoiceTotals
+      # Videos considered
+      field :videos, "videos"
+      # Comments read
+      field :comments, "comments"
+      # Comments that were analyzed
+      field :enriched, "enriched"
+      # Likes on those comments
+      field :total_likes, "total_likes"
+      # Videos that had at least one comment
+      field :videos_with_comments, "videos_with_comments"
+      # Average comment sentiment weighted towards comments with more likes, from -1 to 1
+      field :like_weighted_sentiment, "like_weighted_sentiment"
+    end
 
     # Response body for the AI analysis root.
     class AiAnalysis
@@ -193,6 +870,18 @@ module Zelf
       field :analysis_scope, "analysis_scope"
       # Selects which content the analysis runs over
       field :content_filters, "content_filters", cast: ContentFilterInputRequest
+    end
+
+    # The JSON document behind an AI analysis run's `result.download_url`. Every section
+    # under `general_insights` is optional: a section the run could not produce is left
+    # out rather than returned empty. Which sections appear depends on the run's scope,
+    # `CONTENT` or `COMMENT`. New sections and fields can be added at any time, so ignore
+    # keys you do not recognise.
+    class AiAnalysisReport
+      # The topic the analysis ran on, as it was submitted
+      field :brand_name, "brand_name"
+      # The sections the run produced
+      field :general_insights, "general_insights"
     end
 
     # A single analysis run with its downloadable ``result``.
@@ -777,6 +1466,22 @@ module Zelf
       field :content_scope, "content_scope"
     end
 
+    # The JSON document behind a creator vetting run's `result.download_url`.
+    # `disclosures` is present only when the run asked for the `DISCLOSURE` safety check.
+    # New fields can be added at any time, so ignore keys you do not recognise.
+    class CreatorVettingReport
+      # Two or three sentences describing the creator
+      field :profile_summary, "profile_summary"
+      # The creator's recurring subjects
+      field :top_themes, "top_themes", cast: VettingTopThemes
+      # How much of the catalogue raised a flag
+      field :violation_summary, "violation_summary", cast: VettingSummary
+      # Every flag raised, one row per criterion per content item
+      field :violations, "violations", cast: [VettingViolation]
+      # Paid-partnership signals, one row per signal
+      field :disclosures, "disclosures", cast: [VettingDisclosure]
+    end
+
     # Request body for ``POST /api/v1/creator/vetting/``.
     class CreatorVettingRequest
       # When true, re-indexes the creator even if they already exist in our database
@@ -994,6 +1699,14 @@ module Zelf
       field :periods, "periods", cast: [FollowerPeriod]
     end
 
+    # A label and how many videos carry it.
+    class LabelCount
+      # The label
+      field :label, "label"
+      # Videos carrying it
+      field :count, "count"
+    end
+
     # Partial update for a brand's monitoring keywords. Every field is optional, and only
     # the supplied fields are changed, but at least one field is required.
     class PatchedBrandUpdateRequest
@@ -1115,6 +1828,62 @@ module Zelf
       field :remaining, "remaining"
       # Seconds until the window resets
       field :reset_in, "reset_in"
+    end
+
+    # A paid-partnership signal found in one piece of content.
+    class VettingDisclosure
+      # The content the signal is in
+      field :content_id, "content_id"
+      # Link to that content, blank when unknown
+      field :content_url, "content_url"
+      # Where it was found: frame, title, caption or audio
+      field :source, "source"
+      # What kind of signal it is, for example sponsorship
+      field :kind, "kind"
+      # The disclosure wording itself
+      field :text, "text"
+      # Seconds into the video, or null when it is not timed
+      field :time_seconds, "time_seconds"
+    end
+
+    # How much of the creator's catalogue raised a flag.
+    class VettingSummary
+      # Flags raised across every criterion
+      field :total_violations, "total_violations"
+      # Distinct content items carrying at least one flag
+      field :affected_contents, "affected_contents"
+    end
+
+    # The creator's recurring subjects, with what each is based on.
+    class VettingTopThemes
+      # The themes, strongest first
+      field :top_themes, "top_themes"
+      # top_themes: one grounded entry per theme
+      field :grounding, "grounding"
+    end
+
+    # One criterion raised against one piece of the creator's content.
+    class VettingViolation
+      # Stable id for this flag, as {content_id}_{type}
+      field :violation_id, "violation_id"
+      # The criterion
+      field :type, "type"
+      # The criterion's display name
+      field :value, "value"
+      # What the criterion covers
+      field :description, "description"
+      # Why this content was judged to breach the criterion
+      field :reason, "reason"
+      # The passage the judgement rests on, verbatim
+      field :evidence_quote, "evidence_quote"
+      # Where the quote came from: title, ai_summary, transcription, text_overlay,...
+      field :evidence_field, "evidence_field"
+      # The content the flag is against
+      field :content_id, "content_id"
+      # Always yes
+      field :violation, "violation"
+      # How serious the flag is: high, medium, low or N/A
+      field :severity, "severity"
     end
 
     # An event type a subscription may ask for.

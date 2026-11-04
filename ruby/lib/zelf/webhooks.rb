@@ -18,6 +18,8 @@ module Zelf
 
     # Event types the API can deliver, one per `webhooks` declaration.
     module EventType
+      # Fires once an advanced AI analysis run has finished and its results are stored
+      ADVANCED_AI_ANALYSIS_COMPLETED = "advanced_ai_analysis.completed".freeze
       # Fires when an AI analysis run reaches a terminal state (COMPLETED or FAILED)
       AI_ANALYSIS_COMPLETED = "ai_analysis.completed".freeze
       # Scheduled snapshot of the content set that a subscription matches
@@ -27,7 +29,7 @@ module Zelf
       # Fires when a creator vetting analysis run reaches a terminal state (COMPLETED or...
       CREATOR_VETTING_COMPLETED = "creator_vetting.completed".freeze
 
-      ALL = [AI_ANALYSIS_COMPLETED, CONTENT_SNAPSHOT, CREATOR_SNAPSHOT, CREATOR_VETTING_COMPLETED].freeze
+      ALL = [ADVANCED_AI_ANALYSIS_COMPLETED, AI_ANALYSIS_COMPLETED, CONTENT_SNAPSHOT, CREATOR_SNAPSHOT, CREATOR_VETTING_COMPLETED].freeze
 
       # Whether the API declares this event type.
       def self.known?(value)

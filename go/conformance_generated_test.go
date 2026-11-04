@@ -31,6 +31,130 @@ type conformanceCase struct {
 
 var conformanceCases = []conformanceCase{
 	{
+		operation:   "advanced_ai_analysis.content_statistics",
+		method:      "GET",
+		path:        "/api/v1/advanced_ai_analysis/contents/statistics/",
+		query:       map[string][]string{"analysis_id": {"ban_CByp0P2YSOnkg9qP"}},
+		body:        nil,
+		cardinality: "single",
+		paramsJSON:  []byte(`{"analysis_id": "ban_CByp0P2YSOnkg9qP"}`),
+		bodyJSON:    []byte(`{}`),
+		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
+			var params AdvancedAiAnalysisContentStatisticsParams
+			if err := json.Unmarshal(paramsJSON, &params); err != nil {
+				return nil, err
+			}
+			return c.AdvancedAIAnalysis.ContentStatistics(ctx, &params)
+		},
+		nilCall: func(c *Client, ctx context.Context, bodyJSON json.RawMessage) (any, error) {
+			return c.AdvancedAIAnalysis.ContentStatistics(ctx, nil)
+		},
+	},
+	{
+		operation:   "advanced_ai_analysis.contents",
+		method:      "GET",
+		path:        "/api/v1/advanced_ai_analysis/contents/",
+		query:       map[string][]string{"analysis_id": {"ban_CByp0P2YSOnkg9qP"}, "page": {"1"}, "page_size": {"1"}},
+		body:        nil,
+		cardinality: "page",
+		paramsJSON:  []byte(`{"analysis_id": "ban_CByp0P2YSOnkg9qP", "page": 1, "page_size": 1}`),
+		bodyJSON:    []byte(`{}`),
+		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
+			var params AdvancedAiAnalysisContentsParams
+			if err := json.Unmarshal(paramsJSON, &params); err != nil {
+				return nil, err
+			}
+			return c.AdvancedAIAnalysis.Contents(ctx, &params)
+		},
+		walk: func(result any, ctx context.Context) (int, error) {
+			page := result.(*Page[Content])
+			count := 0
+			err := page.AutoPaging(ctx, func(item Content) error {
+				count++
+				return nil
+			}, MaxPages(2))
+			return count, err
+		},
+		nilCall: func(c *Client, ctx context.Context, bodyJSON json.RawMessage) (any, error) {
+			return c.AdvancedAIAnalysis.Contents(ctx, nil)
+		},
+	},
+	{
+		operation:   "advanced_ai_analysis.create",
+		method:      "POST",
+		path:        "/api/v1/advanced_ai_analysis/",
+		query:       nil,
+		body:        []string{"content_filters", "name", "topic"},
+		cardinality: "single",
+		paramsJSON:  []byte(`{}`),
+		bodyJSON:    []byte(`{"name": "Name", "topic": "Topic", "content_filters": {"view_count_min": 42, "view_count_max": 42, "comment_count_min": 42, "comment_count_max": 42, "like_count_min": 42, "like_count_max": 42, "share_count_min": 42, "share_count_max": 42, "total_engagement_min": 7, "total_engagement_max": 7, "earned_media_value_cents_min": 12500000, "earned_media_value_cents_max": 12500000, "media_duration_min": 0.0425, "media_duration_max": 0.0425, "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "platform": ["instagram"], "language": ["en"], "content_form": "VIDEO", "search": "Search", "creator_id": "cr_15m71bGddcO3i6k1", "brand_id": "brd_CJtiHvFfOa8AL8zs", "is_owned": true, "is_tagged": true, "is_influencer": true, "external_id": "cV3d6aAxvPs6WX5L", "creator_username": "zelfai", "mention_type": ["content"], "mention_type_not": ["content"], "creator_follower_count_min": 42, "creator_follower_count_max": 42, "engagement_rate_min": 0.0425, "engagement_rate_max": 0.0425, "net_promoter_score_min": 7, "net_promoter_score_max": 7, "posted_within_days": 42, "posted_within_hours": 42, "order_by": ["Order by"]}}`),
+		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
+			var body AdvancedAiAnalysisCreateJSONRequestBody
+			if err := json.Unmarshal(bodyJSON, &body); err != nil {
+				return nil, err
+			}
+			return c.AdvancedAIAnalysis.Create(ctx, body)
+		},
+	},
+	{
+		operation:   "advanced_ai_analysis.list",
+		method:      "GET",
+		path:        "/api/v1/advanced_ai_analysis/",
+		query:       map[string][]string{"id": {"id_R5jAcrMDDBbK3BBf"}, "page": {"1"}, "page_size": {"1"}},
+		body:        nil,
+		cardinality: "page",
+		paramsJSON:  []byte(`{"id": "id_R5jAcrMDDBbK3BBf", "page": 1, "page_size": 1}`),
+		bodyJSON:    []byte(`{}`),
+		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
+			var params AdvancedAiAnalysisListParams
+			if err := json.Unmarshal(paramsJSON, &params); err != nil {
+				return nil, err
+			}
+			return c.AdvancedAIAnalysis.List(ctx, &params)
+		},
+		walk: func(result any, ctx context.Context) (int, error) {
+			page := result.(*Page[AdvancedAiAnalysis])
+			count := 0
+			err := page.AutoPaging(ctx, func(item AdvancedAiAnalysis) error {
+				count++
+				return nil
+			}, MaxPages(2))
+			return count, err
+		},
+		nilCall: func(c *Client, ctx context.Context, bodyJSON json.RawMessage) (any, error) {
+			return c.AdvancedAIAnalysis.List(ctx, nil)
+		},
+	},
+	{
+		operation:   "advanced_ai_analysis.results",
+		method:      "GET",
+		path:        "/api/v1/advanced_ai_analysis/results/",
+		query:       map[string][]string{"analysis_id": {"ban_CByp0P2YSOnkg9qP"}, "id": {"id_R5jAcrMDDBbK3BBf"}, "page": {"1"}, "page_size": {"1"}},
+		body:        nil,
+		cardinality: "page",
+		paramsJSON:  []byte(`{"analysis_id": "ban_CByp0P2YSOnkg9qP", "id": "id_R5jAcrMDDBbK3BBf", "page": 1, "page_size": 1}`),
+		bodyJSON:    []byte(`{}`),
+		call: func(c *Client, ctx context.Context, paramsJSON, bodyJSON json.RawMessage) (any, error) {
+			var params AdvancedAiAnalysisResultsParams
+			if err := json.Unmarshal(paramsJSON, &params); err != nil {
+				return nil, err
+			}
+			return c.AdvancedAIAnalysis.Results(ctx, &params)
+		},
+		walk: func(result any, ctx context.Context) (int, error) {
+			page := result.(*Page[AdvancedAiAnalysisResult])
+			count := 0
+			err := page.AutoPaging(ctx, func(item AdvancedAiAnalysisResult) error {
+				count++
+				return nil
+			}, MaxPages(2))
+			return count, err
+		},
+		nilCall: func(c *Client, ctx context.Context, bodyJSON json.RawMessage) (any, error) {
+			return c.AdvancedAIAnalysis.Results(ctx, nil)
+		},
+	},
+	{
 		operation:   "ai_analysis.content_statistics",
 		method:      "GET",
 		path:        "/api/v1/ai_analysis/contents/statistics/",

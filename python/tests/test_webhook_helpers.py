@@ -74,6 +74,7 @@ def test_the_event_type_enum_covers_every_declared_event():
         "creator.snapshot",
         "creator_vetting.completed",
         "ai_analysis.completed",
+        "advanced_ai_analysis.completed",
     }
 
 

@@ -18,6 +18,9 @@ pub const DEFAULT_TOLERANCE_SECONDS: i64 = 300;
 /// An event the API can deliver, one per `webhooks` declaration in the spec.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum EventType {
+    /// Fires once an advanced AI analysis run has finished and its results are stored
+    #[serde(rename = "advanced_ai_analysis.completed")]
+    AdvancedAiAnalysisCompleted,
     /// Fires when an AI analysis run reaches a terminal state (COMPLETED or FAILED)
     #[serde(rename = "ai_analysis.completed")]
     AiAnalysisCompleted,
@@ -36,6 +39,7 @@ impl EventType {
     /// The wire value.
     pub fn as_str(&self) -> &'static str {
         match self {
+            EventType::AdvancedAiAnalysisCompleted => "advanced_ai_analysis.completed",
             EventType::AiAnalysisCompleted => "ai_analysis.completed",
             EventType::ContentSnapshot => "content.snapshot",
             EventType::CreatorSnapshot => "creator.snapshot",
@@ -47,6 +51,7 @@ impl EventType {
     /// SDK predates.
     pub fn from_wire(value: &str) -> Option<Self> {
         match value {
+            "advanced_ai_analysis.completed" => Some(EventType::AdvancedAiAnalysisCompleted),
             "ai_analysis.completed" => Some(EventType::AiAnalysisCompleted),
             "content.snapshot" => Some(EventType::ContentSnapshot),
             "creator.snapshot" => Some(EventType::CreatorSnapshot),

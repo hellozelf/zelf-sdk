@@ -27,6 +27,90 @@ public class ConformanceGenerated
     private static readonly Dictionary<string, Case> Cases = new()
     {
         [
+            "advanced_ai_analysis.content_statistics"
+        ] = new Case(
+            "GET",
+            "/api/v1/advanced_ai_analysis/contents/statistics/",
+            new Dictionary<string, string[]> { { "analysis_id", new[] { "ban_CByp0P2YSOnkg9qP" } } },
+            [],
+            "single",
+            "{\"analysis_id\": \"ban_CByp0P2YSOnkg9qP\"}",
+            async (client, json) => await client.AdvancedAiAnalysis.ContentStatisticsAsync(Parse<AdvancedAiAnalysisContentStatisticsParams>(json)),
+            null,
+            null),
+        [
+            "advanced_ai_analysis.contents"
+        ] = new Case(
+            "GET",
+            "/api/v1/advanced_ai_analysis/contents/",
+            new Dictionary<string, string[]> { { "analysis_id", new[] { "ban_CByp0P2YSOnkg9qP" } }, { "page", new[] { "1" } }, { "page_size", new[] { "1" } } },
+            [],
+            "page",
+            "{\"analysis_id\": \"ban_CByp0P2YSOnkg9qP\", \"page\": 1, \"page_size\": 1}",
+            async (client, json) => await client.AdvancedAiAnalysis.ContentsAsync(Parse<AdvancedAiAnalysisContentsParams>(json)),
+            null,
+            async (page) =>
+            {
+                var seen = 0;
+                await foreach (var row in ((Page<Content>)page).AutoPagingAsync(PageLimits.Pages(2)))
+                {
+                    seen++;
+                }
+                return seen;
+            }),
+        [
+            "advanced_ai_analysis.create"
+        ] = new Case(
+            "POST",
+            "/api/v1/advanced_ai_analysis/",
+            new Dictionary<string, string[]>(),
+            ["content_filters", "name", "topic"],
+            "single",
+            "{\"name\": \"Name\", \"topic\": \"Topic\", \"content_filters\": {\"view_count_min\": 42, \"view_count_max\": 42, \"comment_count_min\": 42, \"comment_count_max\": 42, \"like_count_min\": 42, \"like_count_max\": 42, \"share_count_min\": 42, \"share_count_max\": 42, \"total_engagement_min\": 7, \"total_engagement_max\": 7, \"earned_media_value_cents_min\": 12500000, \"earned_media_value_cents_max\": 12500000, \"media_duration_min\": 0.0425, \"media_duration_max\": 0.0425, \"posted_after\": \"2026-01-01T00:00:00Z\", \"posted_before\": \"2026-01-01T00:00:00Z\", \"platform\": [\"instagram\"], \"language\": [\"en\"], \"content_form\": \"VIDEO\", \"search\": \"Search\", \"creator_id\": \"cr_15m71bGddcO3i6k1\", \"brand_id\": \"brd_CJtiHvFfOa8AL8zs\", \"is_owned\": true, \"is_tagged\": true, \"is_influencer\": true, \"external_id\": \"cV3d6aAxvPs6WX5L\", \"creator_username\": \"zelfai\", \"mention_type\": [\"content\"], \"mention_type_not\": [\"content\"], \"creator_follower_count_min\": 42, \"creator_follower_count_max\": 42, \"engagement_rate_min\": 0.0425, \"engagement_rate_max\": 0.0425, \"net_promoter_score_min\": 7, \"net_promoter_score_max\": 7, \"posted_within_days\": 42, \"posted_within_hours\": 42, \"order_by\": [\"Order by\"]}}",
+            async (client, json) => await client.AdvancedAiAnalysis.CreateAsync(Parse<AdvancedAiAnalysisCreateParams>(json)),
+            null,
+            null),
+        [
+            "advanced_ai_analysis.list"
+        ] = new Case(
+            "GET",
+            "/api/v1/advanced_ai_analysis/",
+            new Dictionary<string, string[]> { { "id", new[] { "id_R5jAcrMDDBbK3BBf" } }, { "page", new[] { "1" } }, { "page_size", new[] { "1" } } },
+            [],
+            "page",
+            "{\"id\": \"id_R5jAcrMDDBbK3BBf\", \"page\": 1, \"page_size\": 1}",
+            async (client, json) => await client.AdvancedAiAnalysis.ListAsync(Parse<AdvancedAiAnalysisListParams>(json)),
+            async (client) => await client.AdvancedAiAnalysis.ListAsync(null),
+            async (page) =>
+            {
+                var seen = 0;
+                await foreach (var row in ((Page<AdvancedAiAnalysis>)page).AutoPagingAsync(PageLimits.Pages(2)))
+                {
+                    seen++;
+                }
+                return seen;
+            }),
+        [
+            "advanced_ai_analysis.results"
+        ] = new Case(
+            "GET",
+            "/api/v1/advanced_ai_analysis/results/",
+            new Dictionary<string, string[]> { { "analysis_id", new[] { "ban_CByp0P2YSOnkg9qP" } }, { "id", new[] { "id_R5jAcrMDDBbK3BBf" } }, { "page", new[] { "1" } }, { "page_size", new[] { "1" } } },
+            [],
+            "page",
+            "{\"analysis_id\": \"ban_CByp0P2YSOnkg9qP\", \"id\": \"id_R5jAcrMDDBbK3BBf\", \"page\": 1, \"page_size\": 1}",
+            async (client, json) => await client.AdvancedAiAnalysis.ResultsAsync(Parse<AdvancedAiAnalysisResultsParams>(json)),
+            async (client) => await client.AdvancedAiAnalysis.ResultsAsync(null),
+            async (page) =>
+            {
+                var seen = 0;
+                await foreach (var row in ((Page<AdvancedAiAnalysisResult>)page).AutoPagingAsync(PageLimits.Pages(2)))
+                {
+                    seen++;
+                }
+                return seen;
+            }),
+        [
             "ai_analysis.content_statistics"
         ] = new Case(
             "GET",

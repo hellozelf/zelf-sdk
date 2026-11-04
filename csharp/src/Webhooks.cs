@@ -12,6 +12,10 @@ namespace Zelf.Webhooks;
 public enum EventType
 {
     /// <summary>
+    /// Fires once an advanced AI analysis run has finished and its results are stored
+    /// </summary>
+    AdvancedAiAnalysisCompleted,
+    /// <summary>
     /// Fires when an AI analysis run reaches a terminal state (COMPLETED or FAILED)
     /// </summary>
     AiAnalysisCompleted,
@@ -34,6 +38,7 @@ public static class EventTypes
 {
     private static readonly Dictionary<string, EventType> ByWire = new()
     {
+        ["advanced_ai_analysis.completed"] = EventType.AdvancedAiAnalysisCompleted,
         ["ai_analysis.completed"] = EventType.AiAnalysisCompleted,
         ["content.snapshot"] = EventType.ContentSnapshot,
         ["creator.snapshot"] = EventType.CreatorSnapshot,
@@ -43,6 +48,7 @@ public static class EventTypes
     /// <summary>The wire value for an event type.</summary>
     public static string ToWire(this EventType value) => value switch
     {
+        EventType.AdvancedAiAnalysisCompleted => "advanced_ai_analysis.completed",
         EventType.AiAnalysisCompleted => "ai_analysis.completed",
         EventType.ContentSnapshot => "content.snapshot",
         EventType.CreatorSnapshot => "creator.snapshot",

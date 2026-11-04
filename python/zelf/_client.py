@@ -9,6 +9,10 @@ from typing import Any
 import httpx
 
 from ._transport import AsyncTransport, SyncTransport
+from .resources.advanced_ai_analysis import (
+    AdvancedAiAnalysisResource,
+    AsyncAdvancedAiAnalysisResource,
+)
 from .resources.ai_analysis import AiAnalysisResource, AsyncAiAnalysisResource
 from .resources.analytics import AnalyticsResource, AsyncAnalyticsResource
 from .resources.brand_accounts import AsyncBrandAccountsResource, BrandAccountsResource
@@ -64,6 +68,7 @@ class ZelfAPIClient:
             default_headers=default_headers,
             http_client=http_client,
         )
+        self.advanced_ai_analysis = AdvancedAiAnalysisResource(self._transport)
         self.ai_analysis = AiAnalysisResource(self._transport)
         self.analytics = AnalyticsResource(self._transport)
         self.brand_accounts = BrandAccountsResource(self._transport)
@@ -120,6 +125,7 @@ class ZelfAPIClientAsync:
             default_headers=default_headers,
             http_client=http_client,
         )
+        self.advanced_ai_analysis = AsyncAdvancedAiAnalysisResource(self._transport)
         self.ai_analysis = AsyncAiAnalysisResource(self._transport)
         self.analytics = AsyncAnalyticsResource(self._transport)
         self.brand_accounts = AsyncBrandAccountsResource(self._transport)

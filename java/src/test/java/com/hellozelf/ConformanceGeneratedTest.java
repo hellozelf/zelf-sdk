@@ -34,11 +34,56 @@ class ConformanceGeneratedTest {
 
     static final List<String> RETURNS_NOTHING = List.of("webhooks.send_test");
 
-    static final List<String> PARAMS_CLASSES = List.of("AiAnalysisContentStatisticsParams", "AiAnalysisContentsParams", "AiAnalysisCreateParams", "AiAnalysisListParams", "AiAnalysisResultsParams", "AnalyticsBrandComparisonParams", "AnalyticsFollowerTimeseriesParams", "BrandAccountsAddParams", "BrandAccountsListParams", "BrandAccountsRemoveParams", "BrandsCatalogParams", "BrandsListParams", "BrandsUpdateParams", "CommentsListParams", "ContentAiSummarizeParams", "ContentDetailsParams", "ContentDiscoverParams", "ContentListParams", "ContentStatisticsParams", "ContentTranscribeParams", "CreatorSyncCreateParams", "CreatorSyncListParams", "CreatorVettingContentStatisticsParams", "CreatorVettingContentsParams", "CreatorVettingCreateParams", "CreatorVettingListParams", "CreatorVettingResultsParams", "CreatorsListParams", "DetectionCreateParams", "DetectionListParams", "EngageCommentStatisticsParams", "SubBrandsCreateParams", "WebhooksCreateSecretParams", "WebhooksCreateSubscriptionParams", "WebhooksListDeliveriesParams", "WebhooksListSecretsParams", "WebhooksListSubscriptionsParams", "WebhooksUpdateSubscriptionParams");
+    static final List<String> PARAMS_CLASSES = List.of("AdvancedAiAnalysisContentStatisticsParams", "AdvancedAiAnalysisContentsParams", "AdvancedAiAnalysisCreateParams", "AdvancedAiAnalysisListParams", "AdvancedAiAnalysisResultsParams", "AiAnalysisContentStatisticsParams", "AiAnalysisContentsParams", "AiAnalysisCreateParams", "AiAnalysisListParams", "AiAnalysisResultsParams", "AnalyticsBrandComparisonParams", "AnalyticsFollowerTimeseriesParams", "BrandAccountsAddParams", "BrandAccountsListParams", "BrandAccountsRemoveParams", "BrandsCatalogParams", "BrandsListParams", "BrandsUpdateParams", "CommentsListParams", "ContentAiSummarizeParams", "ContentDetailsParams", "ContentDiscoverParams", "ContentListParams", "ContentStatisticsParams", "ContentTranscribeParams", "CreatorSyncCreateParams", "CreatorSyncListParams", "CreatorVettingContentStatisticsParams", "CreatorVettingContentsParams", "CreatorVettingCreateParams", "CreatorVettingListParams", "CreatorVettingResultsParams", "CreatorsListParams", "DetectionCreateParams", "DetectionListParams", "EngageCommentStatisticsParams", "SubBrandsCreateParams", "WebhooksCreateSecretParams", "WebhooksCreateSubscriptionParams", "WebhooksListDeliveriesParams", "WebhooksListSecretsParams", "WebhooksListSubscriptionsParams", "WebhooksUpdateSubscriptionParams");
 
     static final List<String> ENUM_CLASSES = List.of("AccountTypeEnum", "AnalysisScopeEnum", "BlankEnum", "ContentFormEnum", "KindEnum", "LastStatusEnum", "MentionTypeEnum", "PlatformEnum", "ResourceEnum", "SecretTypeEnum", "StateEnum", "SubBrandTypeEnum", "TypeEnum");
 
     static final List<Case> CASES = List.of(
+        new Case(
+            "advanced_ai_analysis.content_statistics",
+            "GET",
+            "/api/v1/advanced_ai_analysis/contents/statistics/",
+            java.util.Map.ofEntries(java.util.Map.entry("analysis_id", java.util.List.of("ban_CByp0P2YSOnkg9qP"))),
+            java.util.List.of(),
+            "single",
+            client -> client.advancedAiAnalysis().contentStatistics(new AdvancedAiAnalysisContentStatisticsParams().analysisId("ban_CByp0P2YSOnkg9qP")),
+            client -> client.advancedAiAnalysis().contentStatistics(null)),
+        new Case(
+            "advanced_ai_analysis.contents",
+            "GET",
+            "/api/v1/advanced_ai_analysis/contents/",
+            java.util.Map.ofEntries(java.util.Map.entry("analysis_id", java.util.List.of("ban_CByp0P2YSOnkg9qP")), java.util.Map.entry("page", java.util.List.of("1")), java.util.Map.entry("page_size", java.util.List.of("1"))),
+            java.util.List.of(),
+            "page",
+            client -> client.advancedAiAnalysis().contents(new AdvancedAiAnalysisContentsParams().analysisId("ban_CByp0P2YSOnkg9qP").page(1L).pageSize(1L)),
+            client -> client.advancedAiAnalysis().contents(null)),
+        new Case(
+            "advanced_ai_analysis.create",
+            "POST",
+            "/api/v1/advanced_ai_analysis/",
+            java.util.Map.of(),
+            java.util.List.of("content_filters", "name", "topic"),
+            "single",
+            client -> client.advancedAiAnalysis().create(new AdvancedAiAnalysisCreateParams().name("Name").topic("Topic").contentFilters(json("{\"view_count_min\": 42, \"view_count_max\": 42, \"comment_count_min\": 42, \"comment_count_max\": 42, \"like_count_min\": 42, \"like_count_max\": 42, \"share_count_min\": 42, \"share_count_max\": 42, \"total_engagement_min\": 7, \"total_engagement_max\": 7, \"earned_media_value_cents_min\": 12500000, \"earned_media_value_cents_max\": 12500000, \"media_duration_min\": 0.0425, \"media_duration_max\": 0.0425, \"posted_after\": \"2026-01-01T00:00:00Z\", \"posted_before\": \"2026-01-01T00:00:00Z\", \"platform\": [\"instagram\"], \"language\": [\"en\"], \"content_form\": \"VIDEO\", \"search\": \"Search\", \"creator_id\": \"cr_15m71bGddcO3i6k1\", \"brand_id\": \"brd_CJtiHvFfOa8AL8zs\", \"is_owned\": true, \"is_tagged\": true, \"is_influencer\": true, \"external_id\": \"cV3d6aAxvPs6WX5L\", \"creator_username\": \"zelfai\", \"mention_type\": [\"content\"], \"mention_type_not\": [\"content\"], \"creator_follower_count_min\": 42, \"creator_follower_count_max\": 42, \"engagement_rate_min\": 0.0425, \"engagement_rate_max\": 0.0425, \"net_promoter_score_min\": 7, \"net_promoter_score_max\": 7, \"posted_within_days\": 42, \"posted_within_hours\": 42, \"order_by\": [\"Order by\"]}", ContentFilterInputRequest.class))),
+            client -> client.advancedAiAnalysis().create(null)),
+        new Case(
+            "advanced_ai_analysis.list",
+            "GET",
+            "/api/v1/advanced_ai_analysis/",
+            java.util.Map.ofEntries(java.util.Map.entry("id", java.util.List.of("id_R5jAcrMDDBbK3BBf")), java.util.Map.entry("page", java.util.List.of("1")), java.util.Map.entry("page_size", java.util.List.of("1"))),
+            java.util.List.of(),
+            "page",
+            client -> client.advancedAiAnalysis().list(new AdvancedAiAnalysisListParams().id("id_R5jAcrMDDBbK3BBf").page(1L).pageSize(1L)),
+            client -> client.advancedAiAnalysis().list(null)),
+        new Case(
+            "advanced_ai_analysis.results",
+            "GET",
+            "/api/v1/advanced_ai_analysis/results/",
+            java.util.Map.ofEntries(java.util.Map.entry("analysis_id", java.util.List.of("ban_CByp0P2YSOnkg9qP")), java.util.Map.entry("id", java.util.List.of("id_R5jAcrMDDBbK3BBf")), java.util.Map.entry("page", java.util.List.of("1")), java.util.Map.entry("page_size", java.util.List.of("1"))),
+            java.util.List.of(),
+            "page",
+            client -> client.advancedAiAnalysis().results(new AdvancedAiAnalysisResultsParams().analysisId("ban_CByp0P2YSOnkg9qP").id("id_R5jAcrMDDBbK3BBf").page(1L).pageSize(1L)),
+            client -> client.advancedAiAnalysis().results(null)),
         new Case(
             "ai_analysis.content_statistics",
             "GET",

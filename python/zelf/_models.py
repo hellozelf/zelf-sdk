@@ -8,6 +8,479 @@ from typing import Annotated, Any, Literal
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
 
 
+class AdvancedAiAnalysisRun(BaseModel):
+    """
+    A single advanced run, without its result payload.
+
+    The run ``result`` is not included; retrieve it from
+    `advanced_ai_analysis.results` once ``status`` is `COMPLETED`.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    id: Annotated[str, Field(description="ID of the analysis run.")]
+    status: Annotated[
+        str,
+        Field(
+            description="Run status: one of `IN_PROGRESS`, `COMPLETED`, `EMPTY_RESULT` (finished with no matching content), or `FAILED`."
+        ),
+    ]
+    dashboard_url: Annotated[
+        str | None,
+        Field(
+            description="Signed link to the run's interactive dashboard, for showing a person the analysis. Valid for about 72 hours. `null` while a fresh link is being prepared; read the run again to get it."
+        ),
+    ]
+
+
+class AdvancedContentForm(BaseModel):
+    """
+    One video format and how it performs.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    form: Annotated[str, Field(description="The format, for example `short`.")]
+    count: Annotated[int, Field(description="Videos in this format.")]
+    avg_views: Annotated[int, Field(description="Mean views per video.")]
+    avg_engagements: Annotated[int, Field(description="Mean engagements per video.")]
+
+
+class AdvancedCoverage(BaseModel):
+    """
+    How many of the analyzed videos carry each kind of analysis.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    total: Annotated[int, Field(description="Videos in the analysis.")]
+    enriched: Annotated[int, Field(description="Videos that were analyzed at all.")]
+    has_sentiment: Annotated[int, Field(description="Videos with a sentiment.")]
+    has_themes: Annotated[int, Field(description="Videos with themes.")]
+    has_love_dislike: Annotated[
+        int, Field(description="Videos classified into a love or dislike bucket.")
+    ]
+    has_speaker_demographics: Annotated[
+        int, Field(description="Videos with inferred on-screen demographics.")
+    ]
+    has_human_signals: Annotated[int, Field(description="Videos with product context signals.")]
+
+
+class AdvancedCreatorIntelMeta(BaseModel):
+    """
+    How and when this section was built.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    generated_at: Annotated[str, Field(description="When the section was built (UTC, ISO-8601).")]
+    model: Annotated[str, Field(description="The model that built it.")]
+    enriched_count: Annotated[int, Field(description="Creators analyzed.")]
+    stale: Annotated[
+        bool, Field(description="True when the section predates the analysis' latest content.")
+    ]
+    derived_from: Annotated[
+        str | None, Field(description="The content snapshot it was built from.")
+    ]
+
+
+class AdvancedCreatorIntelTotals(BaseModel):
+    """
+    How the creators split across postures.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    creators: Annotated[int, Field(description="Creators in the analysis.")]
+    advocates: Annotated[int, Field(description="Creators who back the topic.")]
+    detractors: Annotated[int, Field(description="Creators who criticise it.")]
+    prospects: Annotated[int, Field(description="Creators worth approaching.")]
+
+
+class AdvancedLanguage(BaseModel):
+    """
+    One language and its share of the set.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    language: Annotated[str, Field(description="Language code, for example `en`.")]
+    count: Annotated[int, Field(description="Videos in this language.")]
+    engagements: Annotated[int, Field(description="Engagements on those videos.")]
+
+
+class AdvancedLoveDislikeBucket(BaseModel):
+    """
+    One thing people love or dislike, and what backs it.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    slug: Annotated[str, Field(description="Stable key for the bucket.")]
+    label: Annotated[str, Field(description="Display name for the bucket.")]
+    definition: Annotated[str, Field(description="What the bucket covers.")]
+    video_count: Annotated[int, Field(description="Videos in the bucket.")]
+    emv_cents: Annotated[int, Field(description="Earned media value of those videos, in cents.")]
+    total_views: Annotated[int, Field(description="Views on those videos.")]
+
+
+class AdvancedNarrative(BaseModel):
+    """
+    A story moving through the conversation.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    theme: Annotated[str, Field(description="The theme the story is about.")]
+    total: Annotated[int, Field(description="Videos carrying it.")]
+    positive_share: Annotated[
+        float | None, Field(description="Share of those videos that are positive, 0 to 1.")
+    ]
+    negative_share: Annotated[
+        float | None, Field(description="Share of those videos that are negative, 0 to 1.")
+    ]
+    momentum: Annotated[
+        float | None, Field(description="Whether the theme is gaining or losing share, -1 to 1.")
+    ]
+    direction: Annotated[str, Field(description="`rising` or `falling`.")]
+    carriers: Annotated[list[str], Field(description="The creators posting most on the theme.")]
+    play: Annotated[
+        dict[str, Any] | None,
+        Field(description="A suggested response. Model output, so its fields can grow."),
+    ]
+
+
+class AdvancedPerceptionBucket(BaseModel):
+    """
+    One perception band and its share.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    key: Annotated[
+        str,
+        Field(
+            description="The band. Price bands are `expensive`, `affordable`, `cheap`; quality bands are `low`, `good`, `excellent`."
+        ),
+    ]
+    label: Annotated[str, Field(description="Display name for the band.")]
+    pct: Annotated[
+        float,
+        Field(
+            description="This band's share of the classified items, from 0 to 1. The bands on one axis add up to about 1."
+        ),
+    ]
+    video_count: Annotated[
+        int,
+        Field(
+            description="Videos the band covers. On the audience side these are videos with at least one comment in the band."
+        ),
+    ]
+    emv_cents: Annotated[int, Field(description="Earned media value of those videos, in cents.")]
+    total_views: Annotated[int, Field(description="Views on those videos.")]
+
+
+class AdvancedPersonaRepresentative(BaseModel):
+    """
+    A video that stands for a persona.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    record_id: Annotated[str, Field(description="The video's id.")]
+    handle: Annotated[str, Field(description="The creator's handle.")]
+    caption: Annotated[str, Field(description="The video's caption.")]
+    gist: Annotated[str, Field(description="One line summarising the video.")]
+    views: Annotated[int, Field(description="Views on the video.")]
+    likes: Annotated[int, Field(description="Likes on the video.")]
+    engagements: Annotated[int, Field(description="Engagements on the video.")]
+    emv_cents: Annotated[int, Field(description="Earned media value, in cents.")]
+    sentiment: Annotated[str, Field(description="The video's sentiment band.")]
+    sentiment_score: Annotated[float | None, Field(description="The video's sentiment, -1 to 1.")]
+    stance: Annotated[str, Field(description="The creator's stance in the video.")]
+    themes: Annotated[list[str], Field(description="Themes the video covers.")]
+    language: Annotated[str, Field(description="The video's language code.")]
+    content_form: Annotated[str, Field(description="The video's format.")]
+    duration_s: Annotated[float | None, Field(description="How long the video runs, in seconds.")]
+    posted_at: Annotated[str, Field(description="When it was posted (UTC, ISO-8601).")]
+    thumbnail_url: Annotated[str | None, Field(description="Link to the video's thumbnail.")]
+    video_url: Annotated[str | None, Field(description="Link to the video.")]
+
+
+class AdvancedPostureMapEntry(BaseModel):
+    """
+    One creator plotted by reach against stance.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    handle: Annotated[str, Field(description="The creator's handle.")]
+    reach_percentile: Annotated[float | None, Field(description="Where their views rank, 0 to 1.")]
+    stance_lean: Annotated[float | None, Field(description="Which way they lean, -1 to 1.")]
+    posts: Annotated[int, Field(description="Videos they posted.")]
+    posture: Annotated[str, Field(description="Their posture towards the topic.")]
+
+
+class AdvancedSentimentByTheme(BaseModel):
+    """
+    How sentiment splits inside one theme.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    theme: Annotated[str, Field(description="The theme.")]
+    positive: Annotated[int, Field(description="Positive videos on the theme.")]
+    neutral: Annotated[int, Field(description="Neutral videos on the theme.")]
+    negative: Annotated[int, Field(description="Negative videos on the theme.")]
+    mixed: Annotated[int, Field(description="Mixed videos on the theme.")]
+    total: Annotated[int, Field(description="Videos on the theme.")]
+
+
+class AdvancedSummary(BaseModel):
+    """
+    Totals over the whole analyzed set.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    videos: Annotated[int, Field(description="Videos analyzed.")]
+    creators: Annotated[int, Field(description="Distinct creators behind them.")]
+    total_views: Annotated[int, Field(description="Views summed over the set.")]
+    total_likes: Annotated[int, Field(description="Likes summed over the set.")]
+    total_comments: Annotated[int, Field(description="Comments summed over the set.")]
+    total_shares: Annotated[int, Field(description="Shares summed over the set.")]
+    total_engagements: Annotated[
+        int, Field(description="Likes, comments and shares summed over the set.")
+    ]
+    mean_engagement_rate: Annotated[
+        float | None,
+        Field(
+            description="Average of each video's engagements divided by its views, from 0 to 1. Videos with no views are left out. This is not total engagements over total views."
+        ),
+    ]
+    total_emv_cents: Annotated[
+        int, Field(description="Earned media value in cents. `0` for sources without it.")
+    ]
+    first_post: Annotated[
+        str | None, Field(description="Date of the earliest video, as `YYYY-MM-DD`.")
+    ]
+    last_post: Annotated[
+        str | None, Field(description="Date of the latest video, as `YYYY-MM-DD`.")
+    ]
+    coverage: Annotated[
+        AdvancedCoverage,
+        Field(
+            description="How many videos carry each kind of analysis. Read the other sections in this light: a section only describes the videos it could be computed for."
+        ),
+    ]
+
+
+class AdvancedThemeCount(BaseModel):
+    """
+    A theme and how many videos carry it.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    theme: Annotated[str, Field(description="The theme, from this analysis' own set.")]
+    count: Annotated[int, Field(description="Videos carrying it.")]
+
+
+class AdvancedThemeDivergence(BaseModel):
+    """
+    A theme where creators and their audience disagree.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    theme: Annotated[str, Field(description="The theme.")]
+    videos: Annotated[int, Field(description="Videos on the theme.")]
+    comments: Annotated[int, Field(description="Comments on the theme.")]
+    creator_score: Annotated[float | None, Field(description="How the creators lean, -1 to 1.")]
+    audience_score: Annotated[float | None, Field(description="How the audience leans, -1 to 1.")]
+    gap: Annotated[
+        float | None,
+        Field(
+            description="`audience_score` minus `creator_score`. A negative gap means the audience is more critical than the creators."
+        ),
+    ]
+
+
+class AdvancedTimelinePoint(BaseModel):
+    """
+    One month of posting activity.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    month: Annotated[str, Field(description="The month, as `YYYY-MM`.")]
+    posts: Annotated[int, Field(description="Videos posted that month.")]
+    views: Annotated[int, Field(description="Views on those videos.")]
+    engagements: Annotated[int, Field(description="Engagements on those videos.")]
+
+
+class AdvancedTopComment(BaseModel):
+    """
+    A comment worth reading, with the video it sits under.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    comment_id: Annotated[str, Field(description="The comment's id.")]
+    text: Annotated[str, Field(description="What the comment says.")]
+    likes: Annotated[int, Field(description="Likes on the comment.")]
+    posted_at: Annotated[str, Field(description="When it was posted (UTC, ISO-8601).")]
+    sentiment: Annotated[str, Field(description="Its sentiment band.")]
+    intent: Annotated[
+        str, Field(description="What the commenter is doing, for example `question`.")
+    ]
+    gist: Annotated[str, Field(description="One line summarising the comment.")]
+    video_record_id: Annotated[str, Field(description="The video it sits under.")]
+    video_handle: Annotated[str, Field(description="That video's creator handle.")]
+    video_caption: Annotated[str, Field(description="That video's caption.")]
+
+
+class AdvancedTopCreator(BaseModel):
+    """
+    A creator ranked by the reach they brought.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    handle: Annotated[str, Field(description="The creator's handle.")]
+    posts: Annotated[int, Field(description="Videos they posted.")]
+    views: Annotated[int, Field(description="Views across those videos.")]
+    engagements: Annotated[int, Field(description="Engagements across them.")]
+    emv_cents: Annotated[int, Field(description="Earned media value in cents.")]
+
+
+class AdvancedVoiceBrand(BaseModel):
+    """
+    A brand the commenters bring up.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    brand: Annotated[str, Field(description="The brand named.")]
+    count: Annotated[int, Field(description="Comments naming it.")]
+    avg_score: Annotated[
+        float | None, Field(description="Average sentiment of those comments, -1 to 1.")
+    ]
+    total_likes: Annotated[int, Field(description="Likes on those comments.")]
+
+
+class AdvancedVoiceSentiment(BaseModel):
+    """
+    Comments in one sentiment band.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    label: Annotated[
+        str, Field(description="The band: `positive`, `neutral`, `negative` or `mixed`.")
+    ]
+    count: Annotated[int, Field(description="Comments in the band.")]
+    likes: Annotated[int, Field(description="Likes on those comments.")]
+
+
+class AdvancedVoiceTheme(BaseModel):
+    """
+    How the comments on one theme break down.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    theme: Annotated[str, Field(description="The theme.")]
+    count: Annotated[int, Field(description="Comments on the theme.")]
+    positive: Annotated[int, Field(description="Positive comments on it.")]
+    negative: Annotated[int, Field(description="Negative comments on it.")]
+    like_weighted_score: Annotated[
+        float | None, Field(description="Like-weighted sentiment on the theme, -1 to 1.")
+    ]
+
+
+class AdvancedVoiceTimeline(BaseModel):
+    """
+    One month of comment activity.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    month: Annotated[str, Field(description="The month, as `YYYY-MM`.")]
+    count: Annotated[int, Field(description="Comments that month.")]
+    net_sentiment: Annotated[int, Field(description="Positive comments minus negative comments.")]
+    like_weighted_score: Annotated[
+        float | None, Field(description="Like-weighted sentiment that month, -1 to 1.")
+    ]
+
+
+class AdvancedVoiceTotals(BaseModel):
+    """
+    Totals over the comments that were read.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    videos: Annotated[int, Field(description="Videos considered.")]
+    comments: Annotated[int, Field(description="Comments read.")]
+    enriched: Annotated[int, Field(description="Comments that were analyzed.")]
+    total_likes: Annotated[int, Field(description="Likes on those comments.")]
+    videos_with_comments: Annotated[int, Field(description="Videos that had at least one comment.")]
+    like_weighted_sentiment: Annotated[
+        float | None,
+        Field(
+            description="Average comment sentiment weighted towards comments with more likes, from -1 to 1. `null` when no comment has a score."
+        ),
+    ]
+
+
+class AiAnalysisReport(BaseModel):
+    """
+    The JSON document behind an AI analysis run's `result.download_url`.
+
+    Every section under `general_insights` is optional: a section the run could
+    not produce is left out rather than returned empty. Which sections appear
+    depends on the run's scope, `CONTENT` or `COMMENT`. New sections and fields
+    can be added at any time, so ignore keys you do not recognise.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    brand_name: Annotated[
+        str, Field(description="The topic the analysis ran on, as it was submitted.")
+    ]
+    general_insights: Annotated[
+        dict[str, Any],
+        Field(
+            description="The sections the run produced. Content runs can carry `customer_communication`, `competitor_overview`, `trending_now`, `favorite_products_and_features`, `user_personas`, `brand_perception` and `overall_sentiment`. Comment runs can carry `customer_communication`, `trending_now`, `favorite_products_and_features`, `brand_perception`, `overall_sentiment`, `notable_themes` and `key_findings`. Every section carries a `grounding` object whose keys match that section's own fields, each a list of grounding entries."
+        ),
+    ]
+
+
 class AiAnalysisRun(BaseModel):
     """
     A single analysis run, without its result payload.
@@ -822,6 +1295,18 @@ class FollowerTimeseries(BaseModel):
     ]
 
 
+class LabelCount(BaseModel):
+    """
+    A label and how many videos carry it.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    label: Annotated[str, Field(description="The label.")]
+    count: Annotated[int, Field(description="Videos carrying it.")]
+
+
 class PatchedBrandUpdateRequest(BaseModel):
     """
     Partial update for a brand's monitoring keywords.
@@ -923,7 +1408,10 @@ class ResultFile(BaseModel):
     ]
     format: Annotated[str, Field(description="Payload encoding. Always `json`.")]
     download_url: Annotated[
-        str, Field(description="Signed URL to request the JSON payload. Expires at `expires_at`.")
+        str,
+        Field(
+            description="Signed URL to request the JSON payload. Expires at `expires_at`. The document it returns follows `AiAnalysisReport`, `CreatorVettingReport` or `AdvancedAiAnalysisReport`, depending on which kind of run produced it."
+        ),
     ]
 
 
@@ -984,6 +1472,92 @@ class UsageWindow(BaseModel):
         Field(
             description="Seconds until the window resets. The window starts on its first request rather than on the clock, so this is what is left of it."
         ),
+    ]
+
+
+class VettingDisclosure(BaseModel):
+    """
+    A paid-partnership signal found in one piece of content.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    content_id: Annotated[str, Field(description="The content the signal is in.")]
+    content_url: Annotated[str, Field(description="Link to that content, blank when unknown.")]
+    source: Annotated[
+        str, Field(description="Where it was found: `frame`, `title`, `caption` or `audio`.")
+    ]
+    kind: Annotated[str, Field(description="What kind of signal it is, for example `sponsorship`.")]
+    text: Annotated[str, Field(description="The disclosure wording itself.")]
+    time_seconds: Annotated[
+        int | None, Field(description="Seconds into the video, or `null` when it is not timed.")
+    ]
+
+
+class VettingSummary(BaseModel):
+    """
+    How much of the creator's catalogue raised a flag.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    total_violations: Annotated[int, Field(description="Flags raised across every criterion.")]
+    affected_contents: Annotated[
+        int, Field(description="Distinct content items carrying at least one flag.")
+    ]
+
+
+class VettingTopThemes(BaseModel):
+    """
+    The creator's recurring subjects, with what each is based on.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    top_themes: Annotated[list[str], Field(description="The themes, strongest first.")]
+    grounding: Annotated[
+        dict[str, Any], Field(description="`top_themes`: one grounded entry per theme.")
+    ]
+
+
+class VettingViolation(BaseModel):
+    """
+    One criterion raised against one piece of the creator's content.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    violation_id: Annotated[
+        str, Field(description="Stable id for this flag, as `{content_id}_{type}`.")
+    ]
+    type: Annotated[
+        str,
+        Field(
+            description="The criterion. One of `ILLEGAL_ACTS`, `HATE_SPEECH`, `MINOR_SAFETY`, `TERRORISM`, `GRAPHIC_VIOLENCE`, `ADULT_CONTENT`, `ARMS_AND_AMMUNITION`, `SENSITIVE_NEWS_TRAGEDY`, `MISINFORMATION`, `PROFANITY`, `ALCOHOL_AND_TOBACCO`, `POLITICS`, or `USER_DEFINED` for a criterion you supplied."
+        ),
+    ]
+    value: Annotated[str, Field(description="The criterion's display name.")]
+    description: Annotated[str, Field(description="What the criterion covers.")]
+    reason: Annotated[
+        str, Field(description="Why this content was judged to breach the criterion.")
+    ]
+    evidence_quote: Annotated[
+        str, Field(description="The passage the judgement rests on, verbatim.")
+    ]
+    evidence_field: Annotated[
+        str,
+        Field(
+            description="Where the quote came from: `title`, `ai_summary`, `transcription`, `text_overlay`, `vetting_observations` or `none`. New values can be added, so treat an unknown one as `none` rather than failing."
+        ),
+    ]
+    content_id: Annotated[str, Field(description="The content the flag is against.")]
+    violation: Annotated[str, Field(description="Always `yes`. Content that passed is not listed.")]
+    severity: Annotated[
+        str, Field(description="How serious the flag is: `high`, `medium`, `low` or `N/A`.")
     ]
 
 
@@ -1472,6 +2046,298 @@ class Error503(BaseModel):
     error: Error7
 
 
+class AdvancedAiAnalysis(BaseModel):
+    """
+    Response body for the advanced AI analysis root.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    id: Annotated[str, Field(description="ID of the analysis. Use this value on follow-up calls.")]
+    analysis_type: Annotated[str, Field(description="Always `ADVANCED_AI_ANALYSIS` here.")]
+    name: Annotated[str, Field(description="The analysis label.")]
+    topic: Annotated[str | None, Field(description="The subject the analysis focuses on.")]
+    created_at: Annotated[
+        AwareDatetime, Field(description="When the analysis was created (UTC, ISO-8601).")
+    ]
+    modified_at: Annotated[
+        AwareDatetime, Field(description="When the analysis was last modified (UTC, ISO-8601).")
+    ]
+    analyses: Annotated[
+        list[AdvancedAiAnalysisRun],
+        Field(description="The runs that make up this analysis, ordered newest first."),
+    ]
+
+
+class AdvancedAiAnalysisResult(BaseModel):
+    """
+    A single advanced run with its downloadable ``result``.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    id: Annotated[str, Field(description="ID of the analysis run.")]
+    analysis_id: Annotated[str, Field(description="ID of the analysis this run belongs to.")]
+    status: Annotated[
+        str,
+        Field(
+            description="Run status: one of `IN_PROGRESS`, `COMPLETED`, `EMPTY_RESULT` (finished with no matching content), or `FAILED`."
+        ),
+    ]
+    result: Annotated[
+        ResultFile | None,
+        Field(
+            description="Signed, time-limited download of the run's analysis payload: `download_url` (request it to retrieve the JSON), `expires_at` (Unix epoch seconds, approximately 24h TTL), and `format` (`json`). The document behind it follows the `AdvancedAiAnalysisReport` schema. `null` until the run completes."
+        ),
+    ] = None
+    dashboard_url: Annotated[
+        str | None,
+        Field(
+            description="Signed link to the run's interactive dashboard. Valid for about 72 hours. `null` while a fresh link is being prepared; read the run again to get it."
+        ),
+    ]
+    created_at: Annotated[
+        AwareDatetime, Field(description="When the run was created (UTC, ISO-8601).")
+    ]
+    modified_at: Annotated[
+        AwareDatetime, Field(description="When the run was last modified (UTC, ISO-8601).")
+    ]
+
+
+class AdvancedAudienceVoice(BaseModel):
+    """
+    What the comments say, as a whole.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    has_comments: Annotated[
+        bool, Field(description="False when no comments were available; the lists are then empty.")
+    ]
+    totals: Annotated[AdvancedVoiceTotals, Field(description="Totals over the comments read.")]
+    sentiment: Annotated[list[AdvancedVoiceSentiment], Field(description="Comments by sentiment.")]
+    intent: Annotated[list[LabelCount], Field(description="Comments by what the commenter wants.")]
+    themes: Annotated[list[AdvancedVoiceTheme], Field(description="Comments by theme.")]
+    timeline: Annotated[list[AdvancedVoiceTimeline], Field(description="Comments month by month.")]
+    top_comments: Annotated[
+        list[AdvancedTopComment], Field(description="The comments worth reading.")
+    ]
+    theme_divergence: Annotated[
+        list[AdvancedThemeDivergence],
+        Field(description="Themes where creators and their audience part ways."),
+    ]
+    brands: Annotated[
+        list[AdvancedVoiceBrand], Field(description="Brands the commenters bring up.")
+    ]
+
+
+class AdvancedCreatorProfile(BaseModel):
+    """
+    A creator, scored on how they treat the topic.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    handle: Annotated[str, Field(description="The creator's handle.")]
+    posts: Annotated[int, Field(description="Videos they posted.")]
+    views: Annotated[int, Field(description="Views across those videos.")]
+    engagements: Annotated[int, Field(description="Engagements across them.")]
+    emv_cents: Annotated[int, Field(description="Earned media value, in cents.")]
+    avg_sentiment: Annotated[
+        float | None, Field(description="Average sentiment of their videos, -1 to 1.")
+    ]
+    stance_counts: Annotated[
+        dict[str, Any], Field(description="How many of their videos take each stance.")
+    ]
+    top_themes: Annotated[list[AdvancedThemeCount], Field(description="What they post about most.")]
+    organic_share: Annotated[
+        float | None,
+        Field(
+            description="Share of their posts carrying no sponsorship marker, from 0 to 1. `1` means fully organic."
+        ),
+    ]
+    first_post: Annotated[str | None, Field(description="Their earliest post, as `YYYY-MM-DD`.")]
+    last_post: Annotated[str | None, Field(description="Their latest post, as `YYYY-MM-DD`.")]
+    reach_percentile: Annotated[
+        float | None,
+        Field(description="Where their views rank among this analysis' creators, 0 to 1."),
+    ]
+    stance_lean: Annotated[
+        float | None, Field(description="Which way they lean, -1 critical to 1 promoting.")
+    ]
+    posture: Annotated[str, Field(description="`advocate`, `detractor`, `prospect` or `longtail`.")]
+    partnership_fit: Annotated[
+        int | None, Field(description="How good a partner they would be, 0 to 100.")
+    ]
+    detractor_severity: Annotated[
+        int | None, Field(description="How much risk their criticism carries, 0 to 100.")
+    ]
+    consumer_resonance: Annotated[
+        int | None,
+        Field(
+            description="How strongly commenters respond to them, 0 to 100. `0` when none of their comments were analyzed."
+        ),
+    ]
+    read: Annotated[
+        dict[str, Any] | None,
+        Field(description="Model summary of the creator. Its fields can grow."),
+    ]
+    profile: Annotated[
+        dict[str, Any] | None,
+        Field(description="The creator's declared platform profile. Its fields can grow."),
+    ]
+
+
+class AdvancedLoveDislike(BaseModel):
+    """
+    What the audience loves and dislikes about the topic.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    classified_count: Annotated[
+        int, Field(description="Videos that fell into a love or dislike bucket.")
+    ]
+    total_count: Annotated[int, Field(description="Videos considered.")]
+    love: Annotated[
+        list[AdvancedLoveDislikeBucket], Field(description="What people praise, strongest first.")
+    ]
+    dislike: Annotated[
+        list[AdvancedLoveDislikeBucket],
+        Field(description="What people criticise, strongest first."),
+    ]
+
+
+class AdvancedPerceptionAxis(BaseModel):
+    """
+    One perception axis, price or quality, measured one way.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    share_indicating: Annotated[
+        float | None,
+        Field(
+            description="Share of analyzed items that express any view on this axis, from 0 to 1. `null` when nothing was analyzed."
+        ),
+    ]
+    classified_count: Annotated[int, Field(description="Items that express a view on this axis.")]
+    enriched_count: Annotated[
+        int, Field(description="Items analyzed for this axis, those with no view included.")
+    ]
+    buckets: Annotated[
+        list[AdvancedPerceptionBucket],
+        Field(description="The bands on this axis, largest share first."),
+    ]
+
+
+class AdvancedPerceptionSide(BaseModel):
+    """
+    Price and quality as seen from one side.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    price: Annotated[AdvancedPerceptionAxis, Field(description="How price is read.")]
+    quality: Annotated[AdvancedPerceptionAxis, Field(description="How quality is read.")]
+
+
+class AdvancedPersona(BaseModel):
+    """
+    An audience archetype found across the analyzed videos.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    id: Annotated[str, Field(description="Stable key for the persona.")]
+    name: Annotated[str, Field(description="Short label for the persona.")]
+    tagline: Annotated[str, Field(description="One line describing them.")]
+    description: Annotated[str, Field(description="Who this person is.")]
+    member_count: Annotated[int, Field(description="Videos that match the archetype.")]
+    avg_sentiment: Annotated[
+        float | None, Field(description="Average sentiment of those videos, -1 to 1.")
+    ]
+    total_views: Annotated[int, Field(description="Views across those videos.")]
+    top_similarity: Annotated[
+        float | None,
+        Field(
+            description="How closely the best-matching video fits, from 0 to 1. A low value means the archetype is only loosely present."
+        ),
+    ]
+    representatives: Annotated[
+        list[AdvancedPersonaRepresentative],
+        Field(description="The videos that stand for the persona."),
+    ]
+    breakdown: Annotated[
+        dict[str, Any] | None,
+        Field(
+            description="A deeper profile of the persona. Model output, so its fields can grow. `null` when no breakdown was produced."
+        ),
+    ]
+
+
+class AdvancedPersonas(BaseModel):
+    """
+    The audience archetypes, and how they were derived.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    vocab_source: Annotated[
+        str,
+        Field(
+            description="`derived` when the archetypes came from this analysis' own vocabulary, `fallback` when a generic one was used. Treat fallback personas with less weight."
+        ),
+    ]
+    personas: Annotated[list[AdvancedPersona], Field(description="The archetypes found.")]
+
+
+class AdvancedSignals(BaseModel):
+    """
+    Product context drawn from what people show and say.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    stack: Annotated[
+        list[LabelCount], Field(description="Products shown or used alongside the subject.")
+    ]
+    competitors: Annotated[list[LabelCount], Field(description="Rival products that appear.")]
+    pain_points: Annotated[list[LabelCount], Field(description="Problems people keep raising.")]
+    journey_stage: Annotated[
+        list[LabelCount], Field(description="Where the speaker is in their buying journey.")
+    ]
+
+
+class AdvancedSpeakerDemographics(BaseModel):
+    """
+    Inferred traits of the people on screen.
+
+    These are model inferences, not verified facts. Use them for trends across
+    the set, never as a statement about any one person.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    gender: Annotated[list[LabelCount], Field(description="Videos by inferred gender.")]
+    age: Annotated[list[LabelCount], Field(description="Videos by inferred age band.")]
+    ethnicity: Annotated[list[LabelCount], Field(description="Videos by inferred ethnicity.")]
+    setting: Annotated[
+        list[LabelCount], Field(description="Videos by the setting they were filmed in.")
+    ]
+
+
 class AiAnalysis(BaseModel):
     """
     Response body for the AI analysis root.
@@ -1518,7 +2384,7 @@ class AiAnalysisResult(BaseModel):
     result: Annotated[
         ResultFile | None,
         Field(
-            description="Signed, time-limited download of the run's analysis payload: `download_url` (request it to retrieve the JSON), `expires_at` (Unix epoch seconds, approximately 24h TTL), and `format` (`json`). `null` until the run completes."
+            description="Signed, time-limited download of the run's analysis payload: `download_url` (request it to retrieve the JSON), `expires_at` (Unix epoch seconds, approximately 24h TTL), and `format` (`json`). The document behind it follows the `AiAnalysisReport` schema. `null` until the run completes."
         ),
     ] = None
     created_at: Annotated[
@@ -2058,6 +2924,39 @@ class CreatorVetting(BaseModel):
     ]
 
 
+class CreatorVettingReport(BaseModel):
+    """
+    The JSON document behind a creator vetting run's `result.download_url`.
+
+    `disclosures` is present only when the run asked for the `DISCLOSURE`
+    safety check. New fields can be added at any time, so ignore keys you do
+    not recognise.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    profile_summary: Annotated[
+        str | None, Field(description="Two or three sentences describing the creator.")
+    ]
+    top_themes: Annotated[
+        VettingTopThemes | None, Field(description="The creator's recurring subjects.")
+    ]
+    violation_summary: Annotated[
+        VettingSummary | None, Field(description="How much of the catalogue raised a flag.")
+    ]
+    violations: Annotated[
+        list[VettingViolation],
+        Field(description="Every flag raised, one row per criterion per content item."),
+    ]
+    disclosures: Annotated[
+        list[VettingDisclosure] | None,
+        Field(
+            description="Paid-partnership signals, one row per signal. Present only when the run requested the `DISCLOSURE` safety check."
+        ),
+    ] = None
+
+
 class CreatorVettingResult(BaseModel):
     """
     An analysis run together with its downloadable ``result``.
@@ -2092,7 +2991,7 @@ class CreatorVettingResult(BaseModel):
     result: Annotated[
         ResultFile | None,
         Field(
-            description="Signed, time-limited download of the run's analysis payload. Contains `download_url` (request it to retrieve the JSON), `expires_at` (Unix epoch seconds, approximately 24-hour TTL), and `format` (`json`). Returns `null` until the run completes."
+            description="Signed, time-limited download of the run's analysis payload. Contains `download_url` (request it to retrieve the JSON), `expires_at` (Unix epoch seconds, approximately 24-hour TTL), and `format` (`json`). The document behind it follows the `CreatorVettingReport` schema. Returns `null` until the run completes."
         ),
     ] = None
 
@@ -2219,7 +3118,7 @@ class SafetyCheckRequest(BaseModel):
             "DISCLOSURE",
         ],
         Field(
-            description="Category of the safety criterion. One of `USER_DEFINED_SAFETY_CRITERION`, `ADULT_CONTENT`, `ARMS_AND_AMMUNITION`, `MISINFORMATION`, `PROFANITY`, `POLITICS`, `DISCLOSURE`.\n\n`DISCLOSURE` looks for explicit sponsorship disclosures (for example `#ad`, a paid partnership, an affiliate commission or a gifted product) in each video's on-screen text, speech transcription, title and caption. It is not scored as a violation: findings are listed per video under `insight_json.disclosures` in the result payload."
+            description="Category of the safety criterion. One of `USER_DEFINED_SAFETY_CRITERION`, `ADULT_CONTENT`, `ARMS_AND_AMMUNITION`, `MISINFORMATION`, `PROFANITY`, `POLITICS`, `DISCLOSURE`.\n\n`DISCLOSURE` looks for explicit sponsorship disclosures (for example `#ad`, a paid partnership, an affiliate commission or a gifted product) in each video's on-screen text, speech transcription, title and caption. It is not scored as a violation: findings are listed under `disclosures` in the result payload, one entry per signal found."
         ),
     ]
     extra: Annotated[
@@ -2350,6 +3249,78 @@ class WebhookPush(BaseModel):
         Field(
             description="The push payload. See `delivery_mode` for which key inside is populated."
         ),
+    ]
+
+
+class AdvancedAiAnalysisCreateRequest(BaseModel):
+    """
+    Request body for ``POST /api/v1/advanced_ai_analysis/``.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    name: Annotated[str, Field(description="A label for this analysis.", min_length=1)]
+    topic: Annotated[
+        str,
+        Field(
+            description="The brand, product, person or event to analyze, as a short term. For example `Levi's` or `Running shoes`. Keep it under five words. Do not write a question: a run reports sentiment, stance, themes, perception, audience voice, personas and creator intel for the topic. To narrow the posts, use `content_filters`.",
+            min_length=1,
+        ),
+    ]
+    content_filters: Annotated[
+        ContentFilterInputRequest,
+        Field(
+            description="Selects which content the analysis runs over. At least one of `search`, `creator_id`, `creator_username`, `external_id`, or `brand_id` is required to scope it. When both `posted_after` and `posted_before` are omitted, the analysis defaults to content from the last 7 days."
+        ),
+    ]
+
+
+class AdvancedCreatorIntel(BaseModel):
+    """
+    Creators sorted by posture, and the stories they carry.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    totals: Annotated[
+        AdvancedCreatorIntelTotals, Field(description="How the creators split across postures.")
+    ]
+    advocates: Annotated[
+        list[AdvancedCreatorProfile], Field(description="Creators who back the topic.")
+    ]
+    detractors: Annotated[
+        list[AdvancedCreatorProfile], Field(description="Creators who criticise it.")
+    ]
+    prospects: Annotated[
+        list[AdvancedCreatorProfile], Field(description="Creators worth approaching.")
+    ]
+    posture_map: Annotated[
+        list[AdvancedPostureMapEntry],
+        Field(description="Every creator plotted by reach against stance."),
+    ]
+    narratives: Annotated[
+        list[AdvancedNarrative], Field(description="The stories moving through the conversation.")
+    ]
+    meta: Annotated[
+        AdvancedCreatorIntelMeta, Field(description="How and when this section was built.")
+    ]
+
+
+class AdvancedPerception(BaseModel):
+    """
+    Price and quality perception, measured from both sides.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    audience: Annotated[
+        AdvancedPerceptionSide, Field(description="What commenters say. Counts are comments.")
+    ]
+    creator: Annotated[
+        AdvancedPerceptionSide, Field(description="How the videos frame it. Counts are videos.")
     ]
 
 
@@ -2493,3 +3464,76 @@ class Usage(BaseModel):
         UsageHistory,
         Field(description="What was actually spent, day by day, from the usage ledger."),
     ]
+
+
+class AdvancedAiAnalysisReport(BaseModel):
+    """
+    The JSON document behind an advanced AI analysis run's `result.download_url`.
+
+    Counts are whole numbers, shares and rates are decimals from 0 to 1, money
+    is in whole cents, and a value is `null` when there was not enough data to
+    work it out. A section is absent when the run could not produce it, so read
+    every one as optional, and ignore keys you do not recognise.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    summary: Annotated[
+        AdvancedSummary,
+        Field(description="Totals over the analyzed set, and how much of it was analyzed."),
+    ]
+    sentiment: Annotated[
+        list[LabelCount],
+        Field(description="Videos by sentiment: `positive`, `neutral`, `negative`, `mixed`."),
+    ]
+    stance: Annotated[
+        list[LabelCount],
+        Field(
+            description="Videos by what the creator does with the topic: `promoting`, `cautioning`, `neutral`, `critical`, `informational`."
+        ),
+    ]
+    themes: Annotated[
+        list[AdvancedThemeCount],
+        Field(description="Videos by theme. Themes come from this analysis' own set."),
+    ]
+    sentiment_by_theme: Annotated[
+        list[AdvancedSentimentByTheme], Field(description="How sentiment splits inside each theme.")
+    ]
+    timeline: Annotated[
+        list[AdvancedTimelinePoint],
+        Field(description="Posts, views and engagements month by month."),
+    ]
+    languages: Annotated[list[AdvancedLanguage], Field(description="Videos by language.")]
+    content_forms: Annotated[
+        list[AdvancedContentForm], Field(description="Videos by format, with per-format averages.")
+    ]
+    top_creators: Annotated[
+        list[AdvancedTopCreator], Field(description="The creators who brought the most reach.")
+    ]
+    speaker_demographics: Annotated[
+        AdvancedSpeakerDemographics,
+        Field(description="Inferred traits of the people on screen. Trends only."),
+    ]
+    signals: Annotated[
+        AdvancedSignals,
+        Field(description="Product context: stack, rivals, pain points, buying stage."),
+    ]
+    love_dislike: Annotated[
+        AdvancedLoveDislike,
+        Field(description="What the audience loves and dislikes, bucket by bucket."),
+    ]
+    perception: Annotated[
+        AdvancedPerception,
+        Field(description="Price and quality perception, from the audience and the creators."),
+    ]
+    audience_voice: Annotated[AdvancedAudienceVoice, Field(description="What the comments say.")]
+    personas: Annotated[
+        AdvancedPersonas | None, Field(description="Audience archetypes. Produced on request.")
+    ] = None
+    creator_intel: Annotated[
+        AdvancedCreatorIntel | None,
+        Field(
+            description="Advocates, detractors, prospects and narratives. Produced on request, and the largest section by far."
+        ),
+    ] = None

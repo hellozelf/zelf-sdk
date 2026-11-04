@@ -143,6 +143,2484 @@
             "type": {
               "item": {
                 "kind": "ref",
+                "ref": "AdvancedAiAnalysisRun"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "analysis_type",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "created_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "modified_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "name",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "topic",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AdvancedAiAnalysis"
+      },
+      {
+        "fields": [
+          {
+            "name": "content_filters",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "ContentFilterInputRequest"
+            }
+          },
+          {
+            "name": "name",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "topic",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AdvancedAiAnalysisCreateRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "audience_voice",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedAudienceVoice"
+            }
+          },
+          {
+            "name": "content_forms",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedContentForm"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "creator_intel",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedCreatorIntel"
+            }
+          },
+          {
+            "name": "languages",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedLanguage"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "love_dislike",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedLoveDislike"
+            }
+          },
+          {
+            "name": "perception",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedPerception"
+            }
+          },
+          {
+            "name": "personas",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedPersonas"
+            }
+          },
+          {
+            "name": "sentiment",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "LabelCount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "sentiment_by_theme",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedSentimentByTheme"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "signals",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedSignals"
+            }
+          },
+          {
+            "name": "speaker_demographics",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedSpeakerDemographics"
+            }
+          },
+          {
+            "name": "stance",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "LabelCount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "summary",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedSummary"
+            }
+          },
+          {
+            "name": "themes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedThemeCount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "timeline",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedTimelinePoint"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "top_creators",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedTopCreator"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "AdvancedAiAnalysisReport"
+      },
+      {
+        "fields": [
+          {
+            "name": "analysis_id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "created_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "dashboard_url",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "modified_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "result",
+            "nullable": true,
+            "read_only": true,
+            "required": false,
+            "type": {
+              "kind": "ref",
+              "ref": "ResultFile"
+            }
+          },
+          {
+            "name": "status",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AdvancedAiAnalysisResult"
+      },
+      {
+        "fields": [
+          {
+            "name": "dashboard_url",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "status",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AdvancedAiAnalysisRun"
+      },
+      {
+        "fields": [
+          {
+            "name": "brands",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedVoiceBrand"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "has_comments",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "intent",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "LabelCount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "sentiment",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedVoiceSentiment"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "theme_divergence",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedThemeDivergence"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "themes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedVoiceTheme"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "timeline",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedVoiceTimeline"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "top_comments",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedTopComment"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "totals",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedVoiceTotals"
+            }
+          }
+        ],
+        "name": "AdvancedAudienceVoice"
+      },
+      {
+        "fields": [
+          {
+            "name": "avg_engagements",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "avg_views",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "form",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AdvancedContentForm"
+      },
+      {
+        "fields": [
+          {
+            "name": "enriched",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "has_human_signals",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "has_love_dislike",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "has_sentiment",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "has_speaker_demographics",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "has_themes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedCoverage"
+      },
+      {
+        "fields": [
+          {
+            "name": "advocates",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedCreatorProfile"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "detractors",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedCreatorProfile"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "meta",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedCreatorIntelMeta"
+            }
+          },
+          {
+            "name": "narratives",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedNarrative"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "posture_map",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedPostureMapEntry"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "prospects",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedCreatorProfile"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "totals",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedCreatorIntelTotals"
+            }
+          }
+        ],
+        "name": "AdvancedCreatorIntel"
+      },
+      {
+        "fields": [
+          {
+            "name": "derived_from",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "enriched_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "generated_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "model",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "stale",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          }
+        ],
+        "name": "AdvancedCreatorIntelMeta"
+      },
+      {
+        "fields": [
+          {
+            "name": "advocates",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "creators",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "detractors",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "prospects",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedCreatorIntelTotals"
+      },
+      {
+        "fields": [
+          {
+            "name": "avg_sentiment",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "consumer_resonance",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "detractor_severity",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "emv_cents",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "engagements",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "first_post",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "handle",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "last_post",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "organic_share",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "partnership_fit",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "posts",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "posture",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "profile",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "reach_percentile",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "read",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "stance_counts",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "stance_lean",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "top_themes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedThemeCount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "views",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedCreatorProfile"
+      },
+      {
+        "fields": [
+          {
+            "name": "count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "engagements",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "language",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AdvancedLanguage"
+      },
+      {
+        "fields": [
+          {
+            "name": "classified_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "dislike",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedLoveDislikeBucket"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "love",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedLoveDislikeBucket"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "total_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedLoveDislike"
+      },
+      {
+        "fields": [
+          {
+            "name": "definition",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "emv_cents",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "label",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "slug",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "total_views",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "video_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedLoveDislikeBucket"
+      },
+      {
+        "fields": [
+          {
+            "name": "carriers",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "direction",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "momentum",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "negative_share",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "play",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "positive_share",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "theme",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "total",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedNarrative"
+      },
+      {
+        "fields": [
+          {
+            "name": "audience",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedPerceptionSide"
+            }
+          },
+          {
+            "name": "creator",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedPerceptionSide"
+            }
+          }
+        ],
+        "name": "AdvancedPerception"
+      },
+      {
+        "fields": [
+          {
+            "name": "buckets",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedPerceptionBucket"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "classified_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "enriched_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "share_indicating",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          }
+        ],
+        "name": "AdvancedPerceptionAxis"
+      },
+      {
+        "fields": [
+          {
+            "name": "emv_cents",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "key",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "label",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "pct",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "total_views",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "video_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedPerceptionBucket"
+      },
+      {
+        "fields": [
+          {
+            "name": "price",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedPerceptionAxis"
+            }
+          },
+          {
+            "name": "quality",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedPerceptionAxis"
+            }
+          }
+        ],
+        "name": "AdvancedPerceptionSide"
+      },
+      {
+        "fields": [
+          {
+            "name": "avg_sentiment",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "breakdown",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "description",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "member_count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "name",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "representatives",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedPersonaRepresentative"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "tagline",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "top_similarity",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "total_views",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedPersona"
+      },
+      {
+        "fields": [
+          {
+            "name": "caption",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "content_form",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "duration_s",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "emv_cents",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "engagements",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "gist",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "handle",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "language",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "likes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "posted_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "record_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "sentiment",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "sentiment_score",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "stance",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "themes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "thumbnail_url",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "video_url",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "views",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedPersonaRepresentative"
+      },
+      {
+        "fields": [
+          {
+            "name": "personas",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "AdvancedPersona"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "vocab_source",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AdvancedPersonas"
+      },
+      {
+        "fields": [
+          {
+            "name": "handle",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "posts",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "posture",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "reach_percentile",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "stance_lean",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          }
+        ],
+        "name": "AdvancedPostureMapEntry"
+      },
+      {
+        "fields": [
+          {
+            "name": "mixed",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "negative",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "neutral",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "positive",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "theme",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "total",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedSentimentByTheme"
+      },
+      {
+        "fields": [
+          {
+            "name": "competitors",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "LabelCount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "journey_stage",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "LabelCount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "pain_points",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "LabelCount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "stack",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "LabelCount"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "AdvancedSignals"
+      },
+      {
+        "fields": [
+          {
+            "name": "age",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "LabelCount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "ethnicity",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "LabelCount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "gender",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "LabelCount"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "setting",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "LabelCount"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "AdvancedSpeakerDemographics"
+      },
+      {
+        "fields": [
+          {
+            "name": "coverage",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "AdvancedCoverage"
+            }
+          },
+          {
+            "name": "creators",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "first_post",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "last_post",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "mean_engagement_rate",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "total_comments",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_emv_cents",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_engagements",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_likes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_shares",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_views",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "videos",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedSummary"
+      },
+      {
+        "fields": [
+          {
+            "name": "count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "theme",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AdvancedThemeCount"
+      },
+      {
+        "fields": [
+          {
+            "name": "audience_score",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "comments",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "creator_score",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "gap",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "theme",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "videos",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedThemeDivergence"
+      },
+      {
+        "fields": [
+          {
+            "name": "engagements",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "month",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "posts",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "views",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedTimelinePoint"
+      },
+      {
+        "fields": [
+          {
+            "name": "comment_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "gist",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "intent",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "likes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "posted_at",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "sentiment",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "text",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "video_caption",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "video_handle",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "video_record_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AdvancedTopComment"
+      },
+      {
+        "fields": [
+          {
+            "name": "emv_cents",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "engagements",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "handle",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "posts",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "views",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedTopCreator"
+      },
+      {
+        "fields": [
+          {
+            "name": "avg_score",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "brand",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_likes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedVoiceBrand"
+      },
+      {
+        "fields": [
+          {
+            "name": "count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "label",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "likes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedVoiceSentiment"
+      },
+      {
+        "fields": [
+          {
+            "name": "count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "like_weighted_score",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "negative",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "positive",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "theme",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "AdvancedVoiceTheme"
+      },
+      {
+        "fields": [
+          {
+            "name": "count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "like_weighted_score",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "month",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "net_sentiment",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedVoiceTimeline"
+      },
+      {
+        "fields": [
+          {
+            "name": "comments",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "enriched",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "like_weighted_sentiment",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "total_likes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "videos",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "videos_with_comments",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedVoiceTotals"
+      },
+      {
+        "fields": [
+          {
+            "name": "analyses",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
                 "ref": "AiAnalysisRun"
               },
               "kind": "array"
@@ -253,6 +2731,29 @@
           }
         ],
         "name": "AiAnalysisCreateRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "brand_name",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "general_insights",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          }
+        ],
+        "name": "AiAnalysisReport"
       },
       {
         "fields": [
@@ -2548,6 +5049,66 @@
       {
         "fields": [
           {
+            "name": "disclosures",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "VettingDisclosure"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "profile_summary",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "top_themes",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "VettingTopThemes"
+            }
+          },
+          {
+            "name": "violation_summary",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "VettingSummary"
+            }
+          },
+          {
+            "name": "violations",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "VettingViolation"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "CreatorVettingReport"
+      },
+      {
+        "fields": [
+          {
             "name": "content_scope",
             "nullable": false,
             "read_only": false,
@@ -3306,6 +5867,29 @@
       {
         "fields": [
           {
+            "name": "count",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "label",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "LabelCount"
+      },
+      {
+        "fields": [
+          {
             "name": "allowed_languages",
             "nullable": false,
             "read_only": false,
@@ -3773,6 +6357,209 @@
           }
         ],
         "name": "UsageWindow"
+      },
+      {
+        "fields": [
+          {
+            "name": "content_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "content_url",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "kind",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "source",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "text",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "time_seconds",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "VettingDisclosure"
+      },
+      {
+        "fields": [
+          {
+            "name": "affected_contents",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "total_violations",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "VettingSummary"
+      },
+      {
+        "fields": [
+          {
+            "name": "grounding",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "any"
+            }
+          },
+          {
+            "name": "top_themes",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "VettingTopThemes"
+      },
+      {
+        "fields": [
+          {
+            "name": "content_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "description",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "evidence_field",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "evidence_quote",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "reason",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "severity",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "type",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "value",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "violation",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "violation_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "VettingViolation"
       },
       {
         "fields": [
@@ -4753,6 +7540,189 @@
       }
     ],
     "operations": [
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "single",
+        "http_method": "GET",
+        "id": "advanced_ai_analysis.content_statistics",
+        "item": "ContentStatistics",
+        "path": "/api/v1/advanced_ai_analysis/contents/statistics/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "analysis_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "advanced_ai_analysis.contents",
+        "item": "Content",
+        "path": "/api/v1/advanced_ai_analysis/contents/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "analysis_id",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": "AdvancedAiAnalysisCreateRequest",
+        "body_fields": [
+          {
+            "in": "body",
+            "name": "content_filters",
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "ContentFilterInputRequest"
+            }
+          },
+          {
+            "in": "body",
+            "name": "name",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "body",
+            "name": "topic",
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "body_required": true,
+        "cardinality": "single",
+        "http_method": "POST",
+        "id": "advanced_ai_analysis.create",
+        "item": "AdvancedAiAnalysis",
+        "path": "/api/v1/advanced_ai_analysis/",
+        "path_params": [],
+        "query_params": [],
+        "status": 201
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "advanced_ai_analysis.list",
+        "item": "AdvancedAiAnalysis",
+        "path": "/api/v1/advanced_ai_analysis/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
+      {
+        "body": null,
+        "body_fields": [],
+        "body_required": false,
+        "cardinality": "page",
+        "http_method": "GET",
+        "id": "advanced_ai_analysis.results",
+        "item": "AdvancedAiAnalysisResult",
+        "path": "/api/v1/advanced_ai_analysis/results/",
+        "path_params": [],
+        "query_params": [
+          {
+            "in": "query",
+            "name": "analysis_id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "status": 200
+      },
       {
         "body": null,
         "body_fields": [],
@@ -7776,6 +10746,11 @@
       }
     ],
     "webhooks": [
+      {
+        "event_type": "advanced_ai_analysis.completed",
+        "name": "AdvancedAiAnalysisCompleted",
+        "payload": "WebhookPush"
+      },
       {
         "event_type": "ai_analysis.completed",
         "name": "AiAnalysisCompleted",

@@ -93,19 +93,17 @@ module Zelf
       # return every run of that vetting, or `id` (a single run's `id`) to return one run.
       # One of the two is required. A malformed identifier returns `INVALID_ID`; omitting
       # both returns `VALIDATION_ERROR`. **Disclosures.*; When the vetting requested
-      # `DISCLOSURE`, the payload's `insight_json.disclosures` holds one entry per analyzed
-      # video: its `content_id` and a `result`. The `result` lists `evidence` items, each
-      # with the `source` it was found in (`frame` for on-screen text, `audio` for the
-      # speech transcription, `title`, `caption` or `metadata`), a `kind` (`sponsorship`,
-      # `affiliate`, `gifted` or `relationship` for a commercial relationship; `terms` or
-      # `risk` for offer conditions and warnings), the quoted `text` and, where known,
-      # `time_seconds`. It also gives each source a `channels` status: `present`, `absent`
-      # or `unknown` (not checked). Disclosures are not counted as violations. Limits: only
-      # videos up to 10 minutes are checked; on-screen text is read from sampled frames, so
-      # text shown only briefly can be missed; videos Zelf analyzed before the request are
-      # not re-analyzed for disclosures. An empty `evidence` list does not confirm that a
-      # video has no disclosure. Detection reports what was stated; it does not assess legal
-      # compliance.
+      # `DISCLOSURE`, the payload's `disclosures` holds one entry per signal found: its
+      # `content_id` and `content_url`, the `source` it was found in (`frame` for on-screen
+      # text, `audio` for the speech transcription, `title` or `caption`), a `kind`
+      # (`sponsorship`, `affiliate`, `gifted` or `relationship` for a commercial
+      # relationship; `terms` or `risk` for offer conditions and warnings), the quoted
+      # `text` and, where known, `time_seconds`. A video with no signal is simply absent.
+      # Disclosures are not counted as violations. Limits: only videos up to 10 minutes are
+      # checked; on-screen text is read from sampled frames, so text shown only briefly can
+      # be missed; videos Zelf analyzed before the request are not re-analyzed for
+      # disclosures. An empty `evidence` list does not confirm that a video has no
+      # disclosure. Detection reports what was stated; it does not assess legal compliance.
       #
       # Calls GET /api/v1/creator/vetting/results/ (creator_vetting.results).
       def results(id: nil, page: nil, page_size: nil, vetting_id: nil)

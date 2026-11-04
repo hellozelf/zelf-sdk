@@ -378,6 +378,782 @@ impl std::fmt::Display for WebhookPushDeliveryMode {
     }
 }
 
+/// Response body for the advanced AI analysis root.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedAiAnalysis {
+    /// ID of the analysis. Use this value on follow-up calls.
+    pub id: String,
+    /// Always `ADVANCED_AI_ANALYSIS` here.
+    pub analysis_type: String,
+    /// The analysis label.
+    pub name: String,
+    /// The subject the analysis focuses on.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub topic: Option<String>,
+    /// When the analysis was created (UTC, ISO-8601).
+    pub created_at: String,
+    /// When the analysis was last modified (UTC, ISO-8601).
+    pub modified_at: String,
+    /// The runs that make up this analysis, ordered newest first.
+    #[serde(default)]
+    pub analyses: Vec<AdvancedAiAnalysisRun>,
+}
+
+/// Request body for ``POST /api/v1/advanced_ai_analysis/``.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedAiAnalysisCreateRequest {
+    /// A label for this analysis.
+    pub name: String,
+    /// The brand, product, person or event to analyze, as a short term. For example `Levi's` or
+    /// `Running shoes`. Keep it under five words. Do not write a question: a run reports
+    /// sentiment, stance, themes, perception, audience voice, personas and creator intel for
+    /// the topic. To narrow the posts, use `content_filters`.
+    pub topic: String,
+    /// Selects which content the analysis runs over. At least one of `search`, `creator_id`,
+    /// `creator_username`, `external_id`, or `brand_id` is required to scope it. When both
+    /// `posted_after` and `posted_before` are omitted, the analysis defaults to content from
+    /// the last 7 days.
+    pub content_filters: ContentFilterInputRequest,
+}
+
+/// The JSON document behind an advanced AI analysis run's `result.download_url`. Counts are
+/// whole numbers, shares and rates are decimals from 0 to 1, money is in whole cents, and a
+/// value is `null` when there was not enough data to work it out. A section is absent when
+/// the run could not produce it, so read every one as optional, and ignore keys you do not
+/// recognise.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedAiAnalysisReport {
+    /// Totals over the analyzed set, and how much of it was analyzed.
+    pub summary: AdvancedSummary,
+    /// Videos by sentiment: `positive`, `neutral`, `negative`, `mixed`.
+    #[serde(default)]
+    pub sentiment: Vec<LabelCount>,
+    /// Videos by what the creator does with the topic: `promoting`, `cautioning`, `neutral`,
+    /// `critical`, `informational`.
+    #[serde(default)]
+    pub stance: Vec<LabelCount>,
+    /// Videos by theme. Themes come from this analysis' own set.
+    #[serde(default)]
+    pub themes: Vec<AdvancedThemeCount>,
+    /// How sentiment splits inside each theme.
+    #[serde(default)]
+    pub sentiment_by_theme: Vec<AdvancedSentimentByTheme>,
+    /// Posts, views and engagements month by month.
+    #[serde(default)]
+    pub timeline: Vec<AdvancedTimelinePoint>,
+    /// Videos by language.
+    #[serde(default)]
+    pub languages: Vec<AdvancedLanguage>,
+    /// Videos by format, with per-format averages.
+    #[serde(default)]
+    pub content_forms: Vec<AdvancedContentForm>,
+    /// The creators who brought the most reach.
+    #[serde(default)]
+    pub top_creators: Vec<AdvancedTopCreator>,
+    /// Inferred traits of the people on screen. Trends only.
+    pub speaker_demographics: AdvancedSpeakerDemographics,
+    /// Product context: stack, rivals, pain points, buying stage.
+    pub signals: AdvancedSignals,
+    /// What the audience loves and dislikes, bucket by bucket.
+    pub love_dislike: AdvancedLoveDislike,
+    /// Price and quality perception, from the audience and the creators.
+    pub perception: AdvancedPerception,
+    /// What the comments say.
+    pub audience_voice: AdvancedAudienceVoice,
+    /// Audience archetypes. Produced on request.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub personas: Option<AdvancedPersonas>,
+    /// Advocates, detractors, prospects and narratives. Produced on request, and the largest
+    /// section by far.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub creator_intel: Option<AdvancedCreatorIntel>,
+}
+
+/// A single advanced run with its downloadable ``result``.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedAiAnalysisResult {
+    /// ID of the analysis run.
+    pub id: String,
+    /// ID of the analysis this run belongs to.
+    pub analysis_id: String,
+    /// Run status: one of `IN_PROGRESS`, `COMPLETED`, `EMPTY_RESULT` (finished with no matching
+    /// content), or `FAILED`.
+    pub status: String,
+    /// Signed, time-limited download of the run's analysis payload: `download_url` (request it
+    /// to retrieve the JSON), `expires_at` (Unix epoch seconds, approximately 24h TTL), and
+    /// `format` (`json`). The document behind it follows the `AdvancedAiAnalysisReport` schema.
+    /// `null` until the run completes.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub result: Option<ResultFile>,
+    /// Signed link to the run's interactive dashboard. Valid for about 72 hours. `null` while a
+    /// fresh link is being prepared; read the run again to get it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dashboard_url: Option<String>,
+    /// When the run was created (UTC, ISO-8601).
+    pub created_at: String,
+    /// When the run was last modified (UTC, ISO-8601).
+    pub modified_at: String,
+}
+
+/// A single advanced run, without its result payload. The run ``result`` is not included;
+/// retrieve it from `advanced_ai_analysis.results` once ``status`` is `COMPLETED`.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedAiAnalysisRun {
+    /// ID of the analysis run.
+    pub id: String,
+    /// Run status: one of `IN_PROGRESS`, `COMPLETED`, `EMPTY_RESULT` (finished with no matching
+    /// content), or `FAILED`.
+    pub status: String,
+    /// Signed link to the run's interactive dashboard, for showing a person the analysis. Valid
+    /// for about 72 hours. `null` while a fresh link is being prepared; read the run again to
+    /// get it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dashboard_url: Option<String>,
+}
+
+/// What the comments say, as a whole.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedAudienceVoice {
+    /// False when no comments were available; the lists are then empty.
+    pub has_comments: bool,
+    /// Totals over the comments read.
+    pub totals: AdvancedVoiceTotals,
+    /// Comments by sentiment.
+    #[serde(default)]
+    pub sentiment: Vec<AdvancedVoiceSentiment>,
+    /// Comments by what the commenter wants.
+    #[serde(default)]
+    pub intent: Vec<LabelCount>,
+    /// Comments by theme.
+    #[serde(default)]
+    pub themes: Vec<AdvancedVoiceTheme>,
+    /// Comments month by month.
+    #[serde(default)]
+    pub timeline: Vec<AdvancedVoiceTimeline>,
+    /// The comments worth reading.
+    #[serde(default)]
+    pub top_comments: Vec<AdvancedTopComment>,
+    /// Themes where creators and their audience part ways.
+    #[serde(default)]
+    pub theme_divergence: Vec<AdvancedThemeDivergence>,
+    /// Brands the commenters bring up.
+    #[serde(default)]
+    pub brands: Vec<AdvancedVoiceBrand>,
+}
+
+/// One video format and how it performs.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedContentForm {
+    /// The format, for example `short`.
+    pub form: String,
+    /// Videos in this format.
+    pub count: i64,
+    /// Mean views per video.
+    pub avg_views: i64,
+    /// Mean engagements per video.
+    pub avg_engagements: i64,
+}
+
+/// How many of the analyzed videos carry each kind of analysis.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedCoverage {
+    /// Videos in the analysis.
+    pub total: i64,
+    /// Videos that were analyzed at all.
+    pub enriched: i64,
+    /// Videos with a sentiment.
+    pub has_sentiment: i64,
+    /// Videos with themes.
+    pub has_themes: i64,
+    /// Videos classified into a love or dislike bucket.
+    pub has_love_dislike: i64,
+    /// Videos with inferred on-screen demographics.
+    pub has_speaker_demographics: i64,
+    /// Videos with product context signals.
+    pub has_human_signals: i64,
+}
+
+/// Creators sorted by posture, and the stories they carry.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedCreatorIntel {
+    /// How the creators split across postures.
+    pub totals: AdvancedCreatorIntelTotals,
+    /// Creators who back the topic.
+    #[serde(default)]
+    pub advocates: Vec<AdvancedCreatorProfile>,
+    /// Creators who criticise it.
+    #[serde(default)]
+    pub detractors: Vec<AdvancedCreatorProfile>,
+    /// Creators worth approaching.
+    #[serde(default)]
+    pub prospects: Vec<AdvancedCreatorProfile>,
+    /// Every creator plotted by reach against stance.
+    #[serde(default)]
+    pub posture_map: Vec<AdvancedPostureMapEntry>,
+    /// The stories moving through the conversation.
+    #[serde(default)]
+    pub narratives: Vec<AdvancedNarrative>,
+    /// How and when this section was built.
+    pub meta: AdvancedCreatorIntelMeta,
+}
+
+/// How and when this section was built.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedCreatorIntelMeta {
+    /// When the section was built (UTC, ISO-8601).
+    pub generated_at: String,
+    /// The model that built it.
+    pub model: String,
+    /// Creators analyzed.
+    pub enriched_count: i64,
+    /// True when the section predates the analysis' latest content.
+    pub stale: bool,
+    /// The content snapshot it was built from.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub derived_from: Option<String>,
+}
+
+/// How the creators split across postures.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedCreatorIntelTotals {
+    /// Creators in the analysis.
+    pub creators: i64,
+    /// Creators who back the topic.
+    pub advocates: i64,
+    /// Creators who criticise it.
+    pub detractors: i64,
+    /// Creators worth approaching.
+    pub prospects: i64,
+}
+
+/// A creator, scored on how they treat the topic.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedCreatorProfile {
+    /// The creator's handle.
+    pub handle: String,
+    /// Videos they posted.
+    pub posts: i64,
+    /// Views across those videos.
+    pub views: i64,
+    /// Engagements across them.
+    pub engagements: i64,
+    /// Earned media value, in cents.
+    pub emv_cents: i64,
+    /// Average sentiment of their videos, -1 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub avg_sentiment: Option<f64>,
+    /// How many of their videos take each stance.
+    pub stance_counts: serde_json::Value,
+    /// What they post about most.
+    #[serde(default)]
+    pub top_themes: Vec<AdvancedThemeCount>,
+    /// Share of their posts carrying no sponsorship marker, from 0 to 1. `1` means fully
+    /// organic.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub organic_share: Option<f64>,
+    /// Their earliest post, as `YYYY-MM-DD`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub first_post: Option<String>,
+    /// Their latest post, as `YYYY-MM-DD`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub last_post: Option<String>,
+    /// Where their views rank among this analysis' creators, 0 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reach_percentile: Option<f64>,
+    /// Which way they lean, -1 critical to 1 promoting.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stance_lean: Option<f64>,
+    /// `advocate`, `detractor`, `prospect` or `longtail`.
+    pub posture: String,
+    /// How good a partner they would be, 0 to 100.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub partnership_fit: Option<i64>,
+    /// How much risk their criticism carries, 0 to 100.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub detractor_severity: Option<i64>,
+    /// How strongly commenters respond to them, 0 to 100. `0` when none of their comments were
+    /// analyzed.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub consumer_resonance: Option<i64>,
+    /// Model summary of the creator. Its fields can grow.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub read: Option<serde_json::Value>,
+    /// The creator's declared platform profile. Its fields can grow.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub profile: Option<serde_json::Value>,
+}
+
+/// One language and its share of the set.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedLanguage {
+    /// Language code, for example `en`.
+    pub language: String,
+    /// Videos in this language.
+    pub count: i64,
+    /// Engagements on those videos.
+    pub engagements: i64,
+}
+
+/// What the audience loves and dislikes about the topic.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedLoveDislike {
+    /// Videos that fell into a love or dislike bucket.
+    pub classified_count: i64,
+    /// Videos considered.
+    pub total_count: i64,
+    /// What people praise, strongest first.
+    #[serde(default)]
+    pub love: Vec<AdvancedLoveDislikeBucket>,
+    /// What people criticise, strongest first.
+    #[serde(default)]
+    pub dislike: Vec<AdvancedLoveDislikeBucket>,
+}
+
+/// One thing people love or dislike, and what backs it.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedLoveDislikeBucket {
+    /// Stable key for the bucket.
+    pub slug: String,
+    /// Display name for the bucket.
+    pub label: String,
+    /// What the bucket covers.
+    pub definition: String,
+    /// Videos in the bucket.
+    pub video_count: i64,
+    /// Earned media value of those videos, in cents.
+    pub emv_cents: i64,
+    /// Views on those videos.
+    pub total_views: i64,
+}
+
+/// A story moving through the conversation.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedNarrative {
+    /// The theme the story is about.
+    pub theme: String,
+    /// Videos carrying it.
+    pub total: i64,
+    /// Share of those videos that are positive, 0 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub positive_share: Option<f64>,
+    /// Share of those videos that are negative, 0 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub negative_share: Option<f64>,
+    /// Whether the theme is gaining or losing share, -1 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub momentum: Option<f64>,
+    /// `rising` or `falling`.
+    pub direction: String,
+    /// The creators posting most on the theme.
+    #[serde(default)]
+    pub carriers: Vec<String>,
+    /// A suggested response. Model output, so its fields can grow.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub play: Option<serde_json::Value>,
+}
+
+/// Price and quality perception, measured from both sides.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedPerception {
+    /// What commenters say. Counts are comments.
+    pub audience: AdvancedPerceptionSide,
+    /// How the videos frame it. Counts are videos.
+    pub creator: AdvancedPerceptionSide,
+}
+
+/// One perception axis, price or quality, measured one way.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedPerceptionAxis {
+    /// Share of analyzed items that express any view on this axis, from 0 to 1. `null` when
+    /// nothing was analyzed.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub share_indicating: Option<f64>,
+    /// Items that express a view on this axis.
+    pub classified_count: i64,
+    /// Items analyzed for this axis, those with no view included.
+    pub enriched_count: i64,
+    /// The bands on this axis, largest share first.
+    #[serde(default)]
+    pub buckets: Vec<AdvancedPerceptionBucket>,
+}
+
+/// One perception band and its share.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedPerceptionBucket {
+    /// The band. Price bands are `expensive`, `affordable`, `cheap`; quality bands are `low`,
+    /// `good`, `excellent`.
+    pub key: String,
+    /// Display name for the band.
+    pub label: String,
+    /// This band's share of the classified items, from 0 to 1. The bands on one axis add up to
+    /// about 1.
+    pub pct: f64,
+    /// Videos the band covers. On the audience side these are videos with at least one comment
+    /// in the band.
+    pub video_count: i64,
+    /// Earned media value of those videos, in cents.
+    pub emv_cents: i64,
+    /// Views on those videos.
+    pub total_views: i64,
+}
+
+/// Price and quality as seen from one side.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedPerceptionSide {
+    /// How price is read.
+    pub price: AdvancedPerceptionAxis,
+    /// How quality is read.
+    pub quality: AdvancedPerceptionAxis,
+}
+
+/// An audience archetype found across the analyzed videos.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedPersona {
+    /// Stable key for the persona.
+    pub id: String,
+    /// Short label for the persona.
+    pub name: String,
+    /// One line describing them.
+    pub tagline: String,
+    /// Who this person is.
+    pub description: String,
+    /// Videos that match the archetype.
+    pub member_count: i64,
+    /// Average sentiment of those videos, -1 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub avg_sentiment: Option<f64>,
+    /// Views across those videos.
+    pub total_views: i64,
+    /// How closely the best-matching video fits, from 0 to 1. A low value means the archetype
+    /// is only loosely present.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub top_similarity: Option<f64>,
+    /// The videos that stand for the persona.
+    #[serde(default)]
+    pub representatives: Vec<AdvancedPersonaRepresentative>,
+    /// A deeper profile of the persona. Model output, so its fields can grow. `null` when no
+    /// breakdown was produced.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub breakdown: Option<serde_json::Value>,
+}
+
+/// A video that stands for a persona.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedPersonaRepresentative {
+    /// The video's id.
+    pub record_id: String,
+    /// The creator's handle.
+    pub handle: String,
+    /// The video's caption.
+    pub caption: String,
+    /// One line summarising the video.
+    pub gist: String,
+    /// Views on the video.
+    pub views: i64,
+    /// Likes on the video.
+    pub likes: i64,
+    /// Engagements on the video.
+    pub engagements: i64,
+    /// Earned media value, in cents.
+    pub emv_cents: i64,
+    /// The video's sentiment band.
+    pub sentiment: String,
+    /// The video's sentiment, -1 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sentiment_score: Option<f64>,
+    /// The creator's stance in the video.
+    pub stance: String,
+    /// Themes the video covers.
+    #[serde(default)]
+    pub themes: Vec<String>,
+    /// The video's language code.
+    pub language: String,
+    /// The video's format.
+    pub content_form: String,
+    /// How long the video runs, in seconds.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub duration_s: Option<f64>,
+    /// When it was posted (UTC, ISO-8601).
+    pub posted_at: String,
+    /// Link to the video's thumbnail.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub thumbnail_url: Option<String>,
+    /// Link to the video.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub video_url: Option<String>,
+}
+
+/// The audience archetypes, and how they were derived.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedPersonas {
+    /// `derived` when the archetypes came from this analysis' own vocabulary, `fallback` when a
+    /// generic one was used. Treat fallback personas with less weight.
+    pub vocab_source: String,
+    /// The archetypes found.
+    #[serde(default)]
+    pub personas: Vec<AdvancedPersona>,
+}
+
+/// One creator plotted by reach against stance.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedPostureMapEntry {
+    /// The creator's handle.
+    pub handle: String,
+    /// Where their views rank, 0 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reach_percentile: Option<f64>,
+    /// Which way they lean, -1 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stance_lean: Option<f64>,
+    /// Videos they posted.
+    pub posts: i64,
+    /// Their posture towards the topic.
+    pub posture: String,
+}
+
+/// How sentiment splits inside one theme.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedSentimentByTheme {
+    /// The theme.
+    pub theme: String,
+    /// Positive videos on the theme.
+    pub positive: i64,
+    /// Neutral videos on the theme.
+    pub neutral: i64,
+    /// Negative videos on the theme.
+    pub negative: i64,
+    /// Mixed videos on the theme.
+    pub mixed: i64,
+    /// Videos on the theme.
+    pub total: i64,
+}
+
+/// Product context drawn from what people show and say.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedSignals {
+    /// Products shown or used alongside the subject.
+    #[serde(default)]
+    pub stack: Vec<LabelCount>,
+    /// Rival products that appear.
+    #[serde(default)]
+    pub competitors: Vec<LabelCount>,
+    /// Problems people keep raising.
+    #[serde(default)]
+    pub pain_points: Vec<LabelCount>,
+    /// Where the speaker is in their buying journey.
+    #[serde(default)]
+    pub journey_stage: Vec<LabelCount>,
+}
+
+/// Inferred traits of the people on screen. These are model inferences, not verified facts.
+/// Use them for trends across the set, never as a statement about any one person.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedSpeakerDemographics {
+    /// Videos by inferred gender.
+    #[serde(default)]
+    pub gender: Vec<LabelCount>,
+    /// Videos by inferred age band.
+    #[serde(default)]
+    pub age: Vec<LabelCount>,
+    /// Videos by inferred ethnicity.
+    #[serde(default)]
+    pub ethnicity: Vec<LabelCount>,
+    /// Videos by the setting they were filmed in.
+    #[serde(default)]
+    pub setting: Vec<LabelCount>,
+}
+
+/// Totals over the whole analyzed set.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedSummary {
+    /// Videos analyzed.
+    pub videos: i64,
+    /// Distinct creators behind them.
+    pub creators: i64,
+    /// Views summed over the set.
+    pub total_views: i64,
+    /// Likes summed over the set.
+    pub total_likes: i64,
+    /// Comments summed over the set.
+    pub total_comments: i64,
+    /// Shares summed over the set.
+    pub total_shares: i64,
+    /// Likes, comments and shares summed over the set.
+    pub total_engagements: i64,
+    /// Average of each video's engagements divided by its views, from 0 to 1. Videos with no
+    /// views are left out. This is not total engagements over total views.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mean_engagement_rate: Option<f64>,
+    /// Earned media value in cents. `0` for sources without it.
+    pub total_emv_cents: i64,
+    /// Date of the earliest video, as `YYYY-MM-DD`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub first_post: Option<String>,
+    /// Date of the latest video, as `YYYY-MM-DD`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub last_post: Option<String>,
+    /// How many videos carry each kind of analysis. Read the other sections in this light: a
+    /// section only describes the videos it could be computed for.
+    pub coverage: AdvancedCoverage,
+}
+
+/// A theme and how many videos carry it.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedThemeCount {
+    /// The theme, from this analysis' own set.
+    pub theme: String,
+    /// Videos carrying it.
+    pub count: i64,
+}
+
+/// A theme where creators and their audience disagree.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedThemeDivergence {
+    /// The theme.
+    pub theme: String,
+    /// Videos on the theme.
+    pub videos: i64,
+    /// Comments on the theme.
+    pub comments: i64,
+    /// How the creators lean, -1 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub creator_score: Option<f64>,
+    /// How the audience leans, -1 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub audience_score: Option<f64>,
+    /// `audience_score` minus `creator_score`. A negative gap means the audience is more
+    /// critical than the creators.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gap: Option<f64>,
+}
+
+/// One month of posting activity.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedTimelinePoint {
+    /// The month, as `YYYY-MM`.
+    pub month: String,
+    /// Videos posted that month.
+    pub posts: i64,
+    /// Views on those videos.
+    pub views: i64,
+    /// Engagements on those videos.
+    pub engagements: i64,
+}
+
+/// A comment worth reading, with the video it sits under.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedTopComment {
+    /// The comment's id.
+    pub comment_id: String,
+    /// What the comment says.
+    pub text: String,
+    /// Likes on the comment.
+    pub likes: i64,
+    /// When it was posted (UTC, ISO-8601).
+    pub posted_at: String,
+    /// Its sentiment band.
+    pub sentiment: String,
+    /// What the commenter is doing, for example `question`.
+    pub intent: String,
+    /// One line summarising the comment.
+    pub gist: String,
+    /// The video it sits under.
+    pub video_record_id: String,
+    /// That video's creator handle.
+    pub video_handle: String,
+    /// That video's caption.
+    pub video_caption: String,
+}
+
+/// A creator ranked by the reach they brought.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedTopCreator {
+    /// The creator's handle.
+    pub handle: String,
+    /// Videos they posted.
+    pub posts: i64,
+    /// Views across those videos.
+    pub views: i64,
+    /// Engagements across them.
+    pub engagements: i64,
+    /// Earned media value in cents.
+    pub emv_cents: i64,
+}
+
+/// A brand the commenters bring up.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedVoiceBrand {
+    /// The brand named.
+    pub brand: String,
+    /// Comments naming it.
+    pub count: i64,
+    /// Average sentiment of those comments, -1 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub avg_score: Option<f64>,
+    /// Likes on those comments.
+    pub total_likes: i64,
+}
+
+/// Comments in one sentiment band.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedVoiceSentiment {
+    /// The band: `positive`, `neutral`, `negative` or `mixed`.
+    pub label: String,
+    /// Comments in the band.
+    pub count: i64,
+    /// Likes on those comments.
+    pub likes: i64,
+}
+
+/// How the comments on one theme break down.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedVoiceTheme {
+    /// The theme.
+    pub theme: String,
+    /// Comments on the theme.
+    pub count: i64,
+    /// Positive comments on it.
+    pub positive: i64,
+    /// Negative comments on it.
+    pub negative: i64,
+    /// Like-weighted sentiment on the theme, -1 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub like_weighted_score: Option<f64>,
+}
+
+/// One month of comment activity.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedVoiceTimeline {
+    /// The month, as `YYYY-MM`.
+    pub month: String,
+    /// Comments that month.
+    pub count: i64,
+    /// Positive comments minus negative comments.
+    pub net_sentiment: i64,
+    /// Like-weighted sentiment that month, -1 to 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub like_weighted_score: Option<f64>,
+}
+
+/// Totals over the comments that were read.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedVoiceTotals {
+    /// Videos considered.
+    pub videos: i64,
+    /// Comments read.
+    pub comments: i64,
+    /// Comments that were analyzed.
+    pub enriched: i64,
+    /// Likes on those comments.
+    pub total_likes: i64,
+    /// Videos that had at least one comment.
+    pub videos_with_comments: i64,
+    /// Average comment sentiment weighted towards comments with more likes, from -1 to 1.
+    /// `null` when no comment has a score.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub like_weighted_sentiment: Option<f64>,
+}
+
 /// Response body for the AI analysis root.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AiAnalysis {
@@ -419,6 +1195,25 @@ pub struct AiAnalysisCreateRequest {
     pub content_filters: ContentFilterInputRequest,
 }
 
+/// The JSON document behind an AI analysis run's `result.download_url`. Every section under
+/// `general_insights` is optional: a section the run could not produce is left out rather
+/// than returned empty. Which sections appear depends on the run's scope, `CONTENT` or
+/// `COMMENT`. New sections and fields can be added at any time, so ignore keys you do not
+/// recognise.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AiAnalysisReport {
+    /// The topic the analysis ran on, as it was submitted.
+    pub brand_name: String,
+    /// The sections the run produced. Content runs can carry `customer_communication`,
+    /// `competitor_overview`, `trending_now`, `favorite_products_and_features`,
+    /// `user_personas`, `brand_perception` and `overall_sentiment`. Comment runs can carry
+    /// `customer_communication`, `trending_now`, `favorite_products_and_features`,
+    /// `brand_perception`, `overall_sentiment`, `notable_themes` and `key_findings`. Every
+    /// section carries a `grounding` object whose keys match that section's own fields, each a
+    /// list of grounding entries.
+    pub general_insights: serde_json::Value,
+}
+
 /// A single analysis run with its downloadable ``result``.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AiAnalysisResult {
@@ -433,7 +1228,8 @@ pub struct AiAnalysisResult {
     pub status: String,
     /// Signed, time-limited download of the run's analysis payload: `download_url` (request it
     /// to retrieve the JSON), `expires_at` (Unix epoch seconds, approximately 24h TTL), and
-    /// `format` (`json`). `null` until the run completes.
+    /// `format` (`json`). The document behind it follows the `AiAnalysisReport` schema. `null`
+    /// until the run completes.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub result: Option<ResultFile>,
     /// When the run was created (UTC, ISO-8601).
@@ -1246,6 +2042,29 @@ pub struct CreatorVetting {
     pub content_scope: serde_json::Value,
 }
 
+/// The JSON document behind a creator vetting run's `result.download_url`. `disclosures` is
+/// present only when the run asked for the `DISCLOSURE` safety check. New fields can be
+/// added at any time, so ignore keys you do not recognise.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreatorVettingReport {
+    /// Two or three sentences describing the creator.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub profile_summary: Option<String>,
+    /// The creator's recurring subjects.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub top_themes: Option<VettingTopThemes>,
+    /// How much of the catalogue raised a flag.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub violation_summary: Option<VettingSummary>,
+    /// Every flag raised, one row per criterion per content item.
+    #[serde(default)]
+    pub violations: Vec<VettingViolation>,
+    /// Paid-partnership signals, one row per signal. Present only when the run requested the
+    /// `DISCLOSURE` safety check.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub disclosures: Option<Vec<VettingDisclosure>>,
+}
+
 /// Request body for ``POST /api/v1/creator/vetting/``.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreatorVettingRequest {
@@ -1284,7 +2103,8 @@ pub struct CreatorVettingResult {
     pub status: String,
     /// Signed, time-limited download of the run's analysis payload. Contains `download_url`
     /// (request it to retrieve the JSON), `expires_at` (Unix epoch seconds, approximately
-    /// 24-hour TTL), and `format` (`json`). Returns `null` until the run completes.
+    /// 24-hour TTL), and `format` (`json`). The document behind it follows the
+    /// `CreatorVettingReport` schema. Returns `null` until the run completes.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub result: Option<ResultFile>,
 }
@@ -1522,6 +2342,15 @@ pub struct FollowerTimeseries {
     pub periods: Vec<FollowerPeriod>,
 }
 
+/// A label and how many videos carry it.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LabelCount {
+    /// The label.
+    pub label: String,
+    /// Videos carrying it.
+    pub count: i64,
+}
+
 /// Partial update for a brand's monitoring keywords. Every field is optional, and only the
 /// supplied fields are changed, but at least one field is required.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1603,7 +2432,9 @@ pub struct ResultFile {
     pub expires_at: i64,
     /// Payload encoding. Always `json`.
     pub format: String,
-    /// Signed URL to request the JSON payload. Expires at `expires_at`.
+    /// Signed URL to request the JSON payload. Expires at `expires_at`. The document it returns
+    /// follows `AiAnalysisReport`, `CreatorVettingReport` or `AdvancedAiAnalysisReport`,
+    /// depending on which kind of run produced it.
     pub download_url: String,
 }
 
@@ -1617,8 +2448,8 @@ pub struct SafetyCheckRequest {
     /// `DISCLOSURE`. `DISCLOSURE` looks for explicit sponsorship disclosures (for example
     /// `#ad`, a paid partnership, an affiliate commission or a gifted product) in each video's
     /// on-screen text, speech transcription, title and caption. It is not scored as a
-    /// violation: findings are listed per video under `insight_json.disclosures` in the result
-    /// payload.
+    /// violation: findings are listed under `disclosures` in the result payload, one entry per
+    /// signal found.
     #[serde(rename = "type")]
     pub r#type: TypeEnum,
     /// Label for `USER_DEFINED_SAFETY_CRITERION`, stored as the criterion's `value`. Ignored
@@ -1702,6 +2533,74 @@ pub struct UsageWindow {
     /// Seconds until the window resets. The window starts on its first request rather than on
     /// the clock, so this is what is left of it.
     pub reset_in: i64,
+}
+
+/// A paid-partnership signal found in one piece of content.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct VettingDisclosure {
+    /// The content the signal is in.
+    pub content_id: String,
+    /// Link to that content, blank when unknown.
+    pub content_url: String,
+    /// Where it was found: `frame`, `title`, `caption` or `audio`.
+    pub source: String,
+    /// What kind of signal it is, for example `sponsorship`.
+    pub kind: String,
+    /// The disclosure wording itself.
+    pub text: String,
+    /// Seconds into the video, or `null` when it is not timed.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub time_seconds: Option<i64>,
+}
+
+/// How much of the creator's catalogue raised a flag.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct VettingSummary {
+    /// Flags raised across every criterion.
+    pub total_violations: i64,
+    /// Distinct content items carrying at least one flag.
+    pub affected_contents: i64,
+}
+
+/// The creator's recurring subjects, with what each is based on.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct VettingTopThemes {
+    /// The themes, strongest first.
+    #[serde(default)]
+    pub top_themes: Vec<String>,
+    /// `top_themes`: one grounded entry per theme.
+    pub grounding: serde_json::Value,
+}
+
+/// One criterion raised against one piece of the creator's content.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct VettingViolation {
+    /// Stable id for this flag, as `{content_id}_{type}`.
+    pub violation_id: String,
+    /// The criterion. One of `ILLEGAL_ACTS`, `HATE_SPEECH`, `MINOR_SAFETY`, `TERRORISM`,
+    /// `GRAPHIC_VIOLENCE`, `ADULT_CONTENT`, `ARMS_AND_AMMUNITION`, `SENSITIVE_NEWS_TRAGEDY`,
+    /// `MISINFORMATION`, `PROFANITY`, `ALCOHOL_AND_TOBACCO`, `POLITICS`, or `USER_DEFINED` for
+    /// a criterion you supplied.
+    #[serde(rename = "type")]
+    pub r#type: String,
+    /// The criterion's display name.
+    pub value: String,
+    /// What the criterion covers.
+    pub description: String,
+    /// Why this content was judged to breach the criterion.
+    pub reason: String,
+    /// The passage the judgement rests on, verbatim.
+    pub evidence_quote: String,
+    /// Where the quote came from: `title`, `ai_summary`, `transcription`, `text_overlay`,
+    /// `vetting_observations` or `none`. New values can be added, so treat an unknown one as
+    /// `none` rather than failing.
+    pub evidence_field: String,
+    /// The content the flag is against.
+    pub content_id: String,
+    /// Always `yes`. Content that passed is not listed.
+    pub violation: String,
+    /// How serious the flag is: `high`, `medium`, `low` or `N/A`.
+    pub severity: String,
 }
 
 /// An event type a subscription may ask for.

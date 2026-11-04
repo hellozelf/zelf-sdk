@@ -34,6 +34,8 @@ const (
 type EventType string
 
 const (
+	// EventAdvancedAIAnalysisCompleted Fires once an advanced AI analysis run has finished and its results are...
+	EventAdvancedAIAnalysisCompleted EventType = "advanced_ai_analysis.completed"
 	// EventAIAnalysisCompleted Fires when an AI analysis run reaches a terminal state (COMPLETED or FAILED)
 	EventAIAnalysisCompleted EventType = "ai_analysis.completed"
 	// EventContentSnapshot Scheduled snapshot of the content set that a subscription matches
@@ -45,10 +47,11 @@ const (
 )
 
 var knownEvents = map[EventType]bool{
-	"ai_analysis.completed":     true,
-	"content.snapshot":          true,
-	"creator.snapshot":          true,
-	"creator_vetting.completed": true,
+	"advanced_ai_analysis.completed": true,
+	"ai_analysis.completed":          true,
+	"content.snapshot":               true,
+	"creator.snapshot":               true,
+	"creator_vetting.completed":      true,
 }
 
 // Valid reports whether the API declares this event type.

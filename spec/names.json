@@ -1,5 +1,170 @@
 {
   "operations": {
+    "advanced_ai_analysis.content_statistics": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "ContentStatisticsAsync",
+          "resource": "AdvancedAiAnalysis"
+        },
+        "go": {
+          "method": "ContentStatistics",
+          "resource": "AdvancedAIAnalysis"
+        },
+        "java": {
+          "method": "contentStatistics",
+          "resource": "advancedAiAnalysis"
+        },
+        "python": {
+          "method": "content_statistics",
+          "resource": "advanced_ai_analysis"
+        },
+        "ruby": {
+          "method": "content_statistics",
+          "resource": "advanced_ai_analysis"
+        },
+        "rust": {
+          "method": "content_statistics",
+          "resource": "advanced_ai_analysis"
+        },
+        "typescript": {
+          "method": "contentStatistics",
+          "resource": "advanced_ai_analysis"
+        }
+      }
+    },
+    "advanced_ai_analysis.contents": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ContentsAsync",
+          "resource": "AdvancedAiAnalysis"
+        },
+        "go": {
+          "method": "Contents",
+          "resource": "AdvancedAIAnalysis"
+        },
+        "java": {
+          "method": "contents",
+          "resource": "advancedAiAnalysis"
+        },
+        "python": {
+          "method": "contents",
+          "resource": "advanced_ai_analysis"
+        },
+        "ruby": {
+          "method": "contents",
+          "resource": "advanced_ai_analysis"
+        },
+        "rust": {
+          "method": "contents",
+          "resource": "advanced_ai_analysis"
+        },
+        "typescript": {
+          "method": "contents",
+          "resource": "advanced_ai_analysis"
+        }
+      }
+    },
+    "advanced_ai_analysis.create": {
+      "cardinality": "single",
+      "symbols": {
+        "csharp": {
+          "method": "CreateAsync",
+          "resource": "AdvancedAiAnalysis"
+        },
+        "go": {
+          "method": "Create",
+          "resource": "AdvancedAIAnalysis"
+        },
+        "java": {
+          "method": "create",
+          "resource": "advancedAiAnalysis"
+        },
+        "python": {
+          "method": "create",
+          "resource": "advanced_ai_analysis"
+        },
+        "ruby": {
+          "method": "create",
+          "resource": "advanced_ai_analysis"
+        },
+        "rust": {
+          "method": "create",
+          "resource": "advanced_ai_analysis"
+        },
+        "typescript": {
+          "method": "create",
+          "resource": "advanced_ai_analysis"
+        }
+      }
+    },
+    "advanced_ai_analysis.list": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ListAsync",
+          "resource": "AdvancedAiAnalysis"
+        },
+        "go": {
+          "method": "List",
+          "resource": "AdvancedAIAnalysis"
+        },
+        "java": {
+          "method": "list",
+          "resource": "advancedAiAnalysis"
+        },
+        "python": {
+          "method": "list",
+          "resource": "advanced_ai_analysis"
+        },
+        "ruby": {
+          "method": "list",
+          "resource": "advanced_ai_analysis"
+        },
+        "rust": {
+          "method": "list",
+          "resource": "advanced_ai_analysis"
+        },
+        "typescript": {
+          "method": "list",
+          "resource": "advanced_ai_analysis"
+        }
+      }
+    },
+    "advanced_ai_analysis.results": {
+      "cardinality": "page",
+      "symbols": {
+        "csharp": {
+          "method": "ResultsAsync",
+          "resource": "AdvancedAiAnalysis"
+        },
+        "go": {
+          "method": "Results",
+          "resource": "AdvancedAIAnalysis"
+        },
+        "java": {
+          "method": "results",
+          "resource": "advancedAiAnalysis"
+        },
+        "python": {
+          "method": "results",
+          "resource": "advanced_ai_analysis"
+        },
+        "ruby": {
+          "method": "results",
+          "resource": "advanced_ai_analysis"
+        },
+        "rust": {
+          "method": "results",
+          "resource": "advanced_ai_analysis"
+        },
+        "typescript": {
+          "method": "results",
+          "resource": "advanced_ai_analysis"
+        }
+      }
+    },
     "ai_analysis.content_statistics": {
       "cardinality": "single",
       "symbols": {
@@ -1684,5 +1849,5 @@
       }
     }
   },
-  "version": "1.3.0"
+  "version": "1.4.0"
 }
