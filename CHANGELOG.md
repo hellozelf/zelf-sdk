@@ -10,6 +10,30 @@ generated from, which has a version of its own.
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
 
+## 1.4.0
+
+### Added
+- `advanced_ai_analysis.list` (GET /api/v1/advanced_ai_analysis/)
+- `advanced_ai_analysis.create` (POST /api/v1/advanced_ai_analysis/)
+- `advanced_ai_analysis.results` (GET /api/v1/advanced_ai_analysis/results/)
+- `advanced_ai_analysis.contents` (GET /api/v1/advanced_ai_analysis/contents/)
+- `advanced_ai_analysis.content_statistics` (GET /api/v1/advanced_ai_analysis/contents/statistics/)
+- `advanced_ai_analysis.completed`, a webhook raised once a run's report is
+  stored. `ai_analysis.completed` does not cover advanced runs.
+- `AiAnalysisReport`, `CreatorVettingReport` and `AdvancedAiAnalysisReport`: the
+  documents behind `result.download_url`. The envelope was already described;
+  what it points at was not, in any version until now.
+- `AdvancedAiAnalysis`, `AdvancedAiAnalysisResult`, `AdvancedAiAnalysisRun` and
+  the nested report types they carry.
+
+### Changed
+- `result.download_url` names the component its document matches, so a caller
+  can decode the file rather than guess at it.
+- A creator vetting `disclosures[]` entry is documented as the flat shape the
+  producer emits, `{content_id, content_url, source, kind, text, time_seconds}`.
+  The previous description claimed a `result` wrapper with `channels` and
+  `coverage`, which no response has ever returned.
+
 ## 1.3.3
 
 ### Changed
