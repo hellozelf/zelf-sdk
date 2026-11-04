@@ -23,6 +23,8 @@ DEFAULT_TOLERANCE_SECONDS = 300
 class EventType(str, Enum):
     """Event types the API can deliver, one per `webhooks` declaration."""
 
+    # Fires once an advanced AI analysis run has finished and its results are stored
+    ADVANCED_AI_ANALYSIS_COMPLETED = "advanced_ai_analysis.completed"
     # Fires when an AI analysis run reaches a terminal state (COMPLETED or FAILED)
     AI_ANALYSIS_COMPLETED = "ai_analysis.completed"
     # Scheduled snapshot of the content set that a subscription matches

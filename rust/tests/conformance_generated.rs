@@ -5,6 +5,11 @@
 use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
+use zelf::resources::advanced_ai_analysis::AdvancedAiAnalysisContentStatisticsParams;
+use zelf::resources::advanced_ai_analysis::AdvancedAiAnalysisContentsParams;
+use zelf::resources::advanced_ai_analysis::AdvancedAiAnalysisCreateParams;
+use zelf::resources::advanced_ai_analysis::AdvancedAiAnalysisListParams;
+use zelf::resources::advanced_ai_analysis::AdvancedAiAnalysisResultsParams;
 use zelf::resources::ai_analysis::AiAnalysisContentStatisticsParams;
 use zelf::resources::ai_analysis::AiAnalysisContentsParams;
 use zelf::resources::ai_analysis::AiAnalysisCreateParams;
@@ -99,6 +104,422 @@ async fn mount_pages(server: &MockServer, verb: &str, route: &str, body: serde_j
         .respond_with(ResponseTemplate::new(200).set_body_json(second))
         .mount(server)
         .await;
+}
+
+#[tokio::test]
+async fn maps_advanced_ai_analysis_content_statistics() {
+    let server = MockServer::start().await;
+    mount(
+        &server,
+        "GET",
+        "/api/v1/advanced_ai_analysis/contents/statistics/",
+        envelope_for("advanced_ai_analysis_content_statistics"),
+    )
+    .await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisContentStatisticsParams =
+        serde_json::from_str(r##"{"analysis_id": "ban_CByp0P2YSOnkg9qP"}"##).unwrap();
+    client
+        .advanced_ai_analysis()
+        .content_statistics(params)
+        .await
+        .expect("advanced_ai_analysis.content_statistics");
+
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 1, "advanced_ai_analysis.content_statistics");
+    let request = &requests[0];
+    assert_eq!(request.method.as_str(), "GET");
+    assert_eq!(
+        request.url.path(),
+        "/api/v1/advanced_ai_analysis/contents/statistics/"
+    );
+    {
+        let pairs: Vec<(String, String)> = request
+            .url
+            .query_pairs()
+            .map(|(name, value)| (name.to_string(), value.to_string()))
+            .collect();
+        let sent = |name: &str| -> Vec<String> {
+            pairs
+                .iter()
+                .filter(|(key, _)| key == name)
+                .map(|(_, value)| value.clone())
+                .collect()
+        };
+        assert_eq!(
+            sent("analysis_id"),
+            vec!["ban_CByp0P2YSOnkg9qP"],
+            "advanced_ai_analysis.content_statistics sent a wrong ?analysis_id"
+        );
+    }
+}
+
+#[tokio::test]
+async fn errors_propagate_advanced_ai_analysis_content_statistics() {
+    let server = MockServer::start().await;
+    mount_error(
+        &server,
+        "GET",
+        "/api/v1/advanced_ai_analysis/contents/statistics/",
+    )
+    .await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisContentStatisticsParams =
+        serde_json::from_str(r##"{"analysis_id": "ban_CByp0P2YSOnkg9qP"}"##).unwrap();
+    client
+        .advanced_ai_analysis()
+        .content_statistics(params)
+        .await
+        .expect_err("advanced_ai_analysis.content_statistics swallowed a 500");
+}
+
+#[tokio::test]
+async fn maps_advanced_ai_analysis_contents() {
+    let server = MockServer::start().await;
+    mount(
+        &server,
+        "GET",
+        "/api/v1/advanced_ai_analysis/contents/",
+        envelope_for("advanced_ai_analysis_contents"),
+    )
+    .await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisContentsParams = serde_json::from_str(
+        r##"{"analysis_id": "ban_CByp0P2YSOnkg9qP", "page": 1, "page_size": 1}"##,
+    )
+    .unwrap();
+    client
+        .advanced_ai_analysis()
+        .contents(params)
+        .await
+        .expect("advanced_ai_analysis.contents");
+
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 1, "advanced_ai_analysis.contents");
+    let request = &requests[0];
+    assert_eq!(request.method.as_str(), "GET");
+    assert_eq!(request.url.path(), "/api/v1/advanced_ai_analysis/contents/");
+    {
+        let pairs: Vec<(String, String)> = request
+            .url
+            .query_pairs()
+            .map(|(name, value)| (name.to_string(), value.to_string()))
+            .collect();
+        let sent = |name: &str| -> Vec<String> {
+            pairs
+                .iter()
+                .filter(|(key, _)| key == name)
+                .map(|(_, value)| value.clone())
+                .collect()
+        };
+        assert_eq!(
+            sent("analysis_id"),
+            vec!["ban_CByp0P2YSOnkg9qP"],
+            "advanced_ai_analysis.contents sent a wrong ?analysis_id"
+        );
+        assert_eq!(
+            sent("page"),
+            vec!["1"],
+            "advanced_ai_analysis.contents sent a wrong ?page"
+        );
+        assert_eq!(
+            sent("page_size"),
+            vec!["1"],
+            "advanced_ai_analysis.contents sent a wrong ?page_size"
+        );
+    }
+}
+
+#[tokio::test]
+async fn errors_propagate_advanced_ai_analysis_contents() {
+    let server = MockServer::start().await;
+    mount_error(&server, "GET", "/api/v1/advanced_ai_analysis/contents/").await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisContentsParams = serde_json::from_str(
+        r##"{"analysis_id": "ban_CByp0P2YSOnkg9qP", "page": 1, "page_size": 1}"##,
+    )
+    .unwrap();
+    client
+        .advanced_ai_analysis()
+        .contents(params)
+        .await
+        .expect_err("advanced_ai_analysis.contents swallowed a 500");
+}
+
+#[tokio::test]
+async fn walks_advanced_ai_analysis_contents() {
+    let server = MockServer::start().await;
+    mount_pages(
+        &server,
+        "GET",
+        "/api/v1/advanced_ai_analysis/contents/",
+        envelope_for("advanced_ai_analysis_contents"),
+    )
+    .await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisContentsParams = serde_json::from_str(
+        r##"{"analysis_id": "ban_CByp0P2YSOnkg9qP", "page": 1, "page_size": 1}"##,
+    )
+    .unwrap();
+    let page = client
+        .advanced_ai_analysis()
+        .contents(params)
+        .await
+        .expect("advanced_ai_analysis.contents");
+    let rows = page.collect_all(Limits::pages(2)).await.expect("walk");
+
+    assert!(!rows.is_empty());
+    assert_eq!(server.received_requests().await.unwrap().len(), 2);
+}
+
+#[tokio::test]
+async fn maps_advanced_ai_analysis_create() {
+    let server = MockServer::start().await;
+    mount(
+        &server,
+        "POST",
+        "/api/v1/advanced_ai_analysis/",
+        envelope_for("advanced_ai_analysis_create"),
+    )
+    .await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisCreateParams =
+        serde_json::from_str(r##"{"name": "Name", "topic": "Topic", "content_filters": {"view_count_min": 42, "view_count_max": 42, "comment_count_min": 42, "comment_count_max": 42, "like_count_min": 42, "like_count_max": 42, "share_count_min": 42, "share_count_max": 42, "total_engagement_min": 7, "total_engagement_max": 7, "earned_media_value_cents_min": 12500000, "earned_media_value_cents_max": 12500000, "media_duration_min": 0.0425, "media_duration_max": 0.0425, "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "platform": ["instagram"], "language": ["en"], "content_form": "VIDEO", "search": "Search", "creator_id": "cr_15m71bGddcO3i6k1", "brand_id": "brd_CJtiHvFfOa8AL8zs", "is_owned": true, "is_tagged": true, "is_influencer": true, "external_id": "cV3d6aAxvPs6WX5L", "creator_username": "zelfai", "mention_type": ["content"], "mention_type_not": ["content"], "creator_follower_count_min": 42, "creator_follower_count_max": 42, "engagement_rate_min": 0.0425, "engagement_rate_max": 0.0425, "net_promoter_score_min": 7, "net_promoter_score_max": 7, "posted_within_days": 42, "posted_within_hours": 42, "order_by": ["Order by"]}}"##).unwrap();
+    client
+        .advanced_ai_analysis()
+        .create(params)
+        .await
+        .expect("advanced_ai_analysis.create");
+
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 1, "advanced_ai_analysis.create");
+    let request = &requests[0];
+    assert_eq!(request.method.as_str(), "POST");
+    assert_eq!(request.url.path(), "/api/v1/advanced_ai_analysis/");
+    {
+        let body: serde_json::Value =
+            serde_json::from_slice(&request.body).unwrap_or(serde_json::Value::Null);
+        assert!(
+            body.get("content_filters").is_some(),
+            "advanced_ai_analysis.create dropped content_filters"
+        );
+        assert!(
+            body.get("name").is_some(),
+            "advanced_ai_analysis.create dropped name"
+        );
+        assert!(
+            body.get("topic").is_some(),
+            "advanced_ai_analysis.create dropped topic"
+        );
+    }
+}
+
+#[tokio::test]
+async fn errors_propagate_advanced_ai_analysis_create() {
+    let server = MockServer::start().await;
+    mount_error(&server, "POST", "/api/v1/advanced_ai_analysis/").await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisCreateParams =
+        serde_json::from_str(r##"{"name": "Name", "topic": "Topic", "content_filters": {"view_count_min": 42, "view_count_max": 42, "comment_count_min": 42, "comment_count_max": 42, "like_count_min": 42, "like_count_max": 42, "share_count_min": 42, "share_count_max": 42, "total_engagement_min": 7, "total_engagement_max": 7, "earned_media_value_cents_min": 12500000, "earned_media_value_cents_max": 12500000, "media_duration_min": 0.0425, "media_duration_max": 0.0425, "posted_after": "2026-01-01T00:00:00Z", "posted_before": "2026-01-01T00:00:00Z", "platform": ["instagram"], "language": ["en"], "content_form": "VIDEO", "search": "Search", "creator_id": "cr_15m71bGddcO3i6k1", "brand_id": "brd_CJtiHvFfOa8AL8zs", "is_owned": true, "is_tagged": true, "is_influencer": true, "external_id": "cV3d6aAxvPs6WX5L", "creator_username": "zelfai", "mention_type": ["content"], "mention_type_not": ["content"], "creator_follower_count_min": 42, "creator_follower_count_max": 42, "engagement_rate_min": 0.0425, "engagement_rate_max": 0.0425, "net_promoter_score_min": 7, "net_promoter_score_max": 7, "posted_within_days": 42, "posted_within_hours": 42, "order_by": ["Order by"]}}"##).unwrap();
+    client
+        .advanced_ai_analysis()
+        .create(params)
+        .await
+        .expect_err("advanced_ai_analysis.create swallowed a 500");
+}
+
+#[tokio::test]
+async fn maps_advanced_ai_analysis_list() {
+    let server = MockServer::start().await;
+    mount(
+        &server,
+        "GET",
+        "/api/v1/advanced_ai_analysis/",
+        envelope_for("advanced_ai_analysis_list"),
+    )
+    .await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisListParams =
+        serde_json::from_str(r##"{"id": "id_R5jAcrMDDBbK3BBf", "page": 1, "page_size": 1}"##)
+            .unwrap();
+    client
+        .advanced_ai_analysis()
+        .list(params)
+        .await
+        .expect("advanced_ai_analysis.list");
+
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 1, "advanced_ai_analysis.list");
+    let request = &requests[0];
+    assert_eq!(request.method.as_str(), "GET");
+    assert_eq!(request.url.path(), "/api/v1/advanced_ai_analysis/");
+    {
+        let pairs: Vec<(String, String)> = request
+            .url
+            .query_pairs()
+            .map(|(name, value)| (name.to_string(), value.to_string()))
+            .collect();
+        let sent = |name: &str| -> Vec<String> {
+            pairs
+                .iter()
+                .filter(|(key, _)| key == name)
+                .map(|(_, value)| value.clone())
+                .collect()
+        };
+        assert_eq!(
+            sent("id"),
+            vec!["id_R5jAcrMDDBbK3BBf"],
+            "advanced_ai_analysis.list sent a wrong ?id"
+        );
+        assert_eq!(
+            sent("page"),
+            vec!["1"],
+            "advanced_ai_analysis.list sent a wrong ?page"
+        );
+        assert_eq!(
+            sent("page_size"),
+            vec!["1"],
+            "advanced_ai_analysis.list sent a wrong ?page_size"
+        );
+    }
+}
+
+#[tokio::test]
+async fn errors_propagate_advanced_ai_analysis_list() {
+    let server = MockServer::start().await;
+    mount_error(&server, "GET", "/api/v1/advanced_ai_analysis/").await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisListParams =
+        serde_json::from_str(r##"{"id": "id_R5jAcrMDDBbK3BBf", "page": 1, "page_size": 1}"##)
+            .unwrap();
+    client
+        .advanced_ai_analysis()
+        .list(params)
+        .await
+        .expect_err("advanced_ai_analysis.list swallowed a 500");
+}
+
+#[tokio::test]
+async fn walks_advanced_ai_analysis_list() {
+    let server = MockServer::start().await;
+    mount_pages(
+        &server,
+        "GET",
+        "/api/v1/advanced_ai_analysis/",
+        envelope_for("advanced_ai_analysis_list"),
+    )
+    .await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisListParams =
+        serde_json::from_str(r##"{"id": "id_R5jAcrMDDBbK3BBf", "page": 1, "page_size": 1}"##)
+            .unwrap();
+    let page = client
+        .advanced_ai_analysis()
+        .list(params)
+        .await
+        .expect("advanced_ai_analysis.list");
+    let rows = page.collect_all(Limits::pages(2)).await.expect("walk");
+
+    assert!(!rows.is_empty());
+    assert_eq!(server.received_requests().await.unwrap().len(), 2);
+}
+
+#[tokio::test]
+async fn maps_advanced_ai_analysis_results() {
+    let server = MockServer::start().await;
+    mount(
+        &server,
+        "GET",
+        "/api/v1/advanced_ai_analysis/results/",
+        envelope_for("advanced_ai_analysis_results"),
+    )
+    .await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisResultsParams =
+        serde_json::from_str(r##"{"analysis_id": "ban_CByp0P2YSOnkg9qP", "id": "id_R5jAcrMDDBbK3BBf", "page": 1, "page_size": 1}"##).unwrap();
+    client
+        .advanced_ai_analysis()
+        .results(params)
+        .await
+        .expect("advanced_ai_analysis.results");
+
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 1, "advanced_ai_analysis.results");
+    let request = &requests[0];
+    assert_eq!(request.method.as_str(), "GET");
+    assert_eq!(request.url.path(), "/api/v1/advanced_ai_analysis/results/");
+    {
+        let pairs: Vec<(String, String)> = request
+            .url
+            .query_pairs()
+            .map(|(name, value)| (name.to_string(), value.to_string()))
+            .collect();
+        let sent = |name: &str| -> Vec<String> {
+            pairs
+                .iter()
+                .filter(|(key, _)| key == name)
+                .map(|(_, value)| value.clone())
+                .collect()
+        };
+        assert_eq!(
+            sent("analysis_id"),
+            vec!["ban_CByp0P2YSOnkg9qP"],
+            "advanced_ai_analysis.results sent a wrong ?analysis_id"
+        );
+        assert_eq!(
+            sent("id"),
+            vec!["id_R5jAcrMDDBbK3BBf"],
+            "advanced_ai_analysis.results sent a wrong ?id"
+        );
+        assert_eq!(
+            sent("page"),
+            vec!["1"],
+            "advanced_ai_analysis.results sent a wrong ?page"
+        );
+        assert_eq!(
+            sent("page_size"),
+            vec!["1"],
+            "advanced_ai_analysis.results sent a wrong ?page_size"
+        );
+    }
+}
+
+#[tokio::test]
+async fn errors_propagate_advanced_ai_analysis_results() {
+    let server = MockServer::start().await;
+    mount_error(&server, "GET", "/api/v1/advanced_ai_analysis/results/").await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisResultsParams =
+        serde_json::from_str(r##"{"analysis_id": "ban_CByp0P2YSOnkg9qP", "id": "id_R5jAcrMDDBbK3BBf", "page": 1, "page_size": 1}"##).unwrap();
+    client
+        .advanced_ai_analysis()
+        .results(params)
+        .await
+        .expect_err("advanced_ai_analysis.results swallowed a 500");
+}
+
+#[tokio::test]
+async fn walks_advanced_ai_analysis_results() {
+    let server = MockServer::start().await;
+    mount_pages(
+        &server,
+        "GET",
+        "/api/v1/advanced_ai_analysis/results/",
+        envelope_for("advanced_ai_analysis_results"),
+    )
+    .await;
+    let client = client_for(&server);
+    let params: AdvancedAiAnalysisResultsParams =
+        serde_json::from_str(r##"{"analysis_id": "ban_CByp0P2YSOnkg9qP", "id": "id_R5jAcrMDDBbK3BBf", "page": 1, "page_size": 1}"##).unwrap();
+    let page = client
+        .advanced_ai_analysis()
+        .results(params)
+        .await
+        .expect("advanced_ai_analysis.results");
+    let rows = page.collect_all(Limits::pages(2)).await.expect("walk");
+
+    assert!(!rows.is_empty());
+    assert_eq!(server.received_requests().await.unwrap().len(), 2);
 }
 
 #[tokio::test]
@@ -4059,8 +4480,8 @@ async fn api_key_header_is_sent_once() {
     mount(
         &server,
         "GET",
-        "/api/v1/ai_analysis/contents/statistics/",
-        envelope_for("ai_analysis_content_statistics"),
+        "/api/v1/advanced_ai_analysis/contents/statistics/",
+        envelope_for("advanced_ai_analysis_content_statistics"),
     )
     .await;
     let client = Client::builder()
@@ -4070,13 +4491,13 @@ async fn api_key_header_is_sent_once() {
         .header("X-API-Key", "sk_test_a_different_key")
         .build()
         .expect("client builds");
-    let params: AiAnalysisContentStatisticsParams =
+    let params: AdvancedAiAnalysisContentStatisticsParams =
         serde_json::from_str(r##"{"analysis_id": "ban_CByp0P2YSOnkg9qP"}"##).unwrap();
     client
-        .ai_analysis()
+        .advanced_ai_analysis()
         .content_statistics(params)
         .await
-        .expect("ai_analysis.content_statistics");
+        .expect("advanced_ai_analysis.content_statistics");
 
     let requests = server.received_requests().await.unwrap();
     let sent: Vec<&str> = requests[0]

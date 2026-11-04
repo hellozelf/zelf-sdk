@@ -182,6 +182,494 @@ public static class WebhookPushDeliveryMode
 }
 
 /// <summary>
+/// Response body for the advanced AI analysis root.
+/// </summary>
+public sealed record AdvancedAiAnalysis(
+    [property: JsonPropertyName("id")] string Id,
+    [property: JsonPropertyName("analysis_type")] string AnalysisType,
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("topic")] string? Topic,
+    [property: JsonPropertyName("created_at")] DateTimeOffset CreatedAt,
+    [property: JsonPropertyName("modified_at")] DateTimeOffset ModifiedAt,
+    [property: JsonPropertyName("analyses")] IReadOnlyList<AdvancedAiAnalysisRun> Analyses
+);
+
+/// <summary>
+/// Request body for ``POST /api/v1/advanced_ai_analysis/``.
+/// </summary>
+public sealed record AdvancedAiAnalysisCreateRequest
+{
+    /// <summary>
+    /// A label for this analysis
+    /// </summary>
+    [JsonPropertyName("name")]
+    public string? Name { get; init; }
+
+    /// <summary>
+    /// The brand, product, person or event to analyze, as a short term
+    /// </summary>
+    [JsonPropertyName("topic")]
+    public string? Topic { get; init; }
+
+    /// <summary>
+    /// Selects which content the analysis runs over
+    /// </summary>
+    [JsonPropertyName("content_filters")]
+    public ContentFilterInputRequest? ContentFilters { get; init; }
+
+}
+
+/// <summary>
+/// The JSON document behind an advanced AI analysis run's `result.download_url`. Counts
+/// are whole numbers, shares and rates are decimals from 0 to 1, money is in whole
+/// cents, and a value is `null` when there was not enough data to work it out. A
+/// section is absent when the run could not produce it, so read every one as optional,
+/// and ignore keys you do not recognise.
+/// </summary>
+public sealed record AdvancedAiAnalysisReport(
+    [property: JsonPropertyName("summary")] AdvancedSummary Summary,
+    [property: JsonPropertyName("sentiment")] IReadOnlyList<LabelCount> Sentiment,
+    [property: JsonPropertyName("stance")] IReadOnlyList<LabelCount> Stance,
+    [property: JsonPropertyName("themes")] IReadOnlyList<AdvancedThemeCount> Themes,
+    [property: JsonPropertyName("sentiment_by_theme")] IReadOnlyList<AdvancedSentimentByTheme> SentimentByTheme,
+    [property: JsonPropertyName("timeline")] IReadOnlyList<AdvancedTimelinePoint> Timeline,
+    [property: JsonPropertyName("languages")] IReadOnlyList<AdvancedLanguage> Languages,
+    [property: JsonPropertyName("content_forms")] IReadOnlyList<AdvancedContentForm> ContentForms,
+    [property: JsonPropertyName("top_creators")] IReadOnlyList<AdvancedTopCreator> TopCreators,
+    [property: JsonPropertyName("speaker_demographics")] AdvancedSpeakerDemographics SpeakerDemographics,
+    [property: JsonPropertyName("signals")] AdvancedSignals Signals,
+    [property: JsonPropertyName("love_dislike")] AdvancedLoveDislike LoveDislike,
+    [property: JsonPropertyName("perception")] AdvancedPerception Perception,
+    [property: JsonPropertyName("audience_voice")] AdvancedAudienceVoice AudienceVoice,
+    [property: JsonPropertyName("personas")] AdvancedPersonas? Personas,
+    [property: JsonPropertyName("creator_intel")] AdvancedCreatorIntel? CreatorIntel
+);
+
+/// <summary>
+/// A single advanced run with its downloadable ``result``.
+/// </summary>
+public sealed record AdvancedAiAnalysisResult(
+    [property: JsonPropertyName("id")] string Id,
+    [property: JsonPropertyName("analysis_id")] string AnalysisId,
+    [property: JsonPropertyName("status")] string Status,
+    [property: JsonPropertyName("result")] ResultFile? Result,
+    [property: JsonPropertyName("dashboard_url")] string? DashboardUrl,
+    [property: JsonPropertyName("created_at")] DateTimeOffset CreatedAt,
+    [property: JsonPropertyName("modified_at")] DateTimeOffset ModifiedAt
+);
+
+/// <summary>
+/// A single advanced run, without its result payload. The run ``result`` is not
+/// included; retrieve it from `advanced_ai_analysis.results` once ``status`` is
+/// `COMPLETED`.
+/// </summary>
+public sealed record AdvancedAiAnalysisRun(
+    [property: JsonPropertyName("id")] string Id,
+    [property: JsonPropertyName("status")] string Status,
+    [property: JsonPropertyName("dashboard_url")] string? DashboardUrl
+);
+
+/// <summary>
+/// What the comments say, as a whole.
+/// </summary>
+public sealed record AdvancedAudienceVoice(
+    [property: JsonPropertyName("has_comments")] bool HasComments,
+    [property: JsonPropertyName("totals")] AdvancedVoiceTotals Totals,
+    [property: JsonPropertyName("sentiment")] IReadOnlyList<AdvancedVoiceSentiment> Sentiment,
+    [property: JsonPropertyName("intent")] IReadOnlyList<LabelCount> Intent,
+    [property: JsonPropertyName("themes")] IReadOnlyList<AdvancedVoiceTheme> Themes,
+    [property: JsonPropertyName("timeline")] IReadOnlyList<AdvancedVoiceTimeline> Timeline,
+    [property: JsonPropertyName("top_comments")] IReadOnlyList<AdvancedTopComment> TopComments,
+    [property: JsonPropertyName("theme_divergence")] IReadOnlyList<AdvancedThemeDivergence> ThemeDivergence,
+    [property: JsonPropertyName("brands")] IReadOnlyList<AdvancedVoiceBrand> Brands
+);
+
+/// <summary>
+/// One video format and how it performs.
+/// </summary>
+public sealed record AdvancedContentForm(
+    [property: JsonPropertyName("form")] string Form,
+    [property: JsonPropertyName("count")] long Count,
+    [property: JsonPropertyName("avg_views")] long AvgViews,
+    [property: JsonPropertyName("avg_engagements")] long AvgEngagements
+);
+
+/// <summary>
+/// How many of the analyzed videos carry each kind of analysis.
+/// </summary>
+public sealed record AdvancedCoverage(
+    [property: JsonPropertyName("total")] long Total,
+    [property: JsonPropertyName("enriched")] long Enriched,
+    [property: JsonPropertyName("has_sentiment")] long HasSentiment,
+    [property: JsonPropertyName("has_themes")] long HasThemes,
+    [property: JsonPropertyName("has_love_dislike")] long HasLoveDislike,
+    [property: JsonPropertyName("has_speaker_demographics")] long HasSpeakerDemographics,
+    [property: JsonPropertyName("has_human_signals")] long HasHumanSignals
+);
+
+/// <summary>
+/// Creators sorted by posture, and the stories they carry.
+/// </summary>
+public sealed record AdvancedCreatorIntel(
+    [property: JsonPropertyName("totals")] AdvancedCreatorIntelTotals Totals,
+    [property: JsonPropertyName("advocates")] IReadOnlyList<AdvancedCreatorProfile> Advocates,
+    [property: JsonPropertyName("detractors")] IReadOnlyList<AdvancedCreatorProfile> Detractors,
+    [property: JsonPropertyName("prospects")] IReadOnlyList<AdvancedCreatorProfile> Prospects,
+    [property: JsonPropertyName("posture_map")] IReadOnlyList<AdvancedPostureMapEntry> PostureMap,
+    [property: JsonPropertyName("narratives")] IReadOnlyList<AdvancedNarrative> Narratives,
+    [property: JsonPropertyName("meta")] AdvancedCreatorIntelMeta Meta
+);
+
+/// <summary>
+/// How and when this section was built.
+/// </summary>
+public sealed record AdvancedCreatorIntelMeta(
+    [property: JsonPropertyName("generated_at")] string GeneratedAt,
+    [property: JsonPropertyName("model")] string Model,
+    [property: JsonPropertyName("enriched_count")] long EnrichedCount,
+    [property: JsonPropertyName("stale")] bool Stale,
+    [property: JsonPropertyName("derived_from")] string? DerivedFrom
+);
+
+/// <summary>
+/// How the creators split across postures.
+/// </summary>
+public sealed record AdvancedCreatorIntelTotals(
+    [property: JsonPropertyName("creators")] long Creators,
+    [property: JsonPropertyName("advocates")] long Advocates,
+    [property: JsonPropertyName("detractors")] long Detractors,
+    [property: JsonPropertyName("prospects")] long Prospects
+);
+
+/// <summary>
+/// A creator, scored on how they treat the topic.
+/// </summary>
+public sealed record AdvancedCreatorProfile(
+    [property: JsonPropertyName("handle")] string Handle,
+    [property: JsonPropertyName("posts")] long Posts,
+    [property: JsonPropertyName("views")] long Views,
+    [property: JsonPropertyName("engagements")] long Engagements,
+    [property: JsonPropertyName("emv_cents")] long EmvCents,
+    [property: JsonPropertyName("avg_sentiment")] double? AvgSentiment,
+    [property: JsonPropertyName("stance_counts")] JsonElement StanceCounts,
+    [property: JsonPropertyName("top_themes")] IReadOnlyList<AdvancedThemeCount> TopThemes,
+    [property: JsonPropertyName("organic_share")] double? OrganicShare,
+    [property: JsonPropertyName("first_post")] string? FirstPost,
+    [property: JsonPropertyName("last_post")] string? LastPost,
+    [property: JsonPropertyName("reach_percentile")] double? ReachPercentile,
+    [property: JsonPropertyName("stance_lean")] double? StanceLean,
+    [property: JsonPropertyName("posture")] string Posture,
+    [property: JsonPropertyName("partnership_fit")] long? PartnershipFit,
+    [property: JsonPropertyName("detractor_severity")] long? DetractorSeverity,
+    [property: JsonPropertyName("consumer_resonance")] long? ConsumerResonance,
+    [property: JsonPropertyName("read")] JsonElement? Read,
+    [property: JsonPropertyName("profile")] JsonElement? Profile
+);
+
+/// <summary>
+/// One language and its share of the set.
+/// </summary>
+public sealed record AdvancedLanguage(
+    [property: JsonPropertyName("language")] string Language,
+    [property: JsonPropertyName("count")] long Count,
+    [property: JsonPropertyName("engagements")] long Engagements
+);
+
+/// <summary>
+/// What the audience loves and dislikes about the topic.
+/// </summary>
+public sealed record AdvancedLoveDislike(
+    [property: JsonPropertyName("classified_count")] long ClassifiedCount,
+    [property: JsonPropertyName("total_count")] long TotalCount,
+    [property: JsonPropertyName("love")] IReadOnlyList<AdvancedLoveDislikeBucket> Love,
+    [property: JsonPropertyName("dislike")] IReadOnlyList<AdvancedLoveDislikeBucket> Dislike
+);
+
+/// <summary>
+/// One thing people love or dislike, and what backs it.
+/// </summary>
+public sealed record AdvancedLoveDislikeBucket(
+    [property: JsonPropertyName("slug")] string Slug,
+    [property: JsonPropertyName("label")] string Label,
+    [property: JsonPropertyName("definition")] string Definition,
+    [property: JsonPropertyName("video_count")] long VideoCount,
+    [property: JsonPropertyName("emv_cents")] long EmvCents,
+    [property: JsonPropertyName("total_views")] long TotalViews
+);
+
+/// <summary>
+/// A story moving through the conversation.
+/// </summary>
+public sealed record AdvancedNarrative(
+    [property: JsonPropertyName("theme")] string Theme,
+    [property: JsonPropertyName("total")] long Total,
+    [property: JsonPropertyName("positive_share")] double? PositiveShare,
+    [property: JsonPropertyName("negative_share")] double? NegativeShare,
+    [property: JsonPropertyName("momentum")] double? Momentum,
+    [property: JsonPropertyName("direction")] string Direction,
+    [property: JsonPropertyName("carriers")] IReadOnlyList<string> Carriers,
+    [property: JsonPropertyName("play")] JsonElement? Play
+);
+
+/// <summary>
+/// Price and quality perception, measured from both sides.
+/// </summary>
+public sealed record AdvancedPerception(
+    [property: JsonPropertyName("audience")] AdvancedPerceptionSide Audience,
+    [property: JsonPropertyName("creator")] AdvancedPerceptionSide Creator
+);
+
+/// <summary>
+/// One perception axis, price or quality, measured one way.
+/// </summary>
+public sealed record AdvancedPerceptionAxis(
+    [property: JsonPropertyName("share_indicating")] double? ShareIndicating,
+    [property: JsonPropertyName("classified_count")] long ClassifiedCount,
+    [property: JsonPropertyName("enriched_count")] long EnrichedCount,
+    [property: JsonPropertyName("buckets")] IReadOnlyList<AdvancedPerceptionBucket> Buckets
+);
+
+/// <summary>
+/// One perception band and its share.
+/// </summary>
+public sealed record AdvancedPerceptionBucket(
+    [property: JsonPropertyName("key")] string Key,
+    [property: JsonPropertyName("label")] string Label,
+    [property: JsonPropertyName("pct")] double Pct,
+    [property: JsonPropertyName("video_count")] long VideoCount,
+    [property: JsonPropertyName("emv_cents")] long EmvCents,
+    [property: JsonPropertyName("total_views")] long TotalViews
+);
+
+/// <summary>
+/// Price and quality as seen from one side.
+/// </summary>
+public sealed record AdvancedPerceptionSide(
+    [property: JsonPropertyName("price")] AdvancedPerceptionAxis Price,
+    [property: JsonPropertyName("quality")] AdvancedPerceptionAxis Quality
+);
+
+/// <summary>
+/// An audience archetype found across the analyzed videos.
+/// </summary>
+public sealed record AdvancedPersona(
+    [property: JsonPropertyName("id")] string Id,
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("tagline")] string Tagline,
+    [property: JsonPropertyName("description")] string Description,
+    [property: JsonPropertyName("member_count")] long MemberCount,
+    [property: JsonPropertyName("avg_sentiment")] double? AvgSentiment,
+    [property: JsonPropertyName("total_views")] long TotalViews,
+    [property: JsonPropertyName("top_similarity")] double? TopSimilarity,
+    [property: JsonPropertyName("representatives")] IReadOnlyList<AdvancedPersonaRepresentative> Representatives,
+    [property: JsonPropertyName("breakdown")] JsonElement? Breakdown
+);
+
+/// <summary>
+/// A video that stands for a persona.
+/// </summary>
+public sealed record AdvancedPersonaRepresentative(
+    [property: JsonPropertyName("record_id")] string RecordId,
+    [property: JsonPropertyName("handle")] string Handle,
+    [property: JsonPropertyName("caption")] string Caption,
+    [property: JsonPropertyName("gist")] string Gist,
+    [property: JsonPropertyName("views")] long Views,
+    [property: JsonPropertyName("likes")] long Likes,
+    [property: JsonPropertyName("engagements")] long Engagements,
+    [property: JsonPropertyName("emv_cents")] long EmvCents,
+    [property: JsonPropertyName("sentiment")] string Sentiment,
+    [property: JsonPropertyName("sentiment_score")] double? SentimentScore,
+    [property: JsonPropertyName("stance")] string Stance,
+    [property: JsonPropertyName("themes")] IReadOnlyList<string> Themes,
+    [property: JsonPropertyName("language")] string Language,
+    [property: JsonPropertyName("content_form")] string ContentForm,
+    [property: JsonPropertyName("duration_s")] double? DurationS,
+    [property: JsonPropertyName("posted_at")] string PostedAt,
+    [property: JsonPropertyName("thumbnail_url")] string? ThumbnailUrl,
+    [property: JsonPropertyName("video_url")] string? VideoUrl
+);
+
+/// <summary>
+/// The audience archetypes, and how they were derived.
+/// </summary>
+public sealed record AdvancedPersonas(
+    [property: JsonPropertyName("vocab_source")] string VocabSource,
+    [property: JsonPropertyName("personas")] IReadOnlyList<AdvancedPersona> Personas
+);
+
+/// <summary>
+/// One creator plotted by reach against stance.
+/// </summary>
+public sealed record AdvancedPostureMapEntry(
+    [property: JsonPropertyName("handle")] string Handle,
+    [property: JsonPropertyName("reach_percentile")] double? ReachPercentile,
+    [property: JsonPropertyName("stance_lean")] double? StanceLean,
+    [property: JsonPropertyName("posts")] long Posts,
+    [property: JsonPropertyName("posture")] string Posture
+);
+
+/// <summary>
+/// How sentiment splits inside one theme.
+/// </summary>
+public sealed record AdvancedSentimentByTheme(
+    [property: JsonPropertyName("theme")] string Theme,
+    [property: JsonPropertyName("positive")] long Positive,
+    [property: JsonPropertyName("neutral")] long Neutral,
+    [property: JsonPropertyName("negative")] long Negative,
+    [property: JsonPropertyName("mixed")] long Mixed,
+    [property: JsonPropertyName("total")] long Total
+);
+
+/// <summary>
+/// Product context drawn from what people show and say.
+/// </summary>
+public sealed record AdvancedSignals(
+    [property: JsonPropertyName("stack")] IReadOnlyList<LabelCount> Stack,
+    [property: JsonPropertyName("competitors")] IReadOnlyList<LabelCount> Competitors,
+    [property: JsonPropertyName("pain_points")] IReadOnlyList<LabelCount> PainPoints,
+    [property: JsonPropertyName("journey_stage")] IReadOnlyList<LabelCount> JourneyStage
+);
+
+/// <summary>
+/// Inferred traits of the people on screen. These are model inferences, not verified
+/// facts. Use them for trends across the set, never as a statement about any one
+/// person.
+/// </summary>
+public sealed record AdvancedSpeakerDemographics(
+    [property: JsonPropertyName("gender")] IReadOnlyList<LabelCount> Gender,
+    [property: JsonPropertyName("age")] IReadOnlyList<LabelCount> Age,
+    [property: JsonPropertyName("ethnicity")] IReadOnlyList<LabelCount> Ethnicity,
+    [property: JsonPropertyName("setting")] IReadOnlyList<LabelCount> Setting
+);
+
+/// <summary>
+/// Totals over the whole analyzed set.
+/// </summary>
+public sealed record AdvancedSummary(
+    [property: JsonPropertyName("videos")] long Videos,
+    [property: JsonPropertyName("creators")] long Creators,
+    [property: JsonPropertyName("total_views")] long TotalViews,
+    [property: JsonPropertyName("total_likes")] long TotalLikes,
+    [property: JsonPropertyName("total_comments")] long TotalComments,
+    [property: JsonPropertyName("total_shares")] long TotalShares,
+    [property: JsonPropertyName("total_engagements")] long TotalEngagements,
+    [property: JsonPropertyName("mean_engagement_rate")] double? MeanEngagementRate,
+    [property: JsonPropertyName("total_emv_cents")] long TotalEmvCents,
+    [property: JsonPropertyName("first_post")] string? FirstPost,
+    [property: JsonPropertyName("last_post")] string? LastPost,
+    [property: JsonPropertyName("coverage")] AdvancedCoverage Coverage
+);
+
+/// <summary>
+/// A theme and how many videos carry it.
+/// </summary>
+public sealed record AdvancedThemeCount(
+    [property: JsonPropertyName("theme")] string Theme,
+    [property: JsonPropertyName("count")] long Count
+);
+
+/// <summary>
+/// A theme where creators and their audience disagree.
+/// </summary>
+public sealed record AdvancedThemeDivergence(
+    [property: JsonPropertyName("theme")] string Theme,
+    [property: JsonPropertyName("videos")] long Videos,
+    [property: JsonPropertyName("comments")] long Comments,
+    [property: JsonPropertyName("creator_score")] double? CreatorScore,
+    [property: JsonPropertyName("audience_score")] double? AudienceScore,
+    [property: JsonPropertyName("gap")] double? Gap
+);
+
+/// <summary>
+/// One month of posting activity.
+/// </summary>
+public sealed record AdvancedTimelinePoint(
+    [property: JsonPropertyName("month")] string Month,
+    [property: JsonPropertyName("posts")] long Posts,
+    [property: JsonPropertyName("views")] long Views,
+    [property: JsonPropertyName("engagements")] long Engagements
+);
+
+/// <summary>
+/// A comment worth reading, with the video it sits under.
+/// </summary>
+public sealed record AdvancedTopComment(
+    [property: JsonPropertyName("comment_id")] string CommentId,
+    [property: JsonPropertyName("text")] string Text,
+    [property: JsonPropertyName("likes")] long Likes,
+    [property: JsonPropertyName("posted_at")] string PostedAt,
+    [property: JsonPropertyName("sentiment")] string Sentiment,
+    [property: JsonPropertyName("intent")] string Intent,
+    [property: JsonPropertyName("gist")] string Gist,
+    [property: JsonPropertyName("video_record_id")] string VideoRecordId,
+    [property: JsonPropertyName("video_handle")] string VideoHandle,
+    [property: JsonPropertyName("video_caption")] string VideoCaption
+);
+
+/// <summary>
+/// A creator ranked by the reach they brought.
+/// </summary>
+public sealed record AdvancedTopCreator(
+    [property: JsonPropertyName("handle")] string Handle,
+    [property: JsonPropertyName("posts")] long Posts,
+    [property: JsonPropertyName("views")] long Views,
+    [property: JsonPropertyName("engagements")] long Engagements,
+    [property: JsonPropertyName("emv_cents")] long EmvCents
+);
+
+/// <summary>
+/// A brand the commenters bring up.
+/// </summary>
+public sealed record AdvancedVoiceBrand(
+    [property: JsonPropertyName("brand")] string Brand,
+    [property: JsonPropertyName("count")] long Count,
+    [property: JsonPropertyName("avg_score")] double? AvgScore,
+    [property: JsonPropertyName("total_likes")] long TotalLikes
+);
+
+/// <summary>
+/// Comments in one sentiment band.
+/// </summary>
+public sealed record AdvancedVoiceSentiment(
+    [property: JsonPropertyName("label")] string Label,
+    [property: JsonPropertyName("count")] long Count,
+    [property: JsonPropertyName("likes")] long Likes
+);
+
+/// <summary>
+/// How the comments on one theme break down.
+/// </summary>
+public sealed record AdvancedVoiceTheme(
+    [property: JsonPropertyName("theme")] string Theme,
+    [property: JsonPropertyName("count")] long Count,
+    [property: JsonPropertyName("positive")] long Positive,
+    [property: JsonPropertyName("negative")] long Negative,
+    [property: JsonPropertyName("like_weighted_score")] double? LikeWeightedScore
+);
+
+/// <summary>
+/// One month of comment activity.
+/// </summary>
+public sealed record AdvancedVoiceTimeline(
+    [property: JsonPropertyName("month")] string Month,
+    [property: JsonPropertyName("count")] long Count,
+    [property: JsonPropertyName("net_sentiment")] long NetSentiment,
+    [property: JsonPropertyName("like_weighted_score")] double? LikeWeightedScore
+);
+
+/// <summary>
+/// Totals over the comments that were read.
+/// </summary>
+public sealed record AdvancedVoiceTotals(
+    [property: JsonPropertyName("videos")] long Videos,
+    [property: JsonPropertyName("comments")] long Comments,
+    [property: JsonPropertyName("enriched")] long Enriched,
+    [property: JsonPropertyName("total_likes")] long TotalLikes,
+    [property: JsonPropertyName("videos_with_comments")] long VideosWithComments,
+    [property: JsonPropertyName("like_weighted_sentiment")] double? LikeWeightedSentiment
+);
+
+/// <summary>
 /// Response body for the AI analysis root.
 /// </summary>
 public sealed record AiAnalysis(
@@ -224,6 +712,18 @@ public sealed record AiAnalysisCreateRequest
     public ContentFilterInputRequest? ContentFilters { get; init; }
 
 }
+
+/// <summary>
+/// The JSON document behind an AI analysis run's `result.download_url`. Every section
+/// under `general_insights` is optional: a section the run could not produce is left
+/// out rather than returned empty. Which sections appear depends on the run's scope,
+/// `CONTENT` or `COMMENT`. New sections and fields can be added at any time, so ignore
+/// keys you do not recognise.
+/// </summary>
+public sealed record AiAnalysisReport(
+    [property: JsonPropertyName("brand_name")] string BrandName,
+    [property: JsonPropertyName("general_insights")] JsonElement GeneralInsights
+);
 
 /// <summary>
 /// A single analysis run with its downloadable ``result``.
@@ -939,6 +1439,19 @@ public sealed record CreatorVetting(
 );
 
 /// <summary>
+/// The JSON document behind a creator vetting run's `result.download_url`.
+/// `disclosures` is present only when the run asked for the `DISCLOSURE` safety check.
+/// New fields can be added at any time, so ignore keys you do not recognise.
+/// </summary>
+public sealed record CreatorVettingReport(
+    [property: JsonPropertyName("profile_summary")] string? ProfileSummary,
+    [property: JsonPropertyName("top_themes")] VettingTopThemes? TopThemes,
+    [property: JsonPropertyName("violation_summary")] VettingSummary? ViolationSummary,
+    [property: JsonPropertyName("violations")] IReadOnlyList<VettingViolation> Violations,
+    [property: JsonPropertyName("disclosures")] IReadOnlyList<VettingDisclosure>? Disclosures
+);
+
+/// <summary>
 /// Request body for ``POST /api/v1/creator/vetting/``.
 /// </summary>
 public sealed record CreatorVettingRequest
@@ -1194,6 +1707,14 @@ public sealed record FollowerTimeseries(
 );
 
 /// <summary>
+/// A label and how many videos carry it.
+/// </summary>
+public sealed record LabelCount(
+    [property: JsonPropertyName("label")] string Label,
+    [property: JsonPropertyName("count")] long Count
+);
+
+/// <summary>
 /// Partial update for a brand's monitoring keywords. Every field is optional, and only
 /// the supplied fields are changed, but at least one field is required.
 /// </summary>
@@ -1373,6 +1894,50 @@ public sealed record UsageWindow(
     [property: JsonPropertyName("used")] long Used,
     [property: JsonPropertyName("remaining")] long Remaining,
     [property: JsonPropertyName("reset_in")] long ResetIn
+);
+
+/// <summary>
+/// A paid-partnership signal found in one piece of content.
+/// </summary>
+public sealed record VettingDisclosure(
+    [property: JsonPropertyName("content_id")] string ContentId,
+    [property: JsonPropertyName("content_url")] string ContentUrl,
+    [property: JsonPropertyName("source")] string Source,
+    [property: JsonPropertyName("kind")] string Kind,
+    [property: JsonPropertyName("text")] string Text,
+    [property: JsonPropertyName("time_seconds")] long? TimeSeconds
+);
+
+/// <summary>
+/// How much of the creator's catalogue raised a flag.
+/// </summary>
+public sealed record VettingSummary(
+    [property: JsonPropertyName("total_violations")] long TotalViolations,
+    [property: JsonPropertyName("affected_contents")] long AffectedContents
+);
+
+/// <summary>
+/// The creator's recurring subjects, with what each is based on.
+/// </summary>
+public sealed record VettingTopThemes(
+    [property: JsonPropertyName("top_themes")] IReadOnlyList<string> TopThemes,
+    [property: JsonPropertyName("grounding")] JsonElement Grounding
+);
+
+/// <summary>
+/// One criterion raised against one piece of the creator's content.
+/// </summary>
+public sealed record VettingViolation(
+    [property: JsonPropertyName("violation_id")] string ViolationId,
+    [property: JsonPropertyName("type")] string Type,
+    [property: JsonPropertyName("value")] string Value,
+    [property: JsonPropertyName("description")] string Description,
+    [property: JsonPropertyName("reason")] string Reason,
+    [property: JsonPropertyName("evidence_quote")] string EvidenceQuote,
+    [property: JsonPropertyName("evidence_field")] string EvidenceField,
+    [property: JsonPropertyName("content_id")] string ContentId,
+    [property: JsonPropertyName("violation")] string Violation,
+    [property: JsonPropertyName("severity")] string Severity
 );
 
 /// <summary>

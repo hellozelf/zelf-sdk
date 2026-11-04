@@ -9,20 +9,21 @@ const Version = "1.3.3"
 type Client struct {
 	t *transport
 
-	AIAnalysis     *AIAnalysisResource
-	Analytics      *AnalyticsResource
-	BrandAccounts  *BrandAccountsResource
-	Brands         *BrandsResource
-	Comments       *CommentsResource
-	Content        *ContentResource
-	CreatorSync    *CreatorSyncResource
-	CreatorVetting *CreatorVettingResource
-	Creators       *CreatorsResource
-	Detection      *DetectionResource
-	Engage         *EngageResource
-	SubBrands      *SubBrandsResource
-	Usage          *UsageResource
-	Webhooks       *WebhooksResource
+	AdvancedAIAnalysis *AdvancedAIAnalysisResource
+	AIAnalysis         *AIAnalysisResource
+	Analytics          *AnalyticsResource
+	BrandAccounts      *BrandAccountsResource
+	Brands             *BrandsResource
+	Comments           *CommentsResource
+	Content            *ContentResource
+	CreatorSync        *CreatorSyncResource
+	CreatorVetting     *CreatorVettingResource
+	Creators           *CreatorsResource
+	Detection          *DetectionResource
+	Engage             *EngageResource
+	SubBrands          *SubBrandsResource
+	Usage              *UsageResource
+	Webhooks           *WebhooksResource
 }
 
 // New builds a client. The API key comes from WithAPIKey, or from the
@@ -33,21 +34,22 @@ func New(opts ...Option) (*Client, error) {
 		return nil, err
 	}
 	return &Client{
-		t:              t,
-		AIAnalysis:     &AIAnalysisResource{t: t},
-		Analytics:      &AnalyticsResource{t: t},
-		BrandAccounts:  &BrandAccountsResource{t: t},
-		Brands:         &BrandsResource{t: t},
-		Comments:       &CommentsResource{t: t},
-		Content:        &ContentResource{t: t},
-		CreatorSync:    &CreatorSyncResource{t: t},
-		CreatorVetting: &CreatorVettingResource{t: t},
-		Creators:       &CreatorsResource{t: t},
-		Detection:      &DetectionResource{t: t},
-		Engage:         &EngageResource{t: t},
-		SubBrands:      &SubBrandsResource{t: t},
-		Usage:          &UsageResource{t: t},
-		Webhooks:       &WebhooksResource{t: t},
+		t:                  t,
+		AdvancedAIAnalysis: &AdvancedAIAnalysisResource{t: t},
+		AIAnalysis:         &AIAnalysisResource{t: t},
+		Analytics:          &AnalyticsResource{t: t},
+		BrandAccounts:      &BrandAccountsResource{t: t},
+		Brands:             &BrandsResource{t: t},
+		Comments:           &CommentsResource{t: t},
+		Content:            &ContentResource{t: t},
+		CreatorSync:        &CreatorSyncResource{t: t},
+		CreatorVetting:     &CreatorVettingResource{t: t},
+		Creators:           &CreatorsResource{t: t},
+		Detection:          &DetectionResource{t: t},
+		Engage:             &EngageResource{t: t},
+		SubBrands:          &SubBrandsResource{t: t},
+		Usage:              &UsageResource{t: t},
+		Webhooks:           &WebhooksResource{t: t},
 	}, nil
 }
 

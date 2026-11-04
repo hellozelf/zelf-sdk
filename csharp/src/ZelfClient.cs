@@ -17,6 +17,7 @@ public sealed class ZelfClient : IDisposable
     public ZelfClient(ZelfClientOptions options)
     {
         _transport = new Transport(options);
+        AdvancedAiAnalysis = new AdvancedAiAnalysisResource(_transport);
         AiAnalysis = new AiAnalysisResource(_transport);
         Analytics = new AnalyticsResource(_transport);
         BrandAccounts = new BrandAccountsResource(_transport);
@@ -37,6 +38,9 @@ public sealed class ZelfClient : IDisposable
         : this(new ZelfClientOptions { ApiKey = apiKey })
     {
     }
+
+    /// <summary>The advanced_ai_analysis endpoints.</summary>
+    public AdvancedAiAnalysisResource AdvancedAiAnalysis { get; }
 
     /// <summary>The ai_analysis endpoints.</summary>
     public AiAnalysisResource AiAnalysis { get; }

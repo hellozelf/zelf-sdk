@@ -346,6 +346,839 @@ const (
 // AccountTypeEnum defines model for AccountTypeEnum.
 type AccountTypeEnum string
 
+// AdvancedAiAnalysis Response body for the advanced AI analysis root.
+type AdvancedAiAnalysis struct {
+	// Analyses The runs that make up this analysis, ordered newest first.
+	Analyses []AdvancedAiAnalysisRun `json:"analyses"`
+
+	// AnalysisType Always `ADVANCED_AI_ANALYSIS` here.
+	AnalysisType string `json:"analysis_type"`
+
+	// CreatedAt When the analysis was created (UTC, ISO-8601).
+	CreatedAt time.Time `json:"created_at"`
+
+	// Id ID of the analysis. Use this value on follow-up calls.
+	Id string `json:"id"`
+
+	// ModifiedAt When the analysis was last modified (UTC, ISO-8601).
+	ModifiedAt time.Time `json:"modified_at"`
+
+	// Name The analysis label.
+	Name string `json:"name"`
+
+	// Topic The subject the analysis focuses on.
+	Topic nullable.Nullable[string] `json:"topic"`
+}
+
+// AdvancedAiAnalysisCreateRequest Request body for “POST /api/v1/advanced_ai_analysis/“.
+type AdvancedAiAnalysisCreateRequest struct {
+	// ContentFilters Selects which content the analysis runs over. At least one of `search`, `creator_id`, `creator_username`, `external_id`, or `brand_id` is required to scope it. When both `posted_after` and `posted_before` are omitted, the analysis defaults to content from the last 7 days.
+	ContentFilters ContentFilterInputRequest `json:"content_filters"`
+
+	// Name A label for this analysis.
+	Name string `json:"name"`
+
+	// Topic The brand, product, person or event to analyze, as a short term. For example `Levi's` or `Running shoes`. Keep it under five words. Do not write a question: a run reports sentiment, stance, themes, perception, audience voice, personas and creator intel for the topic. To narrow the posts, use `content_filters`.
+	Topic string `json:"topic"`
+}
+
+// AdvancedAiAnalysisReport The JSON document behind an advanced AI analysis run's `result.download_url`.
+//
+// Counts are whole numbers, shares and rates are decimals from 0 to 1, money
+// is in whole cents, and a value is `null` when there was not enough data to
+// work it out. A section is absent when the run could not produce it, so read
+// every one as optional, and ignore keys you do not recognise.
+type AdvancedAiAnalysisReport struct {
+	// AudienceVoice What the comments say.
+	AudienceVoice AdvancedAudienceVoice `json:"audience_voice"`
+
+	// ContentForms Videos by format, with per-format averages.
+	ContentForms []AdvancedContentForm `json:"content_forms"`
+
+	// CreatorIntel Advocates, detractors, prospects and narratives. Produced on request, and the largest section by far.
+	CreatorIntel *AdvancedCreatorIntel `json:"creator_intel,omitempty"`
+
+	// Languages Videos by language.
+	Languages []AdvancedLanguage `json:"languages"`
+
+	// LoveDislike What the audience loves and dislikes, bucket by bucket.
+	LoveDislike AdvancedLoveDislike `json:"love_dislike"`
+
+	// Perception Price and quality perception, from the audience and the creators.
+	Perception AdvancedPerception `json:"perception"`
+
+	// Personas Audience archetypes. Produced on request.
+	Personas *AdvancedPersonas `json:"personas,omitempty"`
+
+	// Sentiment Videos by sentiment: `positive`, `neutral`, `negative`, `mixed`.
+	Sentiment []LabelCount `json:"sentiment"`
+
+	// SentimentByTheme How sentiment splits inside each theme.
+	SentimentByTheme []AdvancedSentimentByTheme `json:"sentiment_by_theme"`
+
+	// Signals Product context: stack, rivals, pain points, buying stage.
+	Signals AdvancedSignals `json:"signals"`
+
+	// SpeakerDemographics Inferred traits of the people on screen. Trends only.
+	SpeakerDemographics AdvancedSpeakerDemographics `json:"speaker_demographics"`
+
+	// Stance Videos by what the creator does with the topic: `promoting`, `cautioning`, `neutral`, `critical`, `informational`.
+	Stance []LabelCount `json:"stance"`
+
+	// Summary Totals over the analyzed set, and how much of it was analyzed.
+	Summary AdvancedSummary `json:"summary"`
+
+	// Themes Videos by theme. Themes come from this analysis' own set.
+	Themes []AdvancedThemeCount `json:"themes"`
+
+	// Timeline Posts, views and engagements month by month.
+	Timeline []AdvancedTimelinePoint `json:"timeline"`
+
+	// TopCreators The creators who brought the most reach.
+	TopCreators []AdvancedTopCreator `json:"top_creators"`
+}
+
+// AdvancedAiAnalysisResult A single advanced run with its downloadable “result“.
+type AdvancedAiAnalysisResult struct {
+	// AnalysisId ID of the analysis this run belongs to.
+	AnalysisId string `json:"analysis_id"`
+
+	// CreatedAt When the run was created (UTC, ISO-8601).
+	CreatedAt time.Time `json:"created_at"`
+
+	// DashboardUrl Signed link to the run's interactive dashboard. Valid for about 72 hours. `null` while a fresh link is being prepared; read the run again to get it.
+	DashboardUrl nullable.Nullable[string] `json:"dashboard_url"`
+
+	// Id ID of the analysis run.
+	Id string `json:"id"`
+
+	// ModifiedAt When the run was last modified (UTC, ISO-8601).
+	ModifiedAt time.Time `json:"modified_at"`
+
+	// Result Signed, time-limited download of an analysis run's result payload.
+	Result *ResultFile `json:"result,omitempty"`
+
+	// Status Run status: one of `IN_PROGRESS`, `COMPLETED`, `EMPTY_RESULT` (finished with no matching content), or `FAILED`.
+	Status string `json:"status"`
+}
+
+// AdvancedAiAnalysisRun A single advanced run, without its result payload.
+//
+// The run “result“ is not included; retrieve it from
+// `advanced_ai_analysis.results` once “status“ is `COMPLETED`.
+type AdvancedAiAnalysisRun struct {
+	// DashboardUrl Signed link to the run's interactive dashboard, for showing a person the analysis. Valid for about 72 hours. `null` while a fresh link is being prepared; read the run again to get it.
+	DashboardUrl nullable.Nullable[string] `json:"dashboard_url"`
+
+	// Id ID of the analysis run.
+	Id string `json:"id"`
+
+	// Status Run status: one of `IN_PROGRESS`, `COMPLETED`, `EMPTY_RESULT` (finished with no matching content), or `FAILED`.
+	Status string `json:"status"`
+}
+
+// AdvancedAudienceVoice What the comments say, as a whole.
+type AdvancedAudienceVoice struct {
+	// Brands Brands the commenters bring up.
+	Brands []AdvancedVoiceBrand `json:"brands"`
+
+	// HasComments False when no comments were available; the lists are then empty.
+	HasComments bool `json:"has_comments"`
+
+	// Intent Comments by what the commenter wants.
+	Intent []LabelCount `json:"intent"`
+
+	// Sentiment Comments by sentiment.
+	Sentiment []AdvancedVoiceSentiment `json:"sentiment"`
+
+	// ThemeDivergence Themes where creators and their audience part ways.
+	ThemeDivergence []AdvancedThemeDivergence `json:"theme_divergence"`
+
+	// Themes Comments by theme.
+	Themes []AdvancedVoiceTheme `json:"themes"`
+
+	// Timeline Comments month by month.
+	Timeline []AdvancedVoiceTimeline `json:"timeline"`
+
+	// TopComments The comments worth reading.
+	TopComments []AdvancedTopComment `json:"top_comments"`
+
+	// Totals Totals over the comments read.
+	Totals AdvancedVoiceTotals `json:"totals"`
+}
+
+// AdvancedContentForm One video format and how it performs.
+type AdvancedContentForm struct {
+	// AvgEngagements Mean engagements per video.
+	AvgEngagements int `json:"avg_engagements"`
+
+	// AvgViews Mean views per video.
+	AvgViews int `json:"avg_views"`
+
+	// Count Videos in this format.
+	Count int `json:"count"`
+
+	// Form The format, for example `short`.
+	Form string `json:"form"`
+}
+
+// AdvancedCoverage How many of the analyzed videos carry each kind of analysis.
+type AdvancedCoverage struct {
+	// Enriched Videos that were analyzed at all.
+	Enriched int `json:"enriched"`
+
+	// HasHumanSignals Videos with product context signals.
+	HasHumanSignals int `json:"has_human_signals"`
+
+	// HasLoveDislike Videos classified into a love or dislike bucket.
+	HasLoveDislike int `json:"has_love_dislike"`
+
+	// HasSentiment Videos with a sentiment.
+	HasSentiment int `json:"has_sentiment"`
+
+	// HasSpeakerDemographics Videos with inferred on-screen demographics.
+	HasSpeakerDemographics int `json:"has_speaker_demographics"`
+
+	// HasThemes Videos with themes.
+	HasThemes int `json:"has_themes"`
+
+	// Total Videos in the analysis.
+	Total int `json:"total"`
+}
+
+// AdvancedCreatorIntel Creators sorted by posture, and the stories they carry.
+type AdvancedCreatorIntel struct {
+	// Advocates Creators who back the topic.
+	Advocates []AdvancedCreatorProfile `json:"advocates"`
+
+	// Detractors Creators who criticise it.
+	Detractors []AdvancedCreatorProfile `json:"detractors"`
+
+	// Meta How and when this section was built.
+	Meta AdvancedCreatorIntelMeta `json:"meta"`
+
+	// Narratives The stories moving through the conversation.
+	Narratives []AdvancedNarrative `json:"narratives"`
+
+	// PostureMap Every creator plotted by reach against stance.
+	PostureMap []AdvancedPostureMapEntry `json:"posture_map"`
+
+	// Prospects Creators worth approaching.
+	Prospects []AdvancedCreatorProfile `json:"prospects"`
+
+	// Totals How the creators split across postures.
+	Totals AdvancedCreatorIntelTotals `json:"totals"`
+}
+
+// AdvancedCreatorIntelMeta How and when this section was built.
+type AdvancedCreatorIntelMeta struct {
+	// DerivedFrom The content snapshot it was built from.
+	DerivedFrom nullable.Nullable[string] `json:"derived_from"`
+
+	// EnrichedCount Creators analyzed.
+	EnrichedCount int `json:"enriched_count"`
+
+	// GeneratedAt When the section was built (UTC, ISO-8601).
+	GeneratedAt string `json:"generated_at"`
+
+	// Model The model that built it.
+	Model string `json:"model"`
+
+	// Stale True when the section predates the analysis' latest content.
+	Stale bool `json:"stale"`
+}
+
+// AdvancedCreatorIntelTotals How the creators split across postures.
+type AdvancedCreatorIntelTotals struct {
+	// Advocates Creators who back the topic.
+	Advocates int `json:"advocates"`
+
+	// Creators Creators in the analysis.
+	Creators int `json:"creators"`
+
+	// Detractors Creators who criticise it.
+	Detractors int `json:"detractors"`
+
+	// Prospects Creators worth approaching.
+	Prospects int `json:"prospects"`
+}
+
+// AdvancedCreatorProfile A creator, scored on how they treat the topic.
+type AdvancedCreatorProfile struct {
+	// AvgSentiment Average sentiment of their videos, -1 to 1.
+	AvgSentiment nullable.Nullable[float64] `json:"avg_sentiment"`
+
+	// ConsumerResonance How strongly commenters respond to them, 0 to 100. `0` when none of their comments were analyzed.
+	ConsumerResonance nullable.Nullable[int] `json:"consumer_resonance"`
+
+	// DetractorSeverity How much risk their criticism carries, 0 to 100.
+	DetractorSeverity nullable.Nullable[int] `json:"detractor_severity"`
+
+	// EmvCents Earned media value, in cents.
+	EmvCents int `json:"emv_cents"`
+
+	// Engagements Engagements across them.
+	Engagements int `json:"engagements"`
+
+	// FirstPost Their earliest post, as `YYYY-MM-DD`.
+	FirstPost nullable.Nullable[string] `json:"first_post"`
+
+	// Handle The creator's handle.
+	Handle string `json:"handle"`
+
+	// LastPost Their latest post, as `YYYY-MM-DD`.
+	LastPost nullable.Nullable[string] `json:"last_post"`
+
+	// OrganicShare Share of their posts carrying no sponsorship marker, from 0 to 1. `1` means fully organic.
+	OrganicShare nullable.Nullable[float64] `json:"organic_share"`
+
+	// PartnershipFit How good a partner they would be, 0 to 100.
+	PartnershipFit nullable.Nullable[int] `json:"partnership_fit"`
+
+	// Posts Videos they posted.
+	Posts int `json:"posts"`
+
+	// Posture `advocate`, `detractor`, `prospect` or `longtail`.
+	Posture string `json:"posture"`
+
+	// Profile The creator's declared platform profile. Its fields can grow.
+	Profile nullable.Nullable[map[string]interface{}] `json:"profile"`
+
+	// ReachPercentile Where their views rank among this analysis' creators, 0 to 1.
+	ReachPercentile nullable.Nullable[float64] `json:"reach_percentile"`
+
+	// Read Model summary of the creator. Its fields can grow.
+	Read nullable.Nullable[map[string]interface{}] `json:"read"`
+
+	// StanceCounts How many of their videos take each stance.
+	StanceCounts map[string]interface{} `json:"stance_counts"`
+
+	// StanceLean Which way they lean, -1 critical to 1 promoting.
+	StanceLean nullable.Nullable[float64] `json:"stance_lean"`
+
+	// TopThemes What they post about most.
+	TopThemes []AdvancedThemeCount `json:"top_themes"`
+
+	// Views Views across those videos.
+	Views int `json:"views"`
+}
+
+// AdvancedLanguage One language and its share of the set.
+type AdvancedLanguage struct {
+	// Count Videos in this language.
+	Count int `json:"count"`
+
+	// Engagements Engagements on those videos.
+	Engagements int `json:"engagements"`
+
+	// Language Language code, for example `en`.
+	Language string `json:"language"`
+}
+
+// AdvancedLoveDislike What the audience loves and dislikes about the topic.
+type AdvancedLoveDislike struct {
+	// ClassifiedCount Videos that fell into a love or dislike bucket.
+	ClassifiedCount int `json:"classified_count"`
+
+	// Dislike What people criticise, strongest first.
+	Dislike []AdvancedLoveDislikeBucket `json:"dislike"`
+
+	// Love What people praise, strongest first.
+	Love []AdvancedLoveDislikeBucket `json:"love"`
+
+	// TotalCount Videos considered.
+	TotalCount int `json:"total_count"`
+}
+
+// AdvancedLoveDislikeBucket One thing people love or dislike, and what backs it.
+type AdvancedLoveDislikeBucket struct {
+	// Definition What the bucket covers.
+	Definition string `json:"definition"`
+
+	// EmvCents Earned media value of those videos, in cents.
+	EmvCents int `json:"emv_cents"`
+
+	// Label Display name for the bucket.
+	Label string `json:"label"`
+
+	// Slug Stable key for the bucket.
+	Slug string `json:"slug"`
+
+	// TotalViews Views on those videos.
+	TotalViews int `json:"total_views"`
+
+	// VideoCount Videos in the bucket.
+	VideoCount int `json:"video_count"`
+}
+
+// AdvancedNarrative A story moving through the conversation.
+type AdvancedNarrative struct {
+	// Carriers The creators posting most on the theme.
+	Carriers []string `json:"carriers"`
+
+	// Direction `rising` or `falling`.
+	Direction string `json:"direction"`
+
+	// Momentum Whether the theme is gaining or losing share, -1 to 1.
+	Momentum nullable.Nullable[float64] `json:"momentum"`
+
+	// NegativeShare Share of those videos that are negative, 0 to 1.
+	NegativeShare nullable.Nullable[float64] `json:"negative_share"`
+
+	// Play A suggested response. Model output, so its fields can grow.
+	Play nullable.Nullable[map[string]interface{}] `json:"play"`
+
+	// PositiveShare Share of those videos that are positive, 0 to 1.
+	PositiveShare nullable.Nullable[float64] `json:"positive_share"`
+
+	// Theme The theme the story is about.
+	Theme string `json:"theme"`
+
+	// Total Videos carrying it.
+	Total int `json:"total"`
+}
+
+// AdvancedPerception Price and quality perception, measured from both sides.
+type AdvancedPerception struct {
+	// Audience What commenters say. Counts are comments.
+	Audience AdvancedPerceptionSide `json:"audience"`
+
+	// Creator How the videos frame it. Counts are videos.
+	Creator AdvancedPerceptionSide `json:"creator"`
+}
+
+// AdvancedPerceptionAxis One perception axis, price or quality, measured one way.
+type AdvancedPerceptionAxis struct {
+	// Buckets The bands on this axis, largest share first.
+	Buckets []AdvancedPerceptionBucket `json:"buckets"`
+
+	// ClassifiedCount Items that express a view on this axis.
+	ClassifiedCount int `json:"classified_count"`
+
+	// EnrichedCount Items analyzed for this axis, those with no view included.
+	EnrichedCount int `json:"enriched_count"`
+
+	// ShareIndicating Share of analyzed items that express any view on this axis, from 0 to 1. `null` when nothing was analyzed.
+	ShareIndicating nullable.Nullable[float64] `json:"share_indicating"`
+}
+
+// AdvancedPerceptionBucket One perception band and its share.
+type AdvancedPerceptionBucket struct {
+	// EmvCents Earned media value of those videos, in cents.
+	EmvCents int `json:"emv_cents"`
+
+	// Key The band. Price bands are `expensive`, `affordable`, `cheap`; quality bands are `low`, `good`, `excellent`.
+	Key string `json:"key"`
+
+	// Label Display name for the band.
+	Label string `json:"label"`
+
+	// Pct This band's share of the classified items, from 0 to 1. The bands on one axis add up to about 1.
+	Pct float64 `json:"pct"`
+
+	// TotalViews Views on those videos.
+	TotalViews int `json:"total_views"`
+
+	// VideoCount Videos the band covers. On the audience side these are videos with at least one comment in the band.
+	VideoCount int `json:"video_count"`
+}
+
+// AdvancedPerceptionSide Price and quality as seen from one side.
+type AdvancedPerceptionSide struct {
+	// Price How price is read.
+	Price AdvancedPerceptionAxis `json:"price"`
+
+	// Quality How quality is read.
+	Quality AdvancedPerceptionAxis `json:"quality"`
+}
+
+// AdvancedPersona An audience archetype found across the analyzed videos.
+type AdvancedPersona struct {
+	// AvgSentiment Average sentiment of those videos, -1 to 1.
+	AvgSentiment nullable.Nullable[float64] `json:"avg_sentiment"`
+
+	// Breakdown A deeper profile of the persona. Model output, so its fields can grow. `null` when no breakdown was produced.
+	Breakdown nullable.Nullable[map[string]interface{}] `json:"breakdown"`
+
+	// Description Who this person is.
+	Description string `json:"description"`
+
+	// Id Stable key for the persona.
+	Id string `json:"id"`
+
+	// MemberCount Videos that match the archetype.
+	MemberCount int `json:"member_count"`
+
+	// Name Short label for the persona.
+	Name string `json:"name"`
+
+	// Representatives The videos that stand for the persona.
+	Representatives []AdvancedPersonaRepresentative `json:"representatives"`
+
+	// Tagline One line describing them.
+	Tagline string `json:"tagline"`
+
+	// TopSimilarity How closely the best-matching video fits, from 0 to 1. A low value means the archetype is only loosely present.
+	TopSimilarity nullable.Nullable[float64] `json:"top_similarity"`
+
+	// TotalViews Views across those videos.
+	TotalViews int `json:"total_views"`
+}
+
+// AdvancedPersonaRepresentative A video that stands for a persona.
+type AdvancedPersonaRepresentative struct {
+	// Caption The video's caption.
+	Caption string `json:"caption"`
+
+	// ContentForm The video's format.
+	ContentForm string `json:"content_form"`
+
+	// DurationS How long the video runs, in seconds.
+	DurationS nullable.Nullable[float64] `json:"duration_s"`
+
+	// EmvCents Earned media value, in cents.
+	EmvCents int `json:"emv_cents"`
+
+	// Engagements Engagements on the video.
+	Engagements int `json:"engagements"`
+
+	// Gist One line summarising the video.
+	Gist string `json:"gist"`
+
+	// Handle The creator's handle.
+	Handle string `json:"handle"`
+
+	// Language The video's language code.
+	Language string `json:"language"`
+
+	// Likes Likes on the video.
+	Likes int `json:"likes"`
+
+	// PostedAt When it was posted (UTC, ISO-8601).
+	PostedAt string `json:"posted_at"`
+
+	// RecordId The video's id.
+	RecordId string `json:"record_id"`
+
+	// Sentiment The video's sentiment band.
+	Sentiment string `json:"sentiment"`
+
+	// SentimentScore The video's sentiment, -1 to 1.
+	SentimentScore nullable.Nullable[float64] `json:"sentiment_score"`
+
+	// Stance The creator's stance in the video.
+	Stance string `json:"stance"`
+
+	// Themes Themes the video covers.
+	Themes []string `json:"themes"`
+
+	// ThumbnailUrl Link to the video's thumbnail.
+	ThumbnailUrl nullable.Nullable[string] `json:"thumbnail_url"`
+
+	// VideoUrl Link to the video.
+	VideoUrl nullable.Nullable[string] `json:"video_url"`
+
+	// Views Views on the video.
+	Views int `json:"views"`
+}
+
+// AdvancedPersonas The audience archetypes, and how they were derived.
+type AdvancedPersonas struct {
+	// Personas The archetypes found.
+	Personas []AdvancedPersona `json:"personas"`
+
+	// VocabSource `derived` when the archetypes came from this analysis' own vocabulary, `fallback` when a generic one was used. Treat fallback personas with less weight.
+	VocabSource string `json:"vocab_source"`
+}
+
+// AdvancedPostureMapEntry One creator plotted by reach against stance.
+type AdvancedPostureMapEntry struct {
+	// Handle The creator's handle.
+	Handle string `json:"handle"`
+
+	// Posts Videos they posted.
+	Posts int `json:"posts"`
+
+	// Posture Their posture towards the topic.
+	Posture string `json:"posture"`
+
+	// ReachPercentile Where their views rank, 0 to 1.
+	ReachPercentile nullable.Nullable[float64] `json:"reach_percentile"`
+
+	// StanceLean Which way they lean, -1 to 1.
+	StanceLean nullable.Nullable[float64] `json:"stance_lean"`
+}
+
+// AdvancedSentimentByTheme How sentiment splits inside one theme.
+type AdvancedSentimentByTheme struct {
+	// Mixed Mixed videos on the theme.
+	Mixed int `json:"mixed"`
+
+	// Negative Negative videos on the theme.
+	Negative int `json:"negative"`
+
+	// Neutral Neutral videos on the theme.
+	Neutral int `json:"neutral"`
+
+	// Positive Positive videos on the theme.
+	Positive int `json:"positive"`
+
+	// Theme The theme.
+	Theme string `json:"theme"`
+
+	// Total Videos on the theme.
+	Total int `json:"total"`
+}
+
+// AdvancedSignals Product context drawn from what people show and say.
+type AdvancedSignals struct {
+	// Competitors Rival products that appear.
+	Competitors []LabelCount `json:"competitors"`
+
+	// JourneyStage Where the speaker is in their buying journey.
+	JourneyStage []LabelCount `json:"journey_stage"`
+
+	// PainPoints Problems people keep raising.
+	PainPoints []LabelCount `json:"pain_points"`
+
+	// Stack Products shown or used alongside the subject.
+	Stack []LabelCount `json:"stack"`
+}
+
+// AdvancedSpeakerDemographics Inferred traits of the people on screen.
+//
+// These are model inferences, not verified facts. Use them for trends across
+// the set, never as a statement about any one person.
+type AdvancedSpeakerDemographics struct {
+	// Age Videos by inferred age band.
+	Age []LabelCount `json:"age"`
+
+	// Ethnicity Videos by inferred ethnicity.
+	Ethnicity []LabelCount `json:"ethnicity"`
+
+	// Gender Videos by inferred gender.
+	Gender []LabelCount `json:"gender"`
+
+	// Setting Videos by the setting they were filmed in.
+	Setting []LabelCount `json:"setting"`
+}
+
+// AdvancedSummary Totals over the whole analyzed set.
+type AdvancedSummary struct {
+	// Coverage How many videos carry each kind of analysis. Read the other sections in this light: a section only describes the videos it could be computed for.
+	Coverage AdvancedCoverage `json:"coverage"`
+
+	// Creators Distinct creators behind them.
+	Creators int `json:"creators"`
+
+	// FirstPost Date of the earliest video, as `YYYY-MM-DD`.
+	FirstPost nullable.Nullable[string] `json:"first_post"`
+
+	// LastPost Date of the latest video, as `YYYY-MM-DD`.
+	LastPost nullable.Nullable[string] `json:"last_post"`
+
+	// MeanEngagementRate Average of each video's engagements divided by its views, from 0 to 1. Videos with no views are left out. This is not total engagements over total views.
+	MeanEngagementRate nullable.Nullable[float64] `json:"mean_engagement_rate"`
+
+	// TotalComments Comments summed over the set.
+	TotalComments int `json:"total_comments"`
+
+	// TotalEmvCents Earned media value in cents. `0` for sources without it.
+	TotalEmvCents int `json:"total_emv_cents"`
+
+	// TotalEngagements Likes, comments and shares summed over the set.
+	TotalEngagements int `json:"total_engagements"`
+
+	// TotalLikes Likes summed over the set.
+	TotalLikes int `json:"total_likes"`
+
+	// TotalShares Shares summed over the set.
+	TotalShares int `json:"total_shares"`
+
+	// TotalViews Views summed over the set.
+	TotalViews int `json:"total_views"`
+
+	// Videos Videos analyzed.
+	Videos int `json:"videos"`
+}
+
+// AdvancedThemeCount A theme and how many videos carry it.
+type AdvancedThemeCount struct {
+	// Count Videos carrying it.
+	Count int `json:"count"`
+
+	// Theme The theme, from this analysis' own set.
+	Theme string `json:"theme"`
+}
+
+// AdvancedThemeDivergence A theme where creators and their audience disagree.
+type AdvancedThemeDivergence struct {
+	// AudienceScore How the audience leans, -1 to 1.
+	AudienceScore nullable.Nullable[float64] `json:"audience_score"`
+
+	// Comments Comments on the theme.
+	Comments int `json:"comments"`
+
+	// CreatorScore How the creators lean, -1 to 1.
+	CreatorScore nullable.Nullable[float64] `json:"creator_score"`
+
+	// Gap `audience_score` minus `creator_score`. A negative gap means the audience is more critical than the creators.
+	Gap nullable.Nullable[float64] `json:"gap"`
+
+	// Theme The theme.
+	Theme string `json:"theme"`
+
+	// Videos Videos on the theme.
+	Videos int `json:"videos"`
+}
+
+// AdvancedTimelinePoint One month of posting activity.
+type AdvancedTimelinePoint struct {
+	// Engagements Engagements on those videos.
+	Engagements int `json:"engagements"`
+
+	// Month The month, as `YYYY-MM`.
+	Month string `json:"month"`
+
+	// Posts Videos posted that month.
+	Posts int `json:"posts"`
+
+	// Views Views on those videos.
+	Views int `json:"views"`
+}
+
+// AdvancedTopComment A comment worth reading, with the video it sits under.
+type AdvancedTopComment struct {
+	// CommentId The comment's id.
+	CommentId string `json:"comment_id"`
+
+	// Gist One line summarising the comment.
+	Gist string `json:"gist"`
+
+	// Intent What the commenter is doing, for example `question`.
+	Intent string `json:"intent"`
+
+	// Likes Likes on the comment.
+	Likes int `json:"likes"`
+
+	// PostedAt When it was posted (UTC, ISO-8601).
+	PostedAt string `json:"posted_at"`
+
+	// Sentiment Its sentiment band.
+	Sentiment string `json:"sentiment"`
+
+	// Text What the comment says.
+	Text string `json:"text"`
+
+	// VideoCaption That video's caption.
+	VideoCaption string `json:"video_caption"`
+
+	// VideoHandle That video's creator handle.
+	VideoHandle string `json:"video_handle"`
+
+	// VideoRecordId The video it sits under.
+	VideoRecordId string `json:"video_record_id"`
+}
+
+// AdvancedTopCreator A creator ranked by the reach they brought.
+type AdvancedTopCreator struct {
+	// EmvCents Earned media value in cents.
+	EmvCents int `json:"emv_cents"`
+
+	// Engagements Engagements across them.
+	Engagements int `json:"engagements"`
+
+	// Handle The creator's handle.
+	Handle string `json:"handle"`
+
+	// Posts Videos they posted.
+	Posts int `json:"posts"`
+
+	// Views Views across those videos.
+	Views int `json:"views"`
+}
+
+// AdvancedVoiceBrand A brand the commenters bring up.
+type AdvancedVoiceBrand struct {
+	// AvgScore Average sentiment of those comments, -1 to 1.
+	AvgScore nullable.Nullable[float64] `json:"avg_score"`
+
+	// Brand The brand named.
+	Brand string `json:"brand"`
+
+	// Count Comments naming it.
+	Count int `json:"count"`
+
+	// TotalLikes Likes on those comments.
+	TotalLikes int `json:"total_likes"`
+}
+
+// AdvancedVoiceSentiment Comments in one sentiment band.
+type AdvancedVoiceSentiment struct {
+	// Count Comments in the band.
+	Count int `json:"count"`
+
+	// Label The band: `positive`, `neutral`, `negative` or `mixed`.
+	Label string `json:"label"`
+
+	// Likes Likes on those comments.
+	Likes int `json:"likes"`
+}
+
+// AdvancedVoiceTheme How the comments on one theme break down.
+type AdvancedVoiceTheme struct {
+	// Count Comments on the theme.
+	Count int `json:"count"`
+
+	// LikeWeightedScore Like-weighted sentiment on the theme, -1 to 1.
+	LikeWeightedScore nullable.Nullable[float64] `json:"like_weighted_score"`
+
+	// Negative Negative comments on it.
+	Negative int `json:"negative"`
+
+	// Positive Positive comments on it.
+	Positive int `json:"positive"`
+
+	// Theme The theme.
+	Theme string `json:"theme"`
+}
+
+// AdvancedVoiceTimeline One month of comment activity.
+type AdvancedVoiceTimeline struct {
+	// Count Comments that month.
+	Count int `json:"count"`
+
+	// LikeWeightedScore Like-weighted sentiment that month, -1 to 1.
+	LikeWeightedScore nullable.Nullable[float64] `json:"like_weighted_score"`
+
+	// Month The month, as `YYYY-MM`.
+	Month string `json:"month"`
+
+	// NetSentiment Positive comments minus negative comments.
+	NetSentiment int `json:"net_sentiment"`
+}
+
+// AdvancedVoiceTotals Totals over the comments that were read.
+type AdvancedVoiceTotals struct {
+	// Comments Comments read.
+	Comments int `json:"comments"`
+
+	// Enriched Comments that were analyzed.
+	Enriched int `json:"enriched"`
+
+	// LikeWeightedSentiment Average comment sentiment weighted towards comments with more likes, from -1 to 1. `null` when no comment has a score.
+	LikeWeightedSentiment nullable.Nullable[float64] `json:"like_weighted_sentiment"`
+
+	// TotalLikes Likes on those comments.
+	TotalLikes int `json:"total_likes"`
+
+	// Videos Videos considered.
+	Videos int `json:"videos"`
+
+	// VideosWithComments Videos that had at least one comment.
+	VideosWithComments int `json:"videos_with_comments"`
+}
+
 // AiAnalysis Response body for the AI analysis root.
 type AiAnalysis struct {
 	// Analyses The runs that make up this analysis, one per scope, ordered newest first.
@@ -383,6 +1216,20 @@ type AiAnalysisCreateRequest struct {
 
 	// Topic The brand, product, person or event to analyze, as a short term. For example `Levi's` or `Running shoes`. Keep it under five words. Do not write a question: every run reports sentiment, price, quality, competitors and products for the topic. To narrow the posts, use `content_filters`.
 	Topic string `json:"topic"`
+}
+
+// AiAnalysisReport The JSON document behind an AI analysis run's `result.download_url`.
+//
+// Every section under `general_insights` is optional: a section the run could
+// not produce is left out rather than returned empty. Which sections appear
+// depends on the run's scope, `CONTENT` or `COMMENT`. New sections and fields
+// can be added at any time, so ignore keys you do not recognise.
+type AiAnalysisReport struct {
+	// BrandName The topic the analysis ran on, as it was submitted.
+	BrandName string `json:"brand_name"`
+
+	// GeneralInsights The sections the run produced. Content runs can carry `customer_communication`, `competitor_overview`, `trending_now`, `favorite_products_and_features`, `user_personas`, `brand_perception` and `overall_sentiment`. Comment runs can carry `customer_communication`, `trending_now`, `favorite_products_and_features`, `brand_perception`, `overall_sentiment`, `notable_themes` and `key_findings`. Every section carries a `grounding` object whose keys match that section's own fields, each a list of grounding entries.
+	GeneralInsights map[string]interface{} `json:"general_insights"`
 }
 
 // AiAnalysisResult A single analysis run with its downloadable “result“.
@@ -1222,6 +2069,28 @@ type CreatorVetting struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+// CreatorVettingReport The JSON document behind a creator vetting run's `result.download_url`.
+//
+// `disclosures` is present only when the run asked for the `DISCLOSURE`
+// safety check. New fields can be added at any time, so ignore keys you do
+// not recognise.
+type CreatorVettingReport struct {
+	// Disclosures Paid-partnership signals, one row per signal. Present only when the run requested the `DISCLOSURE` safety check.
+	Disclosures nullable.Nullable[[]VettingDisclosure] `json:"disclosures,omitempty"`
+
+	// ProfileSummary Two or three sentences describing the creator.
+	ProfileSummary nullable.Nullable[string] `json:"profile_summary"`
+
+	// TopThemes The creator's recurring subjects, with what each is based on.
+	TopThemes VettingTopThemes `json:"top_themes"`
+
+	// ViolationSummary How much of the creator's catalogue raised a flag.
+	ViolationSummary VettingSummary `json:"violation_summary"`
+
+	// Violations Every flag raised, one row per criterion per content item.
+	Violations []VettingViolation `json:"violations"`
+}
+
 // CreatorVettingRequest Request body for “POST /api/v1/creator/vetting/“.
 type CreatorVettingRequest struct {
 	// ContentScope The creator's content relationships to analyze. Defaults to owned content only when omitted.
@@ -1616,6 +2485,15 @@ type IntervalHoursEnum int
 // KindEnum defines model for KindEnum.
 type KindEnum string
 
+// LabelCount A label and how many videos carry it.
+type LabelCount struct {
+	// Count Videos carrying it.
+	Count int `json:"count"`
+
+	// Label The label.
+	Label string `json:"label"`
+}
+
 // LastStatusEnum defines model for LastStatusEnum.
 type LastStatusEnum string
 
@@ -1624,6 +2502,12 @@ type MentionTypeEnum string
 
 // NullEnum defines model for NullEnum.
 type NullEnum = interface{}
+
+// PaginatedAdvancedAiAnalysisList Paginated response envelope. `results` holds this page of `AdvancedAiAnalysis` objects; the envelope fields (`log_id`, `timestamp`, `item_count`, `page`, `next`, `previous`) are described under Response shape.
+type PaginatedAdvancedAiAnalysisList = []AdvancedAiAnalysis
+
+// PaginatedAdvancedAiAnalysisResultList Paginated response envelope. `results` holds this page of `AdvancedAiAnalysisResult` objects; the envelope fields (`log_id`, `timestamp`, `item_count`, `page`, `next`, `previous`) are described under Response shape.
+type PaginatedAdvancedAiAnalysisResultList = []AdvancedAiAnalysisResult
 
 // PaginatedAiAnalysisList Paginated response envelope. `results` holds this page of `AiAnalysis` objects; the envelope fields (`log_id`, `timestamp`, `item_count`, `page`, `next`, `previous`) are described under Response shape.
 type PaginatedAiAnalysisList = []AiAnalysis
@@ -1749,7 +2633,7 @@ type ResourceEnum string
 
 // ResultFile Signed, time-limited download of an analysis run's result payload.
 type ResultFile struct {
-	// DownloadUrl Signed URL to request the JSON payload. Expires at `expires_at`.
+	// DownloadUrl Signed URL to request the JSON payload. Expires at `expires_at`. The document it returns follows `AiAnalysisReport`, `CreatorVettingReport` or `AdvancedAiAnalysisReport`, depending on which kind of run produced it.
 	DownloadUrl string `json:"download_url"`
 
 	// ExpiresAt Unix epoch seconds after which `download_url` expires. Re-fetch the run to obtain a fresh URL.
@@ -1770,7 +2654,7 @@ type SafetyCheckRequest struct {
 
 	// Type Category of the safety criterion. One of `USER_DEFINED_SAFETY_CRITERION`, `ADULT_CONTENT`, `ARMS_AND_AMMUNITION`, `MISINFORMATION`, `PROFANITY`, `POLITICS`, `DISCLOSURE`.
 	//
-	// `DISCLOSURE` looks for explicit sponsorship disclosures (for example `#ad`, a paid partnership, an affiliate commission or a gifted product) in each video's on-screen text, speech transcription, title and caption. It is not scored as a violation: findings are listed per video under `insight_json.disclosures` in the result payload.
+	// `DISCLOSURE` looks for explicit sponsorship disclosures (for example `#ad`, a paid partnership, an affiliate commission or a gifted product) in each video's on-screen text, speech transcription, title and caption. It is not scored as a violation: findings are listed under `disclosures` in the result payload, one entry per signal found.
 	Type TypeEnum `json:"type"`
 }
 
@@ -1868,6 +2752,78 @@ type UsageWindow struct {
 
 	// Window Which window this is: rps, rpm, rph, rpd, rpmonth, or an item window.
 	Window string `json:"window"`
+}
+
+// VettingDisclosure A paid-partnership signal found in one piece of content.
+type VettingDisclosure struct {
+	// ContentId The content the signal is in.
+	ContentId string `json:"content_id"`
+
+	// ContentUrl Link to that content, blank when unknown.
+	ContentUrl string `json:"content_url"`
+
+	// Kind What kind of signal it is, for example `sponsorship`.
+	Kind string `json:"kind"`
+
+	// Source Where it was found: `frame`, `title`, `caption` or `audio`.
+	Source string `json:"source"`
+
+	// Text The disclosure wording itself.
+	Text string `json:"text"`
+
+	// TimeSeconds Seconds into the video, or `null` when it is not timed.
+	TimeSeconds nullable.Nullable[int] `json:"time_seconds"`
+}
+
+// VettingSummary How much of the creator's catalogue raised a flag.
+type VettingSummary struct {
+	// AffectedContents Distinct content items carrying at least one flag.
+	AffectedContents int `json:"affected_contents"`
+
+	// TotalViolations Flags raised across every criterion.
+	TotalViolations int `json:"total_violations"`
+}
+
+// VettingTopThemes The creator's recurring subjects, with what each is based on.
+type VettingTopThemes struct {
+	// Grounding `top_themes`: one grounded entry per theme.
+	Grounding map[string]interface{} `json:"grounding"`
+
+	// TopThemes The themes, strongest first.
+	TopThemes []string `json:"top_themes"`
+}
+
+// VettingViolation One criterion raised against one piece of the creator's content.
+type VettingViolation struct {
+	// ContentId The content the flag is against.
+	ContentId string `json:"content_id"`
+
+	// Description What the criterion covers.
+	Description string `json:"description"`
+
+	// EvidenceField Where the quote came from: `title`, `ai_summary`, `transcription`, `text_overlay`, `vetting_observations` or `none`. New values can be added, so treat an unknown one as `none` rather than failing.
+	EvidenceField string `json:"evidence_field"`
+
+	// EvidenceQuote The passage the judgement rests on, verbatim.
+	EvidenceQuote string `json:"evidence_quote"`
+
+	// Reason Why this content was judged to breach the criterion.
+	Reason string `json:"reason"`
+
+	// Severity How serious the flag is: `high`, `medium`, `low` or `N/A`.
+	Severity string `json:"severity"`
+
+	// Type The criterion. One of `ILLEGAL_ACTS`, `HATE_SPEECH`, `MINOR_SAFETY`, `TERRORISM`, `GRAPHIC_VIOLENCE`, `ADULT_CONTENT`, `ARMS_AND_AMMUNITION`, `SENSITIVE_NEWS_TRAGEDY`, `MISINFORMATION`, `PROFANITY`, `ALCOHOL_AND_TOBACCO`, `POLITICS`, or `USER_DEFINED` for a criterion you supplied.
+	Type string `json:"type"`
+
+	// Value The criterion's display name.
+	Value string `json:"value"`
+
+	// Violation Always `yes`. Content that passed is not listed.
+	Violation string `json:"violation"`
+
+	// ViolationId Stable id for this flag, as `{content_id}_{type}`.
+	ViolationId string `json:"violation_id"`
 }
 
 // WebhookAvailableEvent An event type a subscription may ask for.
@@ -2226,6 +3182,51 @@ type WebhookSubscriptionCreated struct {
 // WebhookSubscriptionCreated_Resource Resource type the subscription is for (content or creator).
 type WebhookSubscriptionCreated_Resource struct {
 	union json.RawMessage
+}
+
+// AdvancedAiAnalysisListParams defines parameters for AdvancedAiAnalysisList.
+type AdvancedAiAnalysisListParams struct {
+	// Id Optional analysis id. When supplied, only that analysis is returned. Returns `INVALID_ID` if malformed.
+	Id *string `form:"id,omitempty" json:"id,omitempty"`
+
+	// Page Page number (1-based). Omit for the first page.
+	Page *int `form:"page,omitempty" json:"page,omitempty"`
+
+	// PageSize Items per page (1-30). Defaults to 30; larger values are clamped down.
+	PageSize *int `form:"page_size,omitempty" json:"page_size,omitempty"`
+}
+
+// AdvancedAiAnalysisContentsParams defines parameters for AdvancedAiAnalysisContents.
+type AdvancedAiAnalysisContentsParams struct {
+	// AnalysisId Analysis id, as returned by `advanced_ai_analysis.list`.
+	AnalysisId string `form:"analysis_id" json:"analysis_id"`
+
+	// Page Page number (1-based). Omit for the first page.
+	Page *int `form:"page,omitempty" json:"page,omitempty"`
+
+	// PageSize Items per page (1-30). Defaults to 30; larger values are clamped down.
+	PageSize *int `form:"page_size,omitempty" json:"page_size,omitempty"`
+}
+
+// AdvancedAiAnalysisContentStatisticsParams defines parameters for AdvancedAiAnalysisContentStatistics.
+type AdvancedAiAnalysisContentStatisticsParams struct {
+	// AnalysisId Analysis id, as returned by `advanced_ai_analysis.list`.
+	AnalysisId string `form:"analysis_id" json:"analysis_id"`
+}
+
+// AdvancedAiAnalysisResultsParams defines parameters for AdvancedAiAnalysisResults.
+type AdvancedAiAnalysisResultsParams struct {
+	// AnalysisId Analysis id (from `advanced_ai_analysis.list`). Returns every run of that analysis. Exactly one of `analysis_id` and `id` is required, and a request carrying both is rejected. Returns `INVALID_ID` if malformed.
+	AnalysisId *string `form:"analysis_id,omitempty" json:"analysis_id,omitempty"`
+
+	// Id Single run id. Returns only that run. Exactly one of `analysis_id` and `id` is required, and a request carrying both is rejected. Returns `INVALID_ID` if malformed.
+	Id *string `form:"id,omitempty" json:"id,omitempty"`
+
+	// Page Page number (1-based). Omit for the first page.
+	Page *int `form:"page,omitempty" json:"page,omitempty"`
+
+	// PageSize Items per page (1-30). Defaults to 30; larger values are clamped down.
+	PageSize *int `form:"page_size,omitempty" json:"page_size,omitempty"`
 }
 
 // AiAnalysisListParams defines parameters for AiAnalysisList.
@@ -2947,6 +3948,15 @@ type WebhooksListSubscriptionsParams struct {
 	// PageSize Items per page (1-30). Defaults to 30; larger values are clamped down.
 	PageSize *int `form:"page_size,omitempty" json:"page_size,omitempty"`
 }
+
+// AdvancedAiAnalysisCreateJSONRequestBody defines body for AdvancedAiAnalysisCreate for application/json ContentType.
+type AdvancedAiAnalysisCreateJSONRequestBody = AdvancedAiAnalysisCreateRequest
+
+// AdvancedAiAnalysisCreateFormdataRequestBody defines body for AdvancedAiAnalysisCreate for application/x-www-form-urlencoded ContentType.
+type AdvancedAiAnalysisCreateFormdataRequestBody = AdvancedAiAnalysisCreateRequest
+
+// AdvancedAiAnalysisCreateMultipartRequestBody defines body for AdvancedAiAnalysisCreate for multipart/form-data ContentType.
+type AdvancedAiAnalysisCreateMultipartRequestBody = AdvancedAiAnalysisCreateRequest
 
 // AiAnalysisCreateJSONRequestBody defines body for AiAnalysisCreate for application/json ContentType.
 type AiAnalysisCreateJSONRequestBody = AiAnalysisCreateRequest
