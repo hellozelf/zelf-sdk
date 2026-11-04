@@ -66,6 +66,7 @@ public class WebhookTests
                  {
                      "content.snapshot", "creator.snapshot",
                      "creator_vetting.completed", "ai_analysis.completed",
+                     "advanced_ai_analysis.completed",
                  })
         {
             var kind = EventTypes.FromWire(wire);
@@ -73,7 +74,7 @@ public class WebhookTests
             Assert.Equal(wire, kind!.Value.ToWire());
         }
         Assert.Null(EventTypes.FromWire("content.exploded"));
-        Assert.Equal(4, EventTypes.All.Count);
+        Assert.Equal(5, EventTypes.All.Count);
     }
 
     [Fact]

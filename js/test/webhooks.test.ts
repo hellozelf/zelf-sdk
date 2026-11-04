@@ -59,6 +59,7 @@ test('the raw payload survives a field the sdk does not know', async () => {
 
 test('the EventType object covers every declared event', () => {
   assert.deepEqual(Object.values(webhooks.EventType).sort(), [
+    'advanced_ai_analysis.completed',
     'ai_analysis.completed',
     'content.snapshot',
     'creator.snapshot',
