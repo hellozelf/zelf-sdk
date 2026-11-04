@@ -85,13 +85,14 @@ class WebhookTest {
     @Test
     void theEventTypeEnumCoversEveryDeclaredEvent() {
         for (String wire : List.of("content.snapshot", "creator.snapshot",
-                "creator_vetting.completed", "ai_analysis.completed")) {
+                "creator_vetting.completed", "ai_analysis.completed",
+                "advanced_ai_analysis.completed")) {
             EventType kind = EventType.fromWire(wire);
             assertNotNull(kind);
             assertEquals(wire, kind.wire());
         }
         assertNull(EventType.fromWire("content.exploded"));
-        assertEquals(4, EventType.values().length);
+        assertEquals(5, EventType.values().length);
     }
 
     @Test

@@ -66,7 +66,8 @@ class WebhooksTest < Minitest::Test
   end
 
   def test_the_event_type_module_covers_every_declared_event
-    assert_equal %w[ai_analysis.completed content.snapshot creator.snapshot
+    assert_equal %w[advanced_ai_analysis.completed ai_analysis.completed
+                    content.snapshot creator.snapshot
                     creator_vetting.completed].sort,
                  EventType::ALL.sort
     assert EventType.known?('content.snapshot')
