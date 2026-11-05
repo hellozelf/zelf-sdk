@@ -9669,6 +9669,8 @@ components:
       - themes
       - timeline
       - top_creators
+      x-tags:
+      - AI Analysis
     AdvancedAiAnalysisResult:
       type: object
       description: A single advanced run with its downloadable ``result``.
@@ -11001,6 +11003,8 @@ components:
       required:
       - brand_name
       - general_insights
+      x-tags:
+      - AI Analysis
     AiAnalysisResult:
       type: object
       description: A single analysis run with its downloadable ``result``.
@@ -12523,6 +12527,8 @@ components:
       - top_themes
       - violation_summary
       - violations
+      x-tags:
+      - Creator
     CreatorVettingRequest:
       type: object
       description: Request body for ``POST /api/v1/creator/vetting/``.
