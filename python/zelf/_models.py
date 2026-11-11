@@ -3260,11 +3260,14 @@ class AdvancedAiAnalysisCreateRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    name: Annotated[str, Field(description="A label for this analysis.", min_length=1)]
+    name: Annotated[
+        str, Field(description="A label for this analysis.", max_length=512, min_length=1)
+    ]
     topic: Annotated[
         str,
         Field(
             description="The brand, product, person or event to analyze, as a short term. For example `Levi's` or `Running shoes`. Keep it under five words. Do not write a question: a run reports sentiment, stance, themes, perception, audience voice, personas and creator intel for the topic. To narrow the posts, use `content_filters`.",
+            max_length=512,
             min_length=1,
         ),
     ]
@@ -3332,11 +3335,14 @@ class AiAnalysisCreateRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    name: Annotated[str, Field(description="A label for this analysis.", min_length=1)]
+    name: Annotated[
+        str, Field(description="A label for this analysis.", max_length=512, min_length=1)
+    ]
     topic: Annotated[
         str,
         Field(
             description="The brand, product, person or event to analyze, as a short term. For example `Levi's` or `Running shoes`. Keep it under five words. Do not write a question: every run reports sentiment, price, quality, competitors and products for the topic. To narrow the posts, use `content_filters`.",
+            max_length=512,
             min_length=1,
         ),
     ]
