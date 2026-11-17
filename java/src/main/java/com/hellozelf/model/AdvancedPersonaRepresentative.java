@@ -18,7 +18,7 @@ public record AdvancedPersonaRepresentative(
         @JsonProperty("views") Long views,
         @JsonProperty("likes") Long likes,
         @JsonProperty("engagements") Long engagements,
-        @JsonProperty("emv_cents") Long emvCents,
+        @JsonProperty("emv_cents") Double emvCents,
         @JsonProperty("sentiment") String sentiment,
         @JsonProperty("sentiment_score") Double sentimentScore,
         @JsonProperty("stance") String stance,

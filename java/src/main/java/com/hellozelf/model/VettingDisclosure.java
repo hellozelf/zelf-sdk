@@ -16,6 +16,6 @@ public record VettingDisclosure(
         @JsonProperty("source") String source,
         @JsonProperty("kind") String kind,
         @JsonProperty("text") String text,
-        @JsonProperty("time_seconds") Long timeSeconds
+        @JsonProperty("time_seconds") Double timeSeconds
 ) {
 }

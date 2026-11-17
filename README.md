@@ -366,6 +366,57 @@ handler := webhooks.NewHandler([]string{secret}, webhooks.Options{}).
 For a manifest delivery, `rows` downloads the NDJSON files and verifies the
 published SHA-256 over each body before yielding anything.
 
+## Reports
+
+A finished AI analysis, advanced AI analysis or creator vetting run points at a
+JSON report through `result.download_url`. Decode it as `AiAnalysisReport`,
+`AdvancedAiAnalysisReport` or `CreatorVettingReport`. Reports decode softly: a
+missing field or a null reads as null (or the zero value in Go and Rust), and a
+decimal in a whole number field never fails the decode.
+
+**Python**
+
+```python
+report = zelf.AdvancedAiAnalysisReport.model_validate_json(body)
+```
+
+**TypeScript**
+
+```typescript
+const report = (await response.json()) as AdvancedAiAnalysisReport
+```
+
+**Go**
+
+```go
+var report zelf.AdvancedAiAnalysisReport
+err := json.Unmarshal(body, &report)
+```
+
+**Rust**
+
+```rust
+let report: zelf::AdvancedAiAnalysisReport = serde_json::from_slice(&body)?;
+```
+
+**Ruby**
+
+```ruby
+report = Zelf::Models::AdvancedAiAnalysisReport.new(JSON.parse(body))
+```
+
+**Java**
+
+```java
+AdvancedAiAnalysisReport report = ZelfReports.decode(body, AdvancedAiAnalysisReport.class);
+```
+
+**C#**
+
+```csharp
+var report = ZelfReports.Decode<AdvancedAiAnalysisReport>(body);
+```
+
 ## Sandbox
 
 A stub of the API, with canned data, for testing against. The key is public.

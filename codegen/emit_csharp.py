@@ -147,7 +147,7 @@ def models_file(api: Api) -> tuple[str, dict[tuple[str, ...], str]]:
         out.append(f"public sealed record {model.name}(")
         rows = []
         for field in model.fields:
-            optional = field.nullable or not field.required
+            optional = model.soft or field.nullable or not field.required
             rendered = cs_type(field.type, aliases, optional, ENUM_NAMES)
             rows.append(
                 f'    [property: JsonPropertyName("{field.name}")] {rendered} {member(field.name)}'
@@ -529,7 +529,7 @@ def emit(api: Api, spec_path: Path, root: Path, templates: Path) -> None:
 
     body, aliases = models_file(api)
     (src / "Models.cs").write_text(body)
-    for name in ("Transport.cs", "Page.cs"):
+    for name in ("Transport.cs", "Page.cs", "ZelfReports.cs"):
         shutil.copyfile(templates / name, src / name)
     (src / "Exceptions.cs").write_text(exceptions_file(api))
     (src / "Webhooks.cs").write_text(

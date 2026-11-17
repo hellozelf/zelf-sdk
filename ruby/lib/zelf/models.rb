@@ -239,10 +239,10 @@ module Zelf
     end
 
     # The JSON document behind an advanced AI analysis run's `result.download_url`. Counts
-    # are whole numbers, shares and rates are decimals from 0 to 1, money is in whole
-    # cents, and a value is `null` when there was not enough data to work it out. A
-    # section is absent when the run could not produce it, so read every one as optional,
-    # and ignore keys you do not recognise.
+    # are whole numbers, shares and rates are decimals from 0 to 1, money is in cents and
+    # can carry a fraction, and a value is `null` when there was not enough data to work
+    # it out. A section is absent when the run could not produce it, so read every one as
+    # optional, and ignore keys you do not recognise.
     class AdvancedAiAnalysisReport
       # Totals over the analyzed set, and how much of it was analyzed
       field :summary, "summary", cast: AdvancedSummary
@@ -1842,7 +1842,7 @@ module Zelf
       field :kind, "kind"
       # The disclosure wording itself
       field :text, "text"
-      # Seconds into the video, or null when it is not timed
+      # Seconds into the video, can carry a fraction, or null when it is not timed
       field :time_seconds, "time_seconds"
     end
 

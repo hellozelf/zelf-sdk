@@ -1679,43 +1679,43 @@ export interface components {
      * @description The JSON document behind an advanced AI analysis run's `result.download_url`.
      *
      *     Counts are whole numbers, shares and rates are decimals from 0 to 1, money
-     *     is in whole cents, and a value is `null` when there was not enough data to
+     *     is in cents and can carry a fraction, and a value is `null` when there was not enough data to
      *     work it out. A section is absent when the run could not produce it, so read
      *     every one as optional, and ignore keys you do not recognise.
      */
     AdvancedAiAnalysisReport: {
       /** @description Totals over the analyzed set, and how much of it was analyzed. */
-      summary: components['schemas']['AdvancedSummary']
+      summary?: components['schemas']['AdvancedSummary'] | null
       /** @description Videos by sentiment: `positive`, `neutral`, `negative`, `mixed`. */
-      sentiment: components['schemas']['LabelCount'][]
+      sentiment?: components['schemas']['LabelCount'][] | null
       /** @description Videos by what the creator does with the topic: `promoting`, `cautioning`, `neutral`, `critical`, `informational`. */
-      stance: components['schemas']['LabelCount'][]
+      stance?: components['schemas']['LabelCount'][] | null
       /** @description Videos by theme. Themes come from this analysis' own set. */
-      themes: components['schemas']['AdvancedThemeCount'][]
+      themes?: components['schemas']['AdvancedThemeCount'][] | null
       /** @description How sentiment splits inside each theme. */
-      sentiment_by_theme: components['schemas']['AdvancedSentimentByTheme'][]
+      sentiment_by_theme?: components['schemas']['AdvancedSentimentByTheme'][] | null
       /** @description Posts, views and engagements month by month. */
-      timeline: components['schemas']['AdvancedTimelinePoint'][]
+      timeline?: components['schemas']['AdvancedTimelinePoint'][] | null
       /** @description Videos by language. */
-      languages: components['schemas']['AdvancedLanguage'][]
+      languages?: components['schemas']['AdvancedLanguage'][] | null
       /** @description Videos by format, with per-format averages. */
-      content_forms: components['schemas']['AdvancedContentForm'][]
+      content_forms?: components['schemas']['AdvancedContentForm'][] | null
       /** @description The creators who brought the most reach. */
-      top_creators: components['schemas']['AdvancedTopCreator'][]
+      top_creators?: components['schemas']['AdvancedTopCreator'][] | null
       /** @description Inferred traits of the people on screen. Trends only. */
-      speaker_demographics: components['schemas']['AdvancedSpeakerDemographics']
+      speaker_demographics?: components['schemas']['AdvancedSpeakerDemographics'] | null
       /** @description Product context: stack, rivals, pain points, buying stage. */
-      signals: components['schemas']['AdvancedSignals']
+      signals?: components['schemas']['AdvancedSignals'] | null
       /** @description What the audience loves and dislikes, bucket by bucket. */
-      love_dislike: components['schemas']['AdvancedLoveDislike']
+      love_dislike?: components['schemas']['AdvancedLoveDislike'] | null
       /** @description Price and quality perception, from the audience and the creators. */
-      perception: components['schemas']['AdvancedPerception']
+      perception?: components['schemas']['AdvancedPerception'] | null
       /** @description What the comments say. */
-      audience_voice: components['schemas']['AdvancedAudienceVoice']
+      audience_voice?: components['schemas']['AdvancedAudienceVoice'] | null
       /** @description Audience archetypes. Produced on request. */
-      personas?: components['schemas']['AdvancedPersonas']
+      personas?: components['schemas']['AdvancedPersonas'] | null
       /** @description Advocates, detractors, prospects and narratives. Produced on request, and the largest section by far. */
-      creator_intel?: components['schemas']['AdvancedCreatorIntel']
+      creator_intel?: components['schemas']['AdvancedCreatorIntel'] | null
     }
     /** @description A single advanced run with its downloadable ``result``. */
     AdvancedAiAnalysisResult: {
@@ -1757,223 +1757,229 @@ export interface components {
     /** @description What the comments say, as a whole. */
     AdvancedAudienceVoice: {
       /** @description False when no comments were available; the lists are then empty. */
-      has_comments: boolean
+      has_comments?: boolean | null
       /** @description Totals over the comments read. */
-      totals: components['schemas']['AdvancedVoiceTotals']
+      totals?: components['schemas']['AdvancedVoiceTotals'] | null
       /** @description Comments by sentiment. */
-      sentiment: components['schemas']['AdvancedVoiceSentiment'][]
+      sentiment?: components['schemas']['AdvancedVoiceSentiment'][] | null
       /** @description Comments by what the commenter wants. */
-      intent: components['schemas']['LabelCount'][]
+      intent?: components['schemas']['LabelCount'][] | null
       /** @description Comments by theme. */
-      themes: components['schemas']['AdvancedVoiceTheme'][]
+      themes?: components['schemas']['AdvancedVoiceTheme'][] | null
       /** @description Comments month by month. */
-      timeline: components['schemas']['AdvancedVoiceTimeline'][]
+      timeline?: components['schemas']['AdvancedVoiceTimeline'][] | null
       /** @description The comments worth reading. */
-      top_comments: components['schemas']['AdvancedTopComment'][]
+      top_comments?: components['schemas']['AdvancedTopComment'][] | null
       /** @description Themes where creators and their audience part ways. */
-      theme_divergence: components['schemas']['AdvancedThemeDivergence'][]
+      theme_divergence?: components['schemas']['AdvancedThemeDivergence'][] | null
       /** @description Brands the commenters bring up. */
-      brands: components['schemas']['AdvancedVoiceBrand'][]
+      brands?: components['schemas']['AdvancedVoiceBrand'][] | null
     }
     /** @description One video format and how it performs. */
     AdvancedContentForm: {
       /** @description The format, for example `short`. */
-      form: string
+      form?: string | null
       /** @description Videos in this format. */
-      count: number
+      count?: number | null
       /** @description Mean views per video. */
-      avg_views: number
+      avg_views?: number | null
       /** @description Mean engagements per video. */
-      avg_engagements: number
+      avg_engagements?: number | null
     }
     /** @description How many of the analyzed videos carry each kind of analysis. */
     AdvancedCoverage: {
       /** @description Videos in the analysis. */
-      total: number
+      total?: number | null
       /** @description Videos that were analyzed at all. */
-      enriched: number
+      enriched?: number | null
       /** @description Videos with a sentiment. */
-      has_sentiment: number
+      has_sentiment?: number | null
       /** @description Videos with themes. */
-      has_themes: number
+      has_themes?: number | null
       /** @description Videos classified into a love or dislike bucket. */
-      has_love_dislike: number
+      has_love_dislike?: number | null
       /** @description Videos with inferred on-screen demographics. */
-      has_speaker_demographics: number
+      has_speaker_demographics?: number | null
       /** @description Videos with product context signals. */
-      has_human_signals: number
+      has_human_signals?: number | null
     }
     /** @description Creators sorted by posture, and the stories they carry. */
     AdvancedCreatorIntel: {
       /** @description How the creators split across postures. */
-      totals: components['schemas']['AdvancedCreatorIntelTotals']
+      totals?: components['schemas']['AdvancedCreatorIntelTotals'] | null
       /** @description Creators who back the topic. */
-      advocates: components['schemas']['AdvancedCreatorProfile'][]
+      advocates?: components['schemas']['AdvancedCreatorProfile'][] | null
       /** @description Creators who criticise it. */
-      detractors: components['schemas']['AdvancedCreatorProfile'][]
+      detractors?: components['schemas']['AdvancedCreatorProfile'][] | null
       /** @description Creators worth approaching. */
-      prospects: components['schemas']['AdvancedCreatorProfile'][]
+      prospects?: components['schemas']['AdvancedCreatorProfile'][] | null
       /** @description Every creator plotted by reach against stance. */
-      posture_map: components['schemas']['AdvancedPostureMapEntry'][]
+      posture_map?: components['schemas']['AdvancedPostureMapEntry'][] | null
       /** @description The stories moving through the conversation. */
-      narratives: components['schemas']['AdvancedNarrative'][]
+      narratives?: components['schemas']['AdvancedNarrative'][] | null
       /** @description How and when this section was built. */
-      meta: components['schemas']['AdvancedCreatorIntelMeta']
+      meta?: components['schemas']['AdvancedCreatorIntelMeta'] | null
     }
     /** @description How and when this section was built. */
     AdvancedCreatorIntelMeta: {
       /** @description When the section was built (UTC, ISO-8601). */
-      generated_at: string
+      generated_at?: string | null
       /** @description The model that built it. */
-      model: string
+      model?: string | null
       /** @description Creators analyzed. */
-      enriched_count: number
+      enriched_count?: number | null
       /** @description True when the section predates the analysis' latest content. */
-      stale: boolean
+      stale?: boolean | null
       /** @description The content snapshot it was built from. */
-      derived_from: string | null
+      derived_from?: string | null
     }
     /** @description How the creators split across postures. */
     AdvancedCreatorIntelTotals: {
       /** @description Creators in the analysis. */
-      creators: number
+      creators?: number | null
       /** @description Creators who back the topic. */
-      advocates: number
+      advocates?: number | null
       /** @description Creators who criticise it. */
-      detractors: number
+      detractors?: number | null
       /** @description Creators worth approaching. */
-      prospects: number
+      prospects?: number | null
     }
     /** @description A creator, scored on how they treat the topic. */
     AdvancedCreatorProfile: {
       /** @description The creator's handle. */
-      handle: string
+      handle?: string | null
       /** @description Videos they posted. */
-      posts: number
+      posts?: number | null
       /** @description Views across those videos. */
-      views: number
+      views?: number | null
       /** @description Engagements across them. */
-      engagements: number
-      /** @description Earned media value, in cents. */
-      emv_cents: number
+      engagements?: number | null
+      /**
+       * Format: double
+       * @description Earned media value, in cents.
+       */
+      emv_cents?: number | null
       /**
        * Format: double
        * @description Average sentiment of their videos, -1 to 1.
        */
-      avg_sentiment: number | null
+      avg_sentiment?: number | null
       /** @description How many of their videos take each stance. */
-      stance_counts: {
+      stance_counts?: {
         [key: string]: unknown
-      }
+      } | null
       /** @description What they post about most. */
-      top_themes: components['schemas']['AdvancedThemeCount'][]
+      top_themes?: components['schemas']['AdvancedThemeCount'][] | null
       /**
        * Format: double
        * @description Share of their posts carrying no sponsorship marker, from 0 to 1. `1` means fully organic.
        */
-      organic_share: number | null
+      organic_share?: number | null
       /** @description Their earliest post, as `YYYY-MM-DD`. */
-      first_post: string | null
+      first_post?: string | null
       /** @description Their latest post, as `YYYY-MM-DD`. */
-      last_post: string | null
+      last_post?: string | null
       /**
        * Format: double
        * @description Where their views rank among this analysis' creators, 0 to 1.
        */
-      reach_percentile: number | null
+      reach_percentile?: number | null
       /**
        * Format: double
        * @description Which way they lean, -1 critical to 1 promoting.
        */
-      stance_lean: number | null
+      stance_lean?: number | null
       /** @description `advocate`, `detractor`, `prospect` or `longtail`. */
-      posture: string
+      posture?: string | null
       /** @description How good a partner they would be, 0 to 100. */
-      partnership_fit: number | null
+      partnership_fit?: number | null
       /** @description How much risk their criticism carries, 0 to 100. */
-      detractor_severity: number | null
+      detractor_severity?: number | null
       /** @description How strongly commenters respond to them, 0 to 100. `0` when none of their comments were analyzed. */
-      consumer_resonance: number | null
+      consumer_resonance?: number | null
       /** @description Model summary of the creator. Its fields can grow. */
-      read: {
+      read?: {
         [key: string]: unknown
       } | null
       /** @description The creator's declared platform profile. Its fields can grow. */
-      profile: {
+      profile?: {
         [key: string]: unknown
       } | null
     }
     /** @description One language and its share of the set. */
     AdvancedLanguage: {
       /** @description Language code, for example `en`. */
-      language: string
+      language?: string | null
       /** @description Videos in this language. */
-      count: number
+      count?: number | null
       /** @description Engagements on those videos. */
-      engagements: number
+      engagements?: number | null
     }
     /** @description What the audience loves and dislikes about the topic. */
     AdvancedLoveDislike: {
       /** @description Videos that fell into a love or dislike bucket. */
-      classified_count: number
+      classified_count?: number | null
       /** @description Videos considered. */
-      total_count: number
+      total_count?: number | null
       /** @description What people praise, strongest first. */
-      love: components['schemas']['AdvancedLoveDislikeBucket'][]
+      love?: components['schemas']['AdvancedLoveDislikeBucket'][] | null
       /** @description What people criticise, strongest first. */
-      dislike: components['schemas']['AdvancedLoveDislikeBucket'][]
+      dislike?: components['schemas']['AdvancedLoveDislikeBucket'][] | null
     }
     /** @description One thing people love or dislike, and what backs it. */
     AdvancedLoveDislikeBucket: {
       /** @description Stable key for the bucket. */
-      slug: string
+      slug?: string | null
       /** @description Display name for the bucket. */
-      label: string
+      label?: string | null
       /** @description What the bucket covers. */
-      definition: string
+      definition?: string | null
       /** @description Videos in the bucket. */
-      video_count: number
-      /** @description Earned media value of those videos, in cents. */
-      emv_cents: number
+      video_count?: number | null
+      /**
+       * Format: double
+       * @description Earned media value of those videos, in cents.
+       */
+      emv_cents?: number | null
       /** @description Views on those videos. */
-      total_views: number
+      total_views?: number | null
     }
     /** @description A story moving through the conversation. */
     AdvancedNarrative: {
       /** @description The theme the story is about. */
-      theme: string
+      theme?: string | null
       /** @description Videos carrying it. */
-      total: number
+      total?: number | null
       /**
        * Format: double
        * @description Share of those videos that are positive, 0 to 1.
        */
-      positive_share: number | null
+      positive_share?: number | null
       /**
        * Format: double
        * @description Share of those videos that are negative, 0 to 1.
        */
-      negative_share: number | null
+      negative_share?: number | null
       /**
        * Format: double
        * @description Whether the theme is gaining or losing share, -1 to 1.
        */
-      momentum: number | null
+      momentum?: number | null
       /** @description `rising` or `falling`. */
-      direction: string
+      direction?: string | null
       /** @description The creators posting most on the theme. */
-      carriers: string[]
+      carriers?: string[] | null
       /** @description A suggested response. Model output, so its fields can grow. */
-      play: {
+      play?: {
         [key: string]: unknown
       } | null
     }
     /** @description Price and quality perception, measured from both sides. */
     AdvancedPerception: {
       /** @description What commenters say. Counts are comments. */
-      audience: components['schemas']['AdvancedPerceptionSide']
+      audience?: components['schemas']['AdvancedPerceptionSide'] | null
       /** @description How the videos frame it. Counts are videos. */
-      creator: components['schemas']['AdvancedPerceptionSide']
+      creator?: components['schemas']['AdvancedPerceptionSide'] | null
     }
     /** @description One perception axis, price or quality, measured one way. */
     AdvancedPerceptionAxis: {
@@ -1981,166 +1987,172 @@ export interface components {
        * Format: double
        * @description Share of analyzed items that express any view on this axis, from 0 to 1. `null` when nothing was analyzed.
        */
-      share_indicating: number | null
+      share_indicating?: number | null
       /** @description Items that express a view on this axis. */
-      classified_count: number
+      classified_count?: number | null
       /** @description Items analyzed for this axis, those with no view included. */
-      enriched_count: number
+      enriched_count?: number | null
       /** @description The bands on this axis, largest share first. */
-      buckets: components['schemas']['AdvancedPerceptionBucket'][]
+      buckets?: components['schemas']['AdvancedPerceptionBucket'][] | null
     }
     /** @description One perception band and its share. */
     AdvancedPerceptionBucket: {
       /** @description The band. Price bands are `expensive`, `affordable`, `cheap`; quality bands are `low`, `good`, `excellent`. */
-      key: string
+      key?: string | null
       /** @description Display name for the band. */
-      label: string
+      label?: string | null
       /**
        * Format: double
        * @description This band's share of the classified items, from 0 to 1. The bands on one axis add up to about 1.
        */
-      pct: number
+      pct?: number | null
       /** @description Videos the band covers. On the audience side these are videos with at least one comment in the band. */
-      video_count: number
-      /** @description Earned media value of those videos, in cents. */
-      emv_cents: number
+      video_count?: number | null
+      /**
+       * Format: double
+       * @description Earned media value of those videos, in cents.
+       */
+      emv_cents?: number | null
       /** @description Views on those videos. */
-      total_views: number
+      total_views?: number | null
     }
     /** @description Price and quality as seen from one side. */
     AdvancedPerceptionSide: {
       /** @description How price is read. */
-      price: components['schemas']['AdvancedPerceptionAxis']
+      price?: components['schemas']['AdvancedPerceptionAxis'] | null
       /** @description How quality is read. */
-      quality: components['schemas']['AdvancedPerceptionAxis']
+      quality?: components['schemas']['AdvancedPerceptionAxis'] | null
     }
     /** @description An audience archetype found across the analyzed videos. */
     AdvancedPersona: {
       /** @description Stable key for the persona. */
-      id: string
+      id?: string | null
       /** @description Short label for the persona. */
-      name: string
+      name?: string | null
       /** @description One line describing them. */
-      tagline: string
+      tagline?: string | null
       /** @description Who this person is. */
-      description: string
+      description?: string | null
       /** @description Videos that match the archetype. */
-      member_count: number
+      member_count?: number | null
       /**
        * Format: double
        * @description Average sentiment of those videos, -1 to 1.
        */
-      avg_sentiment: number | null
+      avg_sentiment?: number | null
       /** @description Views across those videos. */
-      total_views: number
+      total_views?: number | null
       /**
        * Format: double
        * @description How closely the best-matching video fits, from 0 to 1. A low value means the archetype is only loosely present.
        */
-      top_similarity: number | null
+      top_similarity?: number | null
       /** @description The videos that stand for the persona. */
-      representatives: components['schemas']['AdvancedPersonaRepresentative'][]
+      representatives?: components['schemas']['AdvancedPersonaRepresentative'][] | null
       /** @description A deeper profile of the persona. Model output, so its fields can grow. `null` when no breakdown was produced. */
-      breakdown: {
+      breakdown?: {
         [key: string]: unknown
       } | null
     }
     /** @description A video that stands for a persona. */
     AdvancedPersonaRepresentative: {
       /** @description The video's id. */
-      record_id: string
+      record_id?: string | null
       /** @description The creator's handle. */
-      handle: string
+      handle?: string | null
       /** @description The video's caption. */
-      caption: string
+      caption?: string | null
       /** @description One line summarising the video. */
-      gist: string
+      gist?: string | null
       /** @description Views on the video. */
-      views: number
+      views?: number | null
       /** @description Likes on the video. */
-      likes: number
+      likes?: number | null
       /** @description Engagements on the video. */
-      engagements: number
-      /** @description Earned media value, in cents. */
-      emv_cents: number
+      engagements?: number | null
+      /**
+       * Format: double
+       * @description Earned media value, in cents.
+       */
+      emv_cents?: number | null
       /** @description The video's sentiment band. */
-      sentiment: string
+      sentiment?: string | null
       /**
        * Format: double
        * @description The video's sentiment, -1 to 1.
        */
-      sentiment_score: number | null
+      sentiment_score?: number | null
       /** @description The creator's stance in the video. */
-      stance: string
+      stance?: string | null
       /** @description Themes the video covers. */
-      themes: string[]
+      themes?: string[] | null
       /** @description The video's language code. */
-      language: string
+      language?: string | null
       /** @description The video's format. */
-      content_form: string
+      content_form?: string | null
       /**
        * Format: double
        * @description How long the video runs, in seconds.
        */
-      duration_s: number | null
+      duration_s?: number | null
       /** @description When it was posted (UTC, ISO-8601). */
-      posted_at: string
+      posted_at?: string | null
       /** @description Link to the video's thumbnail. */
-      thumbnail_url: string | null
+      thumbnail_url?: string | null
       /** @description Link to the video. */
-      video_url: string | null
+      video_url?: string | null
     }
     /** @description The audience archetypes, and how they were derived. */
     AdvancedPersonas: {
       /** @description `derived` when the archetypes came from this analysis' own vocabulary, `fallback` when a generic one was used. Treat fallback personas with less weight. */
-      vocab_source: string
+      vocab_source?: string | null
       /** @description The archetypes found. */
-      personas: components['schemas']['AdvancedPersona'][]
+      personas?: components['schemas']['AdvancedPersona'][] | null
     }
     /** @description One creator plotted by reach against stance. */
     AdvancedPostureMapEntry: {
       /** @description The creator's handle. */
-      handle: string
+      handle?: string | null
       /**
        * Format: double
        * @description Where their views rank, 0 to 1.
        */
-      reach_percentile: number | null
+      reach_percentile?: number | null
       /**
        * Format: double
        * @description Which way they lean, -1 to 1.
        */
-      stance_lean: number | null
+      stance_lean?: number | null
       /** @description Videos they posted. */
-      posts: number
+      posts?: number | null
       /** @description Their posture towards the topic. */
-      posture: string
+      posture?: string | null
     }
     /** @description How sentiment splits inside one theme. */
     AdvancedSentimentByTheme: {
       /** @description The theme. */
-      theme: string
+      theme?: string | null
       /** @description Positive videos on the theme. */
-      positive: number
+      positive?: number | null
       /** @description Neutral videos on the theme. */
-      neutral: number
+      neutral?: number | null
       /** @description Negative videos on the theme. */
-      negative: number
+      negative?: number | null
       /** @description Mixed videos on the theme. */
-      mixed: number
+      mixed?: number | null
       /** @description Videos on the theme. */
-      total: number
+      total?: number | null
     }
     /** @description Product context drawn from what people show and say. */
     AdvancedSignals: {
       /** @description Products shown or used alongside the subject. */
-      stack: components['schemas']['LabelCount'][]
+      stack?: components['schemas']['LabelCount'][] | null
       /** @description Rival products that appear. */
-      competitors: components['schemas']['LabelCount'][]
+      competitors?: components['schemas']['LabelCount'][] | null
       /** @description Problems people keep raising. */
-      pain_points: components['schemas']['LabelCount'][]
+      pain_points?: components['schemas']['LabelCount'][] | null
       /** @description Where the speaker is in their buying journey. */
-      journey_stage: components['schemas']['LabelCount'][]
+      journey_stage?: components['schemas']['LabelCount'][] | null
     }
     /**
      * @description Inferred traits of the people on screen.
@@ -2150,192 +2162,198 @@ export interface components {
      */
     AdvancedSpeakerDemographics: {
       /** @description Videos by inferred gender. */
-      gender: components['schemas']['LabelCount'][]
+      gender?: components['schemas']['LabelCount'][] | null
       /** @description Videos by inferred age band. */
-      age: components['schemas']['LabelCount'][]
+      age?: components['schemas']['LabelCount'][] | null
       /** @description Videos by inferred ethnicity. */
-      ethnicity: components['schemas']['LabelCount'][]
+      ethnicity?: components['schemas']['LabelCount'][] | null
       /** @description Videos by the setting they were filmed in. */
-      setting: components['schemas']['LabelCount'][]
+      setting?: components['schemas']['LabelCount'][] | null
     }
     /** @description Totals over the whole analyzed set. */
     AdvancedSummary: {
       /** @description Videos analyzed. */
-      videos: number
+      videos?: number | null
       /** @description Distinct creators behind them. */
-      creators: number
+      creators?: number | null
       /** @description Views summed over the set. */
-      total_views: number
+      total_views?: number | null
       /** @description Likes summed over the set. */
-      total_likes: number
+      total_likes?: number | null
       /** @description Comments summed over the set. */
-      total_comments: number
+      total_comments?: number | null
       /** @description Shares summed over the set. */
-      total_shares: number
+      total_shares?: number | null
       /** @description Likes, comments and shares summed over the set. */
-      total_engagements: number
+      total_engagements?: number | null
       /**
        * Format: double
        * @description Average of each video's engagements divided by its views, from 0 to 1. Videos with no views are left out. This is not total engagements over total views.
        */
-      mean_engagement_rate: number | null
-      /** @description Earned media value in cents. `0` for sources without it. */
-      total_emv_cents: number
+      mean_engagement_rate?: number | null
+      /**
+       * Format: double
+       * @description Earned media value in cents. `0` for sources without it.
+       */
+      total_emv_cents?: number | null
       /** @description Date of the earliest video, as `YYYY-MM-DD`. */
-      first_post: string | null
+      first_post?: string | null
       /** @description Date of the latest video, as `YYYY-MM-DD`. */
-      last_post: string | null
+      last_post?: string | null
       /** @description How many videos carry each kind of analysis. Read the other sections in this light: a section only describes the videos it could be computed for. */
-      coverage: components['schemas']['AdvancedCoverage']
+      coverage?: components['schemas']['AdvancedCoverage'] | null
     }
     /** @description A theme and how many videos carry it. */
     AdvancedThemeCount: {
       /** @description The theme, from this analysis' own set. */
-      theme: string
+      theme?: string | null
       /** @description Videos carrying it. */
-      count: number
+      count?: number | null
     }
     /** @description A theme where creators and their audience disagree. */
     AdvancedThemeDivergence: {
       /** @description The theme. */
-      theme: string
+      theme?: string | null
       /** @description Videos on the theme. */
-      videos: number
+      videos?: number | null
       /** @description Comments on the theme. */
-      comments: number
+      comments?: number | null
       /**
        * Format: double
        * @description How the creators lean, -1 to 1.
        */
-      creator_score: number | null
+      creator_score?: number | null
       /**
        * Format: double
        * @description How the audience leans, -1 to 1.
        */
-      audience_score: number | null
+      audience_score?: number | null
       /**
        * Format: double
        * @description `audience_score` minus `creator_score`. A negative gap means the audience is more critical than the creators.
        */
-      gap: number | null
+      gap?: number | null
     }
     /** @description One month of posting activity. */
     AdvancedTimelinePoint: {
       /** @description The month, as `YYYY-MM`. */
-      month: string
+      month?: string | null
       /** @description Videos posted that month. */
-      posts: number
+      posts?: number | null
       /** @description Views on those videos. */
-      views: number
+      views?: number | null
       /** @description Engagements on those videos. */
-      engagements: number
+      engagements?: number | null
     }
     /** @description A comment worth reading, with the video it sits under. */
     AdvancedTopComment: {
       /** @description The comment's id. */
-      comment_id: string
+      comment_id?: string | null
       /** @description What the comment says. */
-      text: string
+      text?: string | null
       /** @description Likes on the comment. */
-      likes: number
+      likes?: number | null
       /** @description When it was posted (UTC, ISO-8601). */
-      posted_at: string
+      posted_at?: string | null
       /** @description Its sentiment band. */
-      sentiment: string
+      sentiment?: string | null
       /** @description What the commenter is doing, for example `question`. */
-      intent: string
+      intent?: string | null
       /** @description One line summarising the comment. */
-      gist: string
+      gist?: string | null
       /** @description The video it sits under. */
-      video_record_id: string
+      video_record_id?: string | null
       /** @description That video's creator handle. */
-      video_handle: string
+      video_handle?: string | null
       /** @description That video's caption. */
-      video_caption: string
+      video_caption?: string | null
     }
     /** @description A creator ranked by the reach they brought. */
     AdvancedTopCreator: {
       /** @description The creator's handle. */
-      handle: string
+      handle?: string | null
       /** @description Videos they posted. */
-      posts: number
+      posts?: number | null
       /** @description Views across those videos. */
-      views: number
+      views?: number | null
       /** @description Engagements across them. */
-      engagements: number
-      /** @description Earned media value in cents. */
-      emv_cents: number
+      engagements?: number | null
+      /**
+       * Format: double
+       * @description Earned media value in cents.
+       */
+      emv_cents?: number | null
     }
     /** @description A brand the commenters bring up. */
     AdvancedVoiceBrand: {
       /** @description The brand named. */
-      brand: string
+      brand?: string | null
       /** @description Comments naming it. */
-      count: number
+      count?: number | null
       /**
        * Format: double
        * @description Average sentiment of those comments, -1 to 1.
        */
-      avg_score: number | null
+      avg_score?: number | null
       /** @description Likes on those comments. */
-      total_likes: number
+      total_likes?: number | null
     }
     /** @description Comments in one sentiment band. */
     AdvancedVoiceSentiment: {
       /** @description The band: `positive`, `neutral`, `negative` or `mixed`. */
-      label: string
+      label?: string | null
       /** @description Comments in the band. */
-      count: number
+      count?: number | null
       /** @description Likes on those comments. */
-      likes: number
+      likes?: number | null
     }
     /** @description How the comments on one theme break down. */
     AdvancedVoiceTheme: {
       /** @description The theme. */
-      theme: string
+      theme?: string | null
       /** @description Comments on the theme. */
-      count: number
+      count?: number | null
       /** @description Positive comments on it. */
-      positive: number
+      positive?: number | null
       /** @description Negative comments on it. */
-      negative: number
+      negative?: number | null
       /**
        * Format: double
        * @description Like-weighted sentiment on the theme, -1 to 1.
        */
-      like_weighted_score: number | null
+      like_weighted_score?: number | null
     }
     /** @description One month of comment activity. */
     AdvancedVoiceTimeline: {
       /** @description The month, as `YYYY-MM`. */
-      month: string
+      month?: string | null
       /** @description Comments that month. */
-      count: number
+      count?: number | null
       /** @description Positive comments minus negative comments. */
-      net_sentiment: number
+      net_sentiment?: number | null
       /**
        * Format: double
        * @description Like-weighted sentiment that month, -1 to 1.
        */
-      like_weighted_score: number | null
+      like_weighted_score?: number | null
     }
     /** @description Totals over the comments that were read. */
     AdvancedVoiceTotals: {
       /** @description Videos considered. */
-      videos: number
+      videos?: number | null
       /** @description Comments read. */
-      comments: number
+      comments?: number | null
       /** @description Comments that were analyzed. */
-      enriched: number
+      enriched?: number | null
       /** @description Likes on those comments. */
-      total_likes: number
+      total_likes?: number | null
       /** @description Videos that had at least one comment. */
-      videos_with_comments: number
+      videos_with_comments?: number | null
       /**
        * Format: double
        * @description Average comment sentiment weighted towards comments with more likes, from -1 to 1. `null` when no comment has a score.
        */
-      like_weighted_sentiment: number | null
+      like_weighted_sentiment?: number | null
     }
     /** @description Response body for the AI analysis root. */
     AiAnalysis: {
@@ -2386,11 +2404,11 @@ export interface components {
      */
     AiAnalysisReport: {
       /** @description The topic the analysis ran on, as it was submitted. */
-      brand_name: string
+      brand_name?: string | null
       /** @description The sections the run produced. Content runs can carry `customer_communication`, `competitor_overview`, `trending_now`, `favorite_products_and_features`, `user_personas`, `brand_perception` and `overall_sentiment`. Comment runs can carry `customer_communication`, `trending_now`, `favorite_products_and_features`, `brand_perception`, `overall_sentiment`, `notable_themes` and `key_findings`. Every section carries a `grounding` object whose keys match that section's own fields, each a list of grounding entries. */
-      general_insights: {
+      general_insights?: {
         [key: string]: unknown
-      }
+      } | null
     }
     /** @description A single analysis run with its downloadable ``result``. */
     AiAnalysisResult: {
@@ -3114,13 +3132,13 @@ export interface components {
      */
     CreatorVettingReport: {
       /** @description Two or three sentences describing the creator. */
-      profile_summary: string | null
+      profile_summary?: string | null
       /** @description The creator's recurring subjects. */
-      top_themes: components['schemas']['VettingTopThemes'] | null
+      top_themes?: components['schemas']['VettingTopThemes'] | null
       /** @description How much of the catalogue raised a flag. */
-      violation_summary: components['schemas']['VettingSummary'] | null
+      violation_summary?: components['schemas']['VettingSummary'] | null
       /** @description Every flag raised, one row per criterion per content item. */
-      violations: components['schemas']['VettingViolation'][]
+      violations?: components['schemas']['VettingViolation'][] | null
       /** @description Paid-partnership signals, one row per signal. Present only when the run requested the `DISCLOSURE` safety check. */
       disclosures?: components['schemas']['VettingDisclosure'][] | null
     }
@@ -3385,9 +3403,9 @@ export interface components {
     /** @description A label and how many videos carry it. */
     LabelCount: {
       /** @description The label. */
-      label: string
+      label?: string | null
       /** @description Videos carrying it. */
-      count: number
+      count?: number | null
     }
     /** @enum {string} */
     LastStatusEnum: 'SUCCESS' | 'FAILED'
@@ -3609,56 +3627,59 @@ export interface components {
     /** @description A paid-partnership signal found in one piece of content. */
     VettingDisclosure: {
       /** @description The content the signal is in. */
-      content_id: string
+      content_id?: string | null
       /** @description Link to that content, blank when unknown. */
-      content_url: string
+      content_url?: string | null
       /** @description Where it was found: `frame`, `title`, `caption` or `audio`. */
-      source: string
+      source?: string | null
       /** @description What kind of signal it is, for example `sponsorship`. */
-      kind: string
+      kind?: string | null
       /** @description The disclosure wording itself. */
-      text: string
-      /** @description Seconds into the video, or `null` when it is not timed. */
-      time_seconds: number | null
+      text?: string | null
+      /**
+       * Format: double
+       * @description Seconds into the video, can carry a fraction, or `null` when it is not timed.
+       */
+      time_seconds?: number | null
     }
     /** @description How much of the creator's catalogue raised a flag. */
     VettingSummary: {
       /** @description Flags raised across every criterion. */
-      total_violations: number
+      total_violations?: number | null
       /** @description Distinct content items carrying at least one flag. */
-      affected_contents: number
+      affected_contents?: number | null
     }
     /** @description The creator's recurring subjects, with what each is based on. */
     VettingTopThemes: {
       /** @description The themes, strongest first. */
-      top_themes: string[]
+      top_themes?: string[] | null
       /** @description `top_themes`: one grounded entry per theme. */
-      grounding: {
+      grounding?: {
         [key: string]: unknown
-      }
+      } | null
     }
     /** @description One criterion raised against one piece of the creator's content. */
     VettingViolation: {
       /** @description Stable id for this flag, as `{content_id}_{type}`. */
-      violation_id: string
+      violation_id?: string | null
       /** @description The criterion. One of `ILLEGAL_ACTS`, `HATE_SPEECH`, `MINOR_SAFETY`, `TERRORISM`, `GRAPHIC_VIOLENCE`, `ADULT_CONTENT`, `ARMS_AND_AMMUNITION`, `SENSITIVE_NEWS_TRAGEDY`, `MISINFORMATION`, `PROFANITY`, `ALCOHOL_AND_TOBACCO`, `POLITICS`, or `USER_DEFINED` for a criterion you supplied. */
-      type: string
+      type?: string | null
       /** @description The criterion's display name. */
-      value: string
+      value?: string | null
       /** @description What the criterion covers. */
-      description: string
+      description?: string | null
       /** @description Why this content was judged to breach the criterion. */
-      reason: string
+      reason?: string | null
       /** @description The passage the judgement rests on, verbatim. */
-      evidence_quote: string
+      evidence_quote?: string | null
       /** @description Where the quote came from: `title`, `ai_summary`, `transcription`, `text_overlay`, `vetting_observations` or `none`. New values can be added, so treat an unknown one as `none` rather than failing. */
-      evidence_field: string
+      evidence_field?: string | null
       /** @description The content the flag is against. */
-      content_id: string
+      content_id?: string | null
       /** @description Always `yes`. Content that passed is not listed. */
-      violation: string
+      violation?: string | null
       /** @description How serious the flag is: `high`, `medium`, `low` or `N/A`. */
-      severity: string
+      severity?: string | null
     }
     /** @description An event type a subscription may ask for. */
     WebhookAvailableEvent: {

@@ -686,7 +686,7 @@ def emit(api: Api, spec_path: Path, root: Path, templates: Path) -> None:
     (main / "resources").mkdir()
     (main / "webhooks").mkdir()
 
-    for name in ("Transport.java", "Envelope.java", "ZelfClientOptions.java", "Page.java", "PageLimits.java"):
+    for name in ("Transport.java", "Envelope.java", "ZelfClientOptions.java", "Page.java", "PageLimits.java", "ZelfReports.java"):
         shutil.copyfile(templates.joinpath(*PACKAGE_PATH, name), main / name)
     for name in ("Webhook.java", "WebhookEvent.java", "WebhookHandler.java"):
         shutil.copyfile(templates.joinpath(*PACKAGE_PATH, "webhooks", name), main / "webhooks" / name)

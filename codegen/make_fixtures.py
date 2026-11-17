@@ -7,6 +7,7 @@ import yaml
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
+import reports  # noqa: E402
 import samples as samples_module  # noqa: E402
 import spec as spec_module  # noqa: E402
 from naming import OPERATION_RENAMES, snake  # noqa: E402
@@ -40,6 +41,55 @@ def examples(spec: dict) -> dict[str, dict]:
     return out
 
 
+def is_object_list(value) -> bool:
+    return isinstance(value, list) and any(isinstance(item, dict) for item in value)
+
+
+def nulls(node):
+    """Every scalar, and every list of scalars, set to null; objects kept."""
+    if isinstance(node, list):
+        return [nulls(item) for item in node]
+    if isinstance(node, dict):
+        return {
+            k: nulls(v) if isinstance(v, dict) or is_object_list(v) else None
+            for k, v in node.items()
+        }
+    return None
+
+
+def missing(node):
+    """Every scalar, and every list of scalars, left out; objects kept."""
+    if isinstance(node, list):
+        return [missing(item) for item in node]
+    return {
+        k: missing(v) for k, v in node.items() if isinstance(v, dict) or is_object_list(v)
+    }
+
+
+def decimals(node):
+    """Every whole number turned into 12.6."""
+    if isinstance(node, list):
+        return [decimals(item) for item in node]
+    if isinstance(node, dict):
+        return {k: decimals(v) for k, v in node.items()}
+    if isinstance(node, int) and not isinstance(node, bool):
+        return 12.6
+    return node
+
+
+def report_cases(model_samples: dict) -> dict:
+    """Malformed report documents every SDK must still decode."""
+    return {
+        name: {
+            "empty": {},
+            "nulls": nulls(model_samples[name]),
+            "missing": missing(model_samples[name]),
+            "decimals": decimals(model_samples[name]),
+        }
+        for name in reports.REPORT_ROOTS
+    }
+
+
 def main() -> int:
     spec_path = ROOT.parent / "spec" / "openapi.yaml"
     spec = yaml.safe_load(spec_path.read_text())
@@ -69,6 +119,7 @@ def main() -> int:
                 "published": sorted(rows),
                 "synthesized": sorted(synthesized),
                 "models": dict(sorted(model_samples.items())),
+                "reports": report_cases(model_samples),
             },
             indent=1,
         )

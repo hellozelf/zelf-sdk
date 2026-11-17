@@ -198,6 +198,7 @@ type (
 	FollowerAccount                                       = openapi.FollowerAccount
 	FollowerPeriod                                        = openapi.FollowerPeriod
 	FollowerTimeseries                                    = openapi.FollowerTimeseries
+	Int                                                   = openapi.Int
 	IntervalHoursEnum                                     = openapi.IntervalHoursEnum
 	KindEnum                                              = openapi.KindEnum
 	LabelCount                                            = openapi.LabelCount

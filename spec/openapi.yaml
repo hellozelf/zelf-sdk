@@ -9578,7 +9578,7 @@ components:
         The JSON document behind an advanced AI analysis run's `result.download_url`.
 
         Counts are whole numbers, shares and rates are decimals from 0 to 1, money
-        is in whole cents, and a value is `null` when there was not enough data to
+        is in cents and can carry a fraction, and a value is `null` when there was not enough data to
         work it out. A section is absent when the run could not produce it, so read
         every one as optional, and ignore keys you do not recognise.
       properties:
@@ -9972,7 +9972,8 @@ components:
           type: integer
           description: Engagements across them.
         emv_cents:
-          type: integer
+          type: number
+          format: double
           description: Earned media value, in cents.
         avg_sentiment:
           type:
@@ -10129,7 +10130,8 @@ components:
           type: integer
           description: Videos in the bucket.
         emv_cents:
-          type: integer
+          type: number
+          format: double
           description: Earned media value of those videos, in cents.
         total_views:
           type: integer
@@ -10255,7 +10257,8 @@ components:
           description: Videos the band covers. On the audience side these are videos
             with at least one comment in the band.
         emv_cents:
-          type: integer
+          type: number
+          format: double
           description: Earned media value of those videos, in cents.
         total_views:
           type: integer
@@ -10354,7 +10357,9 @@ components:
           type: string
           description: The video's caption.
         gist:
-          type: string
+          type:
+          - string
+          - 'null'
           description: One line summarising the video.
         views:
           type: integer
@@ -10366,10 +10371,13 @@ components:
           type: integer
           description: Engagements on the video.
         emv_cents:
-          type: integer
+          type: number
+          format: double
           description: Earned media value, in cents.
         sentiment:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The video's sentiment band.
         sentiment_score:
           type:
@@ -10378,7 +10386,9 @@ components:
           format: double
           description: The video's sentiment, -1 to 1.
         stance:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The creator's stance in the video.
         themes:
           type: array
@@ -10386,10 +10396,14 @@ components:
             type: string
           description: Themes the video covers.
         language:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The video's language code.
         content_form:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The video's format.
         duration_s:
           type:
@@ -10602,7 +10616,8 @@ components:
             0 to 1. Videos with no views are left out. This is not total engagements
             over total views.
         total_emv_cents:
-          type: integer
+          type: number
+          format: double
           description: Earned media value in cents. `0` for sources without it.
         first_post:
           type:
@@ -10720,7 +10735,9 @@ components:
           type: integer
           description: Likes on the comment.
         posted_at:
-          type: string
+          type:
+          - string
+          - 'null'
           description: When it was posted (UTC, ISO-8601).
         sentiment:
           type: string
@@ -10768,7 +10785,8 @@ components:
           type: integer
           description: Engagements across them.
         emv_cents:
-          type: integer
+          type: number
+          format: double
           description: Earned media value in cents.
       required:
       - emv_cents
@@ -12527,8 +12545,6 @@ components:
           description: Paid-partnership signals, one row per signal. Present only
             when the run requested the `DISCLOSURE` safety check.
       required:
-      - profile_summary
-      - top_themes
       - violation_summary
       - violations
       x-tags:
@@ -13553,9 +13569,11 @@ components:
           description: The disclosure wording itself.
         time_seconds:
           type:
-          - integer
+          - number
           - 'null'
-          description: Seconds into the video, or `null` when it is not timed.
+          format: double
+          description: Seconds into the video, can carry a fraction, or `null` when
+            it is not timed.
       required:
       - content_id
       - content_url

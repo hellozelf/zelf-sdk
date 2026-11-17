@@ -8,6 +8,7 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from naming import go_pascal  # noqa: E402
+import reports  # noqa: E402
 
 # oapi-codegen does not read OpenAPI 3.1 yet, and the spec leans on 3.1's
 # `type: [x, "null"]` union everywhere. Downgrading a throwaway copy is cheaper
@@ -143,8 +144,18 @@ def strip_read_only(doc: dict) -> None:
                 stack.extend(node)
 
 
+def lenient_report_ints(doc: dict) -> None:
+    """Point every integer inside a report at the hand-written `Int`."""
+    schemas = doc["components"]["schemas"]
+    for name in reports.report_schemas(doc):
+        for prop in (schemas[name].get("properties") or {}).values():
+            if prop.get("type") == "integer":
+                prop["x-go-type"] = "Int"
+
+
 def build(spec_path: Path) -> dict:
     doc = convert(copy.deepcopy(yaml.safe_load(spec_path.read_text())))
+    lenient_report_ints(doc)
     name_parameters(doc)
     strip_read_only(doc)
     doc["openapi"] = "3.0.3"

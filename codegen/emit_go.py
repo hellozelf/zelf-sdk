@@ -333,13 +333,13 @@ def emit(api: Api, spec_path: Path, root: Path, templates: Path) -> None:
     )
     scratch.unlink()
 
-    for name in ("transport.go", "page.go"):
+    for name in ("transport.go", "page.go", "internal/openapi/report_int.go"):
         shutil.copyfile(templates / name, root / name)
     (root / "webhooks" / "verify.go").write_text(
         webhooks_file(api, (templates / "webhooks" / "verify_head.go").read_text())
     )
     generated = (root / "internal" / "openapi" / "openapi.gen.go").read_text()
-    declared = set(re.findall(r"^type (\w+)", generated, re.M))
+    declared = set(re.findall(r"^type (\w+)", generated, re.M)) | {"Int"}
     (root / "errors.go").write_text(errors_file(api, (templates / "errors_head.go").read_text()))
     (root / "aliases.go").write_text(aliases_file(api, declared))
     (root / "client.go").write_text(client_file(api))

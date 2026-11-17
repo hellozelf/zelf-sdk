@@ -15,6 +15,6 @@ public record AdvancedTopCreator(
         @JsonProperty("posts") Long posts,
         @JsonProperty("views") Long views,
         @JsonProperty("engagements") Long engagements,
-        @JsonProperty("emv_cents") Long emvCents
+        @JsonProperty("emv_cents") Double emvCents
 ) {
 }

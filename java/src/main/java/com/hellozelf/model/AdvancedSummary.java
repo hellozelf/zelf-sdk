@@ -19,7 +19,7 @@ public record AdvancedSummary(
         @JsonProperty("total_shares") Long totalShares,
         @JsonProperty("total_engagements") Long totalEngagements,
         @JsonProperty("mean_engagement_rate") Double meanEngagementRate,
-        @JsonProperty("total_emv_cents") Long totalEmvCents,
+        @JsonProperty("total_emv_cents") Double totalEmvCents,
         @JsonProperty("first_post") String firstPost,
         @JsonProperty("last_post") String lastPost,
         @JsonProperty("coverage") AdvancedCoverage coverage
