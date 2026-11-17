@@ -417,48 +417,54 @@ pub struct AdvancedAiAnalysisCreateRequest {
 }
 
 /// The JSON document behind an advanced AI analysis run's `result.download_url`. Counts are
-/// whole numbers, shares and rates are decimals from 0 to 1, money is in whole cents, and a
-/// value is `null` when there was not enough data to work it out. A section is absent when
-/// the run could not produce it, so read every one as optional, and ignore keys you do not
-/// recognise.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// whole numbers, shares and rates are decimals from 0 to 1, money is in cents and can
+/// carry a fraction, and a value is `null` when there was not enough data to work it out. A
+/// section is absent when the run could not produce it, so read every one as optional, and
+/// ignore keys you do not recognise.
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedAiAnalysisReport {
     /// Totals over the analyzed set, and how much of it was analyzed.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub summary: AdvancedSummary,
     /// Videos by sentiment: `positive`, `neutral`, `negative`, `mixed`.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub sentiment: Vec<LabelCount>,
     /// Videos by what the creator does with the topic: `promoting`, `cautioning`, `neutral`,
     /// `critical`, `informational`.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub stance: Vec<LabelCount>,
     /// Videos by theme. Themes come from this analysis' own set.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub themes: Vec<AdvancedThemeCount>,
     /// How sentiment splits inside each theme.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub sentiment_by_theme: Vec<AdvancedSentimentByTheme>,
     /// Posts, views and engagements month by month.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub timeline: Vec<AdvancedTimelinePoint>,
     /// Videos by language.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub languages: Vec<AdvancedLanguage>,
     /// Videos by format, with per-format averages.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub content_forms: Vec<AdvancedContentForm>,
     /// The creators who brought the most reach.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub top_creators: Vec<AdvancedTopCreator>,
     /// Inferred traits of the people on screen. Trends only.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub speaker_demographics: AdvancedSpeakerDemographics,
     /// Product context: stack, rivals, pain points, buying stage.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub signals: AdvancedSignals,
     /// What the audience loves and dislikes, bucket by bucket.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub love_dislike: AdvancedLoveDislike,
     /// Price and quality perception, from the audience and the creators.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub perception: AdvancedPerception,
     /// What the comments say.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub audience_voice: AdvancedAudienceVoice,
     /// Audience archetypes. Produced on request.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -512,101 +518,120 @@ pub struct AdvancedAiAnalysisRun {
 }
 
 /// What the comments say, as a whole.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedAudienceVoice {
     /// False when no comments were available; the lists are then empty.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub has_comments: bool,
     /// Totals over the comments read.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub totals: AdvancedVoiceTotals,
     /// Comments by sentiment.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub sentiment: Vec<AdvancedVoiceSentiment>,
     /// Comments by what the commenter wants.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub intent: Vec<LabelCount>,
     /// Comments by theme.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub themes: Vec<AdvancedVoiceTheme>,
     /// Comments month by month.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub timeline: Vec<AdvancedVoiceTimeline>,
     /// The comments worth reading.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub top_comments: Vec<AdvancedTopComment>,
     /// Themes where creators and their audience part ways.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub theme_divergence: Vec<AdvancedThemeDivergence>,
     /// Brands the commenters bring up.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub brands: Vec<AdvancedVoiceBrand>,
 }
 
 /// One video format and how it performs.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedContentForm {
     /// The format, for example `short`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub form: String,
     /// Videos in this format.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub count: i64,
     /// Mean views per video.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub avg_views: i64,
     /// Mean engagements per video.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub avg_engagements: i64,
 }
 
 /// How many of the analyzed videos carry each kind of analysis.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedCoverage {
     /// Videos in the analysis.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total: i64,
     /// Videos that were analyzed at all.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub enriched: i64,
     /// Videos with a sentiment.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub has_sentiment: i64,
     /// Videos with themes.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub has_themes: i64,
     /// Videos classified into a love or dislike bucket.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub has_love_dislike: i64,
     /// Videos with inferred on-screen demographics.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub has_speaker_demographics: i64,
     /// Videos with product context signals.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub has_human_signals: i64,
 }
 
 /// Creators sorted by posture, and the stories they carry.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedCreatorIntel {
     /// How the creators split across postures.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub totals: AdvancedCreatorIntelTotals,
     /// Creators who back the topic.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub advocates: Vec<AdvancedCreatorProfile>,
     /// Creators who criticise it.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub detractors: Vec<AdvancedCreatorProfile>,
     /// Creators worth approaching.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub prospects: Vec<AdvancedCreatorProfile>,
     /// Every creator plotted by reach against stance.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub posture_map: Vec<AdvancedPostureMapEntry>,
     /// The stories moving through the conversation.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub narratives: Vec<AdvancedNarrative>,
     /// How and when this section was built.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub meta: AdvancedCreatorIntelMeta,
 }
 
 /// How and when this section was built.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedCreatorIntelMeta {
     /// When the section was built (UTC, ISO-8601).
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub generated_at: String,
     /// The model that built it.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub model: String,
     /// Creators analyzed.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub enriched_count: i64,
     /// True when the section predates the analysis' latest content.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub stale: bool,
     /// The content snapshot it was built from.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -614,38 +639,48 @@ pub struct AdvancedCreatorIntelMeta {
 }
 
 /// How the creators split across postures.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedCreatorIntelTotals {
     /// Creators in the analysis.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub creators: i64,
     /// Creators who back the topic.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub advocates: i64,
     /// Creators who criticise it.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub detractors: i64,
     /// Creators worth approaching.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub prospects: i64,
 }
 
 /// A creator, scored on how they treat the topic.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedCreatorProfile {
     /// The creator's handle.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub handle: String,
     /// Videos they posted.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub posts: i64,
     /// Views across those videos.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub views: i64,
     /// Engagements across them.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub engagements: i64,
     /// Earned media value, in cents.
-    pub emv_cents: i64,
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
+    pub emv_cents: f64,
     /// Average sentiment of their videos, -1 to 1.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avg_sentiment: Option<f64>,
     /// How many of their videos take each stance.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub stance_counts: serde_json::Value,
     /// What they post about most.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub top_themes: Vec<AdvancedThemeCount>,
     /// Share of their posts carrying no sponsorship marker, from 0 to 1. `1` means fully
     /// organic.
@@ -664,16 +699,29 @@ pub struct AdvancedCreatorProfile {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub stance_lean: Option<f64>,
     /// `advocate`, `detractor`, `prospect` or `longtail`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub posture: String,
     /// How good a partner they would be, 0 to 100.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        deserialize_with = "crate::lenient::opt_int",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub partnership_fit: Option<i64>,
     /// How much risk their criticism carries, 0 to 100.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        deserialize_with = "crate::lenient::opt_int",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub detractor_severity: Option<i64>,
     /// How strongly commenters respond to them, 0 to 100. `0` when none of their comments were
     /// analyzed.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        deserialize_with = "crate::lenient::opt_int",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub consumer_resonance: Option<i64>,
     /// Model summary of the creator. Its fields can grow.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -684,54 +732,67 @@ pub struct AdvancedCreatorProfile {
 }
 
 /// One language and its share of the set.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedLanguage {
     /// Language code, for example `en`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub language: String,
     /// Videos in this language.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub count: i64,
     /// Engagements on those videos.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub engagements: i64,
 }
 
 /// What the audience loves and dislikes about the topic.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedLoveDislike {
     /// Videos that fell into a love or dislike bucket.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub classified_count: i64,
     /// Videos considered.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total_count: i64,
     /// What people praise, strongest first.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub love: Vec<AdvancedLoveDislikeBucket>,
     /// What people criticise, strongest first.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub dislike: Vec<AdvancedLoveDislikeBucket>,
 }
 
 /// One thing people love or dislike, and what backs it.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedLoveDislikeBucket {
     /// Stable key for the bucket.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub slug: String,
     /// Display name for the bucket.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub label: String,
     /// What the bucket covers.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub definition: String,
     /// Videos in the bucket.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub video_count: i64,
     /// Earned media value of those videos, in cents.
-    pub emv_cents: i64,
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
+    pub emv_cents: f64,
     /// Views on those videos.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total_views: i64,
 }
 
 /// A story moving through the conversation.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedNarrative {
     /// The theme the story is about.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub theme: String,
     /// Videos carrying it.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total: i64,
     /// Share of those videos that are positive, 0 to 1.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -743,9 +804,10 @@ pub struct AdvancedNarrative {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub momentum: Option<f64>,
     /// `rising` or `falling`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub direction: String,
     /// The creators posting most on the theme.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub carriers: Vec<String>,
     /// A suggested response. Model output, so its fields can grow.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -753,83 +815,101 @@ pub struct AdvancedNarrative {
 }
 
 /// Price and quality perception, measured from both sides.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedPerception {
     /// What commenters say. Counts are comments.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub audience: AdvancedPerceptionSide,
     /// How the videos frame it. Counts are videos.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub creator: AdvancedPerceptionSide,
 }
 
 /// One perception axis, price or quality, measured one way.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedPerceptionAxis {
     /// Share of analyzed items that express any view on this axis, from 0 to 1. `null` when
     /// nothing was analyzed.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub share_indicating: Option<f64>,
     /// Items that express a view on this axis.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub classified_count: i64,
     /// Items analyzed for this axis, those with no view included.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub enriched_count: i64,
     /// The bands on this axis, largest share first.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub buckets: Vec<AdvancedPerceptionBucket>,
 }
 
 /// One perception band and its share.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedPerceptionBucket {
     /// The band. Price bands are `expensive`, `affordable`, `cheap`; quality bands are `low`,
     /// `good`, `excellent`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub key: String,
     /// Display name for the band.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub label: String,
     /// This band's share of the classified items, from 0 to 1. The bands on one axis add up to
     /// about 1.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub pct: f64,
     /// Videos the band covers. On the audience side these are videos with at least one comment
     /// in the band.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub video_count: i64,
     /// Earned media value of those videos, in cents.
-    pub emv_cents: i64,
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
+    pub emv_cents: f64,
     /// Views on those videos.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total_views: i64,
 }
 
 /// Price and quality as seen from one side.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedPerceptionSide {
     /// How price is read.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub price: AdvancedPerceptionAxis,
     /// How quality is read.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub quality: AdvancedPerceptionAxis,
 }
 
 /// An audience archetype found across the analyzed videos.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedPersona {
     /// Stable key for the persona.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub id: String,
     /// Short label for the persona.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub name: String,
     /// One line describing them.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub tagline: String,
     /// Who this person is.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub description: String,
     /// Videos that match the archetype.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub member_count: i64,
     /// Average sentiment of those videos, -1 to 1.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avg_sentiment: Option<f64>,
     /// Views across those videos.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total_views: i64,
     /// How closely the best-matching video fits, from 0 to 1. A low value means the archetype
     /// is only loosely present.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub top_similarity: Option<f64>,
     /// The videos that stand for the persona.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub representatives: Vec<AdvancedPersonaRepresentative>,
     /// A deeper profile of the persona. Model output, so its fields can grow. `null` when no
     /// breakdown was produced.
@@ -838,42 +918,55 @@ pub struct AdvancedPersona {
 }
 
 /// A video that stands for a persona.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedPersonaRepresentative {
     /// The video's id.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub record_id: String,
     /// The creator's handle.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub handle: String,
     /// The video's caption.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub caption: String,
     /// One line summarising the video.
-    pub gist: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gist: Option<String>,
     /// Views on the video.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub views: i64,
     /// Likes on the video.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub likes: i64,
     /// Engagements on the video.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub engagements: i64,
     /// Earned media value, in cents.
-    pub emv_cents: i64,
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
+    pub emv_cents: f64,
     /// The video's sentiment band.
-    pub sentiment: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sentiment: Option<String>,
     /// The video's sentiment, -1 to 1.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub sentiment_score: Option<f64>,
     /// The creator's stance in the video.
-    pub stance: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stance: Option<String>,
     /// Themes the video covers.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub themes: Vec<String>,
     /// The video's language code.
-    pub language: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
     /// The video's format.
-    pub content_form: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub content_form: Option<String>,
     /// How long the video runs, in seconds.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub duration_s: Option<f64>,
     /// When it was posted (UTC, ISO-8601).
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub posted_at: String,
     /// Link to the video's thumbnail.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -884,20 +977,22 @@ pub struct AdvancedPersonaRepresentative {
 }
 
 /// The audience archetypes, and how they were derived.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedPersonas {
     /// `derived` when the archetypes came from this analysis' own vocabulary, `fallback` when a
     /// generic one was used. Treat fallback personas with less weight.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub vocab_source: String,
     /// The archetypes found.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub personas: Vec<AdvancedPersona>,
 }
 
 /// One creator plotted by reach against stance.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedPostureMapEntry {
     /// The creator's handle.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub handle: String,
     /// Where their views rank, 0 to 1.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -906,86 +1001,102 @@ pub struct AdvancedPostureMapEntry {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub stance_lean: Option<f64>,
     /// Videos they posted.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub posts: i64,
     /// Their posture towards the topic.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub posture: String,
 }
 
 /// How sentiment splits inside one theme.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedSentimentByTheme {
     /// The theme.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub theme: String,
     /// Positive videos on the theme.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub positive: i64,
     /// Neutral videos on the theme.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub neutral: i64,
     /// Negative videos on the theme.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub negative: i64,
     /// Mixed videos on the theme.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub mixed: i64,
     /// Videos on the theme.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total: i64,
 }
 
 /// Product context drawn from what people show and say.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedSignals {
     /// Products shown or used alongside the subject.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub stack: Vec<LabelCount>,
     /// Rival products that appear.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub competitors: Vec<LabelCount>,
     /// Problems people keep raising.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub pain_points: Vec<LabelCount>,
     /// Where the speaker is in their buying journey.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub journey_stage: Vec<LabelCount>,
 }
 
 /// Inferred traits of the people on screen. These are model inferences, not verified facts.
 /// Use them for trends across the set, never as a statement about any one person.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedSpeakerDemographics {
     /// Videos by inferred gender.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub gender: Vec<LabelCount>,
     /// Videos by inferred age band.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub age: Vec<LabelCount>,
     /// Videos by inferred ethnicity.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub ethnicity: Vec<LabelCount>,
     /// Videos by the setting they were filmed in.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub setting: Vec<LabelCount>,
 }
 
 /// Totals over the whole analyzed set.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedSummary {
     /// Videos analyzed.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub videos: i64,
     /// Distinct creators behind them.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub creators: i64,
     /// Views summed over the set.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total_views: i64,
     /// Likes summed over the set.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total_likes: i64,
     /// Comments summed over the set.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total_comments: i64,
     /// Shares summed over the set.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total_shares: i64,
     /// Likes, comments and shares summed over the set.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total_engagements: i64,
     /// Average of each video's engagements divided by its views, from 0 to 1. Videos with no
     /// views are left out. This is not total engagements over total views.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub mean_engagement_rate: Option<f64>,
     /// Earned media value in cents. `0` for sources without it.
-    pub total_emv_cents: i64,
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
+    pub total_emv_cents: f64,
     /// Date of the earliest video, as `YYYY-MM-DD`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub first_post: Option<String>,
@@ -994,26 +1105,32 @@ pub struct AdvancedSummary {
     pub last_post: Option<String>,
     /// How many videos carry each kind of analysis. Read the other sections in this light: a
     /// section only describes the videos it could be computed for.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub coverage: AdvancedCoverage,
 }
 
 /// A theme and how many videos carry it.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedThemeCount {
     /// The theme, from this analysis' own set.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub theme: String,
     /// Videos carrying it.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub count: i64,
 }
 
 /// A theme where creators and their audience disagree.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedThemeDivergence {
     /// The theme.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub theme: String,
     /// Videos on the theme.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub videos: i64,
     /// Comments on the theme.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub comments: i64,
     /// How the creators lean, -1 to 1.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1028,93 +1145,122 @@ pub struct AdvancedThemeDivergence {
 }
 
 /// One month of posting activity.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedTimelinePoint {
     /// The month, as `YYYY-MM`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub month: String,
     /// Videos posted that month.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub posts: i64,
     /// Views on those videos.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub views: i64,
     /// Engagements on those videos.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub engagements: i64,
 }
 
 /// A comment worth reading, with the video it sits under.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedTopComment {
     /// The comment's id.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub comment_id: String,
     /// What the comment says.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub text: String,
     /// Likes on the comment.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub likes: i64,
     /// When it was posted (UTC, ISO-8601).
-    pub posted_at: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub posted_at: Option<String>,
     /// Its sentiment band.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub sentiment: String,
     /// What the commenter is doing, for example `question`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub intent: String,
     /// One line summarising the comment.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub gist: String,
     /// The video it sits under.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub video_record_id: String,
     /// That video's creator handle.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub video_handle: String,
     /// That video's caption.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub video_caption: String,
 }
 
 /// A creator ranked by the reach they brought.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedTopCreator {
     /// The creator's handle.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub handle: String,
     /// Videos they posted.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub posts: i64,
     /// Views across those videos.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub views: i64,
     /// Engagements across them.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub engagements: i64,
     /// Earned media value in cents.
-    pub emv_cents: i64,
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
+    pub emv_cents: f64,
 }
 
 /// A brand the commenters bring up.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedVoiceBrand {
     /// The brand named.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub brand: String,
     /// Comments naming it.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub count: i64,
     /// Average sentiment of those comments, -1 to 1.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avg_score: Option<f64>,
     /// Likes on those comments.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total_likes: i64,
 }
 
 /// Comments in one sentiment band.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedVoiceSentiment {
     /// The band: `positive`, `neutral`, `negative` or `mixed`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub label: String,
     /// Comments in the band.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub count: i64,
     /// Likes on those comments.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub likes: i64,
 }
 
 /// How the comments on one theme break down.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedVoiceTheme {
     /// The theme.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub theme: String,
     /// Comments on the theme.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub count: i64,
     /// Positive comments on it.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub positive: i64,
     /// Negative comments on it.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub negative: i64,
     /// Like-weighted sentiment on the theme, -1 to 1.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1122,13 +1268,16 @@ pub struct AdvancedVoiceTheme {
 }
 
 /// One month of comment activity.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedVoiceTimeline {
     /// The month, as `YYYY-MM`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub month: String,
     /// Comments that month.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub count: i64,
     /// Positive comments minus negative comments.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub net_sentiment: i64,
     /// Like-weighted sentiment that month, -1 to 1.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1136,17 +1285,22 @@ pub struct AdvancedVoiceTimeline {
 }
 
 /// Totals over the comments that were read.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AdvancedVoiceTotals {
     /// Videos considered.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub videos: i64,
     /// Comments read.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub comments: i64,
     /// Comments that were analyzed.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub enriched: i64,
     /// Likes on those comments.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total_likes: i64,
     /// Videos that had at least one comment.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub videos_with_comments: i64,
     /// Average comment sentiment weighted towards comments with more likes, from -1 to 1.
     /// `null` when no comment has a score.
@@ -1200,9 +1354,10 @@ pub struct AiAnalysisCreateRequest {
 /// than returned empty. Which sections appear depends on the run's scope, `CONTENT` or
 /// `COMMENT`. New sections and fields can be added at any time, so ignore keys you do not
 /// recognise.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AiAnalysisReport {
     /// The topic the analysis ran on, as it was submitted.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub brand_name: String,
     /// The sections the run produced. Content runs can carry `customer_communication`,
     /// `competitor_overview`, `trending_now`, `favorite_products_and_features`,
@@ -1211,6 +1366,7 @@ pub struct AiAnalysisReport {
     /// `brand_perception`, `overall_sentiment`, `notable_themes` and `key_findings`. Every
     /// section carries a `grounding` object whose keys match that section's own fields, each a
     /// list of grounding entries.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub general_insights: serde_json::Value,
 }
 
@@ -2045,7 +2201,7 @@ pub struct CreatorVetting {
 /// The JSON document behind a creator vetting run's `result.download_url`. `disclosures` is
 /// present only when the run asked for the `DISCLOSURE` safety check. New fields can be
 /// added at any time, so ignore keys you do not recognise.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct CreatorVettingReport {
     /// Two or three sentences describing the creator.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -2057,7 +2213,7 @@ pub struct CreatorVettingReport {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub violation_summary: Option<VettingSummary>,
     /// Every flag raised, one row per criterion per content item.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub violations: Vec<VettingViolation>,
     /// Paid-partnership signals, one row per signal. Present only when the run requested the
     /// `DISCLOSURE` safety check.
@@ -2343,11 +2499,13 @@ pub struct FollowerTimeseries {
 }
 
 /// A label and how many videos carry it.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct LabelCount {
     /// The label.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub label: String,
     /// Videos carrying it.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub count: i64,
 }
 
@@ -2536,70 +2694,91 @@ pub struct UsageWindow {
 }
 
 /// A paid-partnership signal found in one piece of content.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct VettingDisclosure {
     /// The content the signal is in.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub content_id: String,
     /// Link to that content, blank when unknown.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub content_url: String,
     /// Where it was found: `frame`, `title`, `caption` or `audio`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub source: String,
     /// What kind of signal it is, for example `sponsorship`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub kind: String,
     /// The disclosure wording itself.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub text: String,
-    /// Seconds into the video, or `null` when it is not timed.
+    /// Seconds into the video, can carry a fraction, or `null` when it is not timed.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub time_seconds: Option<i64>,
+    pub time_seconds: Option<f64>,
 }
 
 /// How much of the creator's catalogue raised a flag.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct VettingSummary {
     /// Flags raised across every criterion.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub total_violations: i64,
     /// Distinct content items carrying at least one flag.
+    #[serde(default, deserialize_with = "crate::lenient::int")]
     pub affected_contents: i64,
 }
 
 /// The creator's recurring subjects, with what each is based on.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct VettingTopThemes {
     /// The themes, strongest first.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub top_themes: Vec<String>,
     /// `top_themes`: one grounded entry per theme.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub grounding: serde_json::Value,
 }
 
 /// One criterion raised against one piece of the creator's content.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct VettingViolation {
     /// Stable id for this flag, as `{content_id}_{type}`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub violation_id: String,
     /// The criterion. One of `ILLEGAL_ACTS`, `HATE_SPEECH`, `MINOR_SAFETY`, `TERRORISM`,
     /// `GRAPHIC_VIOLENCE`, `ADULT_CONTENT`, `ARMS_AND_AMMUNITION`, `SENSITIVE_NEWS_TRAGEDY`,
     /// `MISINFORMATION`, `PROFANITY`, `ALCOHOL_AND_TOBACCO`, `POLITICS`, or `USER_DEFINED` for
     /// a criterion you supplied.
-    #[serde(rename = "type")]
+    #[serde(
+        rename = "type",
+        default,
+        deserialize_with = "crate::lenient::null_default"
+    )]
     pub r#type: String,
     /// The criterion's display name.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub value: String,
     /// What the criterion covers.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub description: String,
     /// Why this content was judged to breach the criterion.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub reason: String,
     /// The passage the judgement rests on, verbatim.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub evidence_quote: String,
     /// Where the quote came from: `title`, `ai_summary`, `transcription`, `text_overlay`,
     /// `vetting_observations` or `none`. New values can be added, so treat an unknown one as
     /// `none` rather than failing.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub evidence_field: String,
     /// The content the flag is against.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub content_id: String,
     /// Always `yes`. Content that passed is not listed.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub violation: String,
     /// How serious the flag is: `high`, `medium`, `low` or `N/A`.
+    #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub severity: String,
 }
 

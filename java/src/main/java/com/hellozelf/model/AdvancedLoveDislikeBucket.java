@@ -15,7 +15,7 @@ public record AdvancedLoveDislikeBucket(
         @JsonProperty("label") String label,
         @JsonProperty("definition") String definition,
         @JsonProperty("video_count") Long videoCount,
-        @JsonProperty("emv_cents") Long emvCents,
+        @JsonProperty("emv_cents") Double emvCents,
         @JsonProperty("total_views") Long totalViews
 ) {
 }

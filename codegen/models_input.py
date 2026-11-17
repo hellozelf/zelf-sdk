@@ -4,6 +4,8 @@ from pathlib import Path
 
 import yaml
 
+import reports
+
 # `PaginatedXList` is a bare `array of X` alias used only inside the response
 # envelope; the SDK's Page[T] carries the element type, so the aliases would
 # generate 19 RootModel classes nobody calls.
@@ -43,6 +45,7 @@ def normalise(node, inside_items=False):
 
 def build(spec_path: Path) -> dict:
     doc = yaml.safe_load(spec_path.read_text())
+    reports.soften(doc)
     schemas = {k: v for k, v in doc["components"]["schemas"].items() if not SKIP.match(k)}
     text = json.dumps(normalise(schemas)).replace("#/components/schemas/", "#/$defs/")
     return {"$schema": "https://json-schema.org/draft/2020-12/schema", "$defs": json.loads(text)}

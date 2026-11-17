@@ -2490,7 +2490,7 @@
     "total_shares": 42,
     "total_engagements": 42,
     "mean_engagement_rate": 0.0425,
-    "total_emv_cents": 42,
+    "total_emv_cents": 0.0425,
     "first_post": "First post",
     "last_post": "Last post",
     "coverage": {
@@ -2560,7 +2560,7 @@
      "posts": 42,
      "views": 42,
      "engagements": 42,
-     "emv_cents": 42
+     "emv_cents": 0.0425
     }
    ],
    "speaker_demographics": {
@@ -2624,7 +2624,7 @@
       "label": "Label",
       "definition": "Definition",
       "video_count": 42,
-      "emv_cents": 42,
+      "emv_cents": 0.0425,
       "total_views": 42
      }
     ],
@@ -2634,7 +2634,7 @@
       "label": "Label",
       "definition": "Definition",
       "video_count": 42,
-      "emv_cents": 42,
+      "emv_cents": 0.0425,
       "total_views": 42
      }
     ]
@@ -2651,7 +2651,7 @@
         "label": "Label",
         "pct": 0.0425,
         "video_count": 42,
-        "emv_cents": 42,
+        "emv_cents": 0.0425,
         "total_views": 42
        }
       ]
@@ -2666,7 +2666,7 @@
         "label": "Label",
         "pct": 0.0425,
         "video_count": 42,
-        "emv_cents": 42,
+        "emv_cents": 0.0425,
         "total_views": 42
        }
       ]
@@ -2683,7 +2683,7 @@
         "label": "Label",
         "pct": 0.0425,
         "video_count": 42,
-        "emv_cents": 42,
+        "emv_cents": 0.0425,
         "total_views": 42
        }
       ]
@@ -2698,7 +2698,7 @@
         "label": "Label",
         "pct": 0.0425,
         "video_count": 42,
-        "emv_cents": 42,
+        "emv_cents": 0.0425,
         "total_views": 42
        }
       ]
@@ -2799,7 +2799,7 @@
         "views": 42,
         "likes": 42,
         "engagements": 42,
-        "emv_cents": 42,
+        "emv_cents": 0.0425,
         "sentiment": "Sentiment",
         "sentiment_score": 0.0425,
         "stance": "Stance",
@@ -2831,7 +2831,7 @@
       "posts": 42,
       "views": 42,
       "engagements": 42,
-      "emv_cents": 42,
+      "emv_cents": 0.0425,
       "avg_sentiment": 0.0425,
       "stance_counts": {},
       "top_themes": [
@@ -2859,7 +2859,7 @@
       "posts": 42,
       "views": 42,
       "engagements": 42,
-      "emv_cents": 42,
+      "emv_cents": 0.0425,
       "avg_sentiment": 0.0425,
       "stance_counts": {},
       "top_themes": [
@@ -2887,7 +2887,7 @@
       "posts": 42,
       "views": 42,
       "engagements": 42,
-      "emv_cents": 42,
+      "emv_cents": 0.0425,
       "avg_sentiment": 0.0425,
       "stance_counts": {},
       "top_themes": [
@@ -3060,7 +3060,7 @@
      "posts": 42,
      "views": 42,
      "engagements": 42,
-     "emv_cents": 42,
+     "emv_cents": 0.0425,
      "avg_sentiment": 0.0425,
      "stance_counts": {},
      "top_themes": [
@@ -3088,7 +3088,7 @@
      "posts": 42,
      "views": 42,
      "engagements": 42,
-     "emv_cents": 42,
+     "emv_cents": 0.0425,
      "avg_sentiment": 0.0425,
      "stance_counts": {},
      "top_themes": [
@@ -3116,7 +3116,7 @@
      "posts": 42,
      "views": 42,
      "engagements": 42,
-     "emv_cents": 42,
+     "emv_cents": 0.0425,
      "avg_sentiment": 0.0425,
      "stance_counts": {},
      "top_themes": [
@@ -3187,7 +3187,7 @@
    "posts": 42,
    "views": 42,
    "engagements": 42,
-   "emv_cents": 42,
+   "emv_cents": 0.0425,
    "avg_sentiment": 0.0425,
    "stance_counts": {},
    "top_themes": [
@@ -3222,7 +3222,7 @@
      "label": "Label",
      "definition": "Definition",
      "video_count": 42,
-     "emv_cents": 42,
+     "emv_cents": 0.0425,
      "total_views": 42
     }
    ],
@@ -3232,7 +3232,7 @@
      "label": "Label",
      "definition": "Definition",
      "video_count": 42,
-     "emv_cents": 42,
+     "emv_cents": 0.0425,
      "total_views": 42
     }
    ]
@@ -3242,7 +3242,7 @@
    "label": "Label",
    "definition": "Definition",
    "video_count": 42,
-   "emv_cents": 42,
+   "emv_cents": 0.0425,
    "total_views": 42
   },
   "AdvancedNarrative": {
@@ -3269,7 +3269,7 @@
        "label": "Label",
        "pct": 0.0425,
        "video_count": 42,
-       "emv_cents": 42,
+       "emv_cents": 0.0425,
        "total_views": 42
       }
      ]
@@ -3284,7 +3284,7 @@
        "label": "Label",
        "pct": 0.0425,
        "video_count": 42,
-       "emv_cents": 42,
+       "emv_cents": 0.0425,
        "total_views": 42
       }
      ]
@@ -3301,7 +3301,7 @@
        "label": "Label",
        "pct": 0.0425,
        "video_count": 42,
-       "emv_cents": 42,
+       "emv_cents": 0.0425,
        "total_views": 42
       }
      ]
@@ -3316,7 +3316,7 @@
        "label": "Label",
        "pct": 0.0425,
        "video_count": 42,
-       "emv_cents": 42,
+       "emv_cents": 0.0425,
        "total_views": 42
       }
      ]
@@ -3333,7 +3333,7 @@
      "label": "Label",
      "pct": 0.0425,
      "video_count": 42,
-     "emv_cents": 42,
+     "emv_cents": 0.0425,
      "total_views": 42
     }
    ]
@@ -3343,7 +3343,7 @@
    "label": "Label",
    "pct": 0.0425,
    "video_count": 42,
-   "emv_cents": 42,
+   "emv_cents": 0.0425,
    "total_views": 42
   },
   "AdvancedPerceptionSide": {
@@ -3357,7 +3357,7 @@
       "label": "Label",
       "pct": 0.0425,
       "video_count": 42,
-      "emv_cents": 42,
+      "emv_cents": 0.0425,
       "total_views": 42
      }
     ]
@@ -3372,7 +3372,7 @@
       "label": "Label",
       "pct": 0.0425,
       "video_count": 42,
-      "emv_cents": 42,
+      "emv_cents": 0.0425,
       "total_views": 42
      }
     ]
@@ -3396,7 +3396,7 @@
      "views": 42,
      "likes": 42,
      "engagements": 42,
-     "emv_cents": 42,
+     "emv_cents": 0.0425,
      "sentiment": "Sentiment",
      "sentiment_score": 0.0425,
      "stance": "Stance",
@@ -3421,7 +3421,7 @@
    "views": 42,
    "likes": 42,
    "engagements": 42,
-   "emv_cents": 42,
+   "emv_cents": 0.0425,
    "sentiment": "Sentiment",
    "sentiment_score": 0.0425,
    "stance": "Stance",
@@ -3456,7 +3456,7 @@
        "views": 42,
        "likes": 42,
        "engagements": 42,
-       "emv_cents": 42,
+       "emv_cents": 0.0425,
        "sentiment": "Sentiment",
        "sentiment_score": 0.0425,
        "stance": "Stance",
@@ -3551,7 +3551,7 @@
    "total_shares": 42,
    "total_engagements": 42,
    "mean_engagement_rate": 0.0425,
-   "total_emv_cents": 42,
+   "total_emv_cents": 0.0425,
    "first_post": "First post",
    "last_post": "Last post",
    "coverage": {
@@ -3599,7 +3599,7 @@
    "posts": 42,
    "views": 42,
    "engagements": 42,
-   "emv_cents": 42
+   "emv_cents": 0.0425
   },
   "AdvancedVoiceBrand": {
    "brand": "Brand",
@@ -4187,7 +4187,7 @@
      "source": "Source",
      "kind": "snapshot",
      "text": "Text",
-     "time_seconds": 42
+     "time_seconds": 0.0425
     }
    ]
   },
@@ -4629,7 +4629,7 @@
    "source": "Source",
    "kind": "snapshot",
    "text": "Text",
-   "time_seconds": 42
+   "time_seconds": 0.0425
   },
   "VettingSummary": {
    "total_violations": 42,
@@ -4802,6 +4802,1197 @@
    "secret": "sk_zelf_wh_csYj0F1wOQwWAFDNdtJWy5OC",
    "enabled": true,
    "created": "2026-01-01T00:00:00Z"
+  }
+ },
+ "reports": {
+  "AiAnalysisReport": {
+   "empty": {},
+   "nulls": {
+    "brand_name": null,
+    "general_insights": {}
+   },
+   "missing": {
+    "general_insights": {}
+   },
+   "decimals": {
+    "brand_name": "Brand name",
+    "general_insights": {}
+   }
+  },
+  "AdvancedAiAnalysisReport": {
+   "empty": {},
+   "nulls": {
+    "summary": {
+     "videos": null,
+     "creators": null,
+     "total_views": null,
+     "total_likes": null,
+     "total_comments": null,
+     "total_shares": null,
+     "total_engagements": null,
+     "mean_engagement_rate": null,
+     "total_emv_cents": null,
+     "first_post": null,
+     "last_post": null,
+     "coverage": {
+      "total": null,
+      "enriched": null,
+      "has_sentiment": null,
+      "has_themes": null,
+      "has_love_dislike": null,
+      "has_speaker_demographics": null,
+      "has_human_signals": null
+     }
+    },
+    "sentiment": [
+     {
+      "label": null,
+      "count": null
+     }
+    ],
+    "stance": [
+     {
+      "label": null,
+      "count": null
+     }
+    ],
+    "themes": [
+     {
+      "theme": null,
+      "count": null
+     }
+    ],
+    "sentiment_by_theme": [
+     {
+      "theme": null,
+      "positive": null,
+      "neutral": null,
+      "negative": null,
+      "mixed": null,
+      "total": null
+     }
+    ],
+    "timeline": [
+     {
+      "month": null,
+      "posts": null,
+      "views": null,
+      "engagements": null
+     }
+    ],
+    "languages": [
+     {
+      "language": null,
+      "count": null,
+      "engagements": null
+     }
+    ],
+    "content_forms": [
+     {
+      "form": null,
+      "count": null,
+      "avg_views": null,
+      "avg_engagements": null
+     }
+    ],
+    "top_creators": [
+     {
+      "handle": null,
+      "posts": null,
+      "views": null,
+      "engagements": null,
+      "emv_cents": null
+     }
+    ],
+    "speaker_demographics": {
+     "gender": [
+      {
+       "label": null,
+       "count": null
+      }
+     ],
+     "age": [
+      {
+       "label": null,
+       "count": null
+      }
+     ],
+     "ethnicity": [
+      {
+       "label": null,
+       "count": null
+      }
+     ],
+     "setting": [
+      {
+       "label": null,
+       "count": null
+      }
+     ]
+    },
+    "signals": {
+     "stack": [
+      {
+       "label": null,
+       "count": null
+      }
+     ],
+     "competitors": [
+      {
+       "label": null,
+       "count": null
+      }
+     ],
+     "pain_points": [
+      {
+       "label": null,
+       "count": null
+      }
+     ],
+     "journey_stage": [
+      {
+       "label": null,
+       "count": null
+      }
+     ]
+    },
+    "love_dislike": {
+     "classified_count": null,
+     "total_count": null,
+     "love": [
+      {
+       "slug": null,
+       "label": null,
+       "definition": null,
+       "video_count": null,
+       "emv_cents": null,
+       "total_views": null
+      }
+     ],
+     "dislike": [
+      {
+       "slug": null,
+       "label": null,
+       "definition": null,
+       "video_count": null,
+       "emv_cents": null,
+       "total_views": null
+      }
+     ]
+    },
+    "perception": {
+     "audience": {
+      "price": {
+       "share_indicating": null,
+       "classified_count": null,
+       "enriched_count": null,
+       "buckets": [
+        {
+         "key": null,
+         "label": null,
+         "pct": null,
+         "video_count": null,
+         "emv_cents": null,
+         "total_views": null
+        }
+       ]
+      },
+      "quality": {
+       "share_indicating": null,
+       "classified_count": null,
+       "enriched_count": null,
+       "buckets": [
+        {
+         "key": null,
+         "label": null,
+         "pct": null,
+         "video_count": null,
+         "emv_cents": null,
+         "total_views": null
+        }
+       ]
+      }
+     },
+     "creator": {
+      "price": {
+       "share_indicating": null,
+       "classified_count": null,
+       "enriched_count": null,
+       "buckets": [
+        {
+         "key": null,
+         "label": null,
+         "pct": null,
+         "video_count": null,
+         "emv_cents": null,
+         "total_views": null
+        }
+       ]
+      },
+      "quality": {
+       "share_indicating": null,
+       "classified_count": null,
+       "enriched_count": null,
+       "buckets": [
+        {
+         "key": null,
+         "label": null,
+         "pct": null,
+         "video_count": null,
+         "emv_cents": null,
+         "total_views": null
+        }
+       ]
+      }
+     }
+    },
+    "audience_voice": {
+     "has_comments": null,
+     "totals": {
+      "videos": null,
+      "comments": null,
+      "enriched": null,
+      "total_likes": null,
+      "videos_with_comments": null,
+      "like_weighted_sentiment": null
+     },
+     "sentiment": [
+      {
+       "label": null,
+       "count": null,
+       "likes": null
+      }
+     ],
+     "intent": [
+      {
+       "label": null,
+       "count": null
+      }
+     ],
+     "themes": [
+      {
+       "theme": null,
+       "count": null,
+       "positive": null,
+       "negative": null,
+       "like_weighted_score": null
+      }
+     ],
+     "timeline": [
+      {
+       "month": null,
+       "count": null,
+       "net_sentiment": null,
+       "like_weighted_score": null
+      }
+     ],
+     "top_comments": [
+      {
+       "comment_id": null,
+       "text": null,
+       "likes": null,
+       "posted_at": null,
+       "sentiment": null,
+       "intent": null,
+       "gist": null,
+       "video_record_id": null,
+       "video_handle": null,
+       "video_caption": null
+      }
+     ],
+     "theme_divergence": [
+      {
+       "theme": null,
+       "videos": null,
+       "comments": null,
+       "creator_score": null,
+       "audience_score": null,
+       "gap": null
+      }
+     ],
+     "brands": [
+      {
+       "brand": null,
+       "count": null,
+       "avg_score": null,
+       "total_likes": null
+      }
+     ]
+    },
+    "personas": {
+     "vocab_source": null,
+     "personas": [
+      {
+       "id": null,
+       "name": null,
+       "tagline": null,
+       "description": null,
+       "member_count": null,
+       "avg_sentiment": null,
+       "total_views": null,
+       "top_similarity": null,
+       "representatives": [
+        {
+         "record_id": null,
+         "handle": null,
+         "caption": null,
+         "gist": null,
+         "views": null,
+         "likes": null,
+         "engagements": null,
+         "emv_cents": null,
+         "sentiment": null,
+         "sentiment_score": null,
+         "stance": null,
+         "themes": null,
+         "language": null,
+         "content_form": null,
+         "duration_s": null,
+         "posted_at": null,
+         "thumbnail_url": null,
+         "video_url": null
+        }
+       ],
+       "breakdown": {}
+      }
+     ]
+    },
+    "creator_intel": {
+     "totals": {
+      "creators": null,
+      "advocates": null,
+      "detractors": null,
+      "prospects": null
+     },
+     "advocates": [
+      {
+       "handle": null,
+       "posts": null,
+       "views": null,
+       "engagements": null,
+       "emv_cents": null,
+       "avg_sentiment": null,
+       "stance_counts": {},
+       "top_themes": [
+        {
+         "theme": null,
+         "count": null
+        }
+       ],
+       "organic_share": null,
+       "first_post": null,
+       "last_post": null,
+       "reach_percentile": null,
+       "stance_lean": null,
+       "posture": null,
+       "partnership_fit": null,
+       "detractor_severity": null,
+       "consumer_resonance": null,
+       "read": {},
+       "profile": {}
+      }
+     ],
+     "detractors": [
+      {
+       "handle": null,
+       "posts": null,
+       "views": null,
+       "engagements": null,
+       "emv_cents": null,
+       "avg_sentiment": null,
+       "stance_counts": {},
+       "top_themes": [
+        {
+         "theme": null,
+         "count": null
+        }
+       ],
+       "organic_share": null,
+       "first_post": null,
+       "last_post": null,
+       "reach_percentile": null,
+       "stance_lean": null,
+       "posture": null,
+       "partnership_fit": null,
+       "detractor_severity": null,
+       "consumer_resonance": null,
+       "read": {},
+       "profile": {}
+      }
+     ],
+     "prospects": [
+      {
+       "handle": null,
+       "posts": null,
+       "views": null,
+       "engagements": null,
+       "emv_cents": null,
+       "avg_sentiment": null,
+       "stance_counts": {},
+       "top_themes": [
+        {
+         "theme": null,
+         "count": null
+        }
+       ],
+       "organic_share": null,
+       "first_post": null,
+       "last_post": null,
+       "reach_percentile": null,
+       "stance_lean": null,
+       "posture": null,
+       "partnership_fit": null,
+       "detractor_severity": null,
+       "consumer_resonance": null,
+       "read": {},
+       "profile": {}
+      }
+     ],
+     "posture_map": [
+      {
+       "handle": null,
+       "reach_percentile": null,
+       "stance_lean": null,
+       "posts": null,
+       "posture": null
+      }
+     ],
+     "narratives": [
+      {
+       "theme": null,
+       "total": null,
+       "positive_share": null,
+       "negative_share": null,
+       "momentum": null,
+       "direction": null,
+       "carriers": null,
+       "play": {}
+      }
+     ],
+     "meta": {
+      "generated_at": null,
+      "model": null,
+      "enriched_count": null,
+      "stale": null,
+      "derived_from": null
+     }
+    }
+   },
+   "missing": {
+    "summary": {
+     "coverage": {}
+    },
+    "sentiment": [
+     {}
+    ],
+    "stance": [
+     {}
+    ],
+    "themes": [
+     {}
+    ],
+    "sentiment_by_theme": [
+     {}
+    ],
+    "timeline": [
+     {}
+    ],
+    "languages": [
+     {}
+    ],
+    "content_forms": [
+     {}
+    ],
+    "top_creators": [
+     {}
+    ],
+    "speaker_demographics": {
+     "gender": [
+      {}
+     ],
+     "age": [
+      {}
+     ],
+     "ethnicity": [
+      {}
+     ],
+     "setting": [
+      {}
+     ]
+    },
+    "signals": {
+     "stack": [
+      {}
+     ],
+     "competitors": [
+      {}
+     ],
+     "pain_points": [
+      {}
+     ],
+     "journey_stage": [
+      {}
+     ]
+    },
+    "love_dislike": {
+     "love": [
+      {}
+     ],
+     "dislike": [
+      {}
+     ]
+    },
+    "perception": {
+     "audience": {
+      "price": {
+       "buckets": [
+        {}
+       ]
+      },
+      "quality": {
+       "buckets": [
+        {}
+       ]
+      }
+     },
+     "creator": {
+      "price": {
+       "buckets": [
+        {}
+       ]
+      },
+      "quality": {
+       "buckets": [
+        {}
+       ]
+      }
+     }
+    },
+    "audience_voice": {
+     "totals": {},
+     "sentiment": [
+      {}
+     ],
+     "intent": [
+      {}
+     ],
+     "themes": [
+      {}
+     ],
+     "timeline": [
+      {}
+     ],
+     "top_comments": [
+      {}
+     ],
+     "theme_divergence": [
+      {}
+     ],
+     "brands": [
+      {}
+     ]
+    },
+    "personas": {
+     "personas": [
+      {
+       "representatives": [
+        {}
+       ],
+       "breakdown": {}
+      }
+     ]
+    },
+    "creator_intel": {
+     "totals": {},
+     "advocates": [
+      {
+       "stance_counts": {},
+       "top_themes": [
+        {}
+       ],
+       "read": {},
+       "profile": {}
+      }
+     ],
+     "detractors": [
+      {
+       "stance_counts": {},
+       "top_themes": [
+        {}
+       ],
+       "read": {},
+       "profile": {}
+      }
+     ],
+     "prospects": [
+      {
+       "stance_counts": {},
+       "top_themes": [
+        {}
+       ],
+       "read": {},
+       "profile": {}
+      }
+     ],
+     "posture_map": [
+      {}
+     ],
+     "narratives": [
+      {
+       "play": {}
+      }
+     ],
+     "meta": {}
+    }
+   },
+   "decimals": {
+    "summary": {
+     "videos": 12.6,
+     "creators": 12.6,
+     "total_views": 12.6,
+     "total_likes": 12.6,
+     "total_comments": 12.6,
+     "total_shares": 12.6,
+     "total_engagements": 12.6,
+     "mean_engagement_rate": 0.0425,
+     "total_emv_cents": 0.0425,
+     "first_post": "First post",
+     "last_post": "Last post",
+     "coverage": {
+      "total": 12.6,
+      "enriched": 12.6,
+      "has_sentiment": 12.6,
+      "has_themes": 12.6,
+      "has_love_dislike": 12.6,
+      "has_speaker_demographics": 12.6,
+      "has_human_signals": 12.6
+     }
+    },
+    "sentiment": [
+     {
+      "label": "Label",
+      "count": 12.6
+     }
+    ],
+    "stance": [
+     {
+      "label": "Label",
+      "count": 12.6
+     }
+    ],
+    "themes": [
+     {
+      "theme": "Theme",
+      "count": 12.6
+     }
+    ],
+    "sentiment_by_theme": [
+     {
+      "theme": "Theme",
+      "positive": 12.6,
+      "neutral": 12.6,
+      "negative": 12.6,
+      "mixed": 12.6,
+      "total": 12.6
+     }
+    ],
+    "timeline": [
+     {
+      "month": "Month",
+      "posts": 12.6,
+      "views": 12.6,
+      "engagements": 12.6
+     }
+    ],
+    "languages": [
+     {
+      "language": "en",
+      "count": 12.6,
+      "engagements": 12.6
+     }
+    ],
+    "content_forms": [
+     {
+      "form": "Form",
+      "count": 12.6,
+      "avg_views": 12.6,
+      "avg_engagements": 12.6
+     }
+    ],
+    "top_creators": [
+     {
+      "handle": "zelfai",
+      "posts": 12.6,
+      "views": 12.6,
+      "engagements": 12.6,
+      "emv_cents": 0.0425
+     }
+    ],
+    "speaker_demographics": {
+     "gender": [
+      {
+       "label": "Label",
+       "count": 12.6
+      }
+     ],
+     "age": [
+      {
+       "label": "Label",
+       "count": 12.6
+      }
+     ],
+     "ethnicity": [
+      {
+       "label": "Label",
+       "count": 12.6
+      }
+     ],
+     "setting": [
+      {
+       "label": "Label",
+       "count": 12.6
+      }
+     ]
+    },
+    "signals": {
+     "stack": [
+      {
+       "label": "Label",
+       "count": 12.6
+      }
+     ],
+     "competitors": [
+      {
+       "label": "Label",
+       "count": 12.6
+      }
+     ],
+     "pain_points": [
+      {
+       "label": "Label",
+       "count": 12.6
+      }
+     ],
+     "journey_stage": [
+      {
+       "label": "Label",
+       "count": 12.6
+      }
+     ]
+    },
+    "love_dislike": {
+     "classified_count": 12.6,
+     "total_count": 12.6,
+     "love": [
+      {
+       "slug": "Slug",
+       "label": "Label",
+       "definition": "Definition",
+       "video_count": 12.6,
+       "emv_cents": 0.0425,
+       "total_views": 12.6
+      }
+     ],
+     "dislike": [
+      {
+       "slug": "Slug",
+       "label": "Label",
+       "definition": "Definition",
+       "video_count": 12.6,
+       "emv_cents": 0.0425,
+       "total_views": 12.6
+      }
+     ]
+    },
+    "perception": {
+     "audience": {
+      "price": {
+       "share_indicating": 0.0425,
+       "classified_count": 12.6,
+       "enriched_count": 12.6,
+       "buckets": [
+        {
+         "key": "Key",
+         "label": "Label",
+         "pct": 0.0425,
+         "video_count": 12.6,
+         "emv_cents": 0.0425,
+         "total_views": 12.6
+        }
+       ]
+      },
+      "quality": {
+       "share_indicating": 0.0425,
+       "classified_count": 12.6,
+       "enriched_count": 12.6,
+       "buckets": [
+        {
+         "key": "Key",
+         "label": "Label",
+         "pct": 0.0425,
+         "video_count": 12.6,
+         "emv_cents": 0.0425,
+         "total_views": 12.6
+        }
+       ]
+      }
+     },
+     "creator": {
+      "price": {
+       "share_indicating": 0.0425,
+       "classified_count": 12.6,
+       "enriched_count": 12.6,
+       "buckets": [
+        {
+         "key": "Key",
+         "label": "Label",
+         "pct": 0.0425,
+         "video_count": 12.6,
+         "emv_cents": 0.0425,
+         "total_views": 12.6
+        }
+       ]
+      },
+      "quality": {
+       "share_indicating": 0.0425,
+       "classified_count": 12.6,
+       "enriched_count": 12.6,
+       "buckets": [
+        {
+         "key": "Key",
+         "label": "Label",
+         "pct": 0.0425,
+         "video_count": 12.6,
+         "emv_cents": 0.0425,
+         "total_views": 12.6
+        }
+       ]
+      }
+     }
+    },
+    "audience_voice": {
+     "has_comments": true,
+     "totals": {
+      "videos": 12.6,
+      "comments": 12.6,
+      "enriched": 12.6,
+      "total_likes": 12.6,
+      "videos_with_comments": 12.6,
+      "like_weighted_sentiment": 0.0425
+     },
+     "sentiment": [
+      {
+       "label": "Label",
+       "count": 12.6,
+       "likes": 12.6
+      }
+     ],
+     "intent": [
+      {
+       "label": "Label",
+       "count": 12.6
+      }
+     ],
+     "themes": [
+      {
+       "theme": "Theme",
+       "count": 12.6,
+       "positive": 12.6,
+       "negative": 12.6,
+       "like_weighted_score": 0.0425
+      }
+     ],
+     "timeline": [
+      {
+       "month": "Month",
+       "count": 12.6,
+       "net_sentiment": 12.6,
+       "like_weighted_score": 0.0425
+      }
+     ],
+     "top_comments": [
+      {
+       "comment_id": "g1puGWyPrvV69TKG",
+       "text": "Text",
+       "likes": 12.6,
+       "posted_at": "2026-01-01T00:00:00Z",
+       "sentiment": "Sentiment",
+       "intent": "Intent",
+       "gist": "Gist",
+       "video_record_id": "WuxSfICW5c1gG1e9",
+       "video_handle": "zelfai",
+       "video_caption": "Video caption"
+      }
+     ],
+     "theme_divergence": [
+      {
+       "theme": "Theme",
+       "videos": 12.6,
+       "comments": 12.6,
+       "creator_score": 0.0425,
+       "audience_score": 0.0425,
+       "gap": 0.0425
+      }
+     ],
+     "brands": [
+      {
+       "brand": "Brand",
+       "count": 12.6,
+       "avg_score": 0.0425,
+       "total_likes": 12.6
+      }
+     ]
+    },
+    "personas": {
+     "vocab_source": "Vocab source",
+     "personas": [
+      {
+       "id": "id_4AnzqnKj6ThQDqUn",
+       "name": "Name",
+       "tagline": "Tagline",
+       "description": "Description",
+       "member_count": 12.6,
+       "avg_sentiment": 0.0425,
+       "total_views": 12.6,
+       "top_similarity": 0.0425,
+       "representatives": [
+        {
+         "record_id": "CZ8Dm0eSeKOAR3WN",
+         "handle": "zelfai",
+         "caption": "Caption",
+         "gist": "Gist",
+         "views": 12.6,
+         "likes": 12.6,
+         "engagements": 12.6,
+         "emv_cents": 0.0425,
+         "sentiment": "Sentiment",
+         "sentiment_score": 0.0425,
+         "stance": "Stance",
+         "themes": [
+          "Themes"
+         ],
+         "language": "en",
+         "content_form": "VIDEO",
+         "duration_s": 0.0425,
+         "posted_at": "2026-01-01T00:00:00Z",
+         "thumbnail_url": "https://example.com/advancedpersonarepresentative/thumbnail_url",
+         "video_url": "https://example.com/advancedpersonarepresentative/video_url"
+        }
+       ],
+       "breakdown": {}
+      }
+     ]
+    },
+    "creator_intel": {
+     "totals": {
+      "creators": 12.6,
+      "advocates": 12.6,
+      "detractors": 12.6,
+      "prospects": 12.6
+     },
+     "advocates": [
+      {
+       "handle": "zelfai",
+       "posts": 12.6,
+       "views": 12.6,
+       "engagements": 12.6,
+       "emv_cents": 0.0425,
+       "avg_sentiment": 0.0425,
+       "stance_counts": {},
+       "top_themes": [
+        {
+         "theme": "Theme",
+         "count": 12.6
+        }
+       ],
+       "organic_share": 0.0425,
+       "first_post": "First post",
+       "last_post": "Last post",
+       "reach_percentile": 0.0425,
+       "stance_lean": 0.0425,
+       "posture": "Posture",
+       "partnership_fit": 12.6,
+       "detractor_severity": 12.6,
+       "consumer_resonance": 12.6,
+       "read": {},
+       "profile": {}
+      }
+     ],
+     "detractors": [
+      {
+       "handle": "zelfai",
+       "posts": 12.6,
+       "views": 12.6,
+       "engagements": 12.6,
+       "emv_cents": 0.0425,
+       "avg_sentiment": 0.0425,
+       "stance_counts": {},
+       "top_themes": [
+        {
+         "theme": "Theme",
+         "count": 12.6
+        }
+       ],
+       "organic_share": 0.0425,
+       "first_post": "First post",
+       "last_post": "Last post",
+       "reach_percentile": 0.0425,
+       "stance_lean": 0.0425,
+       "posture": "Posture",
+       "partnership_fit": 12.6,
+       "detractor_severity": 12.6,
+       "consumer_resonance": 12.6,
+       "read": {},
+       "profile": {}
+      }
+     ],
+     "prospects": [
+      {
+       "handle": "zelfai",
+       "posts": 12.6,
+       "views": 12.6,
+       "engagements": 12.6,
+       "emv_cents": 0.0425,
+       "avg_sentiment": 0.0425,
+       "stance_counts": {},
+       "top_themes": [
+        {
+         "theme": "Theme",
+         "count": 12.6
+        }
+       ],
+       "organic_share": 0.0425,
+       "first_post": "First post",
+       "last_post": "Last post",
+       "reach_percentile": 0.0425,
+       "stance_lean": 0.0425,
+       "posture": "Posture",
+       "partnership_fit": 12.6,
+       "detractor_severity": 12.6,
+       "consumer_resonance": 12.6,
+       "read": {},
+       "profile": {}
+      }
+     ],
+     "posture_map": [
+      {
+       "handle": "zelfai",
+       "reach_percentile": 0.0425,
+       "stance_lean": 0.0425,
+       "posts": 12.6,
+       "posture": "Posture"
+      }
+     ],
+     "narratives": [
+      {
+       "theme": "Theme",
+       "total": 12.6,
+       "positive_share": 0.0425,
+       "negative_share": 0.0425,
+       "momentum": 0.0425,
+       "direction": "Direction",
+       "carriers": [
+        "Carriers"
+       ],
+       "play": {}
+      }
+     ],
+     "meta": {
+      "generated_at": "2026-01-01T00:00:00Z",
+      "model": "Model",
+      "enriched_count": 12.6,
+      "stale": true,
+      "derived_from": "Derived from"
+     }
+    }
+   }
+  },
+  "CreatorVettingReport": {
+   "empty": {},
+   "nulls": {
+    "profile_summary": null,
+    "top_themes": {
+     "top_themes": null,
+     "grounding": {}
+    },
+    "violation_summary": {
+     "total_violations": null,
+     "affected_contents": null
+    },
+    "violations": [
+     {
+      "violation_id": null,
+      "type": null,
+      "value": null,
+      "description": null,
+      "reason": null,
+      "evidence_quote": null,
+      "evidence_field": null,
+      "content_id": null,
+      "violation": null,
+      "severity": null
+     }
+    ],
+    "disclosures": [
+     {
+      "content_id": null,
+      "content_url": null,
+      "source": null,
+      "kind": null,
+      "text": null,
+      "time_seconds": null
+     }
+    ]
+   },
+   "missing": {
+    "top_themes": {
+     "grounding": {}
+    },
+    "violation_summary": {},
+    "violations": [
+     {}
+    ],
+    "disclosures": [
+     {}
+    ]
+   },
+   "decimals": {
+    "profile_summary": "Profile summary",
+    "top_themes": {
+     "top_themes": [
+      "Top themes"
+     ],
+     "grounding": {}
+    },
+    "violation_summary": {
+     "total_violations": 12.6,
+     "affected_contents": 12.6
+    },
+    "violations": [
+     {
+      "violation_id": "Lp86MWdldxkUtEh6",
+      "type": "Type",
+      "value": "Value",
+      "description": "Description",
+      "reason": "Reason",
+      "evidence_quote": "Evidence quote",
+      "evidence_field": "Evidence field",
+      "content_id": "con_ARKGtpAiUf3OFeDI",
+      "violation": "Violation",
+      "severity": "Severity"
+     }
+    ],
+    "disclosures": [
+     {
+      "content_id": "con_1lgmqMA5Kd6rpTZn",
+      "content_url": "https://example.com/vettingdisclosure/content_url",
+      "source": "Source",
+      "kind": "snapshot",
+      "text": "Text",
+      "time_seconds": 0.0425
+     }
+    ]
+   }
   }
  }
 }

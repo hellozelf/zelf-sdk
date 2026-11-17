@@ -15,7 +15,7 @@ public record AdvancedCreatorProfile(
         @JsonProperty("posts") Long posts,
         @JsonProperty("views") Long views,
         @JsonProperty("engagements") Long engagements,
-        @JsonProperty("emv_cents") Long emvCents,
+        @JsonProperty("emv_cents") Double emvCents,
         @JsonProperty("avg_sentiment") Double avgSentiment,
         @JsonProperty("stance_counts") JsonNode stanceCounts,
         @JsonProperty("top_themes") List<AdvancedThemeCount> topThemes,

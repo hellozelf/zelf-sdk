@@ -5,6 +5,9 @@ import subprocess
 import textwrap
 from pathlib import Path
 
+import yaml
+
+import reports
 from naming import camel, pascal
 from spec import Api, Operation, Param, Type
 from release import version_for
@@ -431,11 +434,17 @@ def emit(api: Api, spec_path: Path, root: Path, templates: Path) -> None:
     (src / "resources").mkdir(parents=True)
 
     ensure_node_modules(root)
+    # Report types are generated from a softened copy, so they read `field?: T | null`.
+    doc = yaml.safe_load(spec_path.read_text())
+    reports.soften(doc)
+    soft_spec = root / "openapi.soft.json"
+    soft_spec.write_text(json.dumps(doc))
     subprocess.run(
         [str(root / "node_modules" / ".bin" / "openapi-typescript"),
-         str(spec_path), "-o", str(src / "schema.d.ts")],
+         str(soft_spec), "-o", str(src / "schema.d.ts")],
         check=True, capture_output=True, cwd=root,
     )
+    soft_spec.unlink()
     for name in ("pagination.ts", "transport.ts"):
         shutil.copyfile(templates / "src" / name, src / name)
     (src / "webhooks.ts").write_text(

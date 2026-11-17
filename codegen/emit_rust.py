@@ -86,6 +86,16 @@ def enum_block(name: str, values: list[str], description: str) -> str:
     return "\n".join(out)
 
 
+def lenient_reader(kind: str, optional: bool) -> str | None:
+    """The `crate::lenient` function that reads one report field softly.
+
+    An `Option` of anything but a whole number already reads null as `None`.
+    """
+    if kind == "int":
+        return "opt_int" if optional else "int"
+    return None if optional else "null_default"
+
+
 def models_module(api: Api) -> tuple[str, dict[tuple[str, ...], str]]:
     found, enums = model_ir.build(api)
     aliases = {tuple(e.values): e.name for e in enums}
@@ -105,8 +115,9 @@ def models_module(api: Api) -> tuple[str, dict[tuple[str, ...], str]]:
 
     for model in found:
         out += doc(model.description or f"The {model.name} object.")
+        derive = "Debug, Clone, Default, Serialize, Deserialize" if model.soft else "Debug, Clone, Serialize, Deserialize"
         out += [
-            "#[derive(Debug, Clone, Serialize, Deserialize)]",
+            f"#[derive({derive})]",
             f"pub struct {model.name} {{",
         ]
         for field in model.fields:
@@ -118,7 +129,14 @@ def models_module(api: Api) -> tuple[str, dict[tuple[str, ...], str]]:
             attrs = []
             if field_name(field.name) != field.name:
                 attrs.append(f'rename = "{field.name}"')
-            if optional:
+            if model.soft:
+                attrs.append("default")
+                reader = lenient_reader(field.type.kind, optional)
+                if reader:
+                    attrs.append(f'deserialize_with = "crate::lenient::{reader}"')
+                if optional:
+                    attrs.append('skip_serializing_if = "Option::is_none"')
+            elif optional:
                 attrs.append("default")
                 attrs.append('skip_serializing_if = "Option::is_none"')
             elif field.type.kind == "array":
@@ -382,6 +400,7 @@ def lib_module(api: Api) -> str:
         "//! ```",
         "",
         "pub mod error;",
+        "mod lenient;",
         "pub mod models;",
         "pub mod page;",
         "pub mod transport;",
@@ -508,7 +527,7 @@ def emit(api: Api, spec_path: Path, root: Path, templates: Path) -> None:
 
     body, aliases = models_module(api)
     (src / "models.rs").write_text(body)
-    for name in ("error.rs", "page.rs", "transport.rs"):
+    for name in ("error.rs", "lenient.rs", "page.rs", "transport.rs"):
         shutil.copyfile(templates / "src" / name, src / name)
     (src / "webhooks.rs").write_text(
         webhooks_module(api, (templates / "src" / "webhooks_head.rs").read_text())

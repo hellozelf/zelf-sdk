@@ -71,6 +71,9 @@ public static class Fixtures
     /// <summary>One synthesized sample per model.</summary>
     public static JsonElement Models() => Document.RootElement.GetProperty("models");
 
+    /// <summary>Malformed report documents every SDK must still decode.</summary>
+    public static JsonElement Reports() => Document.RootElement.GetProperty("reports");
+
     public static ZelfClient Client(Stub stub, int maxRetries = 0, bool retryWrites = false) =>
         new(new ZelfClientOptions
         {

@@ -385,7 +385,7 @@ type AdvancedAiAnalysisCreateRequest struct {
 // AdvancedAiAnalysisReport The JSON document behind an advanced AI analysis run's `result.download_url`.
 //
 // Counts are whole numbers, shares and rates are decimals from 0 to 1, money
-// is in whole cents, and a value is `null` when there was not enough data to
+// is in cents and can carry a fraction, and a value is `null` when there was not enough data to
 // work it out. A section is absent when the run could not produce it, so read
 // every one as optional, and ignore keys you do not recognise.
 type AdvancedAiAnalysisReport struct {
@@ -510,13 +510,13 @@ type AdvancedAudienceVoice struct {
 // AdvancedContentForm One video format and how it performs.
 type AdvancedContentForm struct {
 	// AvgEngagements Mean engagements per video.
-	AvgEngagements int `json:"avg_engagements"`
+	AvgEngagements Int `json:"avg_engagements"`
 
 	// AvgViews Mean views per video.
-	AvgViews int `json:"avg_views"`
+	AvgViews Int `json:"avg_views"`
 
 	// Count Videos in this format.
-	Count int `json:"count"`
+	Count Int `json:"count"`
 
 	// Form The format, for example `short`.
 	Form string `json:"form"`
@@ -525,25 +525,25 @@ type AdvancedContentForm struct {
 // AdvancedCoverage How many of the analyzed videos carry each kind of analysis.
 type AdvancedCoverage struct {
 	// Enriched Videos that were analyzed at all.
-	Enriched int `json:"enriched"`
+	Enriched Int `json:"enriched"`
 
 	// HasHumanSignals Videos with product context signals.
-	HasHumanSignals int `json:"has_human_signals"`
+	HasHumanSignals Int `json:"has_human_signals"`
 
 	// HasLoveDislike Videos classified into a love or dislike bucket.
-	HasLoveDislike int `json:"has_love_dislike"`
+	HasLoveDislike Int `json:"has_love_dislike"`
 
 	// HasSentiment Videos with a sentiment.
-	HasSentiment int `json:"has_sentiment"`
+	HasSentiment Int `json:"has_sentiment"`
 
 	// HasSpeakerDemographics Videos with inferred on-screen demographics.
-	HasSpeakerDemographics int `json:"has_speaker_demographics"`
+	HasSpeakerDemographics Int `json:"has_speaker_demographics"`
 
 	// HasThemes Videos with themes.
-	HasThemes int `json:"has_themes"`
+	HasThemes Int `json:"has_themes"`
 
 	// Total Videos in the analysis.
-	Total int `json:"total"`
+	Total Int `json:"total"`
 }
 
 // AdvancedCreatorIntel Creators sorted by posture, and the stories they carry.
@@ -576,7 +576,7 @@ type AdvancedCreatorIntelMeta struct {
 	DerivedFrom nullable.Nullable[string] `json:"derived_from"`
 
 	// EnrichedCount Creators analyzed.
-	EnrichedCount int `json:"enriched_count"`
+	EnrichedCount Int `json:"enriched_count"`
 
 	// GeneratedAt When the section was built (UTC, ISO-8601).
 	GeneratedAt string `json:"generated_at"`
@@ -591,16 +591,16 @@ type AdvancedCreatorIntelMeta struct {
 // AdvancedCreatorIntelTotals How the creators split across postures.
 type AdvancedCreatorIntelTotals struct {
 	// Advocates Creators who back the topic.
-	Advocates int `json:"advocates"`
+	Advocates Int `json:"advocates"`
 
 	// Creators Creators in the analysis.
-	Creators int `json:"creators"`
+	Creators Int `json:"creators"`
 
 	// Detractors Creators who criticise it.
-	Detractors int `json:"detractors"`
+	Detractors Int `json:"detractors"`
 
 	// Prospects Creators worth approaching.
-	Prospects int `json:"prospects"`
+	Prospects Int `json:"prospects"`
 }
 
 // AdvancedCreatorProfile A creator, scored on how they treat the topic.
@@ -609,16 +609,16 @@ type AdvancedCreatorProfile struct {
 	AvgSentiment nullable.Nullable[float64] `json:"avg_sentiment"`
 
 	// ConsumerResonance How strongly commenters respond to them, 0 to 100. `0` when none of their comments were analyzed.
-	ConsumerResonance nullable.Nullable[int] `json:"consumer_resonance"`
+	ConsumerResonance nullable.Nullable[Int] `json:"consumer_resonance"`
 
 	// DetractorSeverity How much risk their criticism carries, 0 to 100.
-	DetractorSeverity nullable.Nullable[int] `json:"detractor_severity"`
+	DetractorSeverity nullable.Nullable[Int] `json:"detractor_severity"`
 
 	// EmvCents Earned media value, in cents.
-	EmvCents int `json:"emv_cents"`
+	EmvCents float64 `json:"emv_cents"`
 
 	// Engagements Engagements across them.
-	Engagements int `json:"engagements"`
+	Engagements Int `json:"engagements"`
 
 	// FirstPost Their earliest post, as `YYYY-MM-DD`.
 	FirstPost nullable.Nullable[string] `json:"first_post"`
@@ -633,10 +633,10 @@ type AdvancedCreatorProfile struct {
 	OrganicShare nullable.Nullable[float64] `json:"organic_share"`
 
 	// PartnershipFit How good a partner they would be, 0 to 100.
-	PartnershipFit nullable.Nullable[int] `json:"partnership_fit"`
+	PartnershipFit nullable.Nullable[Int] `json:"partnership_fit"`
 
 	// Posts Videos they posted.
-	Posts int `json:"posts"`
+	Posts Int `json:"posts"`
 
 	// Posture `advocate`, `detractor`, `prospect` or `longtail`.
 	Posture string `json:"posture"`
@@ -660,16 +660,16 @@ type AdvancedCreatorProfile struct {
 	TopThemes []AdvancedThemeCount `json:"top_themes"`
 
 	// Views Views across those videos.
-	Views int `json:"views"`
+	Views Int `json:"views"`
 }
 
 // AdvancedLanguage One language and its share of the set.
 type AdvancedLanguage struct {
 	// Count Videos in this language.
-	Count int `json:"count"`
+	Count Int `json:"count"`
 
 	// Engagements Engagements on those videos.
-	Engagements int `json:"engagements"`
+	Engagements Int `json:"engagements"`
 
 	// Language Language code, for example `en`.
 	Language string `json:"language"`
@@ -678,7 +678,7 @@ type AdvancedLanguage struct {
 // AdvancedLoveDislike What the audience loves and dislikes about the topic.
 type AdvancedLoveDislike struct {
 	// ClassifiedCount Videos that fell into a love or dislike bucket.
-	ClassifiedCount int `json:"classified_count"`
+	ClassifiedCount Int `json:"classified_count"`
 
 	// Dislike What people criticise, strongest first.
 	Dislike []AdvancedLoveDislikeBucket `json:"dislike"`
@@ -687,7 +687,7 @@ type AdvancedLoveDislike struct {
 	Love []AdvancedLoveDislikeBucket `json:"love"`
 
 	// TotalCount Videos considered.
-	TotalCount int `json:"total_count"`
+	TotalCount Int `json:"total_count"`
 }
 
 // AdvancedLoveDislikeBucket One thing people love or dislike, and what backs it.
@@ -696,7 +696,7 @@ type AdvancedLoveDislikeBucket struct {
 	Definition string `json:"definition"`
 
 	// EmvCents Earned media value of those videos, in cents.
-	EmvCents int `json:"emv_cents"`
+	EmvCents float64 `json:"emv_cents"`
 
 	// Label Display name for the bucket.
 	Label string `json:"label"`
@@ -705,10 +705,10 @@ type AdvancedLoveDislikeBucket struct {
 	Slug string `json:"slug"`
 
 	// TotalViews Views on those videos.
-	TotalViews int `json:"total_views"`
+	TotalViews Int `json:"total_views"`
 
 	// VideoCount Videos in the bucket.
-	VideoCount int `json:"video_count"`
+	VideoCount Int `json:"video_count"`
 }
 
 // AdvancedNarrative A story moving through the conversation.
@@ -735,7 +735,7 @@ type AdvancedNarrative struct {
 	Theme string `json:"theme"`
 
 	// Total Videos carrying it.
-	Total int `json:"total"`
+	Total Int `json:"total"`
 }
 
 // AdvancedPerception Price and quality perception, measured from both sides.
@@ -753,10 +753,10 @@ type AdvancedPerceptionAxis struct {
 	Buckets []AdvancedPerceptionBucket `json:"buckets"`
 
 	// ClassifiedCount Items that express a view on this axis.
-	ClassifiedCount int `json:"classified_count"`
+	ClassifiedCount Int `json:"classified_count"`
 
 	// EnrichedCount Items analyzed for this axis, those with no view included.
-	EnrichedCount int `json:"enriched_count"`
+	EnrichedCount Int `json:"enriched_count"`
 
 	// ShareIndicating Share of analyzed items that express any view on this axis, from 0 to 1. `null` when nothing was analyzed.
 	ShareIndicating nullable.Nullable[float64] `json:"share_indicating"`
@@ -765,7 +765,7 @@ type AdvancedPerceptionAxis struct {
 // AdvancedPerceptionBucket One perception band and its share.
 type AdvancedPerceptionBucket struct {
 	// EmvCents Earned media value of those videos, in cents.
-	EmvCents int `json:"emv_cents"`
+	EmvCents float64 `json:"emv_cents"`
 
 	// Key The band. Price bands are `expensive`, `affordable`, `cheap`; quality bands are `low`, `good`, `excellent`.
 	Key string `json:"key"`
@@ -777,10 +777,10 @@ type AdvancedPerceptionBucket struct {
 	Pct float64 `json:"pct"`
 
 	// TotalViews Views on those videos.
-	TotalViews int `json:"total_views"`
+	TotalViews Int `json:"total_views"`
 
 	// VideoCount Videos the band covers. On the audience side these are videos with at least one comment in the band.
-	VideoCount int `json:"video_count"`
+	VideoCount Int `json:"video_count"`
 }
 
 // AdvancedPerceptionSide Price and quality as seen from one side.
@@ -807,7 +807,7 @@ type AdvancedPersona struct {
 	Id string `json:"id"`
 
 	// MemberCount Videos that match the archetype.
-	MemberCount int `json:"member_count"`
+	MemberCount Int `json:"member_count"`
 
 	// Name Short label for the persona.
 	Name string `json:"name"`
@@ -822,7 +822,7 @@ type AdvancedPersona struct {
 	TopSimilarity nullable.Nullable[float64] `json:"top_similarity"`
 
 	// TotalViews Views across those videos.
-	TotalViews int `json:"total_views"`
+	TotalViews Int `json:"total_views"`
 }
 
 // AdvancedPersonaRepresentative A video that stands for a persona.
@@ -831,28 +831,28 @@ type AdvancedPersonaRepresentative struct {
 	Caption string `json:"caption"`
 
 	// ContentForm The video's format.
-	ContentForm string `json:"content_form"`
+	ContentForm nullable.Nullable[string] `json:"content_form"`
 
 	// DurationS How long the video runs, in seconds.
 	DurationS nullable.Nullable[float64] `json:"duration_s"`
 
 	// EmvCents Earned media value, in cents.
-	EmvCents int `json:"emv_cents"`
+	EmvCents float64 `json:"emv_cents"`
 
 	// Engagements Engagements on the video.
-	Engagements int `json:"engagements"`
+	Engagements Int `json:"engagements"`
 
 	// Gist One line summarising the video.
-	Gist string `json:"gist"`
+	Gist nullable.Nullable[string] `json:"gist"`
 
 	// Handle The creator's handle.
 	Handle string `json:"handle"`
 
 	// Language The video's language code.
-	Language string `json:"language"`
+	Language nullable.Nullable[string] `json:"language"`
 
 	// Likes Likes on the video.
-	Likes int `json:"likes"`
+	Likes Int `json:"likes"`
 
 	// PostedAt When it was posted (UTC, ISO-8601).
 	PostedAt string `json:"posted_at"`
@@ -861,13 +861,13 @@ type AdvancedPersonaRepresentative struct {
 	RecordId string `json:"record_id"`
 
 	// Sentiment The video's sentiment band.
-	Sentiment string `json:"sentiment"`
+	Sentiment nullable.Nullable[string] `json:"sentiment"`
 
 	// SentimentScore The video's sentiment, -1 to 1.
 	SentimentScore nullable.Nullable[float64] `json:"sentiment_score"`
 
 	// Stance The creator's stance in the video.
-	Stance string `json:"stance"`
+	Stance nullable.Nullable[string] `json:"stance"`
 
 	// Themes Themes the video covers.
 	Themes []string `json:"themes"`
@@ -879,7 +879,7 @@ type AdvancedPersonaRepresentative struct {
 	VideoUrl nullable.Nullable[string] `json:"video_url"`
 
 	// Views Views on the video.
-	Views int `json:"views"`
+	Views Int `json:"views"`
 }
 
 // AdvancedPersonas The audience archetypes, and how they were derived.
@@ -897,7 +897,7 @@ type AdvancedPostureMapEntry struct {
 	Handle string `json:"handle"`
 
 	// Posts Videos they posted.
-	Posts int `json:"posts"`
+	Posts Int `json:"posts"`
 
 	// Posture Their posture towards the topic.
 	Posture string `json:"posture"`
@@ -912,22 +912,22 @@ type AdvancedPostureMapEntry struct {
 // AdvancedSentimentByTheme How sentiment splits inside one theme.
 type AdvancedSentimentByTheme struct {
 	// Mixed Mixed videos on the theme.
-	Mixed int `json:"mixed"`
+	Mixed Int `json:"mixed"`
 
 	// Negative Negative videos on the theme.
-	Negative int `json:"negative"`
+	Negative Int `json:"negative"`
 
 	// Neutral Neutral videos on the theme.
-	Neutral int `json:"neutral"`
+	Neutral Int `json:"neutral"`
 
 	// Positive Positive videos on the theme.
-	Positive int `json:"positive"`
+	Positive Int `json:"positive"`
 
 	// Theme The theme.
 	Theme string `json:"theme"`
 
 	// Total Videos on the theme.
-	Total int `json:"total"`
+	Total Int `json:"total"`
 }
 
 // AdvancedSignals Product context drawn from what people show and say.
@@ -969,7 +969,7 @@ type AdvancedSummary struct {
 	Coverage AdvancedCoverage `json:"coverage"`
 
 	// Creators Distinct creators behind them.
-	Creators int `json:"creators"`
+	Creators Int `json:"creators"`
 
 	// FirstPost Date of the earliest video, as `YYYY-MM-DD`.
 	FirstPost nullable.Nullable[string] `json:"first_post"`
@@ -981,31 +981,31 @@ type AdvancedSummary struct {
 	MeanEngagementRate nullable.Nullable[float64] `json:"mean_engagement_rate"`
 
 	// TotalComments Comments summed over the set.
-	TotalComments int `json:"total_comments"`
+	TotalComments Int `json:"total_comments"`
 
 	// TotalEmvCents Earned media value in cents. `0` for sources without it.
-	TotalEmvCents int `json:"total_emv_cents"`
+	TotalEmvCents float64 `json:"total_emv_cents"`
 
 	// TotalEngagements Likes, comments and shares summed over the set.
-	TotalEngagements int `json:"total_engagements"`
+	TotalEngagements Int `json:"total_engagements"`
 
 	// TotalLikes Likes summed over the set.
-	TotalLikes int `json:"total_likes"`
+	TotalLikes Int `json:"total_likes"`
 
 	// TotalShares Shares summed over the set.
-	TotalShares int `json:"total_shares"`
+	TotalShares Int `json:"total_shares"`
 
 	// TotalViews Views summed over the set.
-	TotalViews int `json:"total_views"`
+	TotalViews Int `json:"total_views"`
 
 	// Videos Videos analyzed.
-	Videos int `json:"videos"`
+	Videos Int `json:"videos"`
 }
 
 // AdvancedThemeCount A theme and how many videos carry it.
 type AdvancedThemeCount struct {
 	// Count Videos carrying it.
-	Count int `json:"count"`
+	Count Int `json:"count"`
 
 	// Theme The theme, from this analysis' own set.
 	Theme string `json:"theme"`
@@ -1017,7 +1017,7 @@ type AdvancedThemeDivergence struct {
 	AudienceScore nullable.Nullable[float64] `json:"audience_score"`
 
 	// Comments Comments on the theme.
-	Comments int `json:"comments"`
+	Comments Int `json:"comments"`
 
 	// CreatorScore How the creators lean, -1 to 1.
 	CreatorScore nullable.Nullable[float64] `json:"creator_score"`
@@ -1029,22 +1029,22 @@ type AdvancedThemeDivergence struct {
 	Theme string `json:"theme"`
 
 	// Videos Videos on the theme.
-	Videos int `json:"videos"`
+	Videos Int `json:"videos"`
 }
 
 // AdvancedTimelinePoint One month of posting activity.
 type AdvancedTimelinePoint struct {
 	// Engagements Engagements on those videos.
-	Engagements int `json:"engagements"`
+	Engagements Int `json:"engagements"`
 
 	// Month The month, as `YYYY-MM`.
 	Month string `json:"month"`
 
 	// Posts Videos posted that month.
-	Posts int `json:"posts"`
+	Posts Int `json:"posts"`
 
 	// Views Views on those videos.
-	Views int `json:"views"`
+	Views Int `json:"views"`
 }
 
 // AdvancedTopComment A comment worth reading, with the video it sits under.
@@ -1059,10 +1059,10 @@ type AdvancedTopComment struct {
 	Intent string `json:"intent"`
 
 	// Likes Likes on the comment.
-	Likes int `json:"likes"`
+	Likes Int `json:"likes"`
 
 	// PostedAt When it was posted (UTC, ISO-8601).
-	PostedAt string `json:"posted_at"`
+	PostedAt nullable.Nullable[string] `json:"posted_at"`
 
 	// Sentiment Its sentiment band.
 	Sentiment string `json:"sentiment"`
@@ -1083,19 +1083,19 @@ type AdvancedTopComment struct {
 // AdvancedTopCreator A creator ranked by the reach they brought.
 type AdvancedTopCreator struct {
 	// EmvCents Earned media value in cents.
-	EmvCents int `json:"emv_cents"`
+	EmvCents float64 `json:"emv_cents"`
 
 	// Engagements Engagements across them.
-	Engagements int `json:"engagements"`
+	Engagements Int `json:"engagements"`
 
 	// Handle The creator's handle.
 	Handle string `json:"handle"`
 
 	// Posts Videos they posted.
-	Posts int `json:"posts"`
+	Posts Int `json:"posts"`
 
 	// Views Views across those videos.
-	Views int `json:"views"`
+	Views Int `json:"views"`
 }
 
 // AdvancedVoiceBrand A brand the commenters bring up.
@@ -1107,37 +1107,37 @@ type AdvancedVoiceBrand struct {
 	Brand string `json:"brand"`
 
 	// Count Comments naming it.
-	Count int `json:"count"`
+	Count Int `json:"count"`
 
 	// TotalLikes Likes on those comments.
-	TotalLikes int `json:"total_likes"`
+	TotalLikes Int `json:"total_likes"`
 }
 
 // AdvancedVoiceSentiment Comments in one sentiment band.
 type AdvancedVoiceSentiment struct {
 	// Count Comments in the band.
-	Count int `json:"count"`
+	Count Int `json:"count"`
 
 	// Label The band: `positive`, `neutral`, `negative` or `mixed`.
 	Label string `json:"label"`
 
 	// Likes Likes on those comments.
-	Likes int `json:"likes"`
+	Likes Int `json:"likes"`
 }
 
 // AdvancedVoiceTheme How the comments on one theme break down.
 type AdvancedVoiceTheme struct {
 	// Count Comments on the theme.
-	Count int `json:"count"`
+	Count Int `json:"count"`
 
 	// LikeWeightedScore Like-weighted sentiment on the theme, -1 to 1.
 	LikeWeightedScore nullable.Nullable[float64] `json:"like_weighted_score"`
 
 	// Negative Negative comments on it.
-	Negative int `json:"negative"`
+	Negative Int `json:"negative"`
 
 	// Positive Positive comments on it.
-	Positive int `json:"positive"`
+	Positive Int `json:"positive"`
 
 	// Theme The theme.
 	Theme string `json:"theme"`
@@ -1146,7 +1146,7 @@ type AdvancedVoiceTheme struct {
 // AdvancedVoiceTimeline One month of comment activity.
 type AdvancedVoiceTimeline struct {
 	// Count Comments that month.
-	Count int `json:"count"`
+	Count Int `json:"count"`
 
 	// LikeWeightedScore Like-weighted sentiment that month, -1 to 1.
 	LikeWeightedScore nullable.Nullable[float64] `json:"like_weighted_score"`
@@ -1155,28 +1155,28 @@ type AdvancedVoiceTimeline struct {
 	Month string `json:"month"`
 
 	// NetSentiment Positive comments minus negative comments.
-	NetSentiment int `json:"net_sentiment"`
+	NetSentiment Int `json:"net_sentiment"`
 }
 
 // AdvancedVoiceTotals Totals over the comments that were read.
 type AdvancedVoiceTotals struct {
 	// Comments Comments read.
-	Comments int `json:"comments"`
+	Comments Int `json:"comments"`
 
 	// Enriched Comments that were analyzed.
-	Enriched int `json:"enriched"`
+	Enriched Int `json:"enriched"`
 
 	// LikeWeightedSentiment Average comment sentiment weighted towards comments with more likes, from -1 to 1. `null` when no comment has a score.
 	LikeWeightedSentiment nullable.Nullable[float64] `json:"like_weighted_sentiment"`
 
 	// TotalLikes Likes on those comments.
-	TotalLikes int `json:"total_likes"`
+	TotalLikes Int `json:"total_likes"`
 
 	// Videos Videos considered.
-	Videos int `json:"videos"`
+	Videos Int `json:"videos"`
 
 	// VideosWithComments Videos that had at least one comment.
-	VideosWithComments int `json:"videos_with_comments"`
+	VideosWithComments Int `json:"videos_with_comments"`
 }
 
 // AiAnalysis Response body for the AI analysis root.
@@ -2079,10 +2079,10 @@ type CreatorVettingReport struct {
 	Disclosures nullable.Nullable[[]VettingDisclosure] `json:"disclosures,omitempty"`
 
 	// ProfileSummary Two or three sentences describing the creator.
-	ProfileSummary nullable.Nullable[string] `json:"profile_summary"`
+	ProfileSummary nullable.Nullable[string] `json:"profile_summary,omitempty"`
 
 	// TopThemes The creator's recurring subjects, with what each is based on.
-	TopThemes VettingTopThemes `json:"top_themes"`
+	TopThemes *VettingTopThemes `json:"top_themes,omitempty"`
 
 	// ViolationSummary How much of the creator's catalogue raised a flag.
 	ViolationSummary VettingSummary `json:"violation_summary"`
@@ -2488,7 +2488,7 @@ type KindEnum string
 // LabelCount A label and how many videos carry it.
 type LabelCount struct {
 	// Count Videos carrying it.
-	Count int `json:"count"`
+	Count Int `json:"count"`
 
 	// Label The label.
 	Label string `json:"label"`
@@ -2771,17 +2771,17 @@ type VettingDisclosure struct {
 	// Text The disclosure wording itself.
 	Text string `json:"text"`
 
-	// TimeSeconds Seconds into the video, or `null` when it is not timed.
-	TimeSeconds nullable.Nullable[int] `json:"time_seconds"`
+	// TimeSeconds Seconds into the video, can carry a fraction, or `null` when it is not timed.
+	TimeSeconds nullable.Nullable[float64] `json:"time_seconds"`
 }
 
 // VettingSummary How much of the creator's catalogue raised a flag.
 type VettingSummary struct {
 	// AffectedContents Distinct content items carrying at least one flag.
-	AffectedContents int `json:"affected_contents"`
+	AffectedContents Int `json:"affected_contents"`
 
 	// TotalViolations Flags raised across every criterion.
-	TotalViolations int `json:"total_violations"`
+	TotalViolations Int `json:"total_violations"`
 }
 
 // VettingTopThemes The creator's recurring subjects, with what each is based on.

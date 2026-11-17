@@ -15,7 +15,7 @@ public record AdvancedPerceptionBucket(
         @JsonProperty("label") String label,
         @JsonProperty("pct") Double pct,
         @JsonProperty("video_count") Long videoCount,
-        @JsonProperty("emv_cents") Long emvCents,
+        @JsonProperty("emv_cents") Double emvCents,
         @JsonProperty("total_views") Long totalViews
 ) {
 }

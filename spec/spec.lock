@@ -968,7 +968,7 @@
             "read_only": false,
             "required": true,
             "type": {
-              "kind": "int"
+              "kind": "float"
             }
           },
           {
@@ -1211,7 +1211,7 @@
             "read_only": false,
             "required": true,
             "type": {
-              "kind": "int"
+              "kind": "float"
             }
           },
           {
@@ -1411,7 +1411,7 @@
             "read_only": false,
             "required": true,
             "type": {
-              "kind": "int"
+              "kind": "float"
             }
           },
           {
@@ -1599,7 +1599,7 @@
           },
           {
             "name": "content_form",
-            "nullable": false,
+            "nullable": true,
             "read_only": false,
             "required": true,
             "type": {
@@ -1621,7 +1621,7 @@
             "read_only": false,
             "required": true,
             "type": {
-              "kind": "int"
+              "kind": "float"
             }
           },
           {
@@ -1635,7 +1635,7 @@
           },
           {
             "name": "gist",
-            "nullable": false,
+            "nullable": true,
             "read_only": false,
             "required": true,
             "type": {
@@ -1653,7 +1653,7 @@
           },
           {
             "name": "language",
-            "nullable": false,
+            "nullable": true,
             "read_only": false,
             "required": true,
             "type": {
@@ -1689,7 +1689,7 @@
           },
           {
             "name": "sentiment",
-            "nullable": false,
+            "nullable": true,
             "read_only": false,
             "required": true,
             "type": {
@@ -1707,7 +1707,7 @@
           },
           {
             "name": "stance",
-            "nullable": false,
+            "nullable": true,
             "read_only": false,
             "required": true,
             "type": {
@@ -2069,7 +2069,7 @@
             "read_only": false,
             "required": true,
             "type": {
-              "kind": "int"
+              "kind": "float"
             }
           },
           {
@@ -2283,7 +2283,7 @@
           },
           {
             "name": "posted_at",
-            "nullable": false,
+            "nullable": true,
             "read_only": false,
             "required": true,
             "type": {
@@ -2346,7 +2346,7 @@
             "read_only": false,
             "required": true,
             "type": {
-              "kind": "int"
+              "kind": "float"
             }
           },
           {
@@ -5065,7 +5065,7 @@
             "name": "profile_summary",
             "nullable": true,
             "read_only": false,
-            "required": true,
+            "required": false,
             "type": {
               "kind": "str"
             }
@@ -5074,7 +5074,7 @@
             "name": "top_themes",
             "nullable": true,
             "read_only": false,
-            "required": true,
+            "required": false,
             "type": {
               "kind": "ref",
               "ref": "VettingTopThemes"
@@ -6411,7 +6411,7 @@
             "read_only": false,
             "required": true,
             "type": {
-              "kind": "int"
+              "kind": "float"
             }
           }
         ],
@@ -10773,5 +10773,5 @@
       }
     ]
   },
-  "version": "1.4.1"
+  "version": "1.4.2"
 }

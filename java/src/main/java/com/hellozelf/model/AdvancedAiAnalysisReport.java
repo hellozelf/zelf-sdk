@@ -9,9 +9,9 @@ import java.util.List;
 /**
  * The JSON document behind an advanced AI analysis run's `result.download_url`.
  * Counts are whole numbers, shares and rates are decimals from 0 to 1, money is in
- * whole cents, and a value is `null` when there was not enough data to work it
- * out. A section is absent when the run could not produce it, so read every one as
- * optional, and ignore keys you do not recognise.
+ * cents and can carry a fraction, and a value is `null` when there was not enough
+ * data to work it out. A section is absent when the run could not produce it, so
+ * read every one as optional, and ignore keys you do not recognise.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record AdvancedAiAnalysisReport(

@@ -10,6 +10,28 @@ generated from, which has a version of its own.
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
 
+## 1.4.2
+
+### Fixed
+- The downloaded reports, `AiAnalysisReport`, `AdvancedAiAnalysisReport` and
+  `CreatorVettingReport`, now decode softly in every client. A missing field, a
+  null, or a decimal where a whole number is expected no longer fails the
+  decode. Missing and null read as null (Python, TypeScript, Ruby, Java, C#) or
+  the zero value (Go, Rust). A decimal is kept as is in Python, TypeScript and
+  Ruby, and rounded to the nearest whole number in Go, Rust, Java and C#. No
+  other type and no request changes.
+- `emv_cents`, `total_emv_cents` and the vetting `disclosures[].time_seconds`
+  are documented as decimals, which is what real reports carry.
+- `posted_at` on a top comment, and `gist`, `sentiment`, `stance`, `language`
+  and `content_form` on a persona representative, are documented as nullable.
+- `profile_summary` and `top_themes` are optional on `CreatorVettingReport`.
+  A vetting that asked for safety checks only leaves them out.
+
+### Added
+- C#: `ZelfReports.Decode<T>` and `ZelfReports.DecodeAsync<T>`, and Java:
+  `ZelfReports.decode`, to decode a downloaded report with the soft rules.
+- Go: `zelf.Int`, the whole number type used inside the reports.
+
 ## 1.4.1
 
 No change to the API surface. Corrected documentation, or a fix in the clients themselves.

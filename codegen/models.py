@@ -1,6 +1,7 @@
 import re
 from dataclasses import dataclass, field as dataclass_field
 
+import reports
 from spec import Api, Type, flatten, resolve_type
 
 # These are hand written in every SDK: one class per status with the error
@@ -24,6 +25,8 @@ class Model:
     name: str
     description: str
     fields: list[Field] = dataclass_field(default_factory=list)
+    # Part of a downloaded report, so decoded softly (see reports.py).
+    soft: bool = False
 
 
 @dataclass
@@ -60,6 +63,7 @@ def unwrap(schema: dict) -> dict:
 def build(api: Api) -> tuple[list[Model], list[Enum]]:
     models: list[Model] = []
     enums: list[Enum] = []
+    soft = reports.report_schemas({"components": {"schemas": api.schemas}})
 
     for name, raw in sorted(api.schemas.items()):
         if SKIP.match(name) or HAND_WRITTEN.match(name):
@@ -87,6 +91,7 @@ def build(api: Api) -> tuple[list[Model], list[Enum]]:
             Model(
                 name=name,
                 description=(schema.get("description") or "").strip(),
+                soft=name in soft,
                 fields=[
                     Field(
                         name=prop_name,
