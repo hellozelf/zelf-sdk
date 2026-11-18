@@ -152,10 +152,12 @@ public sealed class AdvancedAiAnalysisResource(Transport transport)
     /// over, in the standard content shape. Use it to inspect the exact posts included in
     /// an analysis. Requires `analysis_id` (an analysis `id` from
     /// `advanced_ai_analysis.list`). Brand-scoped fields (`is_owned`, `is_tagged`,
-    /// `net_promoter_score`, ...) are `null` in this response.
+    /// `net_promoter_score`, ...) are `null` in this response. Each post carries `intel`:
+    /// the AI enrichment of the post (sentiment, stance, themes, perception, speaker,
+    /// signals) and of each of its comments, `null` until the analysis completes.
     /// </summary>
     /// <remarks>Calls GET /api/v1/advanced_ai_analysis/contents/ (advanced_ai_analysis.contents).</remarks>
-    public async Task<Page<Content>> ContentsAsync(AdvancedAiAnalysisContentsParams parameters, CancellationToken cancellationToken = default)
+    public async Task<Page<AdvancedAiAnalysisContent>> ContentsAsync(AdvancedAiAnalysisContentsParams parameters, CancellationToken cancellationToken = default)
     {
         var path = "/api/v1/advanced_ai_analysis/contents/";
         var query = new List<KeyValuePair<string, string>>();
@@ -168,9 +170,9 @@ public sealed class AdvancedAiAnalysisResource(Transport transport)
         {
             query.Add(new KeyValuePair<string, string>("page_size", QueryValue.Format(parameters.PageSize)));
         }
-        var envelope = await _transport.SendAsync<Content>(HttpMethod.Get, path, query, null, cancellationToken)
+        var envelope = await _transport.SendAsync<AdvancedAiAnalysisContent>(HttpMethod.Get, path, query, null, cancellationToken)
             .ConfigureAwait(false);
-        return new Page<Content>(envelope, _transport, path, query);
+        return new Page<AdvancedAiAnalysisContent>(envelope, _transport, path, query);
     }
 
     /// <summary>

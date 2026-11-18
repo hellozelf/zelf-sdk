@@ -29,6 +29,46 @@ impl std::fmt::Display for AccountTypeEnum {
     }
 }
 
+/// Values accepted for AgeRangeEnum.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum AgeRangeEnum {
+    #[serde(rename = "teens")]
+    Teens,
+    #[serde(rename = "20s")]
+    V20s,
+    #[serde(rename = "30s")]
+    V30s,
+    #[serde(rename = "40s")]
+    V40s,
+    #[serde(rename = "50s")]
+    V50s,
+    #[serde(rename = "60plus")]
+    V60plus,
+    #[serde(rename = "unknown")]
+    Unknown,
+}
+
+impl AgeRangeEnum {
+    /// The wire value.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            AgeRangeEnum::Teens => "teens",
+            AgeRangeEnum::V20s => "20s",
+            AgeRangeEnum::V30s => "30s",
+            AgeRangeEnum::V40s => "40s",
+            AgeRangeEnum::V50s => "50s",
+            AgeRangeEnum::V60plus => "60plus",
+            AgeRangeEnum::Unknown => "unknown",
+        }
+    }
+}
+
+impl std::fmt::Display for AgeRangeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
 /// Values accepted for AnalysisScopeEnum.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum AnalysisScopeEnum {
@@ -76,6 +116,34 @@ impl std::fmt::Display for BlankEnum {
     }
 }
 
+/// Values accepted for ConfidenceEnum.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ConfidenceEnum {
+    #[serde(rename = "low")]
+    Low,
+    #[serde(rename = "medium")]
+    Medium,
+    #[serde(rename = "high")]
+    High,
+}
+
+impl ConfidenceEnum {
+    /// The wire value.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            ConfidenceEnum::Low => "low",
+            ConfidenceEnum::Medium => "medium",
+            ConfidenceEnum::High => "high",
+        }
+    }
+}
+
+impl std::fmt::Display for ConfidenceEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
 /// Values accepted for ContentFormEnum.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ContentFormEnum {
@@ -96,6 +164,145 @@ impl ContentFormEnum {
 }
 
 impl std::fmt::Display for ContentFormEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Values accepted for DecisionPostureEnum.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum DecisionPostureEnum {
+    #[serde(rename = "skeptic")]
+    Skeptic,
+    #[serde(rename = "pragmatic")]
+    Pragmatic,
+    #[serde(rename = "evangelist")]
+    Evangelist,
+    #[serde(rename = "unclear")]
+    Unclear,
+}
+
+impl DecisionPostureEnum {
+    /// The wire value.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            DecisionPostureEnum::Skeptic => "skeptic",
+            DecisionPostureEnum::Pragmatic => "pragmatic",
+            DecisionPostureEnum::Evangelist => "evangelist",
+            DecisionPostureEnum::Unclear => "unclear",
+        }
+    }
+}
+
+impl std::fmt::Display for DecisionPostureEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Values accepted for GenderEnum.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum GenderEnum {
+    #[serde(rename = "male")]
+    Male,
+    #[serde(rename = "female")]
+    Female,
+    #[serde(rename = "nonbinary_or_unclear")]
+    NonbinaryOrUnclear,
+    #[serde(rename = "unknown")]
+    Unknown,
+}
+
+impl GenderEnum {
+    /// The wire value.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            GenderEnum::Male => "male",
+            GenderEnum::Female => "female",
+            GenderEnum::NonbinaryOrUnclear => "nonbinary_or_unclear",
+            GenderEnum::Unknown => "unknown",
+        }
+    }
+}
+
+impl std::fmt::Display for GenderEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Values accepted for IntentEnum.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum IntentEnum {
+    #[serde(rename = "question")]
+    Question,
+    #[serde(rename = "objection")]
+    Objection,
+    #[serde(rename = "experience")]
+    Experience,
+    #[serde(rename = "praise")]
+    Praise,
+    #[serde(rename = "advice")]
+    Advice,
+    #[serde(rename = "other")]
+    Other,
+}
+
+impl IntentEnum {
+    /// The wire value.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            IntentEnum::Question => "question",
+            IntentEnum::Objection => "objection",
+            IntentEnum::Experience => "experience",
+            IntentEnum::Praise => "praise",
+            IntentEnum::Advice => "advice",
+            IntentEnum::Other => "other",
+        }
+    }
+}
+
+impl std::fmt::Display for IntentEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Values accepted for JourneyStageEnum.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum JourneyStageEnum {
+    #[serde(rename = "starting")]
+    Starting,
+    #[serde(rename = "ramping")]
+    Ramping,
+    #[serde(rename = "plateau")]
+    Plateau,
+    #[serde(rename = "maintenance")]
+    Maintenance,
+    #[serde(rename = "quitting")]
+    Quitting,
+    #[serde(rename = "off")]
+    Off,
+    #[serde(rename = "unclear")]
+    Unclear,
+}
+
+impl JourneyStageEnum {
+    /// The wire value.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            JourneyStageEnum::Starting => "starting",
+            JourneyStageEnum::Ramping => "ramping",
+            JourneyStageEnum::Plateau => "plateau",
+            JourneyStageEnum::Maintenance => "maintenance",
+            JourneyStageEnum::Quitting => "quitting",
+            JourneyStageEnum::Off => "off",
+            JourneyStageEnum::Unclear => "unclear",
+        }
+    }
+}
+
+impl std::fmt::Display for JourneyStageEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(self.as_str())
     }
@@ -204,6 +411,68 @@ impl std::fmt::Display for PlatformEnum {
     }
 }
 
+/// Values accepted for PricePerceptionEnum.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum PricePerceptionEnum {
+    #[serde(rename = "expensive")]
+    Expensive,
+    #[serde(rename = "affordable")]
+    Affordable,
+    #[serde(rename = "cheap")]
+    Cheap,
+    #[serde(rename = "none")]
+    None,
+}
+
+impl PricePerceptionEnum {
+    /// The wire value.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            PricePerceptionEnum::Expensive => "expensive",
+            PricePerceptionEnum::Affordable => "affordable",
+            PricePerceptionEnum::Cheap => "cheap",
+            PricePerceptionEnum::None => "none",
+        }
+    }
+}
+
+impl std::fmt::Display for PricePerceptionEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Values accepted for QualityPerceptionEnum.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum QualityPerceptionEnum {
+    #[serde(rename = "low")]
+    Low,
+    #[serde(rename = "good")]
+    Good,
+    #[serde(rename = "excellent")]
+    Excellent,
+    #[serde(rename = "none")]
+    None,
+}
+
+impl QualityPerceptionEnum {
+    /// The wire value.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            QualityPerceptionEnum::Low => "low",
+            QualityPerceptionEnum::Good => "good",
+            QualityPerceptionEnum::Excellent => "excellent",
+            QualityPerceptionEnum::None => "none",
+        }
+    }
+}
+
+impl std::fmt::Display for QualityPerceptionEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
 /// Values accepted for ResourceEnum.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ResourceEnum {
@@ -254,6 +523,71 @@ impl std::fmt::Display for SecretTypeEnum {
     }
 }
 
+/// Values accepted for SentimentEnum.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum SentimentEnum {
+    #[serde(rename = "positive")]
+    Positive,
+    #[serde(rename = "neutral")]
+    Neutral,
+    #[serde(rename = "negative")]
+    Negative,
+    #[serde(rename = "mixed")]
+    Mixed,
+}
+
+impl SentimentEnum {
+    /// The wire value.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            SentimentEnum::Positive => "positive",
+            SentimentEnum::Neutral => "neutral",
+            SentimentEnum::Negative => "negative",
+            SentimentEnum::Mixed => "mixed",
+        }
+    }
+}
+
+impl std::fmt::Display for SentimentEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Values accepted for StanceEnum.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum StanceEnum {
+    #[serde(rename = "promoting")]
+    Promoting,
+    #[serde(rename = "cautioning")]
+    Cautioning,
+    #[serde(rename = "neutral")]
+    Neutral,
+    #[serde(rename = "critical")]
+    Critical,
+    #[serde(rename = "informational")]
+    Informational,
+}
+
+impl StanceEnum {
+    /// The wire value.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            StanceEnum::Promoting => "promoting",
+            StanceEnum::Cautioning => "cautioning",
+            StanceEnum::Neutral => "neutral",
+            StanceEnum::Critical => "critical",
+            StanceEnum::Informational => "informational",
+        }
+    }
+}
+
+impl std::fmt::Display for StanceEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
 /// Values accepted for StateEnum.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum StateEnum {
@@ -283,6 +617,40 @@ impl StateEnum {
 }
 
 impl std::fmt::Display for StateEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// Values accepted for StigmaSignalEnum.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum StigmaSignalEnum {
+    #[serde(rename = "proud_open")]
+    ProudOpen,
+    #[serde(rename = "matter_of_fact")]
+    MatterOfFact,
+    #[serde(rename = "defensive")]
+    Defensive,
+    #[serde(rename = "hiding")]
+    Hiding,
+    #[serde(rename = "none")]
+    None,
+}
+
+impl StigmaSignalEnum {
+    /// The wire value.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            StigmaSignalEnum::ProudOpen => "proud_open",
+            StigmaSignalEnum::MatterOfFact => "matter_of_fact",
+            StigmaSignalEnum::Defensive => "defensive",
+            StigmaSignalEnum::Hiding => "hiding",
+            StigmaSignalEnum::None => "none",
+        }
+    }
+}
+
+impl std::fmt::Display for StigmaSignalEnum {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(self.as_str())
     }
@@ -397,6 +765,111 @@ pub struct AdvancedAiAnalysis {
     /// The runs that make up this analysis, ordered newest first.
     #[serde(default)]
     pub analyses: Vec<AdvancedAiAnalysisRun>,
+}
+
+/// A post the advanced analysis ran over, with its IntelRoom intel.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdvancedAiAnalysisContent {
+    /// Unique identifier for this piece of content. Use it to retrieve the content anywhere a
+    /// content id is accepted.
+    pub id: String,
+    /// The post's identifier on its platform. This is the value at the end of the post's URL.
+    /// Examples:; Instagram: `https://instagram.com/reel/abcd` -> `abcd`; TikTok:
+    /// `https://www.tiktok.com/@username/video/12345678` -> `12345678`
+    pub platform_post_id: String,
+    /// The platform the content was published on: `instagram`, `tiktok` or `youtube`.
+    pub platform: String,
+    /// Whether the content is a video or an image.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub content_form: Option<String>,
+    /// URL of the content's thumbnail image.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub thumbnail_url: Option<String>,
+    /// Time the content was originally published on its platform (UTC).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub posted_at: Option<String>,
+    /// Total number of times the content has been viewed.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub view_count: Option<i64>,
+    /// Total number of likes the content has received.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub like_count: Option<i64>,
+    /// Total number of comments on the content.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub comment_count: Option<i64>,
+    /// Total number of times the content has been shared.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub share_count: Option<i64>,
+    /// Sum of the likes, comments, and shares the content has received.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub total_engagement: Option<i64>,
+    /// ISO 639 code of the content's primary language.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
+    /// Length of the media in seconds. Null when not known.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub media_duration: Option<f64>,
+    /// Engagement per view (likes plus comments plus shares, divided by views). Null when the
+    /// content has no recorded views.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub engagement_rate: Option<f64>,
+    /// Estimated marketing value of the content, in US cents.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub earned_media_value_cents: Option<i64>,
+    /// The creator who published the content.
+    pub creator: ContentCreator,
+    /// Identifier of the brand that the brand-specific signals on this row (`is_owned`,
+    /// `is_tagged`, `is_influencer`, `mention_type`, `net_promoter_score`) are scoped to.
+    /// Returned as `null` when the request omits `brand_id`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub brand_id: Option<String>,
+    /// Net promoter score for the content from the perspective of the scoped brand. Returned as
+    /// `null` when the request omits `brand_id`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub net_promoter_score: Option<i64>,
+    /// Whether the scoped brand owns the content; that is, whether it was published by an
+    /// account the brand controls. Returned as `null` when the request omits `brand_id`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub is_owned: Option<bool>,
+    /// Whether the post tags the scoped brand on the platform. Returned as `null` when the
+    /// request omits `brand_id`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub is_tagged: Option<bool>,
+    /// Whether the scoped brand counts the content as influencer content: it matches the
+    /// brand's influencer terms, comes from an account on its influencer list, was reported as
+    /// branded content by the platform, or was marked by hand. Content the brand owns is never
+    /// influencer content. Returned as `null` when the request omits `brand_id`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub is_influencer: Option<bool>,
+    /// How the scoped brand is mentioned in the content. One of `content` or `comment`, or null
+    /// when the brand is not mentioned. Returned as `null` when the request omits `brand_id`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mention_type: Option<String>,
+    /// Short caption or title of the post (the primary user-visible text).
+    pub caption: String,
+    /// Long-form description of the post.
+    pub description: String,
+    /// Transcribed speech from the content's audio, when available.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub transcript: Option<String>,
+    /// Direct URL to the post on its platform. Examples:; `https://instagram.com/reel/abcd`;
+    /// `https://www.tiktok.com/@username/video/12345678`
+    pub platform_url: String,
+    /// What the content was most recently collected under: a hashtag, a creator handle, a
+    /// search term, or a brand identifier. Null when the content did not arrive through a
+    /// collection task.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub last_keyword: Option<String>,
+    /// Short AI-generated summary of the content.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ai_summary: Option<String>,
+    /// Hashtags used in the post, normalized to lowercase and without the leading `#`.
+    #[serde(default)]
+    pub hashtags: Vec<String>,
+    /// AI enrichment of the post and its comments from this analysis. `null` until the analysis
+    /// has finished and its intel is stored.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub intel: Option<ContentIntel>,
 }
 
 /// Request body for ``POST /api/v1/advanced_ai_analysis/``.
@@ -1724,6 +2197,40 @@ pub struct CommentCategory {
     pub replies: i64,
 }
 
+/// AI enrichment of one comment on the post.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CommentIntel {
+    /// ID of the comment.
+    pub comment_id: i64,
+    /// Overall sentiment of the comment.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sentiment: Option<SentimentEnum>,
+    /// Sentiment from -1 (negative) to 1 (positive).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sentiment_score: Option<f64>,
+    /// Why the commenter wrote the comment.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub intent: Option<IntentEnum>,
+    /// Themes the comment touches, from the analysis taxonomy.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub themes: Option<Vec<String>>,
+    /// One-line summary of the comment.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gist: Option<String>,
+    /// How the comment sees the price.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub price_perception: Option<PricePerceptionEnum>,
+    /// How the comment sees the quality.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub quality_perception: Option<QualityPerceptionEnum>,
+    /// The model that enriched the comment.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub model: Option<String>,
+    /// When the AI enrichment ran.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub enriched_at: Option<String>,
+}
+
 /// Comments the brand posted, split by the content they were posted on.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CommentStatistics {
@@ -2055,6 +2562,59 @@ pub struct ContentFilterInputRequest {
     /// `earned_media_value_cents` descending.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub order_by: Option<Vec<String>>,
+}
+
+/// AI enrichment of the post and its comments from the advanced analysis.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ContentIntel {
+    /// Overall sentiment of the post.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sentiment: Option<SentimentEnum>,
+    /// Sentiment from -1 (negative) to 1 (positive).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sentiment_score: Option<f64>,
+    /// The creator's stance toward the topic.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stance: Option<StanceEnum>,
+    /// Themes the post covers, from the analysis taxonomy.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub themes: Option<Vec<String>>,
+    /// Short summary of the post.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gist: Option<String>,
+    /// How the post frames the price.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub price_perception: Option<PricePerceptionEnum>,
+    /// How the post frames the quality.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub quality_perception: Option<QualityPerceptionEnum>,
+    /// What the post loves about the topic, as a bucket slug.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub love_bucket: Option<String>,
+    /// What the post dislikes about the topic, as a bucket slug.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dislike_bucket: Option<String>,
+    /// Detected language as an ISO code.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
+    /// Confidence of the language detection.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub language_confidence: Option<f64>,
+    /// The main on-camera speaker.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub speaker: Option<SpeakerIntel>,
+    /// Product and behaviour signals.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub signals: Option<SignalsIntel>,
+    /// The model that enriched the post.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub model: Option<String>,
+    /// When the AI enrichment ran.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub enriched_at: Option<String>,
+    /// AI enrichment of each analysed comment on the post.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub comments: Option<Vec<CommentIntel>>,
 }
 
 /// Specifies which of the creator's content relationships feed the analysis. Flags that are
@@ -2614,6 +3174,91 @@ pub struct SafetyCheckRequest {
     /// for predefined types.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub extra: Option<String>,
+}
+
+/// Product and behaviour signals read from the video. AI inferences.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SignalsIntel {
+    /// Where the speaker is in their journey with the product.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub journey_stage: Option<JourneyStageEnum>,
+    /// How the speaker approaches the buying decision.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub decision_posture: Option<DecisionPostureEnum>,
+    /// How openly the speaker talks about using the product.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stigma_signal: Option<StigmaSignalEnum>,
+    /// Products used alongside the subject.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub complementary_products: Option<Vec<String>>,
+    /// Rival products shown, compared or switched to.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub competitors_shown: Option<Vec<String>>,
+    /// What is hard, broken or disliked.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub pain_points: Option<Vec<String>>,
+    /// Moments where using the product is difficult.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub friction_points: Option<Vec<String>>,
+    /// Ways the speaker works around a problem.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub workarounds: Option<Vec<String>>,
+    /// The emotions the video conveys.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub emotional_tenor: Option<Vec<String>>,
+    /// Sources the speaker trusts or cites.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub trust_sources: Option<Vec<String>>,
+    /// Notable moments in the video.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key_moments: Option<Vec<String>>,
+    /// The job the speaker uses the product for.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub job_hired_for: Option<String>,
+    /// How and when the speaker uses the product.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub usage_ritual: Option<String>,
+    /// The speaker's life situation around the product.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub life_context: Option<String>,
+    /// Any switch to or from another product.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub switching: Option<String>,
+    /// Why the speaker would leave or switch.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub churn_switch_driver: Option<String>,
+    /// Where what the speaker says differs from what they show.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub say_show_gap: Option<String>,
+    /// The main takeaway for a brand strategist.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub strategist_signal: Option<String>,
+    /// Perceived location of the speaker.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub apparent_geography: Option<String>,
+}
+
+/// Perceived traits of the main on-camera speaker. AI inferences, not facts.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SpeakerIntel {
+    /// Whether a specific person appears or speaks on camera.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub on_camera: Option<bool>,
+    /// Perceived gender of the main speaker.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gender: Option<GenderEnum>,
+    /// Perceived age range of the speaker.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub age_range: Option<AgeRangeEnum>,
+    /// Perceived ethnicity of the speaker.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ethnicity: Option<String>,
+    /// Where the video was filmed, such as `home` or `gym`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub setting: Option<String>,
+    /// How confident the model is.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub confidence: Option<ConfidenceEnum>,
 }
 
 /// Live consumption for the brand behind the current credentials.

@@ -670,6 +670,8 @@ paths:
         Returns the content an advanced AI analysis ran over, in the standard content shape. Use it to inspect the exact posts included in an analysis.
 
         Requires `analysis_id` (an analysis `id` from `advanced_ai_analysis.list`). Brand-scoped fields (`is_owned`, `is_tagged`, `net_promoter_score`, ...) are `null` in this response.
+
+        Each post carries `intel`: the AI enrichment of the post (sentiment, stance, themes, perception, speaker, signals) and of each of its comments, `null` until the analysis completes.
       summary: List Advanced AI Analysis Content
       parameters:
       - in: query
@@ -713,7 +715,7 @@ paths:
                     type: string
                     format: date-time
                   results:
-                    $ref: '#/components/schemas/PaginatedContentList'
+                    $ref: '#/components/schemas/PaginatedAdvancedAiAnalysisContentList'
                   item_count:
                     type: integer
                   page:
@@ -734,58 +736,6 @@ paths:
                 - page
                 - next
                 - previous
-              examples:
-                Example:
-                  value:
-                    log_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-                    timestamp: '2026-01-01T00:00:00Z'
-                    results:
-                    - id: con_DZaWwnKo5HThZ9bu
-                      platform_post_id: '7376543210987654321'
-                      platform: instagram
-                      content_form: VIDEO
-                      thumbnail_url: https://cdn.hellozelf.com/thumbnails/zelfai-launch.png
-                      posted_at: '2026-05-12T16:00:00Z'
-                      view_count: 184230
-                      like_count: 12840
-                      comment_count: 932
-                      share_count: 415
-                      total_engagement: 14187
-                      language: en
-                      media_duration: 42.0
-                      engagement_rate: 0.077
-                      earned_media_value_cents: 248000
-                      creator:
-                        id: cr_pfqPv0FLsBRimHfi
-                        username: zelfai
-                        name: Zelf
-                        platform: instagram
-                        platform_handle: zelfai
-                        platform_url: https://www.instagram.com/zelfai
-                        profile_picture_url: https://cdn.hellozelf.com/avatars/zelfai.png
-                        profile_bio: Creator and content intelligence for modern brands.
-                        follower_count: 53120
-                        active_content_count: 217
-                      brand_id: brd_Lw6ZZmNYhW0P9k0x
-                      net_promoter_score: 1
-                      is_owned: true
-                      is_tagged: true
-                      is_influencer: true
-                      mention_type: content
-                      caption: Behind the scenes at Zelf.
-                      description: How Zelf turns social signals into creator insights.
-                      transcript: We walk through how Zelf ranks creators by brand
-                        fit.
-                      platform_url: https://www.instagram.com/zelfai
-                      last_keyword: zelf creators
-                      ai_summary: A product walkthrough of Zelf creator analytics.
-                      hashtags:
-                      - zelfai
-                      - creatoreconomy
-                    item_count: 1
-                    page: 1
-                    next: null
-                    previous: null
           description: ''
         '400':
           description: Validation failed or a supplied id is malformed.
@@ -9542,6 +9492,222 @@ components:
       - modified_at
       - name
       - topic
+    AdvancedAiAnalysisContent:
+      type: object
+      description: A post the advanced analysis ran over, with its IntelRoom intel.
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: Unique identifier for this piece of content. Use it to retrieve
+            the content anywhere a content id is accepted.
+        platform_post_id:
+          type: string
+          description: |-
+            The post's identifier on its platform. This is the value at the end of the post's URL.
+
+            Examples:
+            - Instagram: `https://instagram.com/reel/abcd` -> `abcd`
+            - TikTok: `https://www.tiktok.com/@username/video/12345678` -> `12345678`
+        platform:
+          type: string
+          description: 'The platform the content was published on: `instagram`, `tiktok`
+            or `youtube`.'
+        content_form:
+          type:
+          - string
+          - 'null'
+          description: Whether the content is a video or an image.
+        thumbnail_url:
+          type:
+          - string
+          - 'null'
+          description: URL of the content's thumbnail image.
+        posted_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Time the content was originally published on its platform (UTC).
+        view_count:
+          type:
+          - integer
+          - 'null'
+          description: Total number of times the content has been viewed.
+        like_count:
+          type:
+          - integer
+          - 'null'
+          description: Total number of likes the content has received.
+        comment_count:
+          type:
+          - integer
+          - 'null'
+          description: Total number of comments on the content.
+        share_count:
+          type:
+          - integer
+          - 'null'
+          description: Total number of times the content has been shared.
+        total_engagement:
+          type:
+          - integer
+          - 'null'
+          description: Sum of the likes, comments, and shares the content has received.
+        language:
+          type:
+          - string
+          - 'null'
+          description: ISO 639 code of the content's primary language.
+        media_duration:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Length of the media in seconds. Null when not known.
+        engagement_rate:
+          type:
+          - number
+          - 'null'
+          format: double
+          readOnly: true
+          description: Engagement per view (likes plus comments plus shares, divided
+            by views). Null when the content has no recorded views.
+        earned_media_value_cents:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+          description: Estimated marketing value of the content, in US cents.
+        creator:
+          allOf:
+          - $ref: '#/components/schemas/ContentCreator'
+          readOnly: true
+          description: The creator who published the content.
+        brand_id:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: Identifier of the brand that the brand-specific signals on
+            this row (`is_owned`, `is_tagged`, `is_influencer`, `mention_type`, `net_promoter_score`)
+            are scoped to. Returned as `null` when the request omits `brand_id`.
+        net_promoter_score:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+          description: Net promoter score for the content from the perspective of
+            the scoped brand. Returned as `null` when the request omits `brand_id`.
+        is_owned:
+          type:
+          - boolean
+          - 'null'
+          readOnly: true
+          description: Whether the scoped brand owns the content; that is, whether
+            it was published by an account the brand controls. Returned as `null`
+            when the request omits `brand_id`.
+        is_tagged:
+          type:
+          - boolean
+          - 'null'
+          readOnly: true
+          description: Whether the post tags the scoped brand on the platform. Returned
+            as `null` when the request omits `brand_id`.
+        is_influencer:
+          type:
+          - boolean
+          - 'null'
+          readOnly: true
+          description: 'Whether the scoped brand counts the content as influencer
+            content: it matches the brand''s influencer terms, comes from an account
+            on its influencer list, was reported as branded content by the platform,
+            or was marked by hand. Content the brand owns is never influencer content.
+            Returned as `null` when the request omits `brand_id`.'
+        mention_type:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: How the scoped brand is mentioned in the content. One of `content`
+            or `comment`, or null when the brand is not mentioned. Returned as `null`
+            when the request omits `brand_id`.
+        caption:
+          type: string
+          description: Short caption or title of the post (the primary user-visible
+            text).
+        description:
+          type: string
+          description: Long-form description of the post.
+        transcript:
+          type:
+          - string
+          - 'null'
+          description: Transcribed speech from the content's audio, when available.
+        platform_url:
+          type: string
+          description: |-
+            Direct URL to the post on its platform.
+
+            Examples:
+            - `https://instagram.com/reel/abcd`
+            - `https://www.tiktok.com/@username/video/12345678`
+        last_keyword:
+          type:
+          - string
+          - 'null'
+          description: 'What the content was most recently collected under: a hashtag,
+            a creator handle, a search term, or a brand identifier. Null when the
+            content did not arrive through a collection task.'
+        ai_summary:
+          type:
+          - string
+          - 'null'
+          description: Short AI-generated summary of the content.
+        hashtags:
+          type: array
+          items:
+            type: string
+          description: Hashtags used in the post, normalized to lowercase and without
+            the leading `#`.
+        intel:
+          oneOf:
+          - $ref: '#/components/schemas/ContentIntel'
+          - type: 'null'
+          readOnly: true
+          description: AI enrichment of the post and its comments from this analysis.
+            `null` until the analysis has finished and its intel is stored.
+      required:
+      - ai_summary
+      - brand_id
+      - caption
+      - comment_count
+      - content_form
+      - creator
+      - description
+      - earned_media_value_cents
+      - engagement_rate
+      - hashtags
+      - id
+      - intel
+      - is_influencer
+      - is_owned
+      - is_tagged
+      - language
+      - last_keyword
+      - like_count
+      - media_duration
+      - mention_type
+      - net_promoter_score
+      - platform
+      - platform_post_id
+      - platform_url
+      - posted_at
+      - share_count
+      - thumbnail_url
+      - total_engagement
+      - transcript
+      - view_count
     AdvancedAiAnalysisCreateRequest:
       type: object
       description: Request body for ``POST /api/v1/advanced_ai_analysis/``.
@@ -10920,6 +11086,17 @@ components:
       - total_likes
       - videos
       - videos_with_comments
+    AgeRangeEnum:
+      enum:
+      - teens
+      - 20s
+      - 30s
+      - 40s
+      - 50s
+      - 60plus
+      - unknown
+      type: string
+      x-internal: true
     AiAnalysis:
       type: object
       description: Response body for the AI analysis root.
@@ -11674,6 +11851,67 @@ components:
       - comments
       - likes
       - replies
+    CommentIntel:
+      type: object
+      description: AI enrichment of one comment on the post.
+      properties:
+        comment_id:
+          type: integer
+          description: ID of the comment.
+        sentiment:
+          description: Overall sentiment of the comment.
+          oneOf:
+          - $ref: '#/components/schemas/SentimentEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        sentiment_score:
+          type:
+          - number
+          - 'null'
+          format: double
+          maximum: 1.0
+          minimum: -1.0
+          description: Sentiment from -1 (negative) to 1 (positive).
+        intent:
+          description: Why the commenter wrote the comment.
+          oneOf:
+          - $ref: '#/components/schemas/IntentEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        themes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Themes the comment touches, from the analysis taxonomy.
+        gist:
+          type:
+          - string
+          - 'null'
+          description: One-line summary of the comment.
+          maxLength: 160
+        price_perception:
+          description: How the comment sees the price.
+          oneOf:
+          - $ref: '#/components/schemas/PricePerceptionEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        quality_perception:
+          description: How the comment sees the quality.
+          oneOf:
+          - $ref: '#/components/schemas/QualityPerceptionEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        model:
+          type:
+          - string
+          - 'null'
+          description: The model that enriched the comment.
+        enriched_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the AI enrichment ran.
+      required:
+      - comment_id
     CommentStatistics:
       type: object
       description: Comments the brand posted, split by the content they were posted
@@ -11690,6 +11928,13 @@ components:
       required:
       - categories
       - total_comments_posted
+    ConfidenceEnum:
+      enum:
+      - low
+      - medium
+      - high
+      type: string
+      x-internal: true
     Content:
       type: object
       description: A piece of content (a post, video, or image) and its metrics.
@@ -12239,6 +12484,100 @@ components:
       - PHOTO
       type: string
       x-internal: true
+    ContentIntel:
+      type: object
+      description: AI enrichment of the post and its comments from the advanced analysis.
+      properties:
+        sentiment:
+          description: Overall sentiment of the post.
+          oneOf:
+          - $ref: '#/components/schemas/SentimentEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        sentiment_score:
+          type:
+          - number
+          - 'null'
+          format: double
+          maximum: 1.0
+          minimum: -1.0
+          description: Sentiment from -1 (negative) to 1 (positive).
+        stance:
+          description: The creator's stance toward the topic.
+          oneOf:
+          - $ref: '#/components/schemas/StanceEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        themes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Themes the post covers, from the analysis taxonomy.
+        gist:
+          type:
+          - string
+          - 'null'
+          description: Short summary of the post.
+          maxLength: 1000
+        price_perception:
+          description: How the post frames the price.
+          oneOf:
+          - $ref: '#/components/schemas/PricePerceptionEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        quality_perception:
+          description: How the post frames the quality.
+          oneOf:
+          - $ref: '#/components/schemas/QualityPerceptionEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        love_bucket:
+          type:
+          - string
+          - 'null'
+          description: What the post loves about the topic, as a bucket slug.
+        dislike_bucket:
+          type:
+          - string
+          - 'null'
+          description: What the post dislikes about the topic, as a bucket slug.
+        language:
+          type:
+          - string
+          - 'null'
+          description: Detected language as an ISO code.
+        language_confidence:
+          type:
+          - number
+          - 'null'
+          format: double
+          maximum: 1.0
+          minimum: 0.0
+          description: Confidence of the language detection.
+        speaker:
+          oneOf:
+          - $ref: '#/components/schemas/SpeakerIntel'
+          - type: 'null'
+          description: The main on-camera speaker.
+        signals:
+          oneOf:
+          - $ref: '#/components/schemas/SignalsIntel'
+          - type: 'null'
+          description: Product and behaviour signals.
+        model:
+          type:
+          - string
+          - 'null'
+          description: The model that enriched the post.
+        enriched_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the AI enrichment ran.
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentIntel'
+          description: AI enrichment of each analysed comment on the post.
     ContentScopeRequest:
       type: object
       description: |-
@@ -12660,6 +12999,14 @@ components:
       - id
       - scope
       - status
+    DecisionPostureEnum:
+      enum:
+      - skeptic
+      - pragmatic
+      - evangelist
+      - unclear
+      type: string
+      x-internal: true
     Detection:
       type: object
       description: One brand placement detection run.
@@ -13044,6 +13391,24 @@ components:
       required:
       - brand
       - periods
+    GenderEnum:
+      enum:
+      - male
+      - female
+      - nonbinary_or_unclear
+      - unknown
+      type: string
+      x-internal: true
+    IntentEnum:
+      enum:
+      - question
+      - objection
+      - experience
+      - praise
+      - advice
+      - other
+      type: string
+      x-internal: true
     IntervalHoursEnum:
       enum:
       - 4
@@ -13053,6 +13418,17 @@ components:
       - 168
       - 720
       type: integer
+      x-internal: true
+    JourneyStageEnum:
+      enum:
+      - starting
+      - ramping
+      - plateau
+      - maintenance
+      - quitting
+      - 'off'
+      - unclear
+      type: string
       x-internal: true
     KindEnum:
       enum:
@@ -13087,6 +13463,14 @@ components:
       x-internal: true
     NullEnum:
       type: 'null'
+      x-internal: true
+    PaginatedAdvancedAiAnalysisContentList:
+      type: array
+      items:
+        $ref: '#/components/schemas/AdvancedAiAnalysisContent'
+      description: Paginated response envelope. `results` holds this page of `AdvancedAiAnalysisContent`
+        objects; the envelope fields (`log_id`, `timestamp`, `item_count`, `page`,
+        `next`, `previous`) are described under Response shape.
       x-internal: true
     PaginatedAdvancedAiAnalysisList:
       type: array
@@ -13330,6 +13714,22 @@ components:
       - youtube
       type: string
       x-internal: true
+    PricePerceptionEnum:
+      enum:
+      - expensive
+      - affordable
+      - cheap
+      - none
+      type: string
+      x-internal: true
+    QualityPerceptionEnum:
+      enum:
+      - low
+      - good
+      - excellent
+      - none
+      type: string
+      x-internal: true
     ResourceEnum:
       enum:
       - content
@@ -13389,6 +13789,173 @@ components:
       - new
       type: string
       x-internal: true
+    SentimentEnum:
+      enum:
+      - positive
+      - neutral
+      - negative
+      - mixed
+      type: string
+      x-internal: true
+    SignalsIntel:
+      type: object
+      description: Product and behaviour signals read from the video. AI inferences.
+      properties:
+        journey_stage:
+          description: Where the speaker is in their journey with the product.
+          oneOf:
+          - $ref: '#/components/schemas/JourneyStageEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        decision_posture:
+          description: How the speaker approaches the buying decision.
+          oneOf:
+          - $ref: '#/components/schemas/DecisionPostureEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        stigma_signal:
+          description: How openly the speaker talks about using the product.
+          oneOf:
+          - $ref: '#/components/schemas/StigmaSignalEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        complementary_products:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Products used alongside the subject.
+        competitors_shown:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Rival products shown, compared or switched to.
+        pain_points:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: What is hard, broken or disliked.
+        friction_points:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Moments where using the product is difficult.
+        workarounds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Ways the speaker works around a problem.
+        emotional_tenor:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The emotions the video conveys.
+        trust_sources:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Sources the speaker trusts or cites.
+        key_moments:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Notable moments in the video.
+        job_hired_for:
+          type:
+          - string
+          - 'null'
+          description: The job the speaker uses the product for.
+        usage_ritual:
+          type:
+          - string
+          - 'null'
+          description: How and when the speaker uses the product.
+        life_context:
+          type:
+          - string
+          - 'null'
+          description: The speaker's life situation around the product.
+        switching:
+          type:
+          - string
+          - 'null'
+          description: Any switch to or from another product.
+        churn_switch_driver:
+          type:
+          - string
+          - 'null'
+          description: Why the speaker would leave or switch.
+        say_show_gap:
+          type:
+          - string
+          - 'null'
+          description: Where what the speaker says differs from what they show.
+        strategist_signal:
+          type:
+          - string
+          - 'null'
+          description: The main takeaway for a brand strategist.
+        apparent_geography:
+          type:
+          - string
+          - 'null'
+          description: Perceived location of the speaker.
+    SpeakerIntel:
+      type: object
+      description: Perceived traits of the main on-camera speaker. AI inferences,
+        not facts.
+      properties:
+        on_camera:
+          type:
+          - boolean
+          - 'null'
+          description: Whether a specific person appears or speaks on camera.
+        gender:
+          description: Perceived gender of the main speaker.
+          oneOf:
+          - $ref: '#/components/schemas/GenderEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        age_range:
+          description: Perceived age range of the speaker.
+          oneOf:
+          - $ref: '#/components/schemas/AgeRangeEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        ethnicity:
+          type:
+          - string
+          - 'null'
+          description: Perceived ethnicity of the speaker.
+        setting:
+          type:
+          - string
+          - 'null'
+          description: Where the video was filmed, such as `home` or `gym`.
+        confidence:
+          description: How confident the model is.
+          oneOf:
+          - $ref: '#/components/schemas/ConfidenceEnum'
+          - $ref: '#/components/schemas/NullEnum'
+    StanceEnum:
+      enum:
+      - promoting
+      - cautioning
+      - neutral
+      - critical
+      - informational
+      type: string
+      x-internal: true
     StateEnum:
       enum:
       - PENDING
@@ -13396,6 +13963,15 @@ components:
       - FAILED
       - EXHAUSTED
       - QUOTA_EXHAUSTED
+      type: string
+      x-internal: true
+    StigmaSignalEnum:
+      enum:
+      - proud_open
+      - matter_of_fact
+      - defensive
+      - hiding
+      - none
       type: string
       x-internal: true
     SubBrandTypeEnum:

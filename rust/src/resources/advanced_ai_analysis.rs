@@ -6,8 +6,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
 use crate::models::{
-    AdvancedAiAnalysis, AdvancedAiAnalysisResult, Content, ContentFilterInputRequest,
-    ContentStatistics,
+    AdvancedAiAnalysis, AdvancedAiAnalysisContent, AdvancedAiAnalysisResult,
+    ContentFilterInputRequest, ContentStatistics,
 };
 use crate::page::{one, Page};
 use crate::transport::{Envelope, Transport};
@@ -126,13 +126,15 @@ impl AdvancedAiAnalysisResource {
     /// in the standard content shape. Use it to inspect the exact posts included in an
     /// analysis. Requires `analysis_id` (an analysis `id` from `advanced_ai_analysis.list`).
     /// Brand-scoped fields (`is_owned`, `is_tagged`, `net_promoter_score`, ...) are `null` in
-    /// this response.
+    /// this response. Each post carries `intel`: the AI enrichment of the post (sentiment,
+    /// stance, themes, perception, speaker, signals) and of each of its comments, `null` until
+    /// the analysis completes.
     ///
     /// Calls `GET /api/v1/advanced_ai_analysis/contents/` (`advanced_ai_analysis.contents`).
     pub async fn contents(
         &self,
         params: AdvancedAiAnalysisContentsParams,
-    ) -> Result<Page<Content>> {
+    ) -> Result<Page<AdvancedAiAnalysisContent>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         {
@@ -147,7 +149,7 @@ impl AdvancedAiAnalysisResource {
         }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<Content> = self
+        let envelope: Envelope<AdvancedAiAnalysisContent> = self
             .transport
             .request(
                 Method::GET,

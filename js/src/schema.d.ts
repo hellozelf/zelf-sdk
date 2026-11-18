@@ -80,6 +80,8 @@ export interface paths {
      *     Returns the content an advanced AI analysis ran over, in the standard content shape. Use it to inspect the exact posts included in an analysis.
      *
      *     Requires `analysis_id` (an analysis `id` from `advanced_ai_analysis.list`). Brand-scoped fields (`is_owned`, `is_tagged`, `net_promoter_score`, ...) are `null` in this response.
+     *
+     *     Each post carries `intel`: the AI enrichment of the post (sentiment, stance, themes, perception, speaker, signals) and of each of its comments, `null` until the analysis completes.
      */
     get: operations['advanced_ai_analysis.contents']
     put?: never
@@ -1666,6 +1668,90 @@ export interface components {
       /** @description The runs that make up this analysis, ordered newest first. */
       analyses: components['schemas']['AdvancedAiAnalysisRun'][]
     }
+    /** @description A post the advanced analysis ran over, with its IntelRoom intel. */
+    AdvancedAiAnalysisContent: {
+      /** @description Unique identifier for this piece of content. Use it to retrieve the content anywhere a content id is accepted. */
+      readonly id: string
+      /**
+       * @description The post's identifier on its platform. This is the value at the end of the post's URL.
+       *
+       *     Examples:
+       *     - Instagram: `https://instagram.com/reel/abcd` -> `abcd`
+       *     - TikTok: `https://www.tiktok.com/@username/video/12345678` -> `12345678`
+       */
+      platform_post_id: string
+      /** @description The platform the content was published on: `instagram`, `tiktok` or `youtube`. */
+      platform: string
+      /** @description Whether the content is a video or an image. */
+      content_form: string | null
+      /** @description URL of the content's thumbnail image. */
+      thumbnail_url: string | null
+      /**
+       * Format: date-time
+       * @description Time the content was originally published on its platform (UTC).
+       */
+      posted_at: string | null
+      /** @description Total number of times the content has been viewed. */
+      view_count: number | null
+      /** @description Total number of likes the content has received. */
+      like_count: number | null
+      /** @description Total number of comments on the content. */
+      comment_count: number | null
+      /** @description Total number of times the content has been shared. */
+      share_count: number | null
+      /** @description Sum of the likes, comments, and shares the content has received. */
+      total_engagement: number | null
+      /** @description ISO 639 code of the content's primary language. */
+      language: string | null
+      /**
+       * Format: double
+       * @description Length of the media in seconds. Null when not known.
+       */
+      media_duration: number | null
+      /**
+       * Format: double
+       * @description Engagement per view (likes plus comments plus shares, divided by views). Null when the content has no recorded views.
+       */
+      readonly engagement_rate: number | null
+      /** @description Estimated marketing value of the content, in US cents. */
+      readonly earned_media_value_cents: number | null
+      /** @description The creator who published the content. */
+      readonly creator: components['schemas']['ContentCreator']
+      /** @description Identifier of the brand that the brand-specific signals on this row (`is_owned`, `is_tagged`, `is_influencer`, `mention_type`, `net_promoter_score`) are scoped to. Returned as `null` when the request omits `brand_id`. */
+      readonly brand_id: string | null
+      /** @description Net promoter score for the content from the perspective of the scoped brand. Returned as `null` when the request omits `brand_id`. */
+      readonly net_promoter_score: number | null
+      /** @description Whether the scoped brand owns the content; that is, whether it was published by an account the brand controls. Returned as `null` when the request omits `brand_id`. */
+      readonly is_owned: boolean | null
+      /** @description Whether the post tags the scoped brand on the platform. Returned as `null` when the request omits `brand_id`. */
+      readonly is_tagged: boolean | null
+      /** @description Whether the scoped brand counts the content as influencer content: it matches the brand's influencer terms, comes from an account on its influencer list, was reported as branded content by the platform, or was marked by hand. Content the brand owns is never influencer content. Returned as `null` when the request omits `brand_id`. */
+      readonly is_influencer: boolean | null
+      /** @description How the scoped brand is mentioned in the content. One of `content` or `comment`, or null when the brand is not mentioned. Returned as `null` when the request omits `brand_id`. */
+      readonly mention_type: string | null
+      /** @description Short caption or title of the post (the primary user-visible text). */
+      caption: string
+      /** @description Long-form description of the post. */
+      description: string
+      /** @description Transcribed speech from the content's audio, when available. */
+      transcript: string | null
+      /**
+       * @description Direct URL to the post on its platform.
+       *
+       *     Examples:
+       *     - `https://instagram.com/reel/abcd`
+       *     - `https://www.tiktok.com/@username/video/12345678`
+       */
+      platform_url: string
+      /** @description What the content was most recently collected under: a hashtag, a creator handle, a search term, or a brand identifier. Null when the content did not arrive through a collection task. */
+      last_keyword: string | null
+      /** @description Short AI-generated summary of the content. */
+      ai_summary: string | null
+      /** @description Hashtags used in the post, normalized to lowercase and without the leading `#`. */
+      hashtags: string[]
+      /** @description AI enrichment of the post and its comments from this analysis. `null` until the analysis has finished and its intel is stored. */
+      readonly intel: components['schemas']['ContentIntel'] | null
+    }
     /** @description Request body for ``POST /api/v1/advanced_ai_analysis/``. */
     AdvancedAiAnalysisCreateRequest: {
       /** @description A label for this analysis. */
@@ -2355,6 +2441,8 @@ export interface components {
        */
       like_weighted_sentiment?: number | null
     }
+    /** @enum {string} */
+    AgeRangeEnum: 'teens' | '20s' | '30s' | '40s' | '50s' | '60plus' | 'unknown'
     /** @description Response body for the AI analysis root. */
     AiAnalysis: {
       /** @description ID of the analysis. Use this value on follow-up calls. */
@@ -2707,6 +2795,37 @@ export interface components {
       /** @description Replies those comments received. */
       replies: number
     }
+    /** @description AI enrichment of one comment on the post. */
+    CommentIntel: {
+      /** @description ID of the comment. */
+      comment_id: number
+      /** @description Overall sentiment of the comment. */
+      sentiment?: components['schemas']['SentimentEnum'] | components['schemas']['NullEnum']
+      /**
+       * Format: double
+       * @description Sentiment from -1 (negative) to 1 (positive).
+       */
+      sentiment_score?: number | null
+      /** @description Why the commenter wrote the comment. */
+      intent?: components['schemas']['IntentEnum'] | components['schemas']['NullEnum']
+      /** @description Themes the comment touches, from the analysis taxonomy. */
+      themes?: string[] | null
+      /** @description One-line summary of the comment. */
+      gist?: string | null
+      /** @description How the comment sees the price. */
+      price_perception?:
+        components['schemas']['PricePerceptionEnum'] | components['schemas']['NullEnum']
+      /** @description How the comment sees the quality. */
+      quality_perception?:
+        components['schemas']['QualityPerceptionEnum'] | components['schemas']['NullEnum']
+      /** @description The model that enriched the comment. */
+      model?: string | null
+      /**
+       * Format: date-time
+       * @description When the AI enrichment ran.
+       */
+      enriched_at?: string | null
+    }
     /** @description Comments the brand posted, split by the content they were posted on. */
     CommentStatistics: {
       /** @description Comments the brand posted in the window, across every category. */
@@ -2714,6 +2833,8 @@ export interface components {
       /** @description One entry per category. They add up to `total_comments_posted`. */
       categories: components['schemas']['CommentCategory'][]
     }
+    /** @enum {string} */
+    ConfidenceEnum: 'low' | 'medium' | 'high'
     /** @description A piece of content (a post, video, or image) and its metrics. */
     Content: {
       /** @description Unique identifier for this piece of content. Use it to retrieve the content anywhere a content id is accepted. */
@@ -2983,6 +3104,52 @@ export interface components {
     }
     /** @enum {string} */
     ContentFormEnum: 'VIDEO' | 'PHOTO'
+    /** @description AI enrichment of the post and its comments from the advanced analysis. */
+    ContentIntel: {
+      /** @description Overall sentiment of the post. */
+      sentiment?: components['schemas']['SentimentEnum'] | components['schemas']['NullEnum']
+      /**
+       * Format: double
+       * @description Sentiment from -1 (negative) to 1 (positive).
+       */
+      sentiment_score?: number | null
+      /** @description The creator's stance toward the topic. */
+      stance?: components['schemas']['StanceEnum'] | components['schemas']['NullEnum']
+      /** @description Themes the post covers, from the analysis taxonomy. */
+      themes?: string[] | null
+      /** @description Short summary of the post. */
+      gist?: string | null
+      /** @description How the post frames the price. */
+      price_perception?:
+        components['schemas']['PricePerceptionEnum'] | components['schemas']['NullEnum']
+      /** @description How the post frames the quality. */
+      quality_perception?:
+        components['schemas']['QualityPerceptionEnum'] | components['schemas']['NullEnum']
+      /** @description What the post loves about the topic, as a bucket slug. */
+      love_bucket?: string | null
+      /** @description What the post dislikes about the topic, as a bucket slug. */
+      dislike_bucket?: string | null
+      /** @description Detected language as an ISO code. */
+      language?: string | null
+      /**
+       * Format: double
+       * @description Confidence of the language detection.
+       */
+      language_confidence?: number | null
+      /** @description The main on-camera speaker. */
+      speaker?: components['schemas']['SpeakerIntel'] | null
+      /** @description Product and behaviour signals. */
+      signals?: components['schemas']['SignalsIntel'] | null
+      /** @description The model that enriched the post. */
+      model?: string | null
+      /**
+       * Format: date-time
+       * @description When the AI enrichment ran.
+       */
+      enriched_at?: string | null
+      /** @description AI enrichment of each analysed comment on the post. */
+      comments?: components['schemas']['CommentIntel'][]
+    }
     /**
      * @description Specifies which of the creator's content relationships feed the analysis.
      *
@@ -3212,6 +3379,8 @@ export interface components {
       /** @description Status of the analysis. One of `IN_PROGRESS`, `COMPLETED`, `EMPTY_RESULT` (finished with no matching content), or `FAILED`. */
       readonly status: string
     }
+    /** @enum {string} */
+    DecisionPostureEnum: 'skeptic' | 'pragmatic' | 'evangelist' | 'unclear'
     /** @description One brand placement detection run. */
     Detection: {
       /** @description Identifier of the detection. Use this value on follow-up calls. */
@@ -3396,8 +3565,15 @@ export interface components {
       /** @description One entry per period, oldest first. */
       periods: components['schemas']['FollowerPeriod'][]
     }
+    /** @enum {string} */
+    GenderEnum: 'male' | 'female' | 'nonbinary_or_unclear' | 'unknown'
+    /** @enum {string} */
+    IntentEnum: 'question' | 'objection' | 'experience' | 'praise' | 'advice' | 'other'
     /** @enum {integer} */
     IntervalHoursEnum: 4 | 6 | 12 | 24 | 168 | 720
+    /** @enum {string} */
+    JourneyStageEnum:
+      'starting' | 'ramping' | 'plateau' | 'maintenance' | 'quitting' | 'off' | 'unclear'
     /** @enum {string} */
     KindEnum: 'snapshot' | 'event'
     /** @description A label and how many videos carry it. */
@@ -3412,6 +3588,8 @@ export interface components {
     /** @enum {string} */
     MentionTypeEnum: 'content' | 'comment'
     NullEnum: null
+    /** @description Paginated response envelope. `results` holds this page of `AdvancedAiAnalysisContent` objects; the envelope fields (`log_id`, `timestamp`, `item_count`, `page`, `next`, `previous`) are described under Response shape. */
+    PaginatedAdvancedAiAnalysisContentList: components['schemas']['AdvancedAiAnalysisContent'][]
     /** @description Paginated response envelope. `results` holds this page of `AdvancedAiAnalysis` objects; the envelope fields (`log_id`, `timestamp`, `item_count`, `page`, `next`, `previous`) are described under Response shape. */
     PaginatedAdvancedAiAnalysisList: components['schemas']['AdvancedAiAnalysis'][]
     /** @description Paginated response envelope. `results` holds this page of `AdvancedAiAnalysisResult` objects; the envelope fields (`log_id`, `timestamp`, `item_count`, `page`, `next`, `previous`) are described under Response shape. */
@@ -3509,6 +3687,10 @@ export interface components {
     /** @enum {string} */
     PlatformEnum: 'instagram' | 'tiktok' | 'youtube'
     /** @enum {string} */
+    PricePerceptionEnum: 'expensive' | 'affordable' | 'cheap' | 'none'
+    /** @enum {string} */
+    QualityPerceptionEnum: 'low' | 'good' | 'excellent' | 'none'
+    /** @enum {string} */
     ResourceEnum: 'content' | 'creator'
     /** @description Signed, time-limited download of an analysis run's result payload. */
     ResultFile: {
@@ -3542,7 +3724,70 @@ export interface components {
     /** @enum {string} */
     SecretTypeEnum: 'default' | 'new'
     /** @enum {string} */
+    SentimentEnum: 'positive' | 'neutral' | 'negative' | 'mixed'
+    /** @description Product and behaviour signals read from the video. AI inferences. */
+    SignalsIntel: {
+      /** @description Where the speaker is in their journey with the product. */
+      journey_stage?: components['schemas']['JourneyStageEnum'] | components['schemas']['NullEnum']
+      /** @description How the speaker approaches the buying decision. */
+      decision_posture?:
+        components['schemas']['DecisionPostureEnum'] | components['schemas']['NullEnum']
+      /** @description How openly the speaker talks about using the product. */
+      stigma_signal?: components['schemas']['StigmaSignalEnum'] | components['schemas']['NullEnum']
+      /** @description Products used alongside the subject. */
+      complementary_products?: string[] | null
+      /** @description Rival products shown, compared or switched to. */
+      competitors_shown?: string[] | null
+      /** @description What is hard, broken or disliked. */
+      pain_points?: string[] | null
+      /** @description Moments where using the product is difficult. */
+      friction_points?: string[] | null
+      /** @description Ways the speaker works around a problem. */
+      workarounds?: string[] | null
+      /** @description The emotions the video conveys. */
+      emotional_tenor?: string[] | null
+      /** @description Sources the speaker trusts or cites. */
+      trust_sources?: string[] | null
+      /** @description Notable moments in the video. */
+      key_moments?: string[] | null
+      /** @description The job the speaker uses the product for. */
+      job_hired_for?: string | null
+      /** @description How and when the speaker uses the product. */
+      usage_ritual?: string | null
+      /** @description The speaker's life situation around the product. */
+      life_context?: string | null
+      /** @description Any switch to or from another product. */
+      switching?: string | null
+      /** @description Why the speaker would leave or switch. */
+      churn_switch_driver?: string | null
+      /** @description Where what the speaker says differs from what they show. */
+      say_show_gap?: string | null
+      /** @description The main takeaway for a brand strategist. */
+      strategist_signal?: string | null
+      /** @description Perceived location of the speaker. */
+      apparent_geography?: string | null
+    }
+    /** @description Perceived traits of the main on-camera speaker. AI inferences, not facts. */
+    SpeakerIntel: {
+      /** @description Whether a specific person appears or speaks on camera. */
+      on_camera?: boolean | null
+      /** @description Perceived gender of the main speaker. */
+      gender?: components['schemas']['GenderEnum'] | components['schemas']['NullEnum']
+      /** @description Perceived age range of the speaker. */
+      age_range?: components['schemas']['AgeRangeEnum'] | components['schemas']['NullEnum']
+      /** @description Perceived ethnicity of the speaker. */
+      ethnicity?: string | null
+      /** @description Where the video was filmed, such as `home` or `gym`. */
+      setting?: string | null
+      /** @description How confident the model is. */
+      confidence?: components['schemas']['ConfidenceEnum'] | components['schemas']['NullEnum']
+    }
+    /** @enum {string} */
+    StanceEnum: 'promoting' | 'cautioning' | 'neutral' | 'critical' | 'informational'
+    /** @enum {string} */
     StateEnum: 'PENDING' | 'SUCCEEDED' | 'FAILED' | 'EXHAUSTED' | 'QUOTA_EXHAUSTED'
+    /** @enum {string} */
+    StigmaSignalEnum: 'proud_open' | 'matter_of_fact' | 'defensive' | 'hiding' | 'none'
     /** @enum {string} */
     SubBrandTypeEnum: 'COMPETITIVE' | 'THEME'
     /** @enum {string} */
@@ -4548,7 +4793,7 @@ export interface operations {
             log_id: string
             /** Format: date-time */
             timestamp: string
-            results: components['schemas']['PaginatedContentList']
+            results: components['schemas']['PaginatedAdvancedAiAnalysisContentList']
             item_count: number
             page: number
             next: number | null

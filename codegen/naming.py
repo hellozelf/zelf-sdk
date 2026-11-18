@@ -117,7 +117,8 @@ def go_field(name: str) -> str:
 def enum_member(value: str, fallback: str = "Empty") -> str:
     """A language identifier for an enum value.
 
-    The API uses `-posted_at` for descending sorts and `""` for "not set
-    yet", neither of which is an identifier anywhere.
+    The API uses `-posted_at` for descending sorts, `""` for "not set yet"
+    and `20s` for an age range, none of which is an identifier anywhere.
     """
-    return pascal(value.replace("-", "desc_")) or fallback
+    name = pascal(value.replace("-", "desc_")) or fallback
+    return f"V{name}" if name[0].isdigit() else name

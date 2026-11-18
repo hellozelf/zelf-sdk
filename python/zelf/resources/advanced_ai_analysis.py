@@ -6,8 +6,8 @@ from typing import Any
 
 from .._models import (
     AdvancedAiAnalysis,
+    AdvancedAiAnalysisContent,
     AdvancedAiAnalysisResult,
-    Content,
     ContentFilterInputRequest,
     ContentStatistics,
 )
@@ -51,13 +51,16 @@ class AdvancedAiAnalysisResource:
         analysis_id: str,
         page: int | NotGiven = NOT_GIVEN,
         page_size: int | NotGiven = NOT_GIVEN,
-    ) -> Page[Content]:
+    ) -> Page[AdvancedAiAnalysisContent]:
         """List Advanced AI Analysis Content
 
         Returns the content an advanced AI analysis ran over, in the standard content shape.
         Use it to inspect the exact posts included in an analysis. Requires `analysis_id`
         (an analysis `id` from `advanced_ai_analysis.list`). Brand-scoped fields
         (`is_owned`, `is_tagged`, `net_promoter_score`, ...) are `null` in this response.
+        Each post carries `intel`: the AI enrichment of the post (sentiment, stance, themes,
+        perception, speaker, signals) and of each of its comments, `null` until the analysis
+        completes.
 
         Args:
             analysis_id: Analysis id, as returned by advanced_ai_analysis.list.
@@ -82,7 +85,7 @@ class AdvancedAiAnalysisResource:
         envelope = self._transport.request(
             "GET", "/api/v1/advanced_ai_analysis/contents/", query=query
         )
-        return Page(envelope, Content, fetch)
+        return Page(envelope, AdvancedAiAnalysisContent, fetch)
 
     def create(
         self,
@@ -253,13 +256,16 @@ class AsyncAdvancedAiAnalysisResource:
         analysis_id: str,
         page: int | NotGiven = NOT_GIVEN,
         page_size: int | NotGiven = NOT_GIVEN,
-    ) -> AsyncPage[Content]:
+    ) -> AsyncPage[AdvancedAiAnalysisContent]:
         """List Advanced AI Analysis Content
 
         Returns the content an advanced AI analysis ran over, in the standard content shape.
         Use it to inspect the exact posts included in an analysis. Requires `analysis_id`
         (an analysis `id` from `advanced_ai_analysis.list`). Brand-scoped fields
         (`is_owned`, `is_tagged`, `net_promoter_score`, ...) are `null` in this response.
+        Each post carries `intel`: the AI enrichment of the post (sentiment, stance, themes,
+        perception, speaker, signals) and of each of its comments, `null` until the analysis
+        completes.
 
         Args:
             analysis_id: Analysis id, as returned by advanced_ai_analysis.list.
@@ -284,7 +290,7 @@ class AsyncAdvancedAiAnalysisResource:
         envelope = await self._transport.request(
             "GET", "/api/v1/advanced_ai_analysis/contents/", query=query
         )
-        return AsyncPage(envelope, Content, fetch)
+        return AsyncPage(envelope, AdvancedAiAnalysisContent, fetch)
 
     async def create(
         self,

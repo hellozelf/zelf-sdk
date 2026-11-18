@@ -6,7 +6,7 @@
    "cardinality": "single"
   },
   "advanced_ai_analysis_contents": {
-   "model": "Content",
+   "model": "AdvancedAiAnalysisContent",
    "cardinality": "page"
   },
   "advanced_ai_analysis_create": {
@@ -250,53 +250,130 @@
    "previous": null
   },
   "advanced_ai_analysis_contents": {
-   "log_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+   "log_id": "0ca57078-d810-4038-a1d7-02953ac7ce60",
    "timestamp": "2026-01-01T00:00:00Z",
    "results": [
     {
-     "id": "con_DZaWwnKo5HThZ9bu",
-     "platform_post_id": "7376543210987654321",
-     "platform": "instagram",
+     "id": "id_h6Qxp987shtI8jnk",
+     "platform_post_id": "7665460027683012345",
+     "platform": "tiktok",
      "content_form": "VIDEO",
-     "thumbnail_url": "https://cdn.hellozelf.com/thumbnails/zelfai-launch.png",
-     "posted_at": "2026-05-12T16:00:00Z",
-     "view_count": 184230,
-     "like_count": 12840,
-     "comment_count": 932,
-     "share_count": 415,
-     "total_engagement": 14187,
+     "thumbnail_url": "https://example.com/advancedaianalysiscontent/thumbnail_url",
+     "posted_at": "2026-01-01T00:00:00Z",
+     "view_count": 327400000,
+     "like_count": 42,
+     "comment_count": 42,
+     "share_count": 42,
+     "total_engagement": 18400,
      "language": "en",
-     "media_duration": 42.0,
-     "engagement_rate": 0.077,
-     "earned_media_value_cents": 248000,
+     "media_duration": 0.0425,
+     "engagement_rate": 0.0425,
+     "earned_media_value_cents": 12500000,
      "creator": {
-      "id": "cr_pfqPv0FLsBRimHfi",
+      "id": "cr_uaS7fhZpqVq7ZiTm",
       "username": "zelfai",
-      "name": "Zelf",
-      "platform": "instagram",
+      "name": "Name",
+      "platform": "tiktok",
       "platform_handle": "zelfai",
-      "platform_url": "https://www.instagram.com/zelfai",
-      "profile_picture_url": "https://cdn.hellozelf.com/avatars/zelfai.png",
-      "profile_bio": "Creator and content intelligence for modern brands.",
-      "follower_count": 53120,
-      "active_content_count": 217
+      "platform_url": "https://example.com/contentcreator/platform_url",
+      "profile_picture_url": "https://example.com/contentcreator/profile_picture_url",
+      "profile_bio": "Profile bio",
+      "follower_count": 412000,
+      "active_content_count": 42
      },
-     "brand_id": "brd_Lw6ZZmNYhW0P9k0x",
-     "net_promoter_score": 1,
+     "brand_id": "brd_YHNPhXtwARqnTSCJ",
+     "net_promoter_score": 7,
      "is_owned": true,
      "is_tagged": true,
      "is_influencer": true,
      "mention_type": "content",
-     "caption": "Behind the scenes at Zelf.",
-     "description": "How Zelf turns social signals into creator insights.",
-     "transcript": "We walk through how Zelf ranks creators by brand fit.",
-     "platform_url": "https://www.instagram.com/zelfai",
-     "last_keyword": "zelf creators",
-     "ai_summary": "A product walkthrough of Zelf creator analytics.",
+     "caption": "Caption",
+     "description": "Description",
+     "transcript": "Transcript",
+     "platform_url": "https://example.com/advancedaianalysiscontent/platform_url",
+     "last_keyword": "Last keyword",
+     "ai_summary": "Ai summary",
      "hashtags": [
-      "zelfai",
-      "creatoreconomy"
-     ]
+      "Hashtags"
+     ],
+     "intel": {
+      "sentiment": "positive",
+      "sentiment_score": 0.0425,
+      "stance": "promoting",
+      "themes": [
+       "Themes"
+      ],
+      "gist": "Gist",
+      "price_perception": "expensive",
+      "quality_perception": "low",
+      "love_bucket": "Love bucket",
+      "dislike_bucket": "Dislike bucket",
+      "language": "en",
+      "language_confidence": 0.0425,
+      "speaker": {
+       "on_camera": true,
+       "gender": "male",
+       "age_range": "teens",
+       "ethnicity": "Ethnicity",
+       "setting": "Setting",
+       "confidence": "low"
+      },
+      "signals": {
+       "journey_stage": "starting",
+       "decision_posture": "skeptic",
+       "stigma_signal": "proud_open",
+       "complementary_products": [
+        "Complementary products"
+       ],
+       "competitors_shown": [
+        "Competitors shown"
+       ],
+       "pain_points": [
+        "Pain points"
+       ],
+       "friction_points": [
+        "Friction points"
+       ],
+       "workarounds": [
+        "Workarounds"
+       ],
+       "emotional_tenor": [
+        "Emotional tenor"
+       ],
+       "trust_sources": [
+        "Trust sources"
+       ],
+       "key_moments": [
+        "Key moments"
+       ],
+       "job_hired_for": "Job hired for",
+       "usage_ritual": "Usage ritual",
+       "life_context": "Life context",
+       "switching": "Switching",
+       "churn_switch_driver": "Churn switch driver",
+       "say_show_gap": "Say show gap",
+       "strategist_signal": "Strategist signal",
+       "apparent_geography": "Apparent geography"
+      },
+      "model": "Model",
+      "enriched_at": "2026-01-01T00:00:00Z",
+      "comments": [
+       {
+        "comment_id": 7,
+        "sentiment": "positive",
+        "sentiment_score": 0.0425,
+        "intent": "question",
+        "themes": [
+         "Themes"
+        ],
+        "gist": "Gist",
+        "price_perception": "expensive",
+        "quality_perception": "low",
+        "model": "Model",
+        "enriched_at": "2026-01-01T00:00:00Z"
+       }
+      ]
+     }
     }
    ],
    "item_count": 1,
@@ -2352,7 +2429,6 @@
  },
  "published": [
   "advanced_ai_analysis_content_statistics",
-  "advanced_ai_analysis_contents",
   "advanced_ai_analysis_create",
   "advanced_ai_analysis_list",
   "advanced_ai_analysis_results",
@@ -2394,6 +2470,7 @@
   "usage_retrieve"
  ],
  "synthesized": [
+  "advanced_ai_analysis_contents",
   "webhooks_create_secret",
   "webhooks_create_subscription",
   "webhooks_delete_secret",
@@ -2425,6 +2502,128 @@
      "dashboard_url": "https://example.com/advancedaianalysisrun/dashboard_url"
     }
    ]
+  },
+  "AdvancedAiAnalysisContent": {
+   "id": "id_h6Qxp987shtI8jnk",
+   "platform_post_id": "7665460027683012345",
+   "platform": "tiktok",
+   "content_form": "VIDEO",
+   "thumbnail_url": "https://example.com/advancedaianalysiscontent/thumbnail_url",
+   "posted_at": "2026-01-01T00:00:00Z",
+   "view_count": 327400000,
+   "like_count": 42,
+   "comment_count": 42,
+   "share_count": 42,
+   "total_engagement": 18400,
+   "language": "en",
+   "media_duration": 0.0425,
+   "engagement_rate": 0.0425,
+   "earned_media_value_cents": 12500000,
+   "creator": {
+    "id": "cr_uaS7fhZpqVq7ZiTm",
+    "username": "zelfai",
+    "name": "Name",
+    "platform": "tiktok",
+    "platform_handle": "zelfai",
+    "platform_url": "https://example.com/contentcreator/platform_url",
+    "profile_picture_url": "https://example.com/contentcreator/profile_picture_url",
+    "profile_bio": "Profile bio",
+    "follower_count": 412000,
+    "active_content_count": 42
+   },
+   "brand_id": "brd_YHNPhXtwARqnTSCJ",
+   "net_promoter_score": 7,
+   "is_owned": true,
+   "is_tagged": true,
+   "is_influencer": true,
+   "mention_type": "content",
+   "caption": "Caption",
+   "description": "Description",
+   "transcript": "Transcript",
+   "platform_url": "https://example.com/advancedaianalysiscontent/platform_url",
+   "last_keyword": "Last keyword",
+   "ai_summary": "Ai summary",
+   "hashtags": [
+    "Hashtags"
+   ],
+   "intel": {
+    "sentiment": "positive",
+    "sentiment_score": 0.0425,
+    "stance": "promoting",
+    "themes": [
+     "Themes"
+    ],
+    "gist": "Gist",
+    "price_perception": "expensive",
+    "quality_perception": "low",
+    "love_bucket": "Love bucket",
+    "dislike_bucket": "Dislike bucket",
+    "language": "en",
+    "language_confidence": 0.0425,
+    "speaker": {
+     "on_camera": true,
+     "gender": "male",
+     "age_range": "teens",
+     "ethnicity": "Ethnicity",
+     "setting": "Setting",
+     "confidence": "low"
+    },
+    "signals": {
+     "journey_stage": "starting",
+     "decision_posture": "skeptic",
+     "stigma_signal": "proud_open",
+     "complementary_products": [
+      "Complementary products"
+     ],
+     "competitors_shown": [
+      "Competitors shown"
+     ],
+     "pain_points": [
+      "Pain points"
+     ],
+     "friction_points": [
+      "Friction points"
+     ],
+     "workarounds": [
+      "Workarounds"
+     ],
+     "emotional_tenor": [
+      "Emotional tenor"
+     ],
+     "trust_sources": [
+      "Trust sources"
+     ],
+     "key_moments": [
+      "Key moments"
+     ],
+     "job_hired_for": "Job hired for",
+     "usage_ritual": "Usage ritual",
+     "life_context": "Life context",
+     "switching": "Switching",
+     "churn_switch_driver": "Churn switch driver",
+     "say_show_gap": "Say show gap",
+     "strategist_signal": "Strategist signal",
+     "apparent_geography": "Apparent geography"
+    },
+    "model": "Model",
+    "enriched_at": "2026-01-01T00:00:00Z",
+    "comments": [
+     {
+      "comment_id": 7,
+      "sentiment": "positive",
+      "sentiment_score": 0.0425,
+      "intent": "question",
+      "themes": [
+       "Themes"
+      ],
+      "gist": "Gist",
+      "price_perception": "expensive",
+      "quality_perception": "low",
+      "model": "Model",
+      "enriched_at": "2026-01-01T00:00:00Z"
+     }
+    ]
+   }
   },
   "AdvancedAiAnalysisCreateRequest": {
    "name": "Name",
@@ -3939,6 +4138,20 @@
    "likes": 42,
    "replies": 42
   },
+  "CommentIntel": {
+   "comment_id": 7,
+   "sentiment": "positive",
+   "sentiment_score": 0.0425,
+   "intent": "question",
+   "themes": [
+    "Themes"
+   ],
+   "gist": "Gist",
+   "price_perception": "expensive",
+   "quality_perception": "low",
+   "model": "Model",
+   "enriched_at": "2026-01-01T00:00:00Z"
+  },
   "CommentStatistics": {
    "total_comments_posted": 7,
    "categories": [
@@ -4078,6 +4291,84 @@
    "posted_within_hours": 42,
    "order_by": [
     "Order by"
+   ]
+  },
+  "ContentIntel": {
+   "sentiment": "positive",
+   "sentiment_score": 0.0425,
+   "stance": "promoting",
+   "themes": [
+    "Themes"
+   ],
+   "gist": "Gist",
+   "price_perception": "expensive",
+   "quality_perception": "low",
+   "love_bucket": "Love bucket",
+   "dislike_bucket": "Dislike bucket",
+   "language": "en",
+   "language_confidence": 0.0425,
+   "speaker": {
+    "on_camera": true,
+    "gender": "male",
+    "age_range": "teens",
+    "ethnicity": "Ethnicity",
+    "setting": "Setting",
+    "confidence": "low"
+   },
+   "signals": {
+    "journey_stage": "starting",
+    "decision_posture": "skeptic",
+    "stigma_signal": "proud_open",
+    "complementary_products": [
+     "Complementary products"
+    ],
+    "competitors_shown": [
+     "Competitors shown"
+    ],
+    "pain_points": [
+     "Pain points"
+    ],
+    "friction_points": [
+     "Friction points"
+    ],
+    "workarounds": [
+     "Workarounds"
+    ],
+    "emotional_tenor": [
+     "Emotional tenor"
+    ],
+    "trust_sources": [
+     "Trust sources"
+    ],
+    "key_moments": [
+     "Key moments"
+    ],
+    "job_hired_for": "Job hired for",
+    "usage_ritual": "Usage ritual",
+    "life_context": "Life context",
+    "switching": "Switching",
+    "churn_switch_driver": "Churn switch driver",
+    "say_show_gap": "Say show gap",
+    "strategist_signal": "Strategist signal",
+    "apparent_geography": "Apparent geography"
+   },
+   "model": "Model",
+   "enriched_at": "2026-01-01T00:00:00Z",
+   "comments": [
+    {
+     "comment_id": 7,
+     "sentiment": "positive",
+     "sentiment_score": 0.0425,
+     "intent": "question",
+     "themes": [
+      "Themes"
+     ],
+     "gist": "Gist",
+     "price_perception": "expensive",
+     "quality_perception": "low",
+     "model": "Model",
+     "enriched_at": "2026-01-01T00:00:00Z"
+    }
    ]
   },
   "ContentScopeRequest": {
@@ -4543,6 +4834,51 @@
   "SafetyCheckRequest": {
    "type": "USER_DEFINED_SAFETY_CRITERION",
    "extra": "Extra"
+  },
+  "SignalsIntel": {
+   "journey_stage": "starting",
+   "decision_posture": "skeptic",
+   "stigma_signal": "proud_open",
+   "complementary_products": [
+    "Complementary products"
+   ],
+   "competitors_shown": [
+    "Competitors shown"
+   ],
+   "pain_points": [
+    "Pain points"
+   ],
+   "friction_points": [
+    "Friction points"
+   ],
+   "workarounds": [
+    "Workarounds"
+   ],
+   "emotional_tenor": [
+    "Emotional tenor"
+   ],
+   "trust_sources": [
+    "Trust sources"
+   ],
+   "key_moments": [
+    "Key moments"
+   ],
+   "job_hired_for": "Job hired for",
+   "usage_ritual": "Usage ritual",
+   "life_context": "Life context",
+   "switching": "Switching",
+   "churn_switch_driver": "Churn switch driver",
+   "say_show_gap": "Say show gap",
+   "strategist_signal": "Strategist signal",
+   "apparent_geography": "Apparent geography"
+  },
+  "SpeakerIntel": {
+   "on_camera": true,
+   "gender": "male",
+   "age_range": "teens",
+   "ethnicity": "Ethnicity",
+   "setting": "Setting",
+   "confidence": "low"
   },
   "Usage": {
    "brand_id": "brd_yG3ydHhMNfBbLicm",

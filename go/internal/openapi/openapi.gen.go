@@ -23,16 +23,42 @@ const (
 	AccountTypeEnumTracked    AccountTypeEnum = "tracked"
 )
 
+// Defines values for AgeRangeEnum.
+const (
+	AgeRangeEnumN20s    AgeRangeEnum = "20s"
+	AgeRangeEnumN30s    AgeRangeEnum = "30s"
+	AgeRangeEnumN40s    AgeRangeEnum = "40s"
+	AgeRangeEnumN50s    AgeRangeEnum = "50s"
+	AgeRangeEnumN60plus AgeRangeEnum = "60plus"
+	AgeRangeEnumTeens   AgeRangeEnum = "teens"
+	AgeRangeEnumUnknown AgeRangeEnum = "unknown"
+)
+
 // Defines values for AnalysisScopeEnum.
 const (
 	COMMENT AnalysisScopeEnum = "COMMENT"
 	CONTENT AnalysisScopeEnum = "CONTENT"
 )
 
+// Defines values for ConfidenceEnum.
+const (
+	ConfidenceEnumHigh   ConfidenceEnum = "high"
+	ConfidenceEnumLow    ConfidenceEnum = "low"
+	ConfidenceEnumMedium ConfidenceEnum = "medium"
+)
+
 // Defines values for ContentFormEnum.
 const (
 	ContentFormEnumPHOTO ContentFormEnum = "PHOTO"
 	ContentFormEnumVIDEO ContentFormEnum = "VIDEO"
+)
+
+// Defines values for DecisionPostureEnum.
+const (
+	DecisionPostureEnumEvangelist DecisionPostureEnum = "evangelist"
+	DecisionPostureEnumPragmatic  DecisionPostureEnum = "pragmatic"
+	DecisionPostureEnumSkeptic    DecisionPostureEnum = "skeptic"
+	DecisionPostureEnumUnclear    DecisionPostureEnum = "unclear"
 )
 
 // Defines values for Error400ErrorCode.
@@ -79,6 +105,24 @@ const (
 	SERVICEUNAVAILABLE Error503ErrorCode = "SERVICE_UNAVAILABLE"
 )
 
+// Defines values for GenderEnum.
+const (
+	GenderEnumFemale             GenderEnum = "female"
+	GenderEnumMale               GenderEnum = "male"
+	GenderEnumNonbinaryOrUnclear GenderEnum = "nonbinary_or_unclear"
+	GenderEnumUnknown            GenderEnum = "unknown"
+)
+
+// Defines values for IntentEnum.
+const (
+	Advice     IntentEnum = "advice"
+	Experience IntentEnum = "experience"
+	Objection  IntentEnum = "objection"
+	Other      IntentEnum = "other"
+	Praise     IntentEnum = "praise"
+	Question   IntentEnum = "question"
+)
+
 // Defines values for IntervalHoursEnum.
 const (
 	N12  IntervalHoursEnum = 12
@@ -87,6 +131,17 @@ const (
 	N4   IntervalHoursEnum = 4
 	N6   IntervalHoursEnum = 6
 	N720 IntervalHoursEnum = 720
+)
+
+// Defines values for JourneyStageEnum.
+const (
+	JourneyStageEnumMaintenance JourneyStageEnum = "maintenance"
+	JourneyStageEnumOff         JourneyStageEnum = "off"
+	JourneyStageEnumPlateau     JourneyStageEnum = "plateau"
+	JourneyStageEnumQuitting    JourneyStageEnum = "quitting"
+	JourneyStageEnumRamping     JourneyStageEnum = "ramping"
+	JourneyStageEnumStarting    JourneyStageEnum = "starting"
+	JourneyStageEnumUnclear     JourneyStageEnum = "unclear"
 )
 
 // Defines values for KindEnum.
@@ -114,6 +169,22 @@ const (
 	PlatformEnumYoutube   PlatformEnum = "youtube"
 )
 
+// Defines values for PricePerceptionEnum.
+const (
+	PricePerceptionEnumAffordable PricePerceptionEnum = "affordable"
+	PricePerceptionEnumCheap      PricePerceptionEnum = "cheap"
+	PricePerceptionEnumExpensive  PricePerceptionEnum = "expensive"
+	PricePerceptionEnumNone       PricePerceptionEnum = "none"
+)
+
+// Defines values for QualityPerceptionEnum.
+const (
+	QualityPerceptionEnumExcellent QualityPerceptionEnum = "excellent"
+	QualityPerceptionEnumGood      QualityPerceptionEnum = "good"
+	QualityPerceptionEnumLow       QualityPerceptionEnum = "low"
+	QualityPerceptionEnumNone      QualityPerceptionEnum = "none"
+)
+
 // Defines values for ResourceEnum.
 const (
 	ResourceEnumContent ResourceEnum = "content"
@@ -126,6 +197,23 @@ const (
 	New     SecretTypeEnum = "new"
 )
 
+// Defines values for SentimentEnum.
+const (
+	SentimentEnumMixed    SentimentEnum = "mixed"
+	SentimentEnumNegative SentimentEnum = "negative"
+	SentimentEnumNeutral  SentimentEnum = "neutral"
+	SentimentEnumPositive SentimentEnum = "positive"
+)
+
+// Defines values for StanceEnum.
+const (
+	StanceEnumCautioning    StanceEnum = "cautioning"
+	StanceEnumCritical      StanceEnum = "critical"
+	StanceEnumInformational StanceEnum = "informational"
+	StanceEnumNeutral       StanceEnum = "neutral"
+	StanceEnumPromoting     StanceEnum = "promoting"
+)
+
 // Defines values for StateEnum.
 const (
 	StateEnumEXHAUSTED      StateEnum = "EXHAUSTED"
@@ -133,6 +221,15 @@ const (
 	StateEnumPENDING        StateEnum = "PENDING"
 	StateEnumQUOTAEXHAUSTED StateEnum = "QUOTA_EXHAUSTED"
 	StateEnumSUCCEEDED      StateEnum = "SUCCEEDED"
+)
+
+// Defines values for StigmaSignalEnum.
+const (
+	StigmaSignalEnumDefensive    StigmaSignalEnum = "defensive"
+	StigmaSignalEnumHiding       StigmaSignalEnum = "hiding"
+	StigmaSignalEnumMatterOfFact StigmaSignalEnum = "matter_of_fact"
+	StigmaSignalEnumNone         StigmaSignalEnum = "none"
+	StigmaSignalEnumProudOpen    StigmaSignalEnum = "proud_open"
 )
 
 // Defines values for SubBrandTypeEnum.
@@ -368,6 +465,107 @@ type AdvancedAiAnalysis struct {
 
 	// Topic The subject the analysis focuses on.
 	Topic nullable.Nullable[string] `json:"topic"`
+}
+
+// AdvancedAiAnalysisContent A post the advanced analysis ran over, with its IntelRoom intel.
+type AdvancedAiAnalysisContent struct {
+	// AiSummary Short AI-generated summary of the content.
+	AiSummary nullable.Nullable[string] `json:"ai_summary"`
+
+	// BrandId Identifier of the brand that the brand-specific signals on this row (`is_owned`, `is_tagged`, `is_influencer`, `mention_type`, `net_promoter_score`) are scoped to. Returned as `null` when the request omits `brand_id`.
+	BrandId nullable.Nullable[string] `json:"brand_id"`
+
+	// Caption Short caption or title of the post (the primary user-visible text).
+	Caption string `json:"caption"`
+
+	// CommentCount Total number of comments on the content.
+	CommentCount nullable.Nullable[int] `json:"comment_count"`
+
+	// ContentForm Whether the content is a video or an image.
+	ContentForm nullable.Nullable[string] `json:"content_form"`
+
+	// Creator The creator who published the content.
+	Creator ContentCreator `json:"creator"`
+
+	// Description Long-form description of the post.
+	Description string `json:"description"`
+
+	// EarnedMediaValueCents Estimated marketing value of the content, in US cents.
+	EarnedMediaValueCents nullable.Nullable[int] `json:"earned_media_value_cents"`
+
+	// EngagementRate Engagement per view (likes plus comments plus shares, divided by views). Null when the content has no recorded views.
+	EngagementRate nullable.Nullable[float64] `json:"engagement_rate"`
+
+	// Hashtags Hashtags used in the post, normalized to lowercase and without the leading `#`.
+	Hashtags []string `json:"hashtags"`
+
+	// Id Unique identifier for this piece of content. Use it to retrieve the content anywhere a content id is accepted.
+	Id string `json:"id"`
+
+	// Intel AI enrichment of the post and its comments from the advanced analysis.
+	Intel ContentIntel `json:"intel"`
+
+	// IsInfluencer Whether the scoped brand counts the content as influencer content: it matches the brand's influencer terms, comes from an account on its influencer list, was reported as branded content by the platform, or was marked by hand. Content the brand owns is never influencer content. Returned as `null` when the request omits `brand_id`.
+	IsInfluencer nullable.Nullable[bool] `json:"is_influencer"`
+
+	// IsOwned Whether the scoped brand owns the content; that is, whether it was published by an account the brand controls. Returned as `null` when the request omits `brand_id`.
+	IsOwned nullable.Nullable[bool] `json:"is_owned"`
+
+	// IsTagged Whether the post tags the scoped brand on the platform. Returned as `null` when the request omits `brand_id`.
+	IsTagged nullable.Nullable[bool] `json:"is_tagged"`
+
+	// Language ISO 639 code of the content's primary language.
+	Language nullable.Nullable[string] `json:"language"`
+
+	// LastKeyword What the content was most recently collected under: a hashtag, a creator handle, a search term, or a brand identifier. Null when the content did not arrive through a collection task.
+	LastKeyword nullable.Nullable[string] `json:"last_keyword"`
+
+	// LikeCount Total number of likes the content has received.
+	LikeCount nullable.Nullable[int] `json:"like_count"`
+
+	// MediaDuration Length of the media in seconds. Null when not known.
+	MediaDuration nullable.Nullable[float64] `json:"media_duration"`
+
+	// MentionType How the scoped brand is mentioned in the content. One of `content` or `comment`, or null when the brand is not mentioned. Returned as `null` when the request omits `brand_id`.
+	MentionType nullable.Nullable[string] `json:"mention_type"`
+
+	// NetPromoterScore Net promoter score for the content from the perspective of the scoped brand. Returned as `null` when the request omits `brand_id`.
+	NetPromoterScore nullable.Nullable[int] `json:"net_promoter_score"`
+
+	// Platform The platform the content was published on: `instagram`, `tiktok` or `youtube`.
+	Platform string `json:"platform"`
+
+	// PlatformPostId The post's identifier on its platform. This is the value at the end of the post's URL.
+	//
+	// Examples:
+	// - Instagram: `https://instagram.com/reel/abcd` -> `abcd`
+	// - TikTok: `https://www.tiktok.com/@username/video/12345678` -> `12345678`
+	PlatformPostId string `json:"platform_post_id"`
+
+	// PlatformUrl Direct URL to the post on its platform.
+	//
+	// Examples:
+	// - `https://instagram.com/reel/abcd`
+	// - `https://www.tiktok.com/@username/video/12345678`
+	PlatformUrl string `json:"platform_url"`
+
+	// PostedAt Time the content was originally published on its platform (UTC).
+	PostedAt nullable.Nullable[time.Time] `json:"posted_at"`
+
+	// ShareCount Total number of times the content has been shared.
+	ShareCount nullable.Nullable[int] `json:"share_count"`
+
+	// ThumbnailUrl URL of the content's thumbnail image.
+	ThumbnailUrl nullable.Nullable[string] `json:"thumbnail_url"`
+
+	// TotalEngagement Sum of the likes, comments, and shares the content has received.
+	TotalEngagement nullable.Nullable[int] `json:"total_engagement"`
+
+	// Transcript Transcribed speech from the content's audio, when available.
+	Transcript nullable.Nullable[string] `json:"transcript"`
+
+	// ViewCount Total number of times the content has been viewed.
+	ViewCount nullable.Nullable[int] `json:"view_count"`
 }
 
 // AdvancedAiAnalysisCreateRequest Request body for “POST /api/v1/advanced_ai_analysis/“.
@@ -1179,6 +1377,9 @@ type AdvancedVoiceTotals struct {
 	VideosWithComments Int `json:"videos_with_comments"`
 }
 
+// AgeRangeEnum defines model for AgeRangeEnum.
+type AgeRangeEnum string
+
 // AiAnalysis Response body for the AI analysis root.
 type AiAnalysis struct {
 	// Analyses The runs that make up this analysis, one per scope, ordered newest first.
@@ -1601,6 +1802,59 @@ type CommentCategory struct {
 	Replies int `json:"replies"`
 }
 
+// CommentIntel AI enrichment of one comment on the post.
+type CommentIntel struct {
+	// CommentId ID of the comment.
+	CommentId int `json:"comment_id"`
+
+	// EnrichedAt When the AI enrichment ran.
+	EnrichedAt nullable.Nullable[time.Time] `json:"enriched_at,omitempty"`
+
+	// Gist One-line summary of the comment.
+	Gist nullable.Nullable[string] `json:"gist,omitempty"`
+
+	// Intent Why the commenter wrote the comment.
+	Intent *CommentIntel_Intent `json:"intent,omitempty"`
+
+	// Model The model that enriched the comment.
+	Model nullable.Nullable[string] `json:"model,omitempty"`
+
+	// PricePerception How the comment sees the price.
+	PricePerception *CommentIntel_PricePerception `json:"price_perception,omitempty"`
+
+	// QualityPerception How the comment sees the quality.
+	QualityPerception *CommentIntel_QualityPerception `json:"quality_perception,omitempty"`
+
+	// Sentiment Overall sentiment of the comment.
+	Sentiment *CommentIntel_Sentiment `json:"sentiment,omitempty"`
+
+	// SentimentScore Sentiment from -1 (negative) to 1 (positive).
+	SentimentScore nullable.Nullable[float64] `json:"sentiment_score,omitempty"`
+
+	// Themes Themes the comment touches, from the analysis taxonomy.
+	Themes nullable.Nullable[[]string] `json:"themes,omitempty"`
+}
+
+// CommentIntel_Intent Why the commenter wrote the comment.
+type CommentIntel_Intent struct {
+	union json.RawMessage
+}
+
+// CommentIntel_PricePerception How the comment sees the price.
+type CommentIntel_PricePerception struct {
+	union json.RawMessage
+}
+
+// CommentIntel_QualityPerception How the comment sees the quality.
+type CommentIntel_QualityPerception struct {
+	union json.RawMessage
+}
+
+// CommentIntel_Sentiment Overall sentiment of the comment.
+type CommentIntel_Sentiment struct {
+	union json.RawMessage
+}
+
 // CommentStatistics Comments the brand posted, split by the content they were posted on.
 type CommentStatistics struct {
 	// Categories One entry per category. They add up to `total_comments_posted`.
@@ -1609,6 +1863,9 @@ type CommentStatistics struct {
 	// TotalCommentsPosted Comments the brand posted in the window, across every category.
 	TotalCommentsPosted int `json:"total_comments_posted"`
 }
+
+// ConfidenceEnum defines model for ConfidenceEnum.
+type ConfidenceEnum string
 
 // Content A piece of content (a post, video, or image) and its metrics.
 type Content struct {
@@ -1923,6 +2180,77 @@ type ContentFilterInputRequest struct {
 // ContentFormEnum defines model for ContentFormEnum.
 type ContentFormEnum string
 
+// ContentIntel AI enrichment of the post and its comments from the advanced analysis.
+type ContentIntel struct {
+	// Comments AI enrichment of each analysed comment on the post.
+	Comments *[]CommentIntel `json:"comments,omitempty"`
+
+	// DislikeBucket What the post dislikes about the topic, as a bucket slug.
+	DislikeBucket nullable.Nullable[string] `json:"dislike_bucket,omitempty"`
+
+	// EnrichedAt When the AI enrichment ran.
+	EnrichedAt nullable.Nullable[time.Time] `json:"enriched_at,omitempty"`
+
+	// Gist Short summary of the post.
+	Gist nullable.Nullable[string] `json:"gist,omitempty"`
+
+	// Language Detected language as an ISO code.
+	Language nullable.Nullable[string] `json:"language,omitempty"`
+
+	// LanguageConfidence Confidence of the language detection.
+	LanguageConfidence nullable.Nullable[float64] `json:"language_confidence,omitempty"`
+
+	// LoveBucket What the post loves about the topic, as a bucket slug.
+	LoveBucket nullable.Nullable[string] `json:"love_bucket,omitempty"`
+
+	// Model The model that enriched the post.
+	Model nullable.Nullable[string] `json:"model,omitempty"`
+
+	// PricePerception How the post frames the price.
+	PricePerception *ContentIntel_PricePerception `json:"price_perception,omitempty"`
+
+	// QualityPerception How the post frames the quality.
+	QualityPerception *ContentIntel_QualityPerception `json:"quality_perception,omitempty"`
+
+	// Sentiment Overall sentiment of the post.
+	Sentiment *ContentIntel_Sentiment `json:"sentiment,omitempty"`
+
+	// SentimentScore Sentiment from -1 (negative) to 1 (positive).
+	SentimentScore nullable.Nullable[float64] `json:"sentiment_score,omitempty"`
+
+	// Signals Product and behaviour signals read from the video. AI inferences.
+	Signals *SignalsIntel `json:"signals,omitempty"`
+
+	// Speaker Perceived traits of the main on-camera speaker. AI inferences, not facts.
+	Speaker *SpeakerIntel `json:"speaker,omitempty"`
+
+	// Stance The creator's stance toward the topic.
+	Stance *ContentIntel_Stance `json:"stance,omitempty"`
+
+	// Themes Themes the post covers, from the analysis taxonomy.
+	Themes nullable.Nullable[[]string] `json:"themes,omitempty"`
+}
+
+// ContentIntel_PricePerception How the post frames the price.
+type ContentIntel_PricePerception struct {
+	union json.RawMessage
+}
+
+// ContentIntel_QualityPerception How the post frames the quality.
+type ContentIntel_QualityPerception struct {
+	union json.RawMessage
+}
+
+// ContentIntel_Sentiment Overall sentiment of the post.
+type ContentIntel_Sentiment struct {
+	union json.RawMessage
+}
+
+// ContentIntel_Stance The creator's stance toward the topic.
+type ContentIntel_Stance struct {
+	union json.RawMessage
+}
+
 // ContentScopeRequest Specifies which of the creator's content relationships feed the analysis.
 //
 // Flags that are omitted default to owned content only.
@@ -2156,6 +2484,9 @@ type CreatorVettingRun struct {
 	// Status Status of the analysis. One of `IN_PROGRESS`, `COMPLETED`, `EMPTY_RESULT` (finished with no matching content), or `FAILED`.
 	Status string `json:"status"`
 }
+
+// DecisionPostureEnum defines model for DecisionPostureEnum.
+type DecisionPostureEnum string
 
 // Detection One brand placement detection run.
 type Detection struct {
@@ -2479,8 +2810,17 @@ type FollowerTimeseries struct {
 	Periods []FollowerPeriod `json:"periods"`
 }
 
+// GenderEnum defines model for GenderEnum.
+type GenderEnum string
+
+// IntentEnum defines model for IntentEnum.
+type IntentEnum string
+
 // IntervalHoursEnum defines model for IntervalHoursEnum.
 type IntervalHoursEnum int
+
+// JourneyStageEnum defines model for JourneyStageEnum.
+type JourneyStageEnum string
 
 // KindEnum defines model for KindEnum.
 type KindEnum string
@@ -2502,6 +2842,9 @@ type MentionTypeEnum string
 
 // NullEnum defines model for NullEnum.
 type NullEnum = interface{}
+
+// PaginatedAdvancedAiAnalysisContentList Paginated response envelope. `results` holds this page of `AdvancedAiAnalysisContent` objects; the envelope fields (`log_id`, `timestamp`, `item_count`, `page`, `next`, `previous`) are described under Response shape.
+type PaginatedAdvancedAiAnalysisContentList = []AdvancedAiAnalysisContent
 
 // PaginatedAdvancedAiAnalysisList Paginated response envelope. `results` holds this page of `AdvancedAiAnalysis` objects; the envelope fields (`log_id`, `timestamp`, `item_count`, `page`, `next`, `previous`) are described under Response shape.
 type PaginatedAdvancedAiAnalysisList = []AdvancedAiAnalysis
@@ -2628,6 +2971,12 @@ type PatchedWebhookSubscriptionUpdateRequest_IntervalHours struct {
 // PlatformEnum defines model for PlatformEnum.
 type PlatformEnum string
 
+// PricePerceptionEnum defines model for PricePerceptionEnum.
+type PricePerceptionEnum string
+
+// QualityPerceptionEnum defines model for QualityPerceptionEnum.
+type QualityPerceptionEnum string
+
 // ResourceEnum defines model for ResourceEnum.
 type ResourceEnum string
 
@@ -2661,8 +3010,128 @@ type SafetyCheckRequest struct {
 // SecretTypeEnum defines model for SecretTypeEnum.
 type SecretTypeEnum string
 
+// SentimentEnum defines model for SentimentEnum.
+type SentimentEnum string
+
+// SignalsIntel Product and behaviour signals read from the video. AI inferences.
+type SignalsIntel struct {
+	// ApparentGeography Perceived location of the speaker.
+	ApparentGeography nullable.Nullable[string] `json:"apparent_geography,omitempty"`
+
+	// ChurnSwitchDriver Why the speaker would leave or switch.
+	ChurnSwitchDriver nullable.Nullable[string] `json:"churn_switch_driver,omitempty"`
+
+	// CompetitorsShown Rival products shown, compared or switched to.
+	CompetitorsShown nullable.Nullable[[]string] `json:"competitors_shown,omitempty"`
+
+	// ComplementaryProducts Products used alongside the subject.
+	ComplementaryProducts nullable.Nullable[[]string] `json:"complementary_products,omitempty"`
+
+	// DecisionPosture How the speaker approaches the buying decision.
+	DecisionPosture *SignalsIntel_DecisionPosture `json:"decision_posture,omitempty"`
+
+	// EmotionalTenor The emotions the video conveys.
+	EmotionalTenor nullable.Nullable[[]string] `json:"emotional_tenor,omitempty"`
+
+	// FrictionPoints Moments where using the product is difficult.
+	FrictionPoints nullable.Nullable[[]string] `json:"friction_points,omitempty"`
+
+	// JobHiredFor The job the speaker uses the product for.
+	JobHiredFor nullable.Nullable[string] `json:"job_hired_for,omitempty"`
+
+	// JourneyStage Where the speaker is in their journey with the product.
+	JourneyStage *SignalsIntel_JourneyStage `json:"journey_stage,omitempty"`
+
+	// KeyMoments Notable moments in the video.
+	KeyMoments nullable.Nullable[[]string] `json:"key_moments,omitempty"`
+
+	// LifeContext The speaker's life situation around the product.
+	LifeContext nullable.Nullable[string] `json:"life_context,omitempty"`
+
+	// PainPoints What is hard, broken or disliked.
+	PainPoints nullable.Nullable[[]string] `json:"pain_points,omitempty"`
+
+	// SayShowGap Where what the speaker says differs from what they show.
+	SayShowGap nullable.Nullable[string] `json:"say_show_gap,omitempty"`
+
+	// StigmaSignal How openly the speaker talks about using the product.
+	StigmaSignal *SignalsIntel_StigmaSignal `json:"stigma_signal,omitempty"`
+
+	// StrategistSignal The main takeaway for a brand strategist.
+	StrategistSignal nullable.Nullable[string] `json:"strategist_signal,omitempty"`
+
+	// Switching Any switch to or from another product.
+	Switching nullable.Nullable[string] `json:"switching,omitempty"`
+
+	// TrustSources Sources the speaker trusts or cites.
+	TrustSources nullable.Nullable[[]string] `json:"trust_sources,omitempty"`
+
+	// UsageRitual How and when the speaker uses the product.
+	UsageRitual nullable.Nullable[string] `json:"usage_ritual,omitempty"`
+
+	// Workarounds Ways the speaker works around a problem.
+	Workarounds nullable.Nullable[[]string] `json:"workarounds,omitempty"`
+}
+
+// SignalsIntel_DecisionPosture How the speaker approaches the buying decision.
+type SignalsIntel_DecisionPosture struct {
+	union json.RawMessage
+}
+
+// SignalsIntel_JourneyStage Where the speaker is in their journey with the product.
+type SignalsIntel_JourneyStage struct {
+	union json.RawMessage
+}
+
+// SignalsIntel_StigmaSignal How openly the speaker talks about using the product.
+type SignalsIntel_StigmaSignal struct {
+	union json.RawMessage
+}
+
+// SpeakerIntel Perceived traits of the main on-camera speaker. AI inferences, not facts.
+type SpeakerIntel struct {
+	// AgeRange Perceived age range of the speaker.
+	AgeRange *SpeakerIntel_AgeRange `json:"age_range,omitempty"`
+
+	// Confidence How confident the model is.
+	Confidence *SpeakerIntel_Confidence `json:"confidence,omitempty"`
+
+	// Ethnicity Perceived ethnicity of the speaker.
+	Ethnicity nullable.Nullable[string] `json:"ethnicity,omitempty"`
+
+	// Gender Perceived gender of the main speaker.
+	Gender *SpeakerIntel_Gender `json:"gender,omitempty"`
+
+	// OnCamera Whether a specific person appears or speaks on camera.
+	OnCamera nullable.Nullable[bool] `json:"on_camera,omitempty"`
+
+	// Setting Where the video was filmed, such as `home` or `gym`.
+	Setting nullable.Nullable[string] `json:"setting,omitempty"`
+}
+
+// SpeakerIntel_AgeRange Perceived age range of the speaker.
+type SpeakerIntel_AgeRange struct {
+	union json.RawMessage
+}
+
+// SpeakerIntel_Confidence How confident the model is.
+type SpeakerIntel_Confidence struct {
+	union json.RawMessage
+}
+
+// SpeakerIntel_Gender Perceived gender of the main speaker.
+type SpeakerIntel_Gender struct {
+	union json.RawMessage
+}
+
+// StanceEnum defines model for StanceEnum.
+type StanceEnum string
+
 // StateEnum defines model for StateEnum.
 type StateEnum string
+
+// StigmaSignalEnum defines model for StigmaSignalEnum.
+type StigmaSignalEnum string
 
 // SubBrandTypeEnum defines model for SubBrandTypeEnum.
 type SubBrandTypeEnum string
@@ -4084,6 +4553,502 @@ type WebhooksUpdateSubscriptionFormdataRequestBody = PatchedWebhookSubscriptionU
 // WebhooksUpdateSubscriptionMultipartRequestBody defines body for WebhooksUpdateSubscription for multipart/form-data ContentType.
 type WebhooksUpdateSubscriptionMultipartRequestBody = PatchedWebhookSubscriptionUpdateRequest
 
+// AsIntentEnum returns the union data inside the CommentIntel_Intent as a IntentEnum
+func (t CommentIntel_Intent) AsIntentEnum() (IntentEnum, error) {
+	var body IntentEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromIntentEnum overwrites any union data inside the CommentIntel_Intent as the provided IntentEnum
+func (t *CommentIntel_Intent) FromIntentEnum(v IntentEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeIntentEnum performs a merge with any union data inside the CommentIntel_Intent, using the provided IntentEnum
+func (t *CommentIntel_Intent) MergeIntentEnum(v IntentEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the CommentIntel_Intent as a NullEnum
+func (t CommentIntel_Intent) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the CommentIntel_Intent as the provided NullEnum
+func (t *CommentIntel_Intent) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the CommentIntel_Intent, using the provided NullEnum
+func (t *CommentIntel_Intent) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t CommentIntel_Intent) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *CommentIntel_Intent) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsPricePerceptionEnum returns the union data inside the CommentIntel_PricePerception as a PricePerceptionEnum
+func (t CommentIntel_PricePerception) AsPricePerceptionEnum() (PricePerceptionEnum, error) {
+	var body PricePerceptionEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromPricePerceptionEnum overwrites any union data inside the CommentIntel_PricePerception as the provided PricePerceptionEnum
+func (t *CommentIntel_PricePerception) FromPricePerceptionEnum(v PricePerceptionEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergePricePerceptionEnum performs a merge with any union data inside the CommentIntel_PricePerception, using the provided PricePerceptionEnum
+func (t *CommentIntel_PricePerception) MergePricePerceptionEnum(v PricePerceptionEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the CommentIntel_PricePerception as a NullEnum
+func (t CommentIntel_PricePerception) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the CommentIntel_PricePerception as the provided NullEnum
+func (t *CommentIntel_PricePerception) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the CommentIntel_PricePerception, using the provided NullEnum
+func (t *CommentIntel_PricePerception) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t CommentIntel_PricePerception) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *CommentIntel_PricePerception) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsQualityPerceptionEnum returns the union data inside the CommentIntel_QualityPerception as a QualityPerceptionEnum
+func (t CommentIntel_QualityPerception) AsQualityPerceptionEnum() (QualityPerceptionEnum, error) {
+	var body QualityPerceptionEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromQualityPerceptionEnum overwrites any union data inside the CommentIntel_QualityPerception as the provided QualityPerceptionEnum
+func (t *CommentIntel_QualityPerception) FromQualityPerceptionEnum(v QualityPerceptionEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeQualityPerceptionEnum performs a merge with any union data inside the CommentIntel_QualityPerception, using the provided QualityPerceptionEnum
+func (t *CommentIntel_QualityPerception) MergeQualityPerceptionEnum(v QualityPerceptionEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the CommentIntel_QualityPerception as a NullEnum
+func (t CommentIntel_QualityPerception) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the CommentIntel_QualityPerception as the provided NullEnum
+func (t *CommentIntel_QualityPerception) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the CommentIntel_QualityPerception, using the provided NullEnum
+func (t *CommentIntel_QualityPerception) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t CommentIntel_QualityPerception) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *CommentIntel_QualityPerception) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsSentimentEnum returns the union data inside the CommentIntel_Sentiment as a SentimentEnum
+func (t CommentIntel_Sentiment) AsSentimentEnum() (SentimentEnum, error) {
+	var body SentimentEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromSentimentEnum overwrites any union data inside the CommentIntel_Sentiment as the provided SentimentEnum
+func (t *CommentIntel_Sentiment) FromSentimentEnum(v SentimentEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeSentimentEnum performs a merge with any union data inside the CommentIntel_Sentiment, using the provided SentimentEnum
+func (t *CommentIntel_Sentiment) MergeSentimentEnum(v SentimentEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the CommentIntel_Sentiment as a NullEnum
+func (t CommentIntel_Sentiment) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the CommentIntel_Sentiment as the provided NullEnum
+func (t *CommentIntel_Sentiment) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the CommentIntel_Sentiment, using the provided NullEnum
+func (t *CommentIntel_Sentiment) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t CommentIntel_Sentiment) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *CommentIntel_Sentiment) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsPricePerceptionEnum returns the union data inside the ContentIntel_PricePerception as a PricePerceptionEnum
+func (t ContentIntel_PricePerception) AsPricePerceptionEnum() (PricePerceptionEnum, error) {
+	var body PricePerceptionEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromPricePerceptionEnum overwrites any union data inside the ContentIntel_PricePerception as the provided PricePerceptionEnum
+func (t *ContentIntel_PricePerception) FromPricePerceptionEnum(v PricePerceptionEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergePricePerceptionEnum performs a merge with any union data inside the ContentIntel_PricePerception, using the provided PricePerceptionEnum
+func (t *ContentIntel_PricePerception) MergePricePerceptionEnum(v PricePerceptionEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the ContentIntel_PricePerception as a NullEnum
+func (t ContentIntel_PricePerception) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the ContentIntel_PricePerception as the provided NullEnum
+func (t *ContentIntel_PricePerception) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the ContentIntel_PricePerception, using the provided NullEnum
+func (t *ContentIntel_PricePerception) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t ContentIntel_PricePerception) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *ContentIntel_PricePerception) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsQualityPerceptionEnum returns the union data inside the ContentIntel_QualityPerception as a QualityPerceptionEnum
+func (t ContentIntel_QualityPerception) AsQualityPerceptionEnum() (QualityPerceptionEnum, error) {
+	var body QualityPerceptionEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromQualityPerceptionEnum overwrites any union data inside the ContentIntel_QualityPerception as the provided QualityPerceptionEnum
+func (t *ContentIntel_QualityPerception) FromQualityPerceptionEnum(v QualityPerceptionEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeQualityPerceptionEnum performs a merge with any union data inside the ContentIntel_QualityPerception, using the provided QualityPerceptionEnum
+func (t *ContentIntel_QualityPerception) MergeQualityPerceptionEnum(v QualityPerceptionEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the ContentIntel_QualityPerception as a NullEnum
+func (t ContentIntel_QualityPerception) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the ContentIntel_QualityPerception as the provided NullEnum
+func (t *ContentIntel_QualityPerception) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the ContentIntel_QualityPerception, using the provided NullEnum
+func (t *ContentIntel_QualityPerception) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t ContentIntel_QualityPerception) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *ContentIntel_QualityPerception) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsSentimentEnum returns the union data inside the ContentIntel_Sentiment as a SentimentEnum
+func (t ContentIntel_Sentiment) AsSentimentEnum() (SentimentEnum, error) {
+	var body SentimentEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromSentimentEnum overwrites any union data inside the ContentIntel_Sentiment as the provided SentimentEnum
+func (t *ContentIntel_Sentiment) FromSentimentEnum(v SentimentEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeSentimentEnum performs a merge with any union data inside the ContentIntel_Sentiment, using the provided SentimentEnum
+func (t *ContentIntel_Sentiment) MergeSentimentEnum(v SentimentEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the ContentIntel_Sentiment as a NullEnum
+func (t ContentIntel_Sentiment) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the ContentIntel_Sentiment as the provided NullEnum
+func (t *ContentIntel_Sentiment) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the ContentIntel_Sentiment, using the provided NullEnum
+func (t *ContentIntel_Sentiment) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t ContentIntel_Sentiment) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *ContentIntel_Sentiment) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsStanceEnum returns the union data inside the ContentIntel_Stance as a StanceEnum
+func (t ContentIntel_Stance) AsStanceEnum() (StanceEnum, error) {
+	var body StanceEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromStanceEnum overwrites any union data inside the ContentIntel_Stance as the provided StanceEnum
+func (t *ContentIntel_Stance) FromStanceEnum(v StanceEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeStanceEnum performs a merge with any union data inside the ContentIntel_Stance, using the provided StanceEnum
+func (t *ContentIntel_Stance) MergeStanceEnum(v StanceEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the ContentIntel_Stance as a NullEnum
+func (t ContentIntel_Stance) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the ContentIntel_Stance as the provided NullEnum
+func (t *ContentIntel_Stance) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the ContentIntel_Stance, using the provided NullEnum
+func (t *ContentIntel_Stance) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t ContentIntel_Stance) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *ContentIntel_Stance) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
 // AsIntervalHoursEnum returns the union data inside the PatchedWebhookSubscriptionUpdateRequest_IntervalHours as a IntervalHoursEnum
 func (t PatchedWebhookSubscriptionUpdateRequest_IntervalHours) AsIntervalHoursEnum() (IntervalHoursEnum, error) {
 	var body IntervalHoursEnum
@@ -4142,6 +5107,378 @@ func (t PatchedWebhookSubscriptionUpdateRequest_IntervalHours) MarshalJSON() ([]
 }
 
 func (t *PatchedWebhookSubscriptionUpdateRequest_IntervalHours) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsDecisionPostureEnum returns the union data inside the SignalsIntel_DecisionPosture as a DecisionPostureEnum
+func (t SignalsIntel_DecisionPosture) AsDecisionPostureEnum() (DecisionPostureEnum, error) {
+	var body DecisionPostureEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromDecisionPostureEnum overwrites any union data inside the SignalsIntel_DecisionPosture as the provided DecisionPostureEnum
+func (t *SignalsIntel_DecisionPosture) FromDecisionPostureEnum(v DecisionPostureEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeDecisionPostureEnum performs a merge with any union data inside the SignalsIntel_DecisionPosture, using the provided DecisionPostureEnum
+func (t *SignalsIntel_DecisionPosture) MergeDecisionPostureEnum(v DecisionPostureEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the SignalsIntel_DecisionPosture as a NullEnum
+func (t SignalsIntel_DecisionPosture) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the SignalsIntel_DecisionPosture as the provided NullEnum
+func (t *SignalsIntel_DecisionPosture) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the SignalsIntel_DecisionPosture, using the provided NullEnum
+func (t *SignalsIntel_DecisionPosture) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t SignalsIntel_DecisionPosture) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *SignalsIntel_DecisionPosture) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsJourneyStageEnum returns the union data inside the SignalsIntel_JourneyStage as a JourneyStageEnum
+func (t SignalsIntel_JourneyStage) AsJourneyStageEnum() (JourneyStageEnum, error) {
+	var body JourneyStageEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromJourneyStageEnum overwrites any union data inside the SignalsIntel_JourneyStage as the provided JourneyStageEnum
+func (t *SignalsIntel_JourneyStage) FromJourneyStageEnum(v JourneyStageEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeJourneyStageEnum performs a merge with any union data inside the SignalsIntel_JourneyStage, using the provided JourneyStageEnum
+func (t *SignalsIntel_JourneyStage) MergeJourneyStageEnum(v JourneyStageEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the SignalsIntel_JourneyStage as a NullEnum
+func (t SignalsIntel_JourneyStage) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the SignalsIntel_JourneyStage as the provided NullEnum
+func (t *SignalsIntel_JourneyStage) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the SignalsIntel_JourneyStage, using the provided NullEnum
+func (t *SignalsIntel_JourneyStage) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t SignalsIntel_JourneyStage) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *SignalsIntel_JourneyStage) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsStigmaSignalEnum returns the union data inside the SignalsIntel_StigmaSignal as a StigmaSignalEnum
+func (t SignalsIntel_StigmaSignal) AsStigmaSignalEnum() (StigmaSignalEnum, error) {
+	var body StigmaSignalEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromStigmaSignalEnum overwrites any union data inside the SignalsIntel_StigmaSignal as the provided StigmaSignalEnum
+func (t *SignalsIntel_StigmaSignal) FromStigmaSignalEnum(v StigmaSignalEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeStigmaSignalEnum performs a merge with any union data inside the SignalsIntel_StigmaSignal, using the provided StigmaSignalEnum
+func (t *SignalsIntel_StigmaSignal) MergeStigmaSignalEnum(v StigmaSignalEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the SignalsIntel_StigmaSignal as a NullEnum
+func (t SignalsIntel_StigmaSignal) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the SignalsIntel_StigmaSignal as the provided NullEnum
+func (t *SignalsIntel_StigmaSignal) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the SignalsIntel_StigmaSignal, using the provided NullEnum
+func (t *SignalsIntel_StigmaSignal) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t SignalsIntel_StigmaSignal) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *SignalsIntel_StigmaSignal) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsAgeRangeEnum returns the union data inside the SpeakerIntel_AgeRange as a AgeRangeEnum
+func (t SpeakerIntel_AgeRange) AsAgeRangeEnum() (AgeRangeEnum, error) {
+	var body AgeRangeEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromAgeRangeEnum overwrites any union data inside the SpeakerIntel_AgeRange as the provided AgeRangeEnum
+func (t *SpeakerIntel_AgeRange) FromAgeRangeEnum(v AgeRangeEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeAgeRangeEnum performs a merge with any union data inside the SpeakerIntel_AgeRange, using the provided AgeRangeEnum
+func (t *SpeakerIntel_AgeRange) MergeAgeRangeEnum(v AgeRangeEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the SpeakerIntel_AgeRange as a NullEnum
+func (t SpeakerIntel_AgeRange) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the SpeakerIntel_AgeRange as the provided NullEnum
+func (t *SpeakerIntel_AgeRange) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the SpeakerIntel_AgeRange, using the provided NullEnum
+func (t *SpeakerIntel_AgeRange) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t SpeakerIntel_AgeRange) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *SpeakerIntel_AgeRange) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsConfidenceEnum returns the union data inside the SpeakerIntel_Confidence as a ConfidenceEnum
+func (t SpeakerIntel_Confidence) AsConfidenceEnum() (ConfidenceEnum, error) {
+	var body ConfidenceEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromConfidenceEnum overwrites any union data inside the SpeakerIntel_Confidence as the provided ConfidenceEnum
+func (t *SpeakerIntel_Confidence) FromConfidenceEnum(v ConfidenceEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeConfidenceEnum performs a merge with any union data inside the SpeakerIntel_Confidence, using the provided ConfidenceEnum
+func (t *SpeakerIntel_Confidence) MergeConfidenceEnum(v ConfidenceEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the SpeakerIntel_Confidence as a NullEnum
+func (t SpeakerIntel_Confidence) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the SpeakerIntel_Confidence as the provided NullEnum
+func (t *SpeakerIntel_Confidence) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the SpeakerIntel_Confidence, using the provided NullEnum
+func (t *SpeakerIntel_Confidence) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t SpeakerIntel_Confidence) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *SpeakerIntel_Confidence) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsGenderEnum returns the union data inside the SpeakerIntel_Gender as a GenderEnum
+func (t SpeakerIntel_Gender) AsGenderEnum() (GenderEnum, error) {
+	var body GenderEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromGenderEnum overwrites any union data inside the SpeakerIntel_Gender as the provided GenderEnum
+func (t *SpeakerIntel_Gender) FromGenderEnum(v GenderEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeGenderEnum performs a merge with any union data inside the SpeakerIntel_Gender, using the provided GenderEnum
+func (t *SpeakerIntel_Gender) MergeGenderEnum(v GenderEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsNullEnum returns the union data inside the SpeakerIntel_Gender as a NullEnum
+func (t SpeakerIntel_Gender) AsNullEnum() (NullEnum, error) {
+	var body NullEnum
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromNullEnum overwrites any union data inside the SpeakerIntel_Gender as the provided NullEnum
+func (t *SpeakerIntel_Gender) FromNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeNullEnum performs a merge with any union data inside the SpeakerIntel_Gender, using the provided NullEnum
+func (t *SpeakerIntel_Gender) MergeNullEnum(v NullEnum) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t SpeakerIntel_Gender) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *SpeakerIntel_Gender) UnmarshalJSON(b []byte) error {
 	err := t.union.UnmarshalJSON(b)
 	return err
 }

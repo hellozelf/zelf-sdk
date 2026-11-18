@@ -26,7 +26,9 @@ module Zelf
       # over, in the standard content shape. Use it to inspect the exact posts included in
       # an analysis. Requires `analysis_id` (an analysis `id` from
       # `advanced_ai_analysis.list`). Brand-scoped fields (`is_owned`, `is_tagged`,
-      # `net_promoter_score`, ...) are `null` in this response.
+      # `net_promoter_score`, ...) are `null` in this response. Each post carries `intel`:
+      # the AI enrichment of the post (sentiment, stance, themes, perception, speaker,
+      # signals) and of each of its comments, `null` until the analysis completes.
       #
       # Calls GET /api/v1/advanced_ai_analysis/contents/ (advanced_ai_analysis.contents).
       def contents(analysis_id:, page: nil, page_size: nil)
@@ -37,7 +39,7 @@ module Zelf
         }.reject { |_, value| value.nil? }
         envelope = @transport.request(:get, "/api/v1/advanced_ai_analysis/contents/", query: query)
         path = @transport.resolve_path("/api/v1/advanced_ai_analysis/contents/".dup, {})
-        Zelf::Page.new(envelope, Models::Content, @transport, path, query)
+        Zelf::Page.new(envelope, Models::AdvancedAiAnalysisContent, @transport, path, query)
       end
 
       # Create Advanced AI Analysis. Starts an advanced AI analysis over the content matched
