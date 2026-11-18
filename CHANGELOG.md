@@ -10,6 +10,26 @@ generated from, which has a version of its own.
 Entries below this line are written by `codegen/pipeline.py` from the
 structural diff between releases.
 
+## 1.5.0
+
+### Added
+- `AdvancedAiAnalysisContent`
+- `CommentIntel`
+- `ContentIntel`
+- `SignalsIntel`
+- `SpeakerIntel`
+- `AgeRangeEnum`
+- `ConfidenceEnum`
+- `DecisionPostureEnum`
+- `GenderEnum`
+- `IntentEnum`
+- `JourneyStageEnum`
+- `PricePerceptionEnum`
+- `QualityPerceptionEnum`
+- `SentimentEnum`
+- `StanceEnum`
+- `StigmaSignalEnum`
+
 ## 1.4.2
 
 ### Fixed

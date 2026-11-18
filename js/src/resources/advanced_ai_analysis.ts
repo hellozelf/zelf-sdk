@@ -4,8 +4,8 @@ import type { Transport } from '../transport.js'
 import { Page, one } from '../pagination.js'
 import type {
   AdvancedAiAnalysis,
+  AdvancedAiAnalysisContent,
   AdvancedAiAnalysisResult,
-  Content,
   ContentFilterInputRequest,
   ContentStatistics,
 } from '../models.js'
@@ -127,28 +127,31 @@ export class AdvancedAiAnalysisResource {
    * in the standard content shape. Use it to inspect the exact posts included in an
    * analysis. Requires `analysis_id` (an analysis `id` from `advanced_ai_analysis.list`).
    * Brand-scoped fields (`is_owned`, `is_tagged`, `net_promoter_score`, ...) are `null` in
-   * this response.
+   * this response. Each post carries `intel`: the AI enrichment of the post (sentiment,
+   * stance, themes, perception, speaker, signals) and of each of its comments, `null` until
+   * the analysis completes.
    * @see `advanced_ai_analysis.contents` - GET /api/v1/advanced_ai_analysis/contents/
    */
   async contents(
     params: AdvancedAiAnalysisContentsParams,
     options?: { signal?: AbortSignal },
-  ): Promise<Page<Content>> {
+  ): Promise<Page<AdvancedAiAnalysisContent>> {
     const query = {
       analysis_id: params.analysisId,
       page: params.page,
       page_size: params.pageSize,
     }
-    const envelope = await this.transport.request<Content>(
+    const envelope = await this.transport.request<AdvancedAiAnalysisContent>(
       'GET',
       '/api/v1/advanced_ai_analysis/contents/',
       { query, signal: options?.signal },
     )
     return new Page(envelope, (page) =>
-      this.transport.request<Content>('GET', '/api/v1/advanced_ai_analysis/contents/', {
-        query: { ...query, page },
-        signal: options?.signal,
-      }),
+      this.transport.request<AdvancedAiAnalysisContent>(
+        'GET',
+        '/api/v1/advanced_ai_analysis/contents/',
+        { query: { ...query, page }, signal: options?.signal },
+      ),
     )
   }
 

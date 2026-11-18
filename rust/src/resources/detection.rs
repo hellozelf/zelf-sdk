@@ -5,9 +5,9 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::models::{Detection, DetectionContextInputRequest};
-use crate::page::{one, Page};
+use crate::page::{Page, one};
 use crate::transport::{Envelope, Transport};
+use crate::models::{Detection, DetectionContextInputRequest};
 
 /// Parameters for detection.create.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -74,19 +74,11 @@ impl DetectionResource {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(
-            serde_json::to_value(&params)
-                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
-        );
-        let envelope: Envelope<Detection> = self
-            .transport
-            .request(
-                Method::POST,
-                "/api/v1/detection/",
-                &path_params,
-                &query,
-                body,
-            )
+        let body = Some(serde_json::to_value(&params).map_err(|source| {
+            crate::error::Error::Decode { status: 0, source }
+        })?);
+        let envelope: Envelope<Detection> = self.transport
+            .request(Method::POST, "/api/v1/detection/", &path_params, &query, body)
             .await?;
         one(envelope, "Detection")
     }
@@ -112,15 +104,8 @@ impl DetectionResource {
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [("id", id)];
         let body = None;
-        let envelope: Envelope<Detection> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/detection/{id}/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<Detection> = self.transport
+            .request(Method::GET, "/api/v1/detection/{id}/", &path_params, &query, body)
             .await?;
         one(envelope, "Detection")
     }
@@ -133,27 +118,14 @@ impl DetectionResource {
     pub async fn list(&self, params: DetectionListParams) -> Result<Page<Detection>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.page {
-            query.push(("page".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.page_size {
-            query.push(("page_size".to_string(), value.to_string()));
-        }
+        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
+        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<Detection> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/detection/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<Detection> = self.transport
+            .request(Method::GET, "/api/v1/detection/", &path_params, &query, body)
             .await?;
-        let path = self
-            .transport
-            .resolve_path("/api/v1/detection/", &path_params)?;
+        let path = self.transport.resolve_path("/api/v1/detection/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 }

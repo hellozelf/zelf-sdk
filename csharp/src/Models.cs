@@ -18,6 +18,23 @@ public static class AccountTypeEnum
 }
 
 /// <summary>
+/// Accepted values for AgeRangeEnum.
+/// </summary>
+public static class AgeRangeEnum
+{
+    public const string Teens = "teens";
+    public const string 20s = "20s";
+    public const string 30s = "30s";
+    public const string 40s = "40s";
+    public const string 50s = "50s";
+    public const string 60plus = "60plus";
+    public const string Unknown = "unknown";
+
+    /// <summary>Every value the API accepts here.</summary>
+    public static readonly IReadOnlyList<string> All = [Teens, 20s, 30s, 40s, 50s, 60plus, Unknown];
+}
+
+/// <summary>
 /// Accepted values for AnalysisScopeEnum.
 /// </summary>
 public static class AnalysisScopeEnum
@@ -41,6 +58,19 @@ public static class BlankEnum
 }
 
 /// <summary>
+/// Accepted values for ConfidenceEnum.
+/// </summary>
+public static class ConfidenceEnum
+{
+    public const string Low = "low";
+    public const string Medium = "medium";
+    public const string High = "high";
+
+    /// <summary>Every value the API accepts here.</summary>
+    public static readonly IReadOnlyList<string> All = [Low, Medium, High];
+}
+
+/// <summary>
 /// Accepted values for ContentFormEnum.
 /// </summary>
 public static class ContentFormEnum
@@ -50,6 +80,67 @@ public static class ContentFormEnum
 
     /// <summary>Every value the API accepts here.</summary>
     public static readonly IReadOnlyList<string> All = [Video, Photo];
+}
+
+/// <summary>
+/// Accepted values for DecisionPostureEnum.
+/// </summary>
+public static class DecisionPostureEnum
+{
+    public const string Skeptic = "skeptic";
+    public const string Pragmatic = "pragmatic";
+    public const string Evangelist = "evangelist";
+    public const string Unclear = "unclear";
+
+    /// <summary>Every value the API accepts here.</summary>
+    public static readonly IReadOnlyList<string> All = [Skeptic, Pragmatic, Evangelist, Unclear];
+}
+
+/// <summary>
+/// Accepted values for GenderEnum.
+/// </summary>
+public static class GenderEnum
+{
+    public const string Male = "male";
+    public const string Female = "female";
+    public const string NonbinaryOrUnclear = "nonbinary_or_unclear";
+    public const string Unknown = "unknown";
+
+    /// <summary>Every value the API accepts here.</summary>
+    public static readonly IReadOnlyList<string> All = [Male, Female, NonbinaryOrUnclear, Unknown];
+}
+
+/// <summary>
+/// Accepted values for IntentEnum.
+/// </summary>
+public static class IntentEnum
+{
+    public const string Question = "question";
+    public const string Objection = "objection";
+    public const string Experience = "experience";
+    public const string Praise = "praise";
+    public const string Advice = "advice";
+    public const string Other = "other";
+
+    /// <summary>Every value the API accepts here.</summary>
+    public static readonly IReadOnlyList<string> All = [Question, Objection, Experience, Praise, Advice, Other];
+}
+
+/// <summary>
+/// Accepted values for JourneyStageEnum.
+/// </summary>
+public static class JourneyStageEnum
+{
+    public const string Starting = "starting";
+    public const string Ramping = "ramping";
+    public const string Plateau = "plateau";
+    public const string Maintenance = "maintenance";
+    public const string Quitting = "quitting";
+    public const string Off = "off";
+    public const string Unclear = "unclear";
+
+    /// <summary>Every value the API accepts here.</summary>
+    public static readonly IReadOnlyList<string> All = [Starting, Ramping, Plateau, Maintenance, Quitting, Off, Unclear];
 }
 
 /// <summary>
@@ -102,6 +193,34 @@ public static class PlatformEnum
 }
 
 /// <summary>
+/// Accepted values for PricePerceptionEnum.
+/// </summary>
+public static class PricePerceptionEnum
+{
+    public const string Expensive = "expensive";
+    public const string Affordable = "affordable";
+    public const string Cheap = "cheap";
+    public const string None = "none";
+
+    /// <summary>Every value the API accepts here.</summary>
+    public static readonly IReadOnlyList<string> All = [Expensive, Affordable, Cheap, None];
+}
+
+/// <summary>
+/// Accepted values for QualityPerceptionEnum.
+/// </summary>
+public static class QualityPerceptionEnum
+{
+    public const string Low = "low";
+    public const string Good = "good";
+    public const string Excellent = "excellent";
+    public const string None = "none";
+
+    /// <summary>Every value the API accepts here.</summary>
+    public static readonly IReadOnlyList<string> All = [Low, Good, Excellent, None];
+}
+
+/// <summary>
 /// Accepted values for ResourceEnum.
 /// </summary>
 public static class ResourceEnum
@@ -126,6 +245,35 @@ public static class SecretTypeEnum
 }
 
 /// <summary>
+/// Accepted values for SentimentEnum.
+/// </summary>
+public static class SentimentEnum
+{
+    public const string Positive = "positive";
+    public const string Neutral = "neutral";
+    public const string Negative = "negative";
+    public const string Mixed = "mixed";
+
+    /// <summary>Every value the API accepts here.</summary>
+    public static readonly IReadOnlyList<string> All = [Positive, Neutral, Negative, Mixed];
+}
+
+/// <summary>
+/// Accepted values for StanceEnum.
+/// </summary>
+public static class StanceEnum
+{
+    public const string Promoting = "promoting";
+    public const string Cautioning = "cautioning";
+    public const string Neutral = "neutral";
+    public const string Critical = "critical";
+    public const string Informational = "informational";
+
+    /// <summary>Every value the API accepts here.</summary>
+    public static readonly IReadOnlyList<string> All = [Promoting, Cautioning, Neutral, Critical, Informational];
+}
+
+/// <summary>
 /// Accepted values for StateEnum.
 /// </summary>
 public static class StateEnum
@@ -138,6 +286,21 @@ public static class StateEnum
 
     /// <summary>Every value the API accepts here.</summary>
     public static readonly IReadOnlyList<string> All = [Pending, Succeeded, Failed, Exhausted, QuotaExhausted];
+}
+
+/// <summary>
+/// Accepted values for StigmaSignalEnum.
+/// </summary>
+public static class StigmaSignalEnum
+{
+    public const string ProudOpen = "proud_open";
+    public const string MatterOfFact = "matter_of_fact";
+    public const string Defensive = "defensive";
+    public const string Hiding = "hiding";
+    public const string None = "none";
+
+    /// <summary>Every value the API accepts here.</summary>
+    public static readonly IReadOnlyList<string> All = [ProudOpen, MatterOfFact, Defensive, Hiding, None];
 }
 
 /// <summary>
@@ -192,6 +355,42 @@ public sealed record AdvancedAiAnalysis(
     [property: JsonPropertyName("created_at")] DateTimeOffset CreatedAt,
     [property: JsonPropertyName("modified_at")] DateTimeOffset ModifiedAt,
     [property: JsonPropertyName("analyses")] IReadOnlyList<AdvancedAiAnalysisRun> Analyses
+);
+
+/// <summary>
+/// A post the advanced analysis ran over, with its IntelRoom intel.
+/// </summary>
+public sealed record AdvancedAiAnalysisContent(
+    [property: JsonPropertyName("id")] string Id,
+    [property: JsonPropertyName("platform_post_id")] string PlatformPostId,
+    [property: JsonPropertyName("platform")] string Platform,
+    [property: JsonPropertyName("content_form")] string? ContentForm,
+    [property: JsonPropertyName("thumbnail_url")] string? ThumbnailUrl,
+    [property: JsonPropertyName("posted_at")] DateTimeOffset? PostedAt,
+    [property: JsonPropertyName("view_count")] long? ViewCount,
+    [property: JsonPropertyName("like_count")] long? LikeCount,
+    [property: JsonPropertyName("comment_count")] long? CommentCount,
+    [property: JsonPropertyName("share_count")] long? ShareCount,
+    [property: JsonPropertyName("total_engagement")] long? TotalEngagement,
+    [property: JsonPropertyName("language")] string? Language,
+    [property: JsonPropertyName("media_duration")] double? MediaDuration,
+    [property: JsonPropertyName("engagement_rate")] double? EngagementRate,
+    [property: JsonPropertyName("earned_media_value_cents")] long? EarnedMediaValueCents,
+    [property: JsonPropertyName("creator")] ContentCreator Creator,
+    [property: JsonPropertyName("brand_id")] string? BrandId,
+    [property: JsonPropertyName("net_promoter_score")] long? NetPromoterScore,
+    [property: JsonPropertyName("is_owned")] bool? IsOwned,
+    [property: JsonPropertyName("is_tagged")] bool? IsTagged,
+    [property: JsonPropertyName("is_influencer")] bool? IsInfluencer,
+    [property: JsonPropertyName("mention_type")] string? MentionType,
+    [property: JsonPropertyName("caption")] string Caption,
+    [property: JsonPropertyName("description")] string Description,
+    [property: JsonPropertyName("transcript")] string? Transcript,
+    [property: JsonPropertyName("platform_url")] string PlatformUrl,
+    [property: JsonPropertyName("last_keyword")] string? LastKeyword,
+    [property: JsonPropertyName("ai_summary")] string? AiSummary,
+    [property: JsonPropertyName("hashtags")] IReadOnlyList<string> Hashtags,
+    [property: JsonPropertyName("intel")] ContentIntel? Intel
 );
 
 /// <summary>
@@ -982,6 +1181,22 @@ public sealed record CommentCategory(
 );
 
 /// <summary>
+/// AI enrichment of one comment on the post.
+/// </summary>
+public sealed record CommentIntel(
+    [property: JsonPropertyName("comment_id")] long CommentId,
+    [property: JsonPropertyName("sentiment")] string? Sentiment,
+    [property: JsonPropertyName("sentiment_score")] double? SentimentScore,
+    [property: JsonPropertyName("intent")] string? Intent,
+    [property: JsonPropertyName("themes")] IReadOnlyList<string>? Themes,
+    [property: JsonPropertyName("gist")] string? Gist,
+    [property: JsonPropertyName("price_perception")] string? PricePerception,
+    [property: JsonPropertyName("quality_perception")] string? QualityPerception,
+    [property: JsonPropertyName("model")] string? Model,
+    [property: JsonPropertyName("enriched_at")] DateTimeOffset? EnrichedAt
+);
+
+/// <summary>
 /// Comments the brand posted, split by the content they were posted on.
 /// </summary>
 public sealed record CommentStatistics(
@@ -1336,6 +1551,28 @@ public sealed record ContentFilterInputRequest
     public IReadOnlyList<string>? OrderBy { get; init; }
 
 }
+
+/// <summary>
+/// AI enrichment of the post and its comments from the advanced analysis.
+/// </summary>
+public sealed record ContentIntel(
+    [property: JsonPropertyName("sentiment")] string? Sentiment,
+    [property: JsonPropertyName("sentiment_score")] double? SentimentScore,
+    [property: JsonPropertyName("stance")] string? Stance,
+    [property: JsonPropertyName("themes")] IReadOnlyList<string>? Themes,
+    [property: JsonPropertyName("gist")] string? Gist,
+    [property: JsonPropertyName("price_perception")] string? PricePerception,
+    [property: JsonPropertyName("quality_perception")] string? QualityPerception,
+    [property: JsonPropertyName("love_bucket")] string? LoveBucket,
+    [property: JsonPropertyName("dislike_bucket")] string? DislikeBucket,
+    [property: JsonPropertyName("language")] string? Language,
+    [property: JsonPropertyName("language_confidence")] double? LanguageConfidence,
+    [property: JsonPropertyName("speaker")] SpeakerIntel? Speaker,
+    [property: JsonPropertyName("signals")] SignalsIntel? Signals,
+    [property: JsonPropertyName("model")] string? Model,
+    [property: JsonPropertyName("enriched_at")] DateTimeOffset? EnrichedAt,
+    [property: JsonPropertyName("comments")] IReadOnlyList<CommentIntel>? Comments
+);
 
 /// <summary>
 /// Specifies which of the creator's content relationships feed the analysis. Flags that
@@ -1842,6 +2079,43 @@ public sealed record SafetyCheckRequest
     public string? Extra { get; init; }
 
 }
+
+/// <summary>
+/// Product and behaviour signals read from the video. AI inferences.
+/// </summary>
+public sealed record SignalsIntel(
+    [property: JsonPropertyName("journey_stage")] string? JourneyStage,
+    [property: JsonPropertyName("decision_posture")] string? DecisionPosture,
+    [property: JsonPropertyName("stigma_signal")] string? StigmaSignal,
+    [property: JsonPropertyName("complementary_products")] IReadOnlyList<string>? ComplementaryProducts,
+    [property: JsonPropertyName("competitors_shown")] IReadOnlyList<string>? CompetitorsShown,
+    [property: JsonPropertyName("pain_points")] IReadOnlyList<string>? PainPoints,
+    [property: JsonPropertyName("friction_points")] IReadOnlyList<string>? FrictionPoints,
+    [property: JsonPropertyName("workarounds")] IReadOnlyList<string>? Workarounds,
+    [property: JsonPropertyName("emotional_tenor")] IReadOnlyList<string>? EmotionalTenor,
+    [property: JsonPropertyName("trust_sources")] IReadOnlyList<string>? TrustSources,
+    [property: JsonPropertyName("key_moments")] IReadOnlyList<string>? KeyMoments,
+    [property: JsonPropertyName("job_hired_for")] string? JobHiredFor,
+    [property: JsonPropertyName("usage_ritual")] string? UsageRitual,
+    [property: JsonPropertyName("life_context")] string? LifeContext,
+    [property: JsonPropertyName("switching")] string? Switching,
+    [property: JsonPropertyName("churn_switch_driver")] string? ChurnSwitchDriver,
+    [property: JsonPropertyName("say_show_gap")] string? SayShowGap,
+    [property: JsonPropertyName("strategist_signal")] string? StrategistSignal,
+    [property: JsonPropertyName("apparent_geography")] string? ApparentGeography
+);
+
+/// <summary>
+/// Perceived traits of the main on-camera speaker. AI inferences, not facts.
+/// </summary>
+public sealed record SpeakerIntel(
+    [property: JsonPropertyName("on_camera")] bool? OnCamera,
+    [property: JsonPropertyName("gender")] string? Gender,
+    [property: JsonPropertyName("age_range")] string? AgeRange,
+    [property: JsonPropertyName("ethnicity")] string? Ethnicity,
+    [property: JsonPropertyName("setting")] string? Setting,
+    [property: JsonPropertyName("confidence")] string? Confidence
+);
 
 /// <summary>
 /// Live consumption for the brand behind the current credentials.

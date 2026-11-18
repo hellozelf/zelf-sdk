@@ -5,9 +5,9 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::models::Comment;
-use crate::page::Page;
+use crate::page::{Page};
 use crate::transport::{Envelope, Transport};
+use crate::models::{Comment};
 
 /// Parameters for comments.list.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -54,41 +54,19 @@ impl CommentsResource {
     pub async fn list(&self, params: CommentsListParams) -> Result<Page<Comment>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.content_id {
-            query.push(("content_id".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.id {
-            query.push(("id".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.is_parent_comment {
-            query.push((
-                "is_parent_comment".to_string(),
-                if *value { "true" } else { "false" }.to_string(),
-            ));
-        }
-        if let Some(value) = &params.order_by {
-            for entry in value {
-                query.push(("order_by".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.page {
-            query.push(("page".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.page_size {
-            query.push(("page_size".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.parent_comment_id {
-            query.push(("parent_comment_id".to_string(), value.to_string()));
-        }
+        if let Some(value) = &params.content_id { query.push(("content_id".to_string(), value.to_string())); }
+        if let Some(value) = &params.id { query.push(("id".to_string(), value.to_string())); }
+        if let Some(value) = &params.is_parent_comment { query.push(("is_parent_comment".to_string(), if *value { "true" } else { "false" }.to_string())); }
+        if let Some(value) = &params.order_by { for entry in value { query.push(("order_by".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
+        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
+        if let Some(value) = &params.parent_comment_id { query.push(("parent_comment_id".to_string(), value.to_string())); }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<Comment> = self
-            .transport
+        let envelope: Envelope<Comment> = self.transport
             .request(Method::GET, "/api/v1/comment/", &path_params, &query, body)
             .await?;
-        let path = self
-            .transport
-            .resolve_path("/api/v1/comment/", &path_params)?;
+        let path = self.transport.resolve_path("/api/v1/comment/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 }

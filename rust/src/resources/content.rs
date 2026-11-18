@@ -5,12 +5,9 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::models::{
-    Content, ContentActionResponse, ContentDiscovery, ContentFormEnum, ContentStatistics,
-    MentionTypeEnum, PlatformEnum,
-};
-use crate::page::{one, Page};
+use crate::page::{Page, one};
 use crate::transport::{Envelope, Transport};
+use crate::models::{Content, ContentActionResponse, ContentDiscovery, ContentFormEnum, ContentStatistics, MentionTypeEnum, PlatformEnum};
 
 /// Parameters for content.ai_summarize.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -419,26 +416,15 @@ impl ContentResource {
     /// it runs, `COMPLETED` once the content has a summary, `FAILED` if all 3 tries failed.
     ///
     /// Calls `POST /api/v1/content/ai_summarize/` (`content.ai_summarize`).
-    pub async fn ai_summarize(
-        &self,
-        params: ContentAiSummarizeParams,
-    ) -> Result<ContentActionResponse> {
+    pub async fn ai_summarize(&self, params: ContentAiSummarizeParams) -> Result<ContentActionResponse> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(
-            serde_json::to_value(&params)
-                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
-        );
-        let envelope: Envelope<ContentActionResponse> = self
-            .transport
-            .request(
-                Method::POST,
-                "/api/v1/content/ai_summarize/",
-                &path_params,
-                &query,
-                body,
-            )
+        let body = Some(serde_json::to_value(&params).map_err(|source| {
+            crate::error::Error::Decode { status: 0, source }
+        })?);
+        let envelope: Envelope<ContentActionResponse> = self.transport
+            .request(Method::POST, "/api/v1/content/ai_summarize/", &path_params, &query, body)
             .await?;
         one(envelope, "ContentActionResponse")
     }
@@ -453,20 +439,11 @@ impl ContentResource {
     pub async fn details(&self, id: &str, params: ContentDetailsParams) -> Result<Content> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.brand_id {
-            query.push(("brand_id".to_string(), value.to_string()));
-        }
+        if let Some(value) = &params.brand_id { query.push(("brand_id".to_string(), value.to_string())); }
         let path_params = [("id", id)];
         let body = None;
-        let envelope: Envelope<Content> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/content/{id}/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<Content> = self.transport
+            .request(Method::GET, "/api/v1/content/{id}/", &path_params, &query, body)
             .await?;
         one(envelope, "Content")
     }
@@ -483,19 +460,11 @@ impl ContentResource {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(
-            serde_json::to_value(&params)
-                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
-        );
-        let envelope: Envelope<ContentDiscovery> = self
-            .transport
-            .request(
-                Method::POST,
-                "/api/v1/content/discovery/",
-                &path_params,
-                &query,
-                body,
-            )
+        let body = Some(serde_json::to_value(&params).map_err(|source| {
+            crate::error::Error::Decode { status: 0, source }
+        })?);
+        let envelope: Envelope<ContentDiscovery> = self.transport
+            .request(Method::POST, "/api/v1/content/discovery/", &path_params, &query, body)
             .await?;
         one(envelope, "ContentDiscovery")
     }
@@ -541,193 +510,63 @@ impl ContentResource {
     pub async fn list(&self, params: ContentListParams) -> Result<Page<Content>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.brand_id {
-            query.push(("brand_id".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.comment_count {
-            query.push(("comment_count".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.comment_count_max {
-            query.push(("comment_count_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.comment_count_min {
-            query.push(("comment_count_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.content_form {
-            query.push(("content_form".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.creator_follower_count {
-            query.push(("creator_follower_count".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.creator_follower_count_max {
-            query.push(("creator_follower_count_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.creator_follower_count_min {
-            query.push(("creator_follower_count_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.creator_id {
-            query.push(("creator_id".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.creator_username {
-            query.push(("creator_username".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.earned_media_value_cents {
-            query.push(("earned_media_value_cents".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.earned_media_value_cents_max {
-            query.push((
-                "earned_media_value_cents_max".to_string(),
-                value.to_string(),
-            ));
-        }
-        if let Some(value) = &params.earned_media_value_cents_min {
-            query.push((
-                "earned_media_value_cents_min".to_string(),
-                value.to_string(),
-            ));
-        }
-        if let Some(value) = &params.engagement_rate {
-            query.push(("engagement_rate".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.engagement_rate_max {
-            query.push(("engagement_rate_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.engagement_rate_min {
-            query.push(("engagement_rate_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.external_id {
-            query.push(("external_id".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.is_influencer {
-            query.push((
-                "is_influencer".to_string(),
-                if *value { "true" } else { "false" }.to_string(),
-            ));
-        }
-        if let Some(value) = &params.is_owned {
-            query.push((
-                "is_owned".to_string(),
-                if *value { "true" } else { "false" }.to_string(),
-            ));
-        }
-        if let Some(value) = &params.is_tagged {
-            query.push((
-                "is_tagged".to_string(),
-                if *value { "true" } else { "false" }.to_string(),
-            ));
-        }
-        if let Some(value) = &params.language {
-            for entry in value {
-                query.push(("language".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.like_count {
-            query.push(("like_count".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.like_count_max {
-            query.push(("like_count_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.like_count_min {
-            query.push(("like_count_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.media_duration {
-            query.push(("media_duration".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.media_duration_max {
-            query.push(("media_duration_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.media_duration_min {
-            query.push(("media_duration_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.mention_type {
-            for entry in value {
-                query.push(("mention_type".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.mention_type_not {
-            for entry in value {
-                query.push(("mention_type_not".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.net_promoter_score {
-            query.push(("net_promoter_score".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.net_promoter_score_max {
-            query.push(("net_promoter_score_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.net_promoter_score_min {
-            query.push(("net_promoter_score_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.order_by {
-            for entry in value {
-                query.push(("order_by".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.page {
-            query.push(("page".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.page_size {
-            query.push(("page_size".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.platform {
-            for entry in value {
-                query.push(("platform".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.posted {
-            query.push(("posted".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_after {
-            query.push(("posted_after".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_before {
-            query.push(("posted_before".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_within_days {
-            query.push(("posted_within_days".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_within_hours {
-            query.push(("posted_within_hours".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.search {
-            query.push(("search".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.share_count {
-            query.push(("share_count".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.share_count_max {
-            query.push(("share_count_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.share_count_min {
-            query.push(("share_count_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.total_engagement {
-            query.push(("total_engagement".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.total_engagement_max {
-            query.push(("total_engagement_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.total_engagement_min {
-            query.push(("total_engagement_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.view_count {
-            query.push(("view_count".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.view_count_max {
-            query.push(("view_count_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.view_count_min {
-            query.push(("view_count_min".to_string(), value.to_string()));
-        }
+        if let Some(value) = &params.brand_id { query.push(("brand_id".to_string(), value.to_string())); }
+        if let Some(value) = &params.comment_count { query.push(("comment_count".to_string(), value.to_string())); }
+        if let Some(value) = &params.comment_count_max { query.push(("comment_count_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.comment_count_min { query.push(("comment_count_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.content_form { query.push(("content_form".to_string(), value.to_string())); }
+        if let Some(value) = &params.creator_follower_count { query.push(("creator_follower_count".to_string(), value.to_string())); }
+        if let Some(value) = &params.creator_follower_count_max { query.push(("creator_follower_count_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.creator_follower_count_min { query.push(("creator_follower_count_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.creator_id { query.push(("creator_id".to_string(), value.to_string())); }
+        if let Some(value) = &params.creator_username { query.push(("creator_username".to_string(), value.to_string())); }
+        if let Some(value) = &params.earned_media_value_cents { query.push(("earned_media_value_cents".to_string(), value.to_string())); }
+        if let Some(value) = &params.earned_media_value_cents_max { query.push(("earned_media_value_cents_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.earned_media_value_cents_min { query.push(("earned_media_value_cents_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.engagement_rate { query.push(("engagement_rate".to_string(), value.to_string())); }
+        if let Some(value) = &params.engagement_rate_max { query.push(("engagement_rate_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.engagement_rate_min { query.push(("engagement_rate_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.external_id { query.push(("external_id".to_string(), value.to_string())); }
+        if let Some(value) = &params.is_influencer { query.push(("is_influencer".to_string(), if *value { "true" } else { "false" }.to_string())); }
+        if let Some(value) = &params.is_owned { query.push(("is_owned".to_string(), if *value { "true" } else { "false" }.to_string())); }
+        if let Some(value) = &params.is_tagged { query.push(("is_tagged".to_string(), if *value { "true" } else { "false" }.to_string())); }
+        if let Some(value) = &params.language { for entry in value { query.push(("language".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.like_count { query.push(("like_count".to_string(), value.to_string())); }
+        if let Some(value) = &params.like_count_max { query.push(("like_count_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.like_count_min { query.push(("like_count_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.media_duration { query.push(("media_duration".to_string(), value.to_string())); }
+        if let Some(value) = &params.media_duration_max { query.push(("media_duration_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.media_duration_min { query.push(("media_duration_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.mention_type { for entry in value { query.push(("mention_type".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.mention_type_not { for entry in value { query.push(("mention_type_not".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.net_promoter_score { query.push(("net_promoter_score".to_string(), value.to_string())); }
+        if let Some(value) = &params.net_promoter_score_max { query.push(("net_promoter_score_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.net_promoter_score_min { query.push(("net_promoter_score_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.order_by { for entry in value { query.push(("order_by".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
+        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
+        if let Some(value) = &params.platform { for entry in value { query.push(("platform".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.posted { query.push(("posted".to_string(), value.to_string())); }
+        if let Some(value) = &params.posted_after { query.push(("posted_after".to_string(), value.to_string())); }
+        if let Some(value) = &params.posted_before { query.push(("posted_before".to_string(), value.to_string())); }
+        if let Some(value) = &params.posted_within_days { query.push(("posted_within_days".to_string(), value.to_string())); }
+        if let Some(value) = &params.posted_within_hours { query.push(("posted_within_hours".to_string(), value.to_string())); }
+        if let Some(value) = &params.search { query.push(("search".to_string(), value.to_string())); }
+        if let Some(value) = &params.share_count { query.push(("share_count".to_string(), value.to_string())); }
+        if let Some(value) = &params.share_count_max { query.push(("share_count_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.share_count_min { query.push(("share_count_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.total_engagement { query.push(("total_engagement".to_string(), value.to_string())); }
+        if let Some(value) = &params.total_engagement_max { query.push(("total_engagement_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.total_engagement_min { query.push(("total_engagement_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.view_count { query.push(("view_count".to_string(), value.to_string())); }
+        if let Some(value) = &params.view_count_max { query.push(("view_count_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.view_count_min { query.push(("view_count_min".to_string(), value.to_string())); }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<Content> = self
-            .transport
+        let envelope: Envelope<Content> = self.transport
             .request(Method::GET, "/api/v1/content/", &path_params, &query, body)
             .await?;
-        let path = self
-            .transport
-            .resolve_path("/api/v1/content/", &path_params)?;
+        let path = self.transport.resolve_path("/api/v1/content/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 
@@ -761,189 +600,59 @@ impl ContentResource {
     pub async fn statistics(&self, params: ContentStatisticsParams) -> Result<ContentStatistics> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.brand_id {
-            query.push(("brand_id".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.comment_count {
-            query.push(("comment_count".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.comment_count_max {
-            query.push(("comment_count_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.comment_count_min {
-            query.push(("comment_count_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.content_form {
-            query.push(("content_form".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.creator_follower_count {
-            query.push(("creator_follower_count".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.creator_follower_count_max {
-            query.push(("creator_follower_count_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.creator_follower_count_min {
-            query.push(("creator_follower_count_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.creator_id {
-            query.push(("creator_id".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.creator_username {
-            query.push(("creator_username".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.earned_media_value_cents {
-            query.push(("earned_media_value_cents".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.earned_media_value_cents_max {
-            query.push((
-                "earned_media_value_cents_max".to_string(),
-                value.to_string(),
-            ));
-        }
-        if let Some(value) = &params.earned_media_value_cents_min {
-            query.push((
-                "earned_media_value_cents_min".to_string(),
-                value.to_string(),
-            ));
-        }
-        if let Some(value) = &params.engagement_rate {
-            query.push(("engagement_rate".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.engagement_rate_max {
-            query.push(("engagement_rate_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.engagement_rate_min {
-            query.push(("engagement_rate_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.external_id {
-            query.push(("external_id".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.is_influencer {
-            query.push((
-                "is_influencer".to_string(),
-                if *value { "true" } else { "false" }.to_string(),
-            ));
-        }
-        if let Some(value) = &params.is_owned {
-            query.push((
-                "is_owned".to_string(),
-                if *value { "true" } else { "false" }.to_string(),
-            ));
-        }
-        if let Some(value) = &params.is_tagged {
-            query.push((
-                "is_tagged".to_string(),
-                if *value { "true" } else { "false" }.to_string(),
-            ));
-        }
-        if let Some(value) = &params.language {
-            for entry in value {
-                query.push(("language".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.like_count {
-            query.push(("like_count".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.like_count_max {
-            query.push(("like_count_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.like_count_min {
-            query.push(("like_count_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.media_duration {
-            query.push(("media_duration".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.media_duration_max {
-            query.push(("media_duration_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.media_duration_min {
-            query.push(("media_duration_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.mention_type {
-            for entry in value {
-                query.push(("mention_type".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.mention_type_not {
-            for entry in value {
-                query.push(("mention_type_not".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.net_promoter_score {
-            query.push(("net_promoter_score".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.net_promoter_score_max {
-            query.push(("net_promoter_score_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.net_promoter_score_min {
-            query.push(("net_promoter_score_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.order_by {
-            for entry in value {
-                query.push(("order_by".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.platform {
-            for entry in value {
-                query.push(("platform".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.posted {
-            query.push(("posted".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_after {
-            query.push(("posted_after".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_before {
-            query.push(("posted_before".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_within_days {
-            query.push(("posted_within_days".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_within_hours {
-            query.push(("posted_within_hours".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.search {
-            query.push(("search".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.share_count {
-            query.push(("share_count".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.share_count_max {
-            query.push(("share_count_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.share_count_min {
-            query.push(("share_count_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.total_engagement {
-            query.push(("total_engagement".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.total_engagement_max {
-            query.push(("total_engagement_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.total_engagement_min {
-            query.push(("total_engagement_min".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.view_count {
-            query.push(("view_count".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.view_count_max {
-            query.push(("view_count_max".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.view_count_min {
-            query.push(("view_count_min".to_string(), value.to_string()));
-        }
+        if let Some(value) = &params.brand_id { query.push(("brand_id".to_string(), value.to_string())); }
+        if let Some(value) = &params.comment_count { query.push(("comment_count".to_string(), value.to_string())); }
+        if let Some(value) = &params.comment_count_max { query.push(("comment_count_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.comment_count_min { query.push(("comment_count_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.content_form { query.push(("content_form".to_string(), value.to_string())); }
+        if let Some(value) = &params.creator_follower_count { query.push(("creator_follower_count".to_string(), value.to_string())); }
+        if let Some(value) = &params.creator_follower_count_max { query.push(("creator_follower_count_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.creator_follower_count_min { query.push(("creator_follower_count_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.creator_id { query.push(("creator_id".to_string(), value.to_string())); }
+        if let Some(value) = &params.creator_username { query.push(("creator_username".to_string(), value.to_string())); }
+        if let Some(value) = &params.earned_media_value_cents { query.push(("earned_media_value_cents".to_string(), value.to_string())); }
+        if let Some(value) = &params.earned_media_value_cents_max { query.push(("earned_media_value_cents_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.earned_media_value_cents_min { query.push(("earned_media_value_cents_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.engagement_rate { query.push(("engagement_rate".to_string(), value.to_string())); }
+        if let Some(value) = &params.engagement_rate_max { query.push(("engagement_rate_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.engagement_rate_min { query.push(("engagement_rate_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.external_id { query.push(("external_id".to_string(), value.to_string())); }
+        if let Some(value) = &params.is_influencer { query.push(("is_influencer".to_string(), if *value { "true" } else { "false" }.to_string())); }
+        if let Some(value) = &params.is_owned { query.push(("is_owned".to_string(), if *value { "true" } else { "false" }.to_string())); }
+        if let Some(value) = &params.is_tagged { query.push(("is_tagged".to_string(), if *value { "true" } else { "false" }.to_string())); }
+        if let Some(value) = &params.language { for entry in value { query.push(("language".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.like_count { query.push(("like_count".to_string(), value.to_string())); }
+        if let Some(value) = &params.like_count_max { query.push(("like_count_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.like_count_min { query.push(("like_count_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.media_duration { query.push(("media_duration".to_string(), value.to_string())); }
+        if let Some(value) = &params.media_duration_max { query.push(("media_duration_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.media_duration_min { query.push(("media_duration_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.mention_type { for entry in value { query.push(("mention_type".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.mention_type_not { for entry in value { query.push(("mention_type_not".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.net_promoter_score { query.push(("net_promoter_score".to_string(), value.to_string())); }
+        if let Some(value) = &params.net_promoter_score_max { query.push(("net_promoter_score_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.net_promoter_score_min { query.push(("net_promoter_score_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.order_by { for entry in value { query.push(("order_by".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.platform { for entry in value { query.push(("platform".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.posted { query.push(("posted".to_string(), value.to_string())); }
+        if let Some(value) = &params.posted_after { query.push(("posted_after".to_string(), value.to_string())); }
+        if let Some(value) = &params.posted_before { query.push(("posted_before".to_string(), value.to_string())); }
+        if let Some(value) = &params.posted_within_days { query.push(("posted_within_days".to_string(), value.to_string())); }
+        if let Some(value) = &params.posted_within_hours { query.push(("posted_within_hours".to_string(), value.to_string())); }
+        if let Some(value) = &params.search { query.push(("search".to_string(), value.to_string())); }
+        if let Some(value) = &params.share_count { query.push(("share_count".to_string(), value.to_string())); }
+        if let Some(value) = &params.share_count_max { query.push(("share_count_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.share_count_min { query.push(("share_count_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.total_engagement { query.push(("total_engagement".to_string(), value.to_string())); }
+        if let Some(value) = &params.total_engagement_max { query.push(("total_engagement_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.total_engagement_min { query.push(("total_engagement_min".to_string(), value.to_string())); }
+        if let Some(value) = &params.view_count { query.push(("view_count".to_string(), value.to_string())); }
+        if let Some(value) = &params.view_count_max { query.push(("view_count_max".to_string(), value.to_string())); }
+        if let Some(value) = &params.view_count_min { query.push(("view_count_min".to_string(), value.to_string())); }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<ContentStatistics> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/content/statistics/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<ContentStatistics> = self.transport
+            .request(Method::GET, "/api/v1/content/statistics/", &path_params, &query, body)
             .await?;
         one(envelope, "ContentStatistics")
     }
@@ -954,26 +663,15 @@ impl ContentResource {
     /// all 3 tries failed.
     ///
     /// Calls `POST /api/v1/content/transcribe/` (`content.transcribe`).
-    pub async fn transcribe(
-        &self,
-        params: ContentTranscribeParams,
-    ) -> Result<ContentActionResponse> {
+    pub async fn transcribe(&self, params: ContentTranscribeParams) -> Result<ContentActionResponse> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(
-            serde_json::to_value(&params)
-                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
-        );
-        let envelope: Envelope<ContentActionResponse> = self
-            .transport
-            .request(
-                Method::POST,
-                "/api/v1/content/transcribe/",
-                &path_params,
-                &query,
-                body,
-            )
+        let body = Some(serde_json::to_value(&params).map_err(|source| {
+            crate::error::Error::Decode { status: 0, source }
+        })?);
+        let envelope: Envelope<ContentActionResponse> = self.transport
+            .request(Method::POST, "/api/v1/content/transcribe/", &path_params, &query, body)
             .await?;
         one(envelope, "ContentActionResponse")
     }

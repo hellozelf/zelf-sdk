@@ -10,6 +10,17 @@ module Zelf
       "owned",
     ].freeze
 
+    # Accepted values for AgeRangeEnum.
+    AgeRangeEnum = [
+      "teens",
+      "20s",
+      "30s",
+      "40s",
+      "50s",
+      "60plus",
+      "unknown",
+    ].freeze
+
     # Accepted values for AnalysisScopeEnum.
     AnalysisScopeEnum = [
       "CONTENT",
@@ -21,10 +32,54 @@ module Zelf
       "",
     ].freeze
 
+    # Accepted values for ConfidenceEnum.
+    ConfidenceEnum = [
+      "low",
+      "medium",
+      "high",
+    ].freeze
+
     # Accepted values for ContentFormEnum.
     ContentFormEnum = [
       "VIDEO",
       "PHOTO",
+    ].freeze
+
+    # Accepted values for DecisionPostureEnum.
+    DecisionPostureEnum = [
+      "skeptic",
+      "pragmatic",
+      "evangelist",
+      "unclear",
+    ].freeze
+
+    # Accepted values for GenderEnum.
+    GenderEnum = [
+      "male",
+      "female",
+      "nonbinary_or_unclear",
+      "unknown",
+    ].freeze
+
+    # Accepted values for IntentEnum.
+    IntentEnum = [
+      "question",
+      "objection",
+      "experience",
+      "praise",
+      "advice",
+      "other",
+    ].freeze
+
+    # Accepted values for JourneyStageEnum.
+    JourneyStageEnum = [
+      "starting",
+      "ramping",
+      "plateau",
+      "maintenance",
+      "quitting",
+      "off",
+      "unclear",
     ].freeze
 
     # Accepted values for KindEnum.
@@ -52,6 +107,22 @@ module Zelf
       "youtube",
     ].freeze
 
+    # Accepted values for PricePerceptionEnum.
+    PricePerceptionEnum = [
+      "expensive",
+      "affordable",
+      "cheap",
+      "none",
+    ].freeze
+
+    # Accepted values for QualityPerceptionEnum.
+    QualityPerceptionEnum = [
+      "low",
+      "good",
+      "excellent",
+      "none",
+    ].freeze
+
     # Accepted values for ResourceEnum.
     ResourceEnum = [
       "content",
@@ -64,6 +135,23 @@ module Zelf
       "new",
     ].freeze
 
+    # Accepted values for SentimentEnum.
+    SentimentEnum = [
+      "positive",
+      "neutral",
+      "negative",
+      "mixed",
+    ].freeze
+
+    # Accepted values for StanceEnum.
+    StanceEnum = [
+      "promoting",
+      "cautioning",
+      "neutral",
+      "critical",
+      "informational",
+    ].freeze
+
     # Accepted values for StateEnum.
     StateEnum = [
       "PENDING",
@@ -71,6 +159,15 @@ module Zelf
       "FAILED",
       "EXHAUSTED",
       "QUOTA_EXHAUSTED",
+    ].freeze
+
+    # Accepted values for StigmaSignalEnum.
+    StigmaSignalEnum = [
+      "proud_open",
+      "matter_of_fact",
+      "defensive",
+      "hiding",
+      "none",
     ].freeze
 
     # Accepted values for SubBrandTypeEnum.
@@ -91,6 +188,7 @@ module Zelf
     ].freeze
 
     class AdvancedAiAnalysis < Zelf::Model; end
+    class AdvancedAiAnalysisContent < Zelf::Model; end
     class AdvancedAiAnalysisCreateRequest < Zelf::Model; end
     class AdvancedAiAnalysisReport < Zelf::Model; end
     class AdvancedAiAnalysisResult < Zelf::Model; end
@@ -148,6 +246,7 @@ module Zelf
     class Comment < Zelf::Model; end
     class CommentAuthor < Zelf::Model; end
     class CommentCategory < Zelf::Model; end
+    class CommentIntel < Zelf::Model; end
     class CommentStatistics < Zelf::Model; end
     class Content < Zelf::Model; end
     class ContentActionRequestRequest < Zelf::Model; end
@@ -156,6 +255,7 @@ module Zelf
     class ContentDiscovery < Zelf::Model; end
     class ContentDiscoveryRequestRequest < Zelf::Model; end
     class ContentFilterInputRequest < Zelf::Model; end
+    class ContentIntel < Zelf::Model; end
     class ContentScopeRequest < Zelf::Model; end
     class ContentStatistics < Zelf::Model; end
     class Creator < Zelf::Model; end
@@ -188,6 +288,8 @@ module Zelf
     class PatchedWebhookSubscriptionUpdateRequest < Zelf::Model; end
     class ResultFile < Zelf::Model; end
     class SafetyCheckRequest < Zelf::Model; end
+    class SignalsIntel < Zelf::Model; end
+    class SpeakerIntel < Zelf::Model; end
     class Usage < Zelf::Model; end
     class UsageDay < Zelf::Model; end
     class UsageHistory < Zelf::Model; end
@@ -226,6 +328,70 @@ module Zelf
       field :modified_at, "modified_at", cast: :time
       # The runs that make up this analysis, ordered newest first
       field :analyses, "analyses", cast: [AdvancedAiAnalysisRun]
+    end
+
+    # A post the advanced analysis ran over, with its IntelRoom intel.
+    class AdvancedAiAnalysisContent
+      # Unique identifier for this piece of content
+      field :id, "id"
+      # The post's identifier on its platform
+      field :platform_post_id, "platform_post_id"
+      # The platform the content was published on: instagram, tiktok or youtube
+      field :platform, "platform"
+      # Whether the content is a video or an image
+      field :content_form, "content_form"
+      # URL of the content's thumbnail image
+      field :thumbnail_url, "thumbnail_url"
+      # Time the content was originally published on its platform (UTC)
+      field :posted_at, "posted_at", cast: :time
+      # Total number of times the content has been viewed
+      field :view_count, "view_count"
+      # Total number of likes the content has received
+      field :like_count, "like_count"
+      # Total number of comments on the content
+      field :comment_count, "comment_count"
+      # Total number of times the content has been shared
+      field :share_count, "share_count"
+      # Sum of the likes, comments, and shares the content has received
+      field :total_engagement, "total_engagement"
+      # ISO 639 code of the content's primary language
+      field :language, "language"
+      # Length of the media in seconds
+      field :media_duration, "media_duration"
+      # Engagement per view (likes plus comments plus shares, divided by views)
+      field :engagement_rate, "engagement_rate"
+      # Estimated marketing value of the content, in US cents
+      field :earned_media_value_cents, "earned_media_value_cents"
+      # The creator who published the content
+      field :creator, "creator", cast: ContentCreator
+      # Identifier of the brand that the brand-specific signals on this row (is_owned,...
+      field :brand_id, "brand_id"
+      # Net promoter score for the content from the perspective of the scoped brand
+      field :net_promoter_score, "net_promoter_score"
+      # Whether the scoped brand owns the content; that is, whether it was published by...
+      field :is_owned, "is_owned"
+      # Whether the post tags the scoped brand on the platform
+      field :is_tagged, "is_tagged"
+      # Whether the scoped brand counts the content as influencer content: it matches the...
+      field :is_influencer, "is_influencer"
+      # How the scoped brand is mentioned in the content
+      field :mention_type, "mention_type"
+      # Short caption or title of the post (the primary user-visible text)
+      field :caption, "caption"
+      # Long-form description of the post
+      field :description, "description"
+      # Transcribed speech from the content's audio, when available
+      field :transcript, "transcript"
+      # Direct URL to the post on its platform
+      field :platform_url, "platform_url"
+      # What the content was most recently collected under: a hashtag, a creator handle,...
+      field :last_keyword, "last_keyword"
+      # Short AI-generated summary of the content
+      field :ai_summary, "ai_summary"
+      # Hashtags used in the post, normalized to lowercase and without the leading #
+      field :hashtags, "hashtags"
+      # AI enrichment of the post and its comments from this analysis
+      field :intel, "intel", cast: ContentIntel
     end
 
     # Request body for ``POST /api/v1/advanced_ai_analysis/``.
@@ -1134,6 +1300,30 @@ module Zelf
       field :replies, "replies"
     end
 
+    # AI enrichment of one comment on the post.
+    class CommentIntel
+      # ID of the comment
+      field :comment_id, "comment_id"
+      # Overall sentiment of the comment
+      field :sentiment, "sentiment"
+      # Sentiment from -1 (negative) to 1 (positive)
+      field :sentiment_score, "sentiment_score"
+      # Why the commenter wrote the comment
+      field :intent, "intent"
+      # Themes the comment touches, from the analysis taxonomy
+      field :themes, "themes"
+      # One-line summary of the comment
+      field :gist, "gist"
+      # How the comment sees the price
+      field :price_perception, "price_perception"
+      # How the comment sees the quality
+      field :quality_perception, "quality_perception"
+      # The model that enriched the comment
+      field :model, "model"
+      # When the AI enrichment ran
+      field :enriched_at, "enriched_at", cast: :time
+    end
+
     # Comments the brand posted, split by the content they were posted on.
     class CommentStatistics
       # Comments the brand posted in the window, across every category
@@ -1355,6 +1545,42 @@ module Zelf
       field :posted_within_hours, "posted_within_hours"
       # Sort the selected content
       field :order_by, "order_by"
+    end
+
+    # AI enrichment of the post and its comments from the advanced analysis.
+    class ContentIntel
+      # Overall sentiment of the post
+      field :sentiment, "sentiment"
+      # Sentiment from -1 (negative) to 1 (positive)
+      field :sentiment_score, "sentiment_score"
+      # The creator's stance toward the topic
+      field :stance, "stance"
+      # Themes the post covers, from the analysis taxonomy
+      field :themes, "themes"
+      # Short summary of the post
+      field :gist, "gist"
+      # How the post frames the price
+      field :price_perception, "price_perception"
+      # How the post frames the quality
+      field :quality_perception, "quality_perception"
+      # What the post loves about the topic, as a bucket slug
+      field :love_bucket, "love_bucket"
+      # What the post dislikes about the topic, as a bucket slug
+      field :dislike_bucket, "dislike_bucket"
+      # Detected language as an ISO code
+      field :language, "language"
+      # Confidence of the language detection
+      field :language_confidence, "language_confidence"
+      # The main on-camera speaker
+      field :speaker, "speaker", cast: SpeakerIntel
+      # Product and behaviour signals
+      field :signals, "signals", cast: SignalsIntel
+      # The model that enriched the post
+      field :model, "model"
+      # When the AI enrichment ran
+      field :enriched_at, "enriched_at", cast: :time
+      # AI enrichment of each analysed comment on the post
+      field :comments, "comments", cast: [CommentIntel]
     end
 
     # Specifies which of the creator's content relationships feed the analysis. Flags that
@@ -1762,6 +1988,64 @@ module Zelf
       field :type, "type"
       # Label for USER_DEFINED_SAFETY_CRITERION, stored as the criterion's value
       field :extra, "extra"
+    end
+
+    # Product and behaviour signals read from the video. AI inferences.
+    class SignalsIntel
+      # Where the speaker is in their journey with the product
+      field :journey_stage, "journey_stage"
+      # How the speaker approaches the buying decision
+      field :decision_posture, "decision_posture"
+      # How openly the speaker talks about using the product
+      field :stigma_signal, "stigma_signal"
+      # Products used alongside the subject
+      field :complementary_products, "complementary_products"
+      # Rival products shown, compared or switched to
+      field :competitors_shown, "competitors_shown"
+      # What is hard, broken or disliked
+      field :pain_points, "pain_points"
+      # Moments where using the product is difficult
+      field :friction_points, "friction_points"
+      # Ways the speaker works around a problem
+      field :workarounds, "workarounds"
+      # The emotions the video conveys
+      field :emotional_tenor, "emotional_tenor"
+      # Sources the speaker trusts or cites
+      field :trust_sources, "trust_sources"
+      # Notable moments in the video
+      field :key_moments, "key_moments"
+      # The job the speaker uses the product for
+      field :job_hired_for, "job_hired_for"
+      # How and when the speaker uses the product
+      field :usage_ritual, "usage_ritual"
+      # The speaker's life situation around the product
+      field :life_context, "life_context"
+      # Any switch to or from another product
+      field :switching, "switching"
+      # Why the speaker would leave or switch
+      field :churn_switch_driver, "churn_switch_driver"
+      # Where what the speaker says differs from what they show
+      field :say_show_gap, "say_show_gap"
+      # The main takeaway for a brand strategist
+      field :strategist_signal, "strategist_signal"
+      # Perceived location of the speaker
+      field :apparent_geography, "apparent_geography"
+    end
+
+    # Perceived traits of the main on-camera speaker. AI inferences, not facts.
+    class SpeakerIntel
+      # Whether a specific person appears or speaks on camera
+      field :on_camera, "on_camera"
+      # Perceived gender of the main speaker
+      field :gender, "gender"
+      # Perceived age range of the speaker
+      field :age_range, "age_range"
+      # Perceived ethnicity of the speaker
+      field :ethnicity, "ethnicity"
+      # Where the video was filmed, such as home or gym
+      field :setting, "setting"
+      # How confident the model is
+      field :confidence, "confidence"
     end
 
     # Live consumption for the brand behind the current credentials.

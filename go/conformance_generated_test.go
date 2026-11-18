@@ -67,9 +67,9 @@ var conformanceCases = []conformanceCase{
 			return c.AdvancedAIAnalysis.Contents(ctx, &params)
 		},
 		walk: func(result any, ctx context.Context) (int, error) {
-			page := result.(*Page[Content])
+			page := result.(*Page[AdvancedAiAnalysisContent])
 			count := 0
-			err := page.AutoPaging(ctx, func(item Content) error {
+			err := page.AutoPaging(ctx, func(item AdvancedAiAnalysisContent) error {
 				count++
 				return nil
 			}, MaxPages(2))
@@ -1402,6 +1402,326 @@ func (failingRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) 
 
 // Every oneOf field must survive a round trip through each of its variants.
 func TestConformanceUnionRoundTrip(t *testing.T) {
+	t.Run("CommentIntel_Intent/IntentEnum", func(t *testing.T) {
+		var value CommentIntel_Intent
+		if err := value.FromIntentEnum(IntentEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsIntentEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeIntentEnum(IntentEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again CommentIntel_Intent
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("CommentIntel_Intent/NullEnum", func(t *testing.T) {
+		var value CommentIntel_Intent
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again CommentIntel_Intent
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("CommentIntel_PricePerception/NullEnum", func(t *testing.T) {
+		var value CommentIntel_PricePerception
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again CommentIntel_PricePerception
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("CommentIntel_PricePerception/PricePerceptionEnum", func(t *testing.T) {
+		var value CommentIntel_PricePerception
+		if err := value.FromPricePerceptionEnum(PricePerceptionEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsPricePerceptionEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergePricePerceptionEnum(PricePerceptionEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again CommentIntel_PricePerception
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("CommentIntel_QualityPerception/NullEnum", func(t *testing.T) {
+		var value CommentIntel_QualityPerception
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again CommentIntel_QualityPerception
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("CommentIntel_QualityPerception/QualityPerceptionEnum", func(t *testing.T) {
+		var value CommentIntel_QualityPerception
+		if err := value.FromQualityPerceptionEnum(QualityPerceptionEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsQualityPerceptionEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeQualityPerceptionEnum(QualityPerceptionEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again CommentIntel_QualityPerception
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("CommentIntel_Sentiment/NullEnum", func(t *testing.T) {
+		var value CommentIntel_Sentiment
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again CommentIntel_Sentiment
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("CommentIntel_Sentiment/SentimentEnum", func(t *testing.T) {
+		var value CommentIntel_Sentiment
+		if err := value.FromSentimentEnum(SentimentEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsSentimentEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeSentimentEnum(SentimentEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again CommentIntel_Sentiment
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("ContentIntel_PricePerception/NullEnum", func(t *testing.T) {
+		var value ContentIntel_PricePerception
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again ContentIntel_PricePerception
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("ContentIntel_PricePerception/PricePerceptionEnum", func(t *testing.T) {
+		var value ContentIntel_PricePerception
+		if err := value.FromPricePerceptionEnum(PricePerceptionEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsPricePerceptionEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergePricePerceptionEnum(PricePerceptionEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again ContentIntel_PricePerception
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("ContentIntel_QualityPerception/NullEnum", func(t *testing.T) {
+		var value ContentIntel_QualityPerception
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again ContentIntel_QualityPerception
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("ContentIntel_QualityPerception/QualityPerceptionEnum", func(t *testing.T) {
+		var value ContentIntel_QualityPerception
+		if err := value.FromQualityPerceptionEnum(QualityPerceptionEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsQualityPerceptionEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeQualityPerceptionEnum(QualityPerceptionEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again ContentIntel_QualityPerception
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("ContentIntel_Sentiment/NullEnum", func(t *testing.T) {
+		var value ContentIntel_Sentiment
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again ContentIntel_Sentiment
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("ContentIntel_Sentiment/SentimentEnum", func(t *testing.T) {
+		var value ContentIntel_Sentiment
+		if err := value.FromSentimentEnum(SentimentEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsSentimentEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeSentimentEnum(SentimentEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again ContentIntel_Sentiment
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("ContentIntel_Stance/NullEnum", func(t *testing.T) {
+		var value ContentIntel_Stance
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again ContentIntel_Stance
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("ContentIntel_Stance/StanceEnum", func(t *testing.T) {
+		var value ContentIntel_Stance
+		if err := value.FromStanceEnum(StanceEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsStanceEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeStanceEnum(StanceEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again ContentIntel_Stance
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
 	t.Run("PatchedWebhookSubscriptionUpdateRequest_IntervalHours/IntervalHoursEnum", func(t *testing.T) {
 		var value PatchedWebhookSubscriptionUpdateRequest_IntervalHours
 		if err := value.FromIntervalHoursEnum(IntervalHoursEnum(0)); err != nil {
@@ -1438,6 +1758,246 @@ func TestConformanceUnionRoundTrip(t *testing.T) {
 			t.Fatalf("marshal: %v", err)
 		}
 		var again PatchedWebhookSubscriptionUpdateRequest_IntervalHours
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("SignalsIntel_DecisionPosture/DecisionPostureEnum", func(t *testing.T) {
+		var value SignalsIntel_DecisionPosture
+		if err := value.FromDecisionPostureEnum(DecisionPostureEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsDecisionPostureEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeDecisionPostureEnum(DecisionPostureEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again SignalsIntel_DecisionPosture
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("SignalsIntel_DecisionPosture/NullEnum", func(t *testing.T) {
+		var value SignalsIntel_DecisionPosture
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again SignalsIntel_DecisionPosture
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("SignalsIntel_JourneyStage/JourneyStageEnum", func(t *testing.T) {
+		var value SignalsIntel_JourneyStage
+		if err := value.FromJourneyStageEnum(JourneyStageEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsJourneyStageEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeJourneyStageEnum(JourneyStageEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again SignalsIntel_JourneyStage
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("SignalsIntel_JourneyStage/NullEnum", func(t *testing.T) {
+		var value SignalsIntel_JourneyStage
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again SignalsIntel_JourneyStage
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("SignalsIntel_StigmaSignal/NullEnum", func(t *testing.T) {
+		var value SignalsIntel_StigmaSignal
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again SignalsIntel_StigmaSignal
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("SignalsIntel_StigmaSignal/StigmaSignalEnum", func(t *testing.T) {
+		var value SignalsIntel_StigmaSignal
+		if err := value.FromStigmaSignalEnum(StigmaSignalEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsStigmaSignalEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeStigmaSignalEnum(StigmaSignalEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again SignalsIntel_StigmaSignal
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("SpeakerIntel_AgeRange/AgeRangeEnum", func(t *testing.T) {
+		var value SpeakerIntel_AgeRange
+		if err := value.FromAgeRangeEnum(AgeRangeEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsAgeRangeEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeAgeRangeEnum(AgeRangeEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again SpeakerIntel_AgeRange
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("SpeakerIntel_AgeRange/NullEnum", func(t *testing.T) {
+		var value SpeakerIntel_AgeRange
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again SpeakerIntel_AgeRange
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("SpeakerIntel_Confidence/ConfidenceEnum", func(t *testing.T) {
+		var value SpeakerIntel_Confidence
+		if err := value.FromConfidenceEnum(ConfidenceEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsConfidenceEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeConfidenceEnum(ConfidenceEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again SpeakerIntel_Confidence
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("SpeakerIntel_Confidence/NullEnum", func(t *testing.T) {
+		var value SpeakerIntel_Confidence
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again SpeakerIntel_Confidence
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("SpeakerIntel_Gender/GenderEnum", func(t *testing.T) {
+		var value SpeakerIntel_Gender
+		if err := value.FromGenderEnum(GenderEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsGenderEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeGenderEnum(GenderEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again SpeakerIntel_Gender
+		if err := again.UnmarshalJSON(encoded); err != nil {
+			t.Errorf("unmarshal: %v", err)
+		}
+	})
+	t.Run("SpeakerIntel_Gender/NullEnum", func(t *testing.T) {
+		var value SpeakerIntel_Gender
+		if err := value.FromNullEnum(NullEnum("")); err != nil {
+			t.Fatalf("from: %v", err)
+		}
+		if _, err := value.AsNullEnum(); err != nil {
+			t.Errorf("as: %v", err)
+		}
+		if err := value.MergeNullEnum(NullEnum("")); err != nil {
+			t.Errorf("merge: %v", err)
+		}
+		encoded, err := value.MarshalJSON()
+		if err != nil {
+			t.Fatalf("marshal: %v", err)
+		}
+		var again SpeakerIntel_Gender
 		if err := again.UnmarshalJSON(encoded); err != nil {
 			t.Errorf("unmarshal: %v", err)
 		}

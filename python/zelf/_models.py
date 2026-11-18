@@ -1480,6 +1480,36 @@ class ResultFile(BaseModel):
     ]
 
 
+class SpeakerIntel(BaseModel):
+    """
+    Perceived traits of the main on-camera speaker. AI inferences, not facts.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    on_camera: Annotated[
+        bool | None, Field(description="Whether a specific person appears or speaks on camera.")
+    ] = None
+    gender: Annotated[
+        Literal["male", "female", "nonbinary_or_unclear", "unknown"] | None,
+        Field(description="Perceived gender of the main speaker."),
+    ] = None
+    age_range: Annotated[
+        Literal["teens", "20s", "30s", "40s", "50s", "60plus", "unknown"] | None,
+        Field(description="Perceived age range of the speaker."),
+    ] = None
+    ethnicity: Annotated[str | None, Field(description="Perceived ethnicity of the speaker.")] = (
+        None
+    )
+    setting: Annotated[
+        str | None, Field(description="Where the video was filmed, such as `home` or `gym`.")
+    ] = None
+    confidence: Annotated[
+        Literal["low", "medium", "high"] | None, Field(description="How confident the model is.")
+    ] = None
+
+
 class UsageDay(BaseModel):
     """
     One day of consumption for one source.
@@ -2658,6 +2688,48 @@ class Comment(BaseModel):
     ]
 
 
+class CommentIntel(BaseModel):
+    """
+    AI enrichment of one comment on the post.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    comment_id: Annotated[int, Field(description="ID of the comment.")]
+    sentiment: Annotated[
+        Literal["positive", "neutral", "negative", "mixed"] | None,
+        Field(description="Overall sentiment of the comment."),
+    ] = None
+    sentiment_score: Annotated[
+        float | None,
+        Field(description="Sentiment from -1 (negative) to 1 (positive).", ge=-1.0, le=1.0),
+    ] = None
+    intent: Annotated[
+        Literal["question", "objection", "experience", "praise", "advice", "other"] | None,
+        Field(description="Why the commenter wrote the comment."),
+    ] = None
+    themes: Annotated[
+        list[str] | None,
+        Field(description="Themes the comment touches, from the analysis taxonomy."),
+    ] = None
+    gist: Annotated[
+        str | None, Field(description="One-line summary of the comment.", max_length=160)
+    ] = None
+    price_perception: Annotated[
+        Literal["expensive", "affordable", "cheap", "none"] | None,
+        Field(description="How the comment sees the price."),
+    ] = None
+    quality_perception: Annotated[
+        Literal["low", "good", "excellent", "none"] | None,
+        Field(description="How the comment sees the quality."),
+    ] = None
+    model: Annotated[str | None, Field(description="The model that enriched the comment.")] = None
+    enriched_at: Annotated[
+        AwareDatetime | None, Field(description="When the AI enrichment ran.")
+    ] = None
+
+
 class Content(BaseModel):
     """
     A piece of content (a post, video, or image) and its metrics.
@@ -3248,6 +3320,77 @@ class SafetyCheckRequest(BaseModel):
     ] = None
 
 
+class SignalsIntel(BaseModel):
+    """
+    Product and behaviour signals read from the video. AI inferences.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    journey_stage: Annotated[
+        Literal["starting", "ramping", "plateau", "maintenance", "quitting", "off", "unclear"]
+        | None,
+        Field(description="Where the speaker is in their journey with the product."),
+    ] = None
+    decision_posture: Annotated[
+        Literal["skeptic", "pragmatic", "evangelist", "unclear"] | None,
+        Field(description="How the speaker approaches the buying decision."),
+    ] = None
+    stigma_signal: Annotated[
+        Literal["proud_open", "matter_of_fact", "defensive", "hiding", "none"] | None,
+        Field(description="How openly the speaker talks about using the product."),
+    ] = None
+    complementary_products: Annotated[
+        list[str] | None, Field(description="Products used alongside the subject.")
+    ] = None
+    competitors_shown: Annotated[
+        list[str] | None, Field(description="Rival products shown, compared or switched to.")
+    ] = None
+    pain_points: Annotated[
+        list[str] | None, Field(description="What is hard, broken or disliked.")
+    ] = None
+    friction_points: Annotated[
+        list[str] | None, Field(description="Moments where using the product is difficult.")
+    ] = None
+    workarounds: Annotated[
+        list[str] | None, Field(description="Ways the speaker works around a problem.")
+    ] = None
+    emotional_tenor: Annotated[
+        list[str] | None, Field(description="The emotions the video conveys.")
+    ] = None
+    trust_sources: Annotated[
+        list[str] | None, Field(description="Sources the speaker trusts or cites.")
+    ] = None
+    key_moments: Annotated[list[str] | None, Field(description="Notable moments in the video.")] = (
+        None
+    )
+    job_hired_for: Annotated[
+        str | None, Field(description="The job the speaker uses the product for.")
+    ] = None
+    usage_ritual: Annotated[
+        str | None, Field(description="How and when the speaker uses the product.")
+    ] = None
+    life_context: Annotated[
+        str | None, Field(description="The speaker's life situation around the product.")
+    ] = None
+    switching: Annotated[
+        str | None, Field(description="Any switch to or from another product.")
+    ] = None
+    churn_switch_driver: Annotated[
+        str | None, Field(description="Why the speaker would leave or switch.")
+    ] = None
+    say_show_gap: Annotated[
+        str | None, Field(description="Where what the speaker says differs from what they show.")
+    ] = None
+    strategist_signal: Annotated[
+        str | None, Field(description="The main takeaway for a brand strategist.")
+    ] = None
+    apparent_geography: Annotated[
+        str | None, Field(description="Perceived location of the speaker.")
+    ] = None
+
+
 class UsageScope(BaseModel):
     """
     One metered group, with every window that has a limit.
@@ -3498,6 +3641,64 @@ class BrandComparison(BaseModel):
     ]
 
 
+class ContentIntel(BaseModel):
+    """
+    AI enrichment of the post and its comments from the advanced analysis.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    sentiment: Annotated[
+        Literal["positive", "neutral", "negative", "mixed"] | None,
+        Field(description="Overall sentiment of the post."),
+    ] = None
+    sentiment_score: Annotated[
+        float | None,
+        Field(description="Sentiment from -1 (negative) to 1 (positive).", ge=-1.0, le=1.0),
+    ] = None
+    stance: Annotated[
+        Literal["promoting", "cautioning", "neutral", "critical", "informational"] | None,
+        Field(description="The creator's stance toward the topic."),
+    ] = None
+    themes: Annotated[
+        list[str] | None, Field(description="Themes the post covers, from the analysis taxonomy.")
+    ] = None
+    gist: Annotated[
+        str | None, Field(description="Short summary of the post.", max_length=1000)
+    ] = None
+    price_perception: Annotated[
+        Literal["expensive", "affordable", "cheap", "none"] | None,
+        Field(description="How the post frames the price."),
+    ] = None
+    quality_perception: Annotated[
+        Literal["low", "good", "excellent", "none"] | None,
+        Field(description="How the post frames the quality."),
+    ] = None
+    love_bucket: Annotated[
+        str | None, Field(description="What the post loves about the topic, as a bucket slug.")
+    ] = None
+    dislike_bucket: Annotated[
+        str | None, Field(description="What the post dislikes about the topic, as a bucket slug.")
+    ] = None
+    language: Annotated[str | None, Field(description="Detected language as an ISO code.")] = None
+    language_confidence: Annotated[
+        float | None, Field(description="Confidence of the language detection.", ge=0.0, le=1.0)
+    ] = None
+    speaker: Annotated[SpeakerIntel | None, Field(description="The main on-camera speaker.")] = None
+    signals: Annotated[SignalsIntel | None, Field(description="Product and behaviour signals.")] = (
+        None
+    )
+    model: Annotated[str | None, Field(description="The model that enriched the post.")] = None
+    enriched_at: Annotated[
+        AwareDatetime | None, Field(description="When the AI enrichment ran.")
+    ] = None
+    comments: Annotated[
+        list[CommentIntel] | None,
+        Field(description="AI enrichment of each analysed comment on the post."),
+    ] = None
+
+
 class CreatorVettingRequest(BaseModel):
     """
     Request body for ``POST /api/v1/creator/vetting/``.
@@ -3592,6 +3793,146 @@ class Usage(BaseModel):
     history: Annotated[
         UsageHistory,
         Field(description="What was actually spent, day by day, from the usage ledger."),
+    ]
+
+
+class AdvancedAiAnalysisContent(BaseModel):
+    """
+    A post the advanced analysis ran over, with its IntelRoom intel.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    id: Annotated[
+        str,
+        Field(
+            description="Unique identifier for this piece of content. Use it to retrieve the content anywhere a content id is accepted."
+        ),
+    ]
+    platform_post_id: Annotated[
+        str,
+        Field(
+            description="The post's identifier on its platform. This is the value at the end of the post's URL.\n\nExamples:\n- Instagram: `https://instagram.com/reel/abcd` -> `abcd`\n- TikTok: `https://www.tiktok.com/@username/video/12345678` -> `12345678`"
+        ),
+    ]
+    platform: Annotated[
+        str,
+        Field(
+            description="The platform the content was published on: `instagram`, `tiktok` or `youtube`."
+        ),
+    ]
+    content_form: Annotated[
+        str | None, Field(description="Whether the content is a video or an image.")
+    ]
+    thumbnail_url: Annotated[str | None, Field(description="URL of the content's thumbnail image.")]
+    posted_at: Annotated[
+        AwareDatetime | None,
+        Field(description="Time the content was originally published on its platform (UTC)."),
+    ]
+    view_count: Annotated[
+        int | None, Field(description="Total number of times the content has been viewed.")
+    ]
+    like_count: Annotated[
+        int | None, Field(description="Total number of likes the content has received.")
+    ]
+    comment_count: Annotated[
+        int | None, Field(description="Total number of comments on the content.")
+    ]
+    share_count: Annotated[
+        int | None, Field(description="Total number of times the content has been shared.")
+    ]
+    total_engagement: Annotated[
+        int | None,
+        Field(description="Sum of the likes, comments, and shares the content has received."),
+    ]
+    language: Annotated[
+        str | None, Field(description="ISO 639 code of the content's primary language.")
+    ]
+    media_duration: Annotated[
+        float | None, Field(description="Length of the media in seconds. Null when not known.")
+    ]
+    engagement_rate: Annotated[
+        float | None,
+        Field(
+            description="Engagement per view (likes plus comments plus shares, divided by views). Null when the content has no recorded views."
+        ),
+    ]
+    earned_media_value_cents: Annotated[
+        int | None, Field(description="Estimated marketing value of the content, in US cents.")
+    ]
+    creator: Annotated[ContentCreator, Field(description="The creator who published the content.")]
+    brand_id: Annotated[
+        str | None,
+        Field(
+            description="Identifier of the brand that the brand-specific signals on this row (`is_owned`, `is_tagged`, `is_influencer`, `mention_type`, `net_promoter_score`) are scoped to. Returned as `null` when the request omits `brand_id`."
+        ),
+    ]
+    net_promoter_score: Annotated[
+        int | None,
+        Field(
+            description="Net promoter score for the content from the perspective of the scoped brand. Returned as `null` when the request omits `brand_id`."
+        ),
+    ]
+    is_owned: Annotated[
+        bool | None,
+        Field(
+            description="Whether the scoped brand owns the content; that is, whether it was published by an account the brand controls. Returned as `null` when the request omits `brand_id`."
+        ),
+    ]
+    is_tagged: Annotated[
+        bool | None,
+        Field(
+            description="Whether the post tags the scoped brand on the platform. Returned as `null` when the request omits `brand_id`."
+        ),
+    ]
+    is_influencer: Annotated[
+        bool | None,
+        Field(
+            description="Whether the scoped brand counts the content as influencer content: it matches the brand's influencer terms, comes from an account on its influencer list, was reported as branded content by the platform, or was marked by hand. Content the brand owns is never influencer content. Returned as `null` when the request omits `brand_id`."
+        ),
+    ]
+    mention_type: Annotated[
+        str | None,
+        Field(
+            description="How the scoped brand is mentioned in the content. One of `content` or `comment`, or null when the brand is not mentioned. Returned as `null` when the request omits `brand_id`."
+        ),
+    ]
+    caption: Annotated[
+        str,
+        Field(description="Short caption or title of the post (the primary user-visible text)."),
+    ]
+    description: Annotated[str, Field(description="Long-form description of the post.")]
+    transcript: Annotated[
+        str | None,
+        Field(description="Transcribed speech from the content's audio, when available."),
+    ]
+    platform_url: Annotated[
+        str,
+        Field(
+            description="Direct URL to the post on its platform.\n\nExamples:\n- `https://instagram.com/reel/abcd`\n- `https://www.tiktok.com/@username/video/12345678`"
+        ),
+    ]
+    last_keyword: Annotated[
+        str | None,
+        Field(
+            description="What the content was most recently collected under: a hashtag, a creator handle, a search term, or a brand identifier. Null when the content did not arrive through a collection task."
+        ),
+    ]
+    ai_summary: Annotated[
+        str | None, Field(description="Short AI-generated summary of the content.")
+    ]
+    hashtags: Annotated[
+        list[str],
+        Field(
+            description="Hashtags used in the post, normalized to lowercase and without the leading `#`."
+        ),
+    ]
+    intel: Annotated[
+        ContentIntel | None,
+        Field(
+            description="AI enrichment of the post and its comments from this analysis. `null` until the analysis has finished and its intel is stored."
+        ),
     ]
 
 

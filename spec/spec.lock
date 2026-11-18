@@ -10,6 +10,18 @@
         ]
       },
       {
+        "name": "AgeRangeEnum",
+        "values": [
+          "20s",
+          "30s",
+          "40s",
+          "50s",
+          "60plus",
+          "teens",
+          "unknown"
+        ]
+      },
+      {
         "name": "AnalysisScopeEnum",
         "values": [
           "COMMENT",
@@ -23,10 +35,59 @@
         ]
       },
       {
+        "name": "ConfidenceEnum",
+        "values": [
+          "high",
+          "low",
+          "medium"
+        ]
+      },
+      {
         "name": "ContentFormEnum",
         "values": [
           "PHOTO",
           "VIDEO"
+        ]
+      },
+      {
+        "name": "DecisionPostureEnum",
+        "values": [
+          "evangelist",
+          "pragmatic",
+          "skeptic",
+          "unclear"
+        ]
+      },
+      {
+        "name": "GenderEnum",
+        "values": [
+          "female",
+          "male",
+          "nonbinary_or_unclear",
+          "unknown"
+        ]
+      },
+      {
+        "name": "IntentEnum",
+        "values": [
+          "advice",
+          "experience",
+          "objection",
+          "other",
+          "praise",
+          "question"
+        ]
+      },
+      {
+        "name": "JourneyStageEnum",
+        "values": [
+          "maintenance",
+          "off",
+          "plateau",
+          "quitting",
+          "ramping",
+          "starting",
+          "unclear"
         ]
       },
       {
@@ -59,6 +120,24 @@
         ]
       },
       {
+        "name": "PricePerceptionEnum",
+        "values": [
+          "affordable",
+          "cheap",
+          "expensive",
+          "none"
+        ]
+      },
+      {
+        "name": "QualityPerceptionEnum",
+        "values": [
+          "excellent",
+          "good",
+          "low",
+          "none"
+        ]
+      },
+      {
         "name": "ResourceEnum",
         "values": [
           "content",
@@ -73,6 +152,25 @@
         ]
       },
       {
+        "name": "SentimentEnum",
+        "values": [
+          "mixed",
+          "negative",
+          "neutral",
+          "positive"
+        ]
+      },
+      {
+        "name": "StanceEnum",
+        "values": [
+          "cautioning",
+          "critical",
+          "informational",
+          "neutral",
+          "promoting"
+        ]
+      },
+      {
         "name": "StateEnum",
         "values": [
           "EXHAUSTED",
@@ -80,6 +178,16 @@
           "PENDING",
           "QUOTA_EXHAUSTED",
           "SUCCEEDED"
+        ]
+      },
+      {
+        "name": "StigmaSignalEnum",
+        "values": [
+          "defensive",
+          "hiding",
+          "matter_of_fact",
+          "none",
+          "proud_open"
         ]
       },
       {
@@ -204,6 +312,286 @@
           }
         ],
         "name": "AdvancedAiAnalysis"
+      },
+      {
+        "fields": [
+          {
+            "name": "ai_summary",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "brand_id",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "caption",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "comment_count",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "content_form",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "creator",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "ContentCreator"
+            }
+          },
+          {
+            "name": "description",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "earned_media_value_cents",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "engagement_rate",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "hashtags",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "id",
+            "nullable": false,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "intel",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "ref",
+              "ref": "ContentIntel"
+            }
+          },
+          {
+            "name": "is_influencer",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "is_owned",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "is_tagged",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "language",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "last_keyword",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "like_count",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "media_duration",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "mention_type",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "net_promoter_score",
+            "nullable": true,
+            "read_only": true,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "platform",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platform_post_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "platform_url",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "posted_at",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "share_count",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "thumbnail_url",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "total_engagement",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "transcript",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "view_count",
+            "nullable": true,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          }
+        ],
+        "name": "AdvancedAiAnalysisContent"
       },
       {
         "fields": [
@@ -3723,6 +4111,130 @@
       {
         "fields": [
           {
+            "name": "comment_id",
+            "nullable": false,
+            "read_only": false,
+            "required": true,
+            "type": {
+              "kind": "int"
+            }
+          },
+          {
+            "name": "enriched_at",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "gist",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "intent",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "advice",
+                "experience",
+                "objection",
+                "other",
+                "praise",
+                "question"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "model",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "price_perception",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "affordable",
+                "cheap",
+                "expensive",
+                "none"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "quality_perception",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "excellent",
+                "good",
+                "low",
+                "none"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "sentiment",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "mixed",
+                "negative",
+                "neutral",
+                "positive"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "sentiment_score",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "themes",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "CommentIntel"
+      },
+      {
+        "fields": [
+          {
             "name": "categories",
             "nullable": false,
             "read_only": false,
@@ -4629,6 +5141,189 @@
           }
         ],
         "name": "ContentFilterInputRequest"
+      },
+      {
+        "fields": [
+          {
+            "name": "comments",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "ref",
+                "ref": "CommentIntel"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "dislike_bucket",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "enriched_at",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "datetime"
+            }
+          },
+          {
+            "name": "gist",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "language",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "language_confidence",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "love_bucket",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "model",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "price_perception",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "affordable",
+                "cheap",
+                "expensive",
+                "none"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "quality_perception",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "excellent",
+                "good",
+                "low",
+                "none"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "sentiment",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "mixed",
+                "negative",
+                "neutral",
+                "positive"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "sentiment_score",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "float"
+            }
+          },
+          {
+            "name": "signals",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "ref",
+              "ref": "SignalsIntel"
+            }
+          },
+          {
+            "name": "speaker",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "ref",
+              "ref": "SpeakerIntel"
+            }
+          },
+          {
+            "name": "stance",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "cautioning",
+                "critical",
+                "informational",
+                "neutral",
+                "promoting"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "themes",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "ContentIntel"
       },
       {
         "fields": [
@@ -6116,6 +6811,307 @@
       {
         "fields": [
           {
+            "name": "apparent_geography",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "churn_switch_driver",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "competitors_shown",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "complementary_products",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "decision_posture",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "evangelist",
+                "pragmatic",
+                "skeptic",
+                "unclear"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "emotional_tenor",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "friction_points",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "job_hired_for",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "journey_stage",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "maintenance",
+                "off",
+                "plateau",
+                "quitting",
+                "ramping",
+                "starting",
+                "unclear"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "key_moments",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "life_context",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "pain_points",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "say_show_gap",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "stigma_signal",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "defensive",
+                "hiding",
+                "matter_of_fact",
+                "none",
+                "proud_open"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "strategist_signal",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "switching",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "trust_sources",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          },
+          {
+            "name": "usage_ritual",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "workarounds",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "item": {
+                "kind": "str"
+              },
+              "kind": "array"
+            }
+          }
+        ],
+        "name": "SignalsIntel"
+      },
+      {
+        "fields": [
+          {
+            "name": "age_range",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "20s",
+                "30s",
+                "40s",
+                "50s",
+                "60plus",
+                "teens",
+                "unknown"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "confidence",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "high",
+                "low",
+                "medium"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "ethnicity",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          },
+          {
+            "name": "gender",
+            "nullable": false,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "enum": [
+                "female",
+                "male",
+                "nonbinary_or_unclear",
+                "unknown"
+              ],
+              "kind": "enum"
+            }
+          },
+          {
+            "name": "on_camera",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "bool"
+            }
+          },
+          {
+            "name": "setting",
+            "nullable": true,
+            "read_only": false,
+            "required": false,
+            "type": {
+              "kind": "str"
+            }
+          }
+        ],
+        "name": "SpeakerIntel"
+      },
+      {
+        "fields": [
+          {
             "name": "authenticated_as",
             "nullable": false,
             "read_only": false,
@@ -7569,7 +8565,7 @@
         "cardinality": "page",
         "http_method": "GET",
         "id": "advanced_ai_analysis.contents",
-        "item": "Content",
+        "item": "AdvancedAiAnalysisContent",
         "path": "/api/v1/advanced_ai_analysis/contents/",
         "path_params": [],
         "query_params": [
@@ -10773,5 +11769,5 @@
       }
     ]
   },
-  "version": "1.4.2"
+  "version": "1.5.0"
 }

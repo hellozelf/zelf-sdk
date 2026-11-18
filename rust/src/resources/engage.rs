@@ -5,9 +5,9 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::models::{CommentStatistics, PlatformEnum};
-use crate::page::one;
+use crate::page::{one};
 use crate::transport::{Envelope, Transport};
+use crate::models::{CommentStatistics, PlatformEnum};
 
 /// Parameters for engage.comment_statistics.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -52,44 +52,19 @@ impl EngageResource {
     /// `total_comments_posted`.
     ///
     /// Calls `GET /api/v1/engage/comment_statistics/` (`engage.comment_statistics`).
-    pub async fn comment_statistics(
-        &self,
-        params: EngageCommentStatisticsParams,
-    ) -> Result<CommentStatistics> {
+    pub async fn comment_statistics(&self, params: EngageCommentStatisticsParams) -> Result<CommentStatistics> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        {
-            let value = &params.brand_id;
-            query.push(("brand_id".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.platform {
-            for entry in value {
-                query.push(("platform".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.posted_after {
-            query.push(("posted_after".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_before {
-            query.push(("posted_before".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_within_days {
-            query.push(("posted_within_days".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.posted_within_hours {
-            query.push(("posted_within_hours".to_string(), value.to_string()));
-        }
+        { let value = &params.brand_id; query.push(("brand_id".to_string(), value.to_string())); }
+        if let Some(value) = &params.platform { for entry in value { query.push(("platform".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.posted_after { query.push(("posted_after".to_string(), value.to_string())); }
+        if let Some(value) = &params.posted_before { query.push(("posted_before".to_string(), value.to_string())); }
+        if let Some(value) = &params.posted_within_days { query.push(("posted_within_days".to_string(), value.to_string())); }
+        if let Some(value) = &params.posted_within_hours { query.push(("posted_within_hours".to_string(), value.to_string())); }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<CommentStatistics> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/engage/comment_statistics/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<CommentStatistics> = self.transport
+            .request(Method::GET, "/api/v1/engage/comment_statistics/", &path_params, &query, body)
             .await?;
         one(envelope, "CommentStatistics")
     }

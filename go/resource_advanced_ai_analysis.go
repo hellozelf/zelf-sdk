@@ -28,22 +28,24 @@ func (r *AdvancedAIAnalysisResource) ContentStatistics(ctx context.Context, para
 // Contents returns the content an advanced AI analysis ran over, in the standard content
 // shape. Use it to inspect the exact posts included in an analysis. Requires `analysis_id`
 // (an analysis `id` from `advanced_ai_analysis.list`). Brand-scoped fields (`is_owned`,
-// `is_tagged`, `net_promoter_score`, ...) are `null` in this response.
+// `is_tagged`, `net_promoter_score`, ...) are `null` in this response. Each post carries
+// `intel`: the AI enrichment of the post (sentiment, stance, themes, perception, speaker,
+// signals) and of each of its comments, `null` until the analysis completes.
 //
 // Calls GET /api/v1/advanced_ai_analysis/contents/ (advanced_ai_analysis.contents).
-func (r *AdvancedAIAnalysisResource) Contents(ctx context.Context, params *AdvancedAiAnalysisContentsParams) (*Page[Content], error) {
+func (r *AdvancedAIAnalysisResource) Contents(ctx context.Context, params *AdvancedAiAnalysisContentsParams) (*Page[AdvancedAiAnalysisContent], error) {
 	if params == nil {
 		params = &AdvancedAiAnalysisContentsParams{}
 	}
-	env, err := request[Content](ctx, r.t, "GET", "/api/v1/advanced_ai_analysis/contents/",
+	env, err := request[AdvancedAiAnalysisContent](ctx, r.t, "GET", "/api/v1/advanced_ai_analysis/contents/",
 		nil, params, nil)
 	if err != nil {
 		return nil, err
 	}
-	fetch := func(ctx context.Context, page int) (*envelope[Content], error) {
+	fetch := func(ctx context.Context, page int) (*envelope[AdvancedAiAnalysisContent], error) {
 		next := *params
 		next.Page = &page
-		return request[Content](ctx, r.t, "GET", "/api/v1/advanced_ai_analysis/contents/",
+		return request[AdvancedAiAnalysisContent](ctx, r.t, "GET", "/api/v1/advanced_ai_analysis/contents/",
 			nil, &next, nil)
 	}
 	return newPage(env, fetch), nil

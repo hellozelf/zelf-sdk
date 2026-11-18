@@ -52,7 +52,7 @@ public class ConformanceGenerated
             async (page) =>
             {
                 var seen = 0;
-                await foreach (var row in ((Page<Content>)page).AutoPagingAsync(PageLimits.Pages(2)))
+                await foreach (var row in ((Page<AdvancedAiAnalysisContent>)page).AutoPagingAsync(PageLimits.Pages(2)))
                 {
                     seen++;
                 }
@@ -1066,7 +1066,7 @@ public class ConformanceGenerated
         get
         {
             var data = new TheoryData<string>();
-            foreach (var name in new[] { "AccountTypeEnum", "AnalysisScopeEnum", "BlankEnum", "ContentFormEnum", "KindEnum", "LastStatusEnum", "MentionTypeEnum", "PlatformEnum", "ResourceEnum", "SecretTypeEnum", "StateEnum", "SubBrandTypeEnum", "TypeEnum" })
+            foreach (var name in new[] { "AccountTypeEnum", "AgeRangeEnum", "AnalysisScopeEnum", "BlankEnum", "ConfidenceEnum", "ContentFormEnum", "DecisionPostureEnum", "GenderEnum", "IntentEnum", "JourneyStageEnum", "KindEnum", "LastStatusEnum", "MentionTypeEnum", "PlatformEnum", "PricePerceptionEnum", "QualityPerceptionEnum", "ResourceEnum", "SecretTypeEnum", "SentimentEnum", "StanceEnum", "StateEnum", "StigmaSignalEnum", "SubBrandTypeEnum", "TypeEnum" })
             {
                 data.Add(name);
             }

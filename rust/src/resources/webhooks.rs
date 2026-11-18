@@ -5,13 +5,9 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::models::{
-    KindEnum, ResourceEnum, SecretTypeEnum, StateEnum, WebhookAvailableEvent,
-    WebhookDeleteAcknowledgement, WebhookDelivery, WebhookSecret, WebhookSecretCreated,
-    WebhookSubscription, WebhookSubscriptionCreated,
-};
-use crate::page::{one, Page};
+use crate::page::{Page, one};
 use crate::transport::{Envelope, Transport};
+use crate::models::{KindEnum, ResourceEnum, SecretTypeEnum, StateEnum, WebhookAvailableEvent, WebhookDeleteAcknowledgement, WebhookDelivery, WebhookSecret, WebhookSecretCreated, WebhookSubscription, WebhookSubscriptionCreated};
 
 /// Parameters for webhooks.create_secret.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -147,26 +143,15 @@ impl WebhooksResource {
     /// returned only once.
     ///
     /// Calls `POST /api/v1/webhooks/secrets/` (`webhooks.create_secret`).
-    pub async fn create_secret(
-        &self,
-        params: WebhooksCreateSecretParams,
-    ) -> Result<WebhookSecretCreated> {
+    pub async fn create_secret(&self, params: WebhooksCreateSecretParams) -> Result<WebhookSecretCreated> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(
-            serde_json::to_value(&params)
-                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
-        );
-        let envelope: Envelope<WebhookSecretCreated> = self
-            .transport
-            .request(
-                Method::POST,
-                "/api/v1/webhooks/secrets/",
-                &path_params,
-                &query,
-                body,
-            )
+        let body = Some(serde_json::to_value(&params).map_err(|source| {
+            crate::error::Error::Decode { status: 0, source }
+        })?);
+        let envelope: Envelope<WebhookSecretCreated> = self.transport
+            .request(Method::POST, "/api/v1/webhooks/secrets/", &path_params, &query, body)
             .await?;
         one(envelope, "WebhookSecretCreated")
     }
@@ -176,26 +161,15 @@ impl WebhooksResource {
     /// `event` subscription.
     ///
     /// Calls `POST /api/v1/webhooks/subscriptions/` (`webhooks.create_subscription`).
-    pub async fn create_subscription(
-        &self,
-        params: WebhooksCreateSubscriptionParams,
-    ) -> Result<WebhookSubscriptionCreated> {
+    pub async fn create_subscription(&self, params: WebhooksCreateSubscriptionParams) -> Result<WebhookSubscriptionCreated> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(
-            serde_json::to_value(&params)
-                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
-        );
-        let envelope: Envelope<WebhookSubscriptionCreated> = self
-            .transport
-            .request(
-                Method::POST,
-                "/api/v1/webhooks/subscriptions/",
-                &path_params,
-                &query,
-                body,
-            )
+        let body = Some(serde_json::to_value(&params).map_err(|source| {
+            crate::error::Error::Decode { status: 0, source }
+        })?);
+        let envelope: Envelope<WebhookSubscriptionCreated> = self.transport
+            .request(Method::POST, "/api/v1/webhooks/subscriptions/", &path_params, &query, body)
             .await?;
         one(envelope, "WebhookSubscriptionCreated")
     }
@@ -209,15 +183,8 @@ impl WebhooksResource {
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [("secret_id", secret_id)];
         let body = None;
-        let envelope: Envelope<WebhookDeleteAcknowledgement> = self
-            .transport
-            .request(
-                Method::DELETE,
-                "/api/v1/webhooks/secrets/{secret_id}/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<WebhookDeleteAcknowledgement> = self.transport
+            .request(Method::DELETE, "/api/v1/webhooks/secrets/{secret_id}/", &path_params, &query, body)
             .await?;
         one(envelope, "WebhookDeleteAcknowledgement")
     }
@@ -226,23 +193,13 @@ impl WebhooksResource {
     /// subscription stops receiving deliveries.
     ///
     /// Calls `DELETE /api/v1/webhooks/subscriptions/{subscription_id}/` (`webhooks.delete_subscription`).
-    pub async fn delete_subscription(
-        &self,
-        subscription_id: &str,
-    ) -> Result<WebhookDeleteAcknowledgement> {
+    pub async fn delete_subscription(&self, subscription_id: &str) -> Result<WebhookDeleteAcknowledgement> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [("subscription_id", subscription_id)];
         let body = None;
-        let envelope: Envelope<WebhookDeleteAcknowledgement> = self
-            .transport
-            .request(
-                Method::DELETE,
-                "/api/v1/webhooks/subscriptions/{subscription_id}/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<WebhookDeleteAcknowledgement> = self.transport
+            .request(Method::DELETE, "/api/v1/webhooks/subscriptions/{subscription_id}/", &path_params, &query, body)
             .await?;
         one(envelope, "WebhookDeleteAcknowledgement")
     }
@@ -255,15 +212,8 @@ impl WebhooksResource {
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [("delivery_id", delivery_id)];
         let body = None;
-        let envelope: Envelope<WebhookDelivery> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/webhooks/deliveries/{delivery_id}/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<WebhookDelivery> = self.transport
+            .request(Method::GET, "/api/v1/webhooks/deliveries/{delivery_id}/", &path_params, &query, body)
             .await?;
         one(envelope, "WebhookDelivery")
     }
@@ -276,15 +226,8 @@ impl WebhooksResource {
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [("secret_id", secret_id)];
         let body = None;
-        let envelope: Envelope<WebhookSecret> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/webhooks/secrets/{secret_id}/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<WebhookSecret> = self.transport
+            .request(Method::GET, "/api/v1/webhooks/secrets/{secret_id}/", &path_params, &query, body)
             .await?;
         one(envelope, "WebhookSecret")
     }
@@ -297,15 +240,8 @@ impl WebhooksResource {
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [("subscription_id", subscription_id)];
         let body = None;
-        let envelope: Envelope<WebhookSubscription> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/webhooks/subscriptions/{subscription_id}/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<WebhookSubscription> = self.transport
+            .request(Method::GET, "/api/v1/webhooks/subscriptions/{subscription_id}/", &path_params, &query, body)
             .await?;
         one(envelope, "WebhookSubscription")
     }
@@ -315,56 +251,24 @@ impl WebhooksResource {
     /// window.
     ///
     /// Calls `GET /api/v1/webhooks/deliveries/` (`webhooks.list_deliveries`).
-    pub async fn list_deliveries(
-        &self,
-        params: WebhooksListDeliveriesParams,
-    ) -> Result<Page<WebhookDelivery>> {
+    pub async fn list_deliveries(&self, params: WebhooksListDeliveriesParams) -> Result<Page<WebhookDelivery>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.created {
-            query.push(("created".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.created_after {
-            query.push(("created_after".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.created_before {
-            query.push(("created_before".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.page {
-            query.push(("page".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.page_size {
-            query.push(("page_size".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.sort_by {
-            for entry in value {
-                query.push(("sort_by".to_string(), entry.to_string()));
-            }
-        }
-        if let Some(value) = &params.state {
-            query.push(("state".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.state_not {
-            query.push(("state!".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.subscription {
-            query.push(("subscription".to_string(), value.to_string()));
-        }
+        if let Some(value) = &params.created { query.push(("created".to_string(), value.to_string())); }
+        if let Some(value) = &params.created_after { query.push(("created_after".to_string(), value.to_string())); }
+        if let Some(value) = &params.created_before { query.push(("created_before".to_string(), value.to_string())); }
+        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
+        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
+        if let Some(value) = &params.sort_by { for entry in value { query.push(("sort_by".to_string(), entry.to_string())); } }
+        if let Some(value) = &params.state { query.push(("state".to_string(), value.to_string())); }
+        if let Some(value) = &params.state_not { query.push(("state!".to_string(), value.to_string())); }
+        if let Some(value) = &params.subscription { query.push(("subscription".to_string(), value.to_string())); }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<WebhookDelivery> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/webhooks/deliveries/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<WebhookDelivery> = self.transport
+            .request(Method::GET, "/api/v1/webhooks/deliveries/", &path_params, &query, body)
             .await?;
-        let path = self
-            .transport
-            .resolve_path("/api/v1/webhooks/deliveries/", &path_params)?;
+        let path = self.transport.resolve_path("/api/v1/webhooks/deliveries/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 
@@ -377,15 +281,8 @@ impl WebhooksResource {
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
         let body = None;
-        let envelope: Envelope<WebhookAvailableEvent> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/webhooks/events/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<WebhookAvailableEvent> = self.transport
+            .request(Method::GET, "/api/v1/webhooks/events/", &path_params, &query, body)
             .await?;
         Ok(envelope.results)
     }
@@ -393,33 +290,17 @@ impl WebhooksResource {
     /// List Webhook Secrets. Lists the brand's active secrets.
     ///
     /// Calls `GET /api/v1/webhooks/secrets/` (`webhooks.list_secrets`).
-    pub async fn list_secrets(
-        &self,
-        params: WebhooksListSecretsParams,
-    ) -> Result<Page<WebhookSecret>> {
+    pub async fn list_secrets(&self, params: WebhooksListSecretsParams) -> Result<Page<WebhookSecret>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.page {
-            query.push(("page".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.page_size {
-            query.push(("page_size".to_string(), value.to_string()));
-        }
+        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
+        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<WebhookSecret> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/webhooks/secrets/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<WebhookSecret> = self.transport
+            .request(Method::GET, "/api/v1/webhooks/secrets/", &path_params, &query, body)
             .await?;
-        let path = self
-            .transport
-            .resolve_path("/api/v1/webhooks/secrets/", &path_params)?;
+        let path = self.transport.resolve_path("/api/v1/webhooks/secrets/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 
@@ -427,33 +308,17 @@ impl WebhooksResource {
     /// newest first.
     ///
     /// Calls `GET /api/v1/webhooks/subscriptions/` (`webhooks.list_subscriptions`).
-    pub async fn list_subscriptions(
-        &self,
-        params: WebhooksListSubscriptionsParams,
-    ) -> Result<Page<WebhookSubscription>> {
+    pub async fn list_subscriptions(&self, params: WebhooksListSubscriptionsParams) -> Result<Page<WebhookSubscription>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.page {
-            query.push(("page".to_string(), value.to_string()));
-        }
-        if let Some(value) = &params.page_size {
-            query.push(("page_size".to_string(), value.to_string()));
-        }
+        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
+        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<WebhookSubscription> = self
-            .transport
-            .request(
-                Method::GET,
-                "/api/v1/webhooks/subscriptions/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<WebhookSubscription> = self.transport
+            .request(Method::GET, "/api/v1/webhooks/subscriptions/", &path_params, &query, body)
             .await?;
-        let path = self
-            .transport
-            .resolve_path("/api/v1/webhooks/subscriptions/", &path_params)?;
+        let path = self.transport.resolve_path("/api/v1/webhooks/subscriptions/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 
@@ -461,23 +326,13 @@ impl WebhooksResource {
     /// returns the full `secret` once. Deliveries after this use the new secret.
     ///
     /// Calls `POST /api/v1/webhooks/subscriptions/{subscription_id}/rotate_secret/` (`webhooks.rotate_subscription_secret`).
-    pub async fn rotate_subscription_secret(
-        &self,
-        subscription_id: &str,
-    ) -> Result<WebhookSubscriptionCreated> {
+    pub async fn rotate_subscription_secret(&self, subscription_id: &str) -> Result<WebhookSubscriptionCreated> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [("subscription_id", subscription_id)];
         let body = None;
-        let envelope: Envelope<WebhookSubscriptionCreated> = self
-            .transport
-            .request(
-                Method::POST,
-                "/api/v1/webhooks/subscriptions/{subscription_id}/rotate_secret/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<WebhookSubscriptionCreated> = self.transport
+            .request(Method::POST, "/api/v1/webhooks/subscriptions/{subscription_id}/rotate_secret/", &path_params, &query, body)
             .await?;
         one(envelope, "WebhookSubscriptionCreated")
     }
@@ -492,15 +347,8 @@ impl WebhooksResource {
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [("subscription_id", subscription_id)];
         let body = None;
-        let envelope: Envelope<serde_json::Value> = self
-            .transport
-            .request(
-                Method::POST,
-                "/api/v1/webhooks/subscriptions/{subscription_id}/send_test/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<serde_json::Value> = self.transport
+            .request(Method::POST, "/api/v1/webhooks/subscriptions/{subscription_id}/send_test/", &path_params, &query, body)
             .await?;
         let _ = envelope;
         Ok(())
@@ -514,15 +362,8 @@ impl WebhooksResource {
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [("secret_id", secret_id)];
         let body = None;
-        let envelope: Envelope<WebhookSecret> = self
-            .transport
-            .request(
-                Method::POST,
-                "/api/v1/webhooks/secrets/{secret_id}/set_default/",
-                &path_params,
-                &query,
-                body,
-            )
+        let envelope: Envelope<WebhookSecret> = self.transport
+            .request(Method::POST, "/api/v1/webhooks/secrets/{secret_id}/set_default/", &path_params, &query, body)
             .await?;
         one(envelope, "WebhookSecret")
     }
@@ -532,27 +373,15 @@ impl WebhooksResource {
     /// `event_types` are immutable after create.
     ///
     /// Calls `PATCH /api/v1/webhooks/subscriptions/{subscription_id}/` (`webhooks.update_subscription`).
-    pub async fn update_subscription(
-        &self,
-        subscription_id: &str,
-        params: WebhooksUpdateSubscriptionParams,
-    ) -> Result<WebhookSubscription> {
+    pub async fn update_subscription(&self, subscription_id: &str, params: WebhooksUpdateSubscriptionParams) -> Result<WebhookSubscription> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [("subscription_id", subscription_id)];
-        let body = Some(
-            serde_json::to_value(&params)
-                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
-        );
-        let envelope: Envelope<WebhookSubscription> = self
-            .transport
-            .request(
-                Method::PATCH,
-                "/api/v1/webhooks/subscriptions/{subscription_id}/",
-                &path_params,
-                &query,
-                body,
-            )
+        let body = Some(serde_json::to_value(&params).map_err(|source| {
+            crate::error::Error::Decode { status: 0, source }
+        })?);
+        let envelope: Envelope<WebhookSubscription> = self.transport
+            .request(Method::PATCH, "/api/v1/webhooks/subscriptions/{subscription_id}/", &path_params, &query, body)
             .await?;
         one(envelope, "WebhookSubscription")
     }

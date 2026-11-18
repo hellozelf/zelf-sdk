@@ -4,9 +4,9 @@ use std::sync::Arc;
 use reqwest::Method;
 
 use crate::error::Result;
-use crate::models::Usage;
-use crate::page::one;
+use crate::page::{one};
 use crate::transport::{Envelope, Transport};
+use crate::models::{Usage};
 
 /// The usage endpoints.
 #[derive(Debug, Clone)]
@@ -30,8 +30,7 @@ impl UsageResource {
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
         let body = None;
-        let envelope: Envelope<Usage> = self
-            .transport
+        let envelope: Envelope<Usage> = self.transport
             .request(Method::GET, "/api/v1/usage/", &path_params, &query, body)
             .await?;
         one(envelope, "Usage")

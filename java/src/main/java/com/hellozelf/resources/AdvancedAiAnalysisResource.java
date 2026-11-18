@@ -52,10 +52,13 @@ public final class AdvancedAiAnalysisResource {
      * ran over, in the standard content shape. Use it to inspect the exact posts
      * included in an analysis. Requires `analysis_id` (an analysis `id` from
      * `advanced_ai_analysis.list`). Brand-scoped fields (`is_owned`, `is_tagged`,
-     * `net_promoter_score`, ...) are `null` in this response. Calls GET
-     * /api/v1/advanced_ai_analysis/contents/ (advanced_ai_analysis.contents).
+     * `net_promoter_score`, ...) are `null` in this response. Each post carries
+     * `intel`: the AI enrichment of the post (sentiment, stance, themes, perception,
+     * speaker, signals) and of each of its comments, `null` until the analysis
+     * completes. Calls GET /api/v1/advanced_ai_analysis/contents/
+     * (advanced_ai_analysis.contents).
      */
-    public Page<Content> contents(AdvancedAiAnalysisContentsParams parameters) {
+    public Page<AdvancedAiAnalysisContent> contents(AdvancedAiAnalysisContentsParams parameters) {
         if (parameters == null) {
             parameters = new AdvancedAiAnalysisContentsParams();
         }
@@ -70,8 +73,8 @@ public final class AdvancedAiAnalysisResource {
         if (parameters.pageSize() != null) {
             query.add(Map.entry("page_size", String.valueOf(parameters.pageSize())));
         }
-        Envelope<Content> envelope = transport.send("GET", path, query, null, Content.class);
-        return new Page<>(envelope, transport, path, query, Content.class);
+        Envelope<AdvancedAiAnalysisContent> envelope = transport.send("GET", path, query, null, AdvancedAiAnalysisContent.class);
+        return new Page<>(envelope, transport, path, query, AdvancedAiAnalysisContent.class);
     }
 
     /**

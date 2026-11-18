@@ -67,6 +67,7 @@ impl std::fmt::Display for EventType {
     }
 }
 
+
 /// Every way verifying a delivery can fail. Answer any of these with a 400 and
 /// never process the body.
 #[derive(Debug, thiserror::Error)]
@@ -110,10 +111,7 @@ pub struct Options {
 
 impl Default for Options {
     fn default() -> Self {
-        Self {
-            tolerance_seconds: DEFAULT_TOLERANCE_SECONDS,
-            now: None,
-        }
+        Self { tolerance_seconds: DEFAULT_TOLERANCE_SECONDS, now: None }
     }
 }
 
@@ -126,11 +124,7 @@ fn parse_signature(raw: &str) -> Result<(i64, Vec<&str>), VerificationError> {
         };
         match key {
             "t" if timestamp.is_none() => {
-                timestamp = Some(
-                    value
-                        .parse()
-                        .map_err(|_| VerificationError::MalformedSignature)?,
-                );
+                timestamp = Some(value.parse().map_err(|_| VerificationError::MalformedSignature)?);
             }
             "v1" => digests.push(value),
             _ => {}
@@ -176,10 +170,7 @@ pub fn verify(
     if options.tolerance_seconds > 0 {
         let age = (now_seconds(&options) - timestamp).abs();
         if age > options.tolerance_seconds {
-            return Err(VerificationError::Replay {
-                age,
-                tolerance: options.tolerance_seconds,
-            });
+            return Err(VerificationError::Replay { age, tolerance: options.tolerance_seconds });
         }
     }
 
@@ -189,9 +180,7 @@ pub fn verify(
     let mut matched = false;
     for secret in secrets {
         for digest in &digests {
-            let Ok(raw) = hex::decode(digest) else {
-                continue;
-            };
+            let Ok(raw) = hex::decode(digest) else { continue };
             let mut mac = HmacSha256::new_from_slice(secret.as_ref().as_bytes())
                 .expect("HMAC accepts a key of any length");
             mac.update(&signed);
@@ -205,11 +194,10 @@ pub fn verify(
     }
 
     let value: serde_json::Value = serde_json::from_slice(payload)?;
-    value.as_object().cloned().ok_or_else(|| {
-        serde_json::from_str::<serde_json::Map<String, serde_json::Value>>("0")
-            .unwrap_err()
-            .into()
-    })
+    value
+        .as_object()
+        .cloned()
+        .ok_or_else(|| serde_json::from_str::<serde_json::Map<String, serde_json::Value>>("0").unwrap_err().into())
 }
 
 /// One downloadable snapshot file in a manifest delivery.
@@ -307,10 +295,7 @@ impl Event {
                 .await
                 .map_err(|e| VerificationError::Download(e.to_string()))?;
             if status.is_client_error() || status.is_server_error() {
-                return Err(VerificationError::Download(format!(
-                    "HTTP {}",
-                    status.as_u16()
-                )));
+                return Err(VerificationError::Download(format!("HTTP {}", status.as_u16())));
             }
             if !skip_checksum {
                 if handle.sha256.is_empty() {
@@ -379,12 +364,7 @@ impl Handler {
     /// Build a handler for the given signing secrets. A rotation switches at
     /// once, so hold both only for as long as the rollout takes.
     pub fn new(secrets: Vec<String>, options: Options) -> Self {
-        Self {
-            secrets,
-            options,
-            listeners: HashMap::new(),
-            fallback: None,
-        }
+        Self { secrets, options, listeners: HashMap::new(), fallback: None }
     }
 
     /// Register a listener for one event type.
@@ -392,10 +372,7 @@ impl Handler {
     where
         F: Fn(&Event) -> Result<(), VerificationError> + Send + Sync + 'static,
     {
-        self.listeners
-            .entry(event_type)
-            .or_default()
-            .push(Box::new(listener));
+        self.listeners.entry(event_type).or_default().push(Box::new(listener));
         self
     }
 
