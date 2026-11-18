@@ -83,84 +83,115 @@ impl Client {
 
     /// The advanced_ai_analysis endpoints.
     pub fn advanced_ai_analysis(&self) -> AdvancedAiAnalysisResource {
-        AdvancedAiAnalysisResource { transport: self.transport.clone() }
+        AdvancedAiAnalysisResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The ai_analysis endpoints.
     pub fn ai_analysis(&self) -> AiAnalysisResource {
-        AiAnalysisResource { transport: self.transport.clone() }
+        AiAnalysisResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The analytics endpoints.
     pub fn analytics(&self) -> AnalyticsResource {
-        AnalyticsResource { transport: self.transport.clone() }
+        AnalyticsResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The brand_accounts endpoints.
     pub fn brand_accounts(&self) -> BrandAccountsResource {
-        BrandAccountsResource { transport: self.transport.clone() }
+        BrandAccountsResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The brands endpoints.
     pub fn brands(&self) -> BrandsResource {
-        BrandsResource { transport: self.transport.clone() }
+        BrandsResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The comments endpoints.
     pub fn comments(&self) -> CommentsResource {
-        CommentsResource { transport: self.transport.clone() }
+        CommentsResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The content endpoints.
     pub fn content(&self) -> ContentResource {
-        ContentResource { transport: self.transport.clone() }
+        ContentResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The creator_sync endpoints.
     pub fn creator_sync(&self) -> CreatorSyncResource {
-        CreatorSyncResource { transport: self.transport.clone() }
+        CreatorSyncResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The creator_vetting endpoints.
     pub fn creator_vetting(&self) -> CreatorVettingResource {
-        CreatorVettingResource { transport: self.transport.clone() }
+        CreatorVettingResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The creators endpoints.
     pub fn creators(&self) -> CreatorsResource {
-        CreatorsResource { transport: self.transport.clone() }
+        CreatorsResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The detection endpoints.
     pub fn detection(&self) -> DetectionResource {
-        DetectionResource { transport: self.transport.clone() }
+        DetectionResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The engage endpoints.
     pub fn engage(&self) -> EngageResource {
-        EngageResource { transport: self.transport.clone() }
+        EngageResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The sub_brands endpoints.
     pub fn sub_brands(&self) -> SubBrandsResource {
-        SubBrandsResource { transport: self.transport.clone() }
+        SubBrandsResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The usage endpoints.
     pub fn usage(&self) -> UsageResource {
-        UsageResource { transport: self.transport.clone() }
+        UsageResource {
+            transport: self.transport.clone(),
+        }
     }
 
     /// The webhooks endpoints.
     pub fn webhooks(&self) -> WebhooksResource {
-        WebhooksResource { transport: self.transport.clone() }
+        WebhooksResource {
+            transport: self.transport.clone(),
+        }
     }
-
 }
 
 impl ClientBuilder {
     /// Finish building. Fails when no API key is configured.
     pub fn build(self) -> Result<Client> {
-        Ok(Client { transport: self.into_transport()? })
+        Ok(Client {
+            transport: self.into_transport()?,
+        })
     }
 }

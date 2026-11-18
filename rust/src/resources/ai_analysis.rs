@@ -5,9 +5,12 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::page::{Page, one};
+use crate::models::{
+    AiAnalysis, AiAnalysisResult, AnalysisScopeEnum, Content, ContentFilterInputRequest,
+    ContentStatistics,
+};
+use crate::page::{one, Page};
 use crate::transport::{Envelope, Transport};
-use crate::models::{AiAnalysis, AiAnalysisResult, AnalysisScopeEnum, Content, ContentFilterInputRequest, ContentStatistics};
 
 /// Parameters for ai_analysis.content_statistics.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -97,14 +100,27 @@ impl AiAnalysisResource {
     /// same totals shape as `content.statistics`.
     ///
     /// Calls `GET /api/v1/ai_analysis/contents/statistics/` (`ai_analysis.content_statistics`).
-    pub async fn content_statistics(&self, params: AiAnalysisContentStatisticsParams) -> Result<ContentStatistics> {
+    pub async fn content_statistics(
+        &self,
+        params: AiAnalysisContentStatisticsParams,
+    ) -> Result<ContentStatistics> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        { let value = &params.analysis_id; query.push(("analysis_id".to_string(), value.to_string())); }
+        {
+            let value = &params.analysis_id;
+            query.push(("analysis_id".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<ContentStatistics> = self.transport
-            .request(Method::GET, "/api/v1/ai_analysis/contents/statistics/", &path_params, &query, body)
+        let envelope: Envelope<ContentStatistics> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/ai_analysis/contents/statistics/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
         one(envelope, "ContentStatistics")
     }
@@ -118,15 +134,31 @@ impl AiAnalysisResource {
     pub async fn contents(&self, params: AiAnalysisContentsParams) -> Result<Page<Content>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        { let value = &params.analysis_id; query.push(("analysis_id".to_string(), value.to_string())); }
-        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
-        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
+        {
+            let value = &params.analysis_id;
+            query.push(("analysis_id".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page {
+            query.push(("page".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page_size {
+            query.push(("page_size".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<Content> = self.transport
-            .request(Method::GET, "/api/v1/ai_analysis/contents/", &path_params, &query, body)
+        let envelope: Envelope<Content> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/ai_analysis/contents/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
-        let path = self.transport.resolve_path("/api/v1/ai_analysis/contents/", &path_params)?;
+        let path = self
+            .transport
+            .resolve_path("/api/v1/ai_analysis/contents/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 
@@ -147,11 +179,19 @@ impl AiAnalysisResource {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(serde_json::to_value(&params).map_err(|source| {
-            crate::error::Error::Decode { status: 0, source }
-        })?);
-        let envelope: Envelope<AiAnalysis> = self.transport
-            .request(Method::POST, "/api/v1/ai_analysis/", &path_params, &query, body)
+        let body = Some(
+            serde_json::to_value(&params)
+                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
+        );
+        let envelope: Envelope<AiAnalysis> = self
+            .transport
+            .request(
+                Method::POST,
+                "/api/v1/ai_analysis/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
         one(envelope, "AiAnalysis")
     }
@@ -169,15 +209,30 @@ impl AiAnalysisResource {
     pub async fn list(&self, params: AiAnalysisListParams) -> Result<Page<AiAnalysis>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.id { query.push(("id".to_string(), value.to_string())); }
-        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
-        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
+        if let Some(value) = &params.id {
+            query.push(("id".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page {
+            query.push(("page".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page_size {
+            query.push(("page_size".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<AiAnalysis> = self.transport
-            .request(Method::GET, "/api/v1/ai_analysis/", &path_params, &query, body)
+        let envelope: Envelope<AiAnalysis> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/ai_analysis/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
-        let path = self.transport.resolve_path("/api/v1/ai_analysis/", &path_params)?;
+        let path = self
+            .transport
+            .resolve_path("/api/v1/ai_analysis/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 
@@ -192,16 +247,33 @@ impl AiAnalysisResource {
     pub async fn results(&self, params: AiAnalysisResultsParams) -> Result<Page<AiAnalysisResult>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.analysis_id { query.push(("analysis_id".to_string(), value.to_string())); }
-        if let Some(value) = &params.id { query.push(("id".to_string(), value.to_string())); }
-        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
-        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
+        if let Some(value) = &params.analysis_id {
+            query.push(("analysis_id".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.id {
+            query.push(("id".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page {
+            query.push(("page".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page_size {
+            query.push(("page_size".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<AiAnalysisResult> = self.transport
-            .request(Method::GET, "/api/v1/ai_analysis/results/", &path_params, &query, body)
+        let envelope: Envelope<AiAnalysisResult> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/ai_analysis/results/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
-        let path = self.transport.resolve_path("/api/v1/ai_analysis/results/", &path_params)?;
+        let path = self
+            .transport
+            .resolve_path("/api/v1/ai_analysis/results/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 }

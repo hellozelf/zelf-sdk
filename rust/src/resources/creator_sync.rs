@@ -5,9 +5,9 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::page::{Page, one};
+use crate::models::CreatorSync;
+use crate::page::{one, Page};
 use crate::transport::{Envelope, Transport};
-use crate::models::{CreatorSync};
 
 /// Parameters for creator_sync.create.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -48,11 +48,19 @@ impl CreatorSyncResource {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(serde_json::to_value(&params).map_err(|source| {
-            crate::error::Error::Decode { status: 0, source }
-        })?);
-        let envelope: Envelope<CreatorSync> = self.transport
-            .request(Method::POST, "/api/v1/creator_sync/", &path_params, &query, body)
+        let body = Some(
+            serde_json::to_value(&params)
+                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
+        );
+        let envelope: Envelope<CreatorSync> = self
+            .transport
+            .request(
+                Method::POST,
+                "/api/v1/creator_sync/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
         one(envelope, "CreatorSync")
     }
@@ -67,8 +75,15 @@ impl CreatorSyncResource {
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [("id", id)];
         let body = None;
-        let envelope: Envelope<CreatorSync> = self.transport
-            .request(Method::GET, "/api/v1/creator_sync/{id}/", &path_params, &query, body)
+        let envelope: Envelope<CreatorSync> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/creator_sync/{id}/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
         one(envelope, "CreatorSync")
     }
@@ -84,14 +99,27 @@ impl CreatorSyncResource {
     pub async fn list(&self, params: CreatorSyncListParams) -> Result<Page<CreatorSync>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
-        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
+        if let Some(value) = &params.page {
+            query.push(("page".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page_size {
+            query.push(("page_size".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<CreatorSync> = self.transport
-            .request(Method::GET, "/api/v1/creator_sync/", &path_params, &query, body)
+        let envelope: Envelope<CreatorSync> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/creator_sync/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
-        let path = self.transport.resolve_path("/api/v1/creator_sync/", &path_params)?;
+        let path = self
+            .transport
+            .resolve_path("/api/v1/creator_sync/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 }

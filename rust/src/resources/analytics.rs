@@ -5,8 +5,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::transport::{Envelope, Transport};
 use crate::models::{BrandComparison, FollowerTimeseries, PlatformEnum};
+use crate::transport::{Envelope, Transport};
 
 /// Parameters for analytics.brand_comparison.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -85,19 +85,44 @@ impl AnalyticsResource {
     /// the parent to use instead.
     ///
     /// Calls `GET /api/v1/analytics/brand_comparison/` (`analytics.brand_comparison`).
-    pub async fn brand_comparison(&self, params: AnalyticsBrandComparisonParams) -> Result<Vec<BrandComparison>> {
+    pub async fn brand_comparison(
+        &self,
+        params: AnalyticsBrandComparisonParams,
+    ) -> Result<Vec<BrandComparison>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        { let value = &params.brand_id; query.push(("brand_id".to_string(), value.to_string())); }
-        if let Some(value) = &params.platform { for entry in value { query.push(("platform".to_string(), entry.to_string())); } }
-        if let Some(value) = &params.posted_after { query.push(("posted_after".to_string(), value.to_string())); }
-        if let Some(value) = &params.posted_before { query.push(("posted_before".to_string(), value.to_string())); }
-        if let Some(value) = &params.posted_within_days { query.push(("posted_within_days".to_string(), value.to_string())); }
-        if let Some(value) = &params.posted_within_hours { query.push(("posted_within_hours".to_string(), value.to_string())); }
+        {
+            let value = &params.brand_id;
+            query.push(("brand_id".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.platform {
+            for entry in value {
+                query.push(("platform".to_string(), entry.to_string()));
+            }
+        }
+        if let Some(value) = &params.posted_after {
+            query.push(("posted_after".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.posted_before {
+            query.push(("posted_before".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.posted_within_days {
+            query.push(("posted_within_days".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.posted_within_hours {
+            query.push(("posted_within_hours".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<BrandComparison> = self.transport
-            .request(Method::GET, "/api/v1/analytics/brand_comparison/", &path_params, &query, body)
+        let envelope: Envelope<BrandComparison> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/analytics/brand_comparison/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
         Ok(envelope.results)
     }
@@ -109,20 +134,47 @@ impl AnalyticsResource {
     /// last one recorded before it.
     ///
     /// Calls `GET /api/v1/analytics/follower_timeseries/` (`analytics.follower_timeseries`).
-    pub async fn follower_timeseries(&self, params: AnalyticsFollowerTimeseriesParams) -> Result<Vec<FollowerTimeseries>> {
+    pub async fn follower_timeseries(
+        &self,
+        params: AnalyticsFollowerTimeseriesParams,
+    ) -> Result<Vec<FollowerTimeseries>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        { let value = &params.brand_id; query.push(("brand_id".to_string(), value.to_string())); }
-        if let Some(value) = &params.period { query.push(("period".to_string(), value.to_string())); }
-        if let Some(value) = &params.platform { for entry in value { query.push(("platform".to_string(), entry.to_string())); } }
-        if let Some(value) = &params.posted_after { query.push(("posted_after".to_string(), value.to_string())); }
-        if let Some(value) = &params.posted_before { query.push(("posted_before".to_string(), value.to_string())); }
-        if let Some(value) = &params.posted_within_days { query.push(("posted_within_days".to_string(), value.to_string())); }
-        if let Some(value) = &params.posted_within_hours { query.push(("posted_within_hours".to_string(), value.to_string())); }
+        {
+            let value = &params.brand_id;
+            query.push(("brand_id".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.period {
+            query.push(("period".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.platform {
+            for entry in value {
+                query.push(("platform".to_string(), entry.to_string()));
+            }
+        }
+        if let Some(value) = &params.posted_after {
+            query.push(("posted_after".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.posted_before {
+            query.push(("posted_before".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.posted_within_days {
+            query.push(("posted_within_days".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.posted_within_hours {
+            query.push(("posted_within_hours".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<FollowerTimeseries> = self.transport
-            .request(Method::GET, "/api/v1/analytics/follower_timeseries/", &path_params, &query, body)
+        let envelope: Envelope<FollowerTimeseries> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/analytics/follower_timeseries/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
         Ok(envelope.results)
     }

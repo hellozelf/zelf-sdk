@@ -35,15 +35,15 @@ pub enum AgeRangeEnum {
     #[serde(rename = "teens")]
     Teens,
     #[serde(rename = "20s")]
-    20s,
+    V20s,
     #[serde(rename = "30s")]
-    30s,
+    V30s,
     #[serde(rename = "40s")]
-    40s,
+    V40s,
     #[serde(rename = "50s")]
-    50s,
+    V50s,
     #[serde(rename = "60plus")]
-    60plus,
+    V60plus,
     #[serde(rename = "unknown")]
     Unknown,
 }
@@ -53,11 +53,11 @@ impl AgeRangeEnum {
     pub fn as_str(&self) -> &'static str {
         match self {
             AgeRangeEnum::Teens => "teens",
-            AgeRangeEnum::20s => "20s",
-            AgeRangeEnum::30s => "30s",
-            AgeRangeEnum::40s => "40s",
-            AgeRangeEnum::50s => "50s",
-            AgeRangeEnum::60plus => "60plus",
+            AgeRangeEnum::V20s => "20s",
+            AgeRangeEnum::V30s => "30s",
+            AgeRangeEnum::V40s => "40s",
+            AgeRangeEnum::V50s => "50s",
+            AgeRangeEnum::V60plus => "60plus",
             AgeRangeEnum::Unknown => "unknown",
         }
     }
@@ -1175,14 +1175,26 @@ pub struct AdvancedCreatorProfile {
     #[serde(default, deserialize_with = "crate::lenient::null_default")]
     pub posture: String,
     /// How good a partner they would be, 0 to 100.
-    #[serde(default, deserialize_with = "crate::lenient::opt_int", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        deserialize_with = "crate::lenient::opt_int",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub partnership_fit: Option<i64>,
     /// How much risk their criticism carries, 0 to 100.
-    #[serde(default, deserialize_with = "crate::lenient::opt_int", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        deserialize_with = "crate::lenient::opt_int",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub detractor_severity: Option<i64>,
     /// How strongly commenters respond to them, 0 to 100. `0` when none of their comments were
     /// analyzed.
-    #[serde(default, deserialize_with = "crate::lenient::opt_int", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        deserialize_with = "crate::lenient::opt_int",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub consumer_resonance: Option<i64>,
     /// Model summary of the creator. Its fields can grow.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -3381,7 +3393,11 @@ pub struct VettingViolation {
     /// `GRAPHIC_VIOLENCE`, `ADULT_CONTENT`, `ARMS_AND_AMMUNITION`, `SENSITIVE_NEWS_TRAGEDY`,
     /// `MISINFORMATION`, `PROFANITY`, `ALCOHOL_AND_TOBACCO`, `POLITICS`, or `USER_DEFINED` for
     /// a criterion you supplied.
-    #[serde(rename = "type", default, deserialize_with = "crate::lenient::null_default")]
+    #[serde(
+        rename = "type",
+        default,
+        deserialize_with = "crate::lenient::null_default"
+    )]
     pub r#type: String,
     /// The criterion's display name.
     #[serde(default, deserialize_with = "crate::lenient::null_default")]

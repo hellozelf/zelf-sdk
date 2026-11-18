@@ -5,9 +5,9 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::page::{Page, one};
-use crate::transport::{Envelope, Transport};
 use crate::models::{Brand, BrandCatalog, BrandCatalogItem};
+use crate::page::{one, Page};
+use crate::transport::{Envelope, Transport};
 
 /// Parameters for brands.catalog.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -104,17 +104,38 @@ impl BrandsResource {
     pub async fn catalog(&self, params: BrandsCatalogParams) -> Result<Page<BrandCatalog>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.category_id { query.push(("category_id".to_string(), value.to_string())); }
-        if let Some(value) = &params.industry_id { query.push(("industry_id".to_string(), value.to_string())); }
-        if let Some(value) = &params.order_by { for entry in value { query.push(("order_by".to_string(), entry.to_string())); } }
-        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
-        if let Some(value) = &params.search { query.push(("search".to_string(), value.to_string())); }
+        if let Some(value) = &params.category_id {
+            query.push(("category_id".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.industry_id {
+            query.push(("industry_id".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.order_by {
+            for entry in value {
+                query.push(("order_by".to_string(), entry.to_string()));
+            }
+        }
+        if let Some(value) = &params.page {
+            query.push(("page".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.search {
+            query.push(("search".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<BrandCatalog> = self.transport
-            .request(Method::GET, "/api/v1/brands/catalog/", &path_params, &query, body)
+        let envelope: Envelope<BrandCatalog> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/brands/catalog/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
-        let path = self.transport.resolve_path("/api/v1/brands/catalog/", &path_params)?;
+        let path = self
+            .transport
+            .resolve_path("/api/v1/brands/catalog/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 
@@ -129,8 +150,15 @@ impl BrandsResource {
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
         let body = None;
-        let envelope: Envelope<BrandCatalogItem> = self.transport
-            .request(Method::GET, "/api/v1/brands/catalog/categories/", &path_params, &query, body)
+        let envelope: Envelope<BrandCatalogItem> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/brands/catalog/categories/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
         Ok(envelope.results)
     }
@@ -145,13 +173,18 @@ impl BrandsResource {
     pub async fn list(&self, params: BrandsListParams) -> Result<Page<Brand>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
+        if let Some(value) = &params.page {
+            query.push(("page".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<Brand> = self.transport
+        let envelope: Envelope<Brand> = self
+            .transport
             .request(Method::GET, "/api/v1/brands/", &path_params, &query, body)
             .await?;
-        let path = self.transport.resolve_path("/api/v1/brands/", &path_params)?;
+        let path = self
+            .transport
+            .resolve_path("/api/v1/brands/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 
@@ -167,10 +200,12 @@ impl BrandsResource {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(serde_json::to_value(&params).map_err(|source| {
-            crate::error::Error::Decode { status: 0, source }
-        })?);
-        let envelope: Envelope<Brand> = self.transport
+        let body = Some(
+            serde_json::to_value(&params)
+                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
+        );
+        let envelope: Envelope<Brand> = self
+            .transport
             .request(Method::PATCH, "/api/v1/brands/", &path_params, &query, body)
             .await?;
         one(envelope, "Brand")

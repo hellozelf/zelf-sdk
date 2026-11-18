@@ -23,15 +23,15 @@ public static class AccountTypeEnum
 public static class AgeRangeEnum
 {
     public const string Teens = "teens";
-    public const string 20s = "20s";
-    public const string 30s = "30s";
-    public const string 40s = "40s";
-    public const string 50s = "50s";
-    public const string 60plus = "60plus";
+    public const string V20s = "20s";
+    public const string V30s = "30s";
+    public const string V40s = "40s";
+    public const string V50s = "50s";
+    public const string V60plus = "60plus";
     public const string Unknown = "unknown";
 
     /// <summary>Every value the API accepts here.</summary>
-    public static readonly IReadOnlyList<string> All = [Teens, 20s, 30s, 40s, 50s, 60plus, Unknown];
+    public static readonly IReadOnlyList<string> All = [Teens, V20s, V30s, V40s, V50s, V60plus, Unknown];
 }
 
 /// <summary>

@@ -19,13 +19,19 @@ impl Limits {
     /// Stop after `n` pages, counting the one already in hand. A value of 1
     /// makes no further request.
     pub fn pages(n: usize) -> Self {
-        Self { max_pages: Some(n), max_items: None }
+        Self {
+            max_pages: Some(n),
+            max_items: None,
+        }
     }
 
     /// Stop once `n` items have been visited, so no page is requested that is
     /// not needed to reach `n`.
     pub fn items(n: usize) -> Self {
-        Self { max_pages: None, max_items: Some(n) }
+        Self {
+            max_pages: None,
+            max_items: Some(n),
+        }
     }
 
     /// Add a page bound to an existing limit.
@@ -111,8 +117,12 @@ impl<T: DeserializeOwned> Page<T> {
         let Some(number) = self.next else {
             return Ok(None);
         };
-        let mut query: Vec<(String, String)> =
-            self.query.iter().filter(|(k, _)| k != "page").cloned().collect();
+        let mut query: Vec<(String, String)> = self
+            .query
+            .iter()
+            .filter(|(k, _)| k != "page")
+            .cloned()
+            .collect();
         query.push(("page".to_string(), number.to_string()));
 
         let envelope: Envelope<T> = self

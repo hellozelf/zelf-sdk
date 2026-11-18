@@ -5,9 +5,9 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::page::{one};
-use crate::transport::{Envelope, Transport};
 use crate::models::{Brand, SubBrandTypeEnum};
+use crate::page::one;
+use crate::transport::{Envelope, Transport};
 
 /// Parameters for sub_brands.create.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -73,10 +73,12 @@ impl SubBrandsResource {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(serde_json::to_value(&params).map_err(|source| {
-            crate::error::Error::Decode { status: 0, source }
-        })?);
-        let envelope: Envelope<Brand> = self.transport
+        let body = Some(
+            serde_json::to_value(&params)
+                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
+        );
+        let envelope: Envelope<Brand> = self
+            .transport
             .request(Method::POST, "/api/v1/brands/", &path_params, &query, body)
             .await?;
         one(envelope, "Brand")

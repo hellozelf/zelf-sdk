@@ -5,9 +5,9 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::page::{one};
-use crate::transport::{Envelope, Transport};
 use crate::models::{AccountTypeEnum, BrandAccountGroups};
+use crate::page::one;
+use crate::transport::{Envelope, Transport};
 
 /// Parameters for brand_accounts.add.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -69,11 +69,19 @@ impl BrandAccountsResource {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(serde_json::to_value(&params).map_err(|source| {
-            crate::error::Error::Decode { status: 0, source }
-        })?);
-        let envelope: Envelope<BrandAccountGroups> = self.transport
-            .request(Method::POST, "/api/v1/brands/accounts/", &path_params, &query, body)
+        let body = Some(
+            serde_json::to_value(&params)
+                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
+        );
+        let envelope: Envelope<BrandAccountGroups> = self
+            .transport
+            .request(
+                Method::POST,
+                "/api/v1/brands/accounts/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
         one(envelope, "BrandAccountGroups")
     }
@@ -88,12 +96,23 @@ impl BrandAccountsResource {
     pub async fn list(&self, params: BrandAccountsListParams) -> Result<BrandAccountGroups> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.account_type { query.push(("account_type".to_string(), value.to_string())); }
-        if let Some(value) = &params.brand_id { query.push(("brand_id".to_string(), value.to_string())); }
+        if let Some(value) = &params.account_type {
+            query.push(("account_type".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.brand_id {
+            query.push(("brand_id".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<BrandAccountGroups> = self.transport
-            .request(Method::GET, "/api/v1/brands/accounts/", &path_params, &query, body)
+        let envelope: Envelope<BrandAccountGroups> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/brands/accounts/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
         one(envelope, "BrandAccountGroups")
     }
@@ -111,11 +130,19 @@ impl BrandAccountsResource {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(serde_json::to_value(&params).map_err(|source| {
-            crate::error::Error::Decode { status: 0, source }
-        })?);
-        let envelope: Envelope<BrandAccountGroups> = self.transport
-            .request(Method::DELETE, "/api/v1/brands/accounts/", &path_params, &query, body)
+        let body = Some(
+            serde_json::to_value(&params)
+                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
+        );
+        let envelope: Envelope<BrandAccountGroups> = self
+            .transport
+            .request(
+                Method::DELETE,
+                "/api/v1/brands/accounts/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
         one(envelope, "BrandAccountGroups")
     }

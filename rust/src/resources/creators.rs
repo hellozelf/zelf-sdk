@@ -5,9 +5,9 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::page::{Page};
-use crate::transport::{Envelope, Transport};
 use crate::models::{Creator, PlatformEnum};
+use crate::page::Page;
+use crate::transport::{Envelope, Transport};
 
 /// Parameters for creators.list.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -53,19 +53,40 @@ impl CreatorsResource {
     pub async fn list(&self, params: CreatorsListParams) -> Result<Page<Creator>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.email { query.push(("email".to_string(), value.to_string())); }
-        if let Some(value) = &params.id { query.push(("id".to_string(), value.to_string())); }
-        if let Some(value) = &params.order_by { for entry in value { query.push(("order_by".to_string(), entry.to_string())); } }
-        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
-        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
-        if let Some(value) = &params.platform { for entry in value { query.push(("platform".to_string(), entry.to_string())); } }
-        if let Some(value) = &params.username { query.push(("username".to_string(), value.to_string())); }
+        if let Some(value) = &params.email {
+            query.push(("email".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.id {
+            query.push(("id".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.order_by {
+            for entry in value {
+                query.push(("order_by".to_string(), entry.to_string()));
+            }
+        }
+        if let Some(value) = &params.page {
+            query.push(("page".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page_size {
+            query.push(("page_size".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.platform {
+            for entry in value {
+                query.push(("platform".to_string(), entry.to_string()));
+            }
+        }
+        if let Some(value) = &params.username {
+            query.push(("username".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<Creator> = self.transport
+        let envelope: Envelope<Creator> = self
+            .transport
             .request(Method::GET, "/api/v1/creator/", &path_params, &query, body)
             .await?;
-        let path = self.transport.resolve_path("/api/v1/creator/", &path_params)?;
+        let path = self
+            .transport
+            .resolve_path("/api/v1/creator/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 }

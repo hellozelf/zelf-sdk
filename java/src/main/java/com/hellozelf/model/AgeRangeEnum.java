@@ -12,13 +12,13 @@ public final class AgeRangeEnum {
     }
 
     public static final String TEENS = "teens";
-    public static final String 20S = "20s";
-    public static final String 30S = "30s";
-    public static final String 40S = "40s";
-    public static final String 50S = "50s";
-    public static final String 60PLUS = "60plus";
+    public static final String V20S = "20s";
+    public static final String V30S = "30s";
+    public static final String V40S = "40s";
+    public static final String V50S = "50s";
+    public static final String V60PLUS = "60plus";
     public static final String UNKNOWN = "unknown";
 
     /** Every value the API accepts here. */
-    public static final List<String> ALL = List.of(TEENS, 20S, 30S, 40S, 50S, 60PLUS, UNKNOWN);
+    public static final List<String> ALL = List.of(TEENS, V20S, V30S, V40S, V50S, V60PLUS, UNKNOWN);
 }

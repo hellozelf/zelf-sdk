@@ -5,9 +5,12 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Result;
-use crate::page::{Page, one};
+use crate::models::{
+    Content, ContentScopeRequest, ContentStatistics, CreatorVetting, CreatorVettingResult,
+    SafetyCheckRequest,
+};
+use crate::page::{one, Page};
 use crate::transport::{Envelope, Transport};
-use crate::models::{Content, ContentScopeRequest, ContentStatistics, CreatorVetting, CreatorVettingResult, SafetyCheckRequest};
 
 /// Parameters for creator_vetting.content_statistics.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -100,14 +103,27 @@ impl CreatorVettingResource {
     /// the same totals shape as `content.statistics`.
     ///
     /// Calls `GET /api/v1/creator/vetting/contents/statistics/` (`creator_vetting.content_statistics`).
-    pub async fn content_statistics(&self, params: CreatorVettingContentStatisticsParams) -> Result<ContentStatistics> {
+    pub async fn content_statistics(
+        &self,
+        params: CreatorVettingContentStatisticsParams,
+    ) -> Result<ContentStatistics> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        { let value = &params.vetting_id; query.push(("vetting_id".to_string(), value.to_string())); }
+        {
+            let value = &params.vetting_id;
+            query.push(("vetting_id".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<ContentStatistics> = self.transport
-            .request(Method::GET, "/api/v1/creator/vetting/contents/statistics/", &path_params, &query, body)
+        let envelope: Envelope<ContentStatistics> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/creator/vetting/contents/statistics/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
         one(envelope, "ContentStatistics")
     }
@@ -121,15 +137,31 @@ impl CreatorVettingResource {
     pub async fn contents(&self, params: CreatorVettingContentsParams) -> Result<Page<Content>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
-        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
-        { let value = &params.vetting_id; query.push(("vetting_id".to_string(), value.to_string())); }
+        if let Some(value) = &params.page {
+            query.push(("page".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page_size {
+            query.push(("page_size".to_string(), value.to_string()));
+        }
+        {
+            let value = &params.vetting_id;
+            query.push(("vetting_id".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<Content> = self.transport
-            .request(Method::GET, "/api/v1/creator/vetting/contents/", &path_params, &query, body)
+        let envelope: Envelope<Content> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/creator/vetting/contents/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
-        let path = self.transport.resolve_path("/api/v1/creator/vetting/contents/", &path_params)?;
+        let path = self
+            .transport
+            .resolve_path("/api/v1/creator/vetting/contents/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 
@@ -148,11 +180,19 @@ impl CreatorVettingResource {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
         let path_params = [];
-        let body = Some(serde_json::to_value(&params).map_err(|source| {
-            crate::error::Error::Decode { status: 0, source }
-        })?);
-        let envelope: Envelope<CreatorVetting> = self.transport
-            .request(Method::POST, "/api/v1/creator/vetting/", &path_params, &query, body)
+        let body = Some(
+            serde_json::to_value(&params)
+                .map_err(|source| crate::error::Error::Decode { status: 0, source })?,
+        );
+        let envelope: Envelope<CreatorVetting> = self
+            .transport
+            .request(
+                Method::POST,
+                "/api/v1/creator/vetting/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
         one(envelope, "CreatorVetting")
     }
@@ -171,16 +211,33 @@ impl CreatorVettingResource {
     pub async fn list(&self, params: CreatorVettingListParams) -> Result<Page<CreatorVetting>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.creator_id { query.push(("creator_id".to_string(), value.to_string())); }
-        if let Some(value) = &params.id { query.push(("id".to_string(), value.to_string())); }
-        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
-        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
+        if let Some(value) = &params.creator_id {
+            query.push(("creator_id".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.id {
+            query.push(("id".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page {
+            query.push(("page".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page_size {
+            query.push(("page_size".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<CreatorVetting> = self.transport
-            .request(Method::GET, "/api/v1/creator/vetting/", &path_params, &query, body)
+        let envelope: Envelope<CreatorVetting> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/creator/vetting/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
-        let path = self.transport.resolve_path("/api/v1/creator/vetting/", &path_params)?;
+        let path = self
+            .transport
+            .resolve_path("/api/v1/creator/vetting/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 
@@ -203,19 +260,39 @@ impl CreatorVettingResource {
     /// what was stated; it does not assess legal compliance.
     ///
     /// Calls `GET /api/v1/creator/vetting/results/` (`creator_vetting.results`).
-    pub async fn results(&self, params: CreatorVettingResultsParams) -> Result<Page<CreatorVettingResult>> {
+    pub async fn results(
+        &self,
+        params: CreatorVettingResultsParams,
+    ) -> Result<Page<CreatorVettingResult>> {
         #[allow(unused_mut)]
         let mut query: Vec<(String, String)> = Vec::new();
-        if let Some(value) = &params.id { query.push(("id".to_string(), value.to_string())); }
-        if let Some(value) = &params.page { query.push(("page".to_string(), value.to_string())); }
-        if let Some(value) = &params.page_size { query.push(("page_size".to_string(), value.to_string())); }
-        if let Some(value) = &params.vetting_id { query.push(("vetting_id".to_string(), value.to_string())); }
+        if let Some(value) = &params.id {
+            query.push(("id".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page {
+            query.push(("page".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.page_size {
+            query.push(("page_size".to_string(), value.to_string()));
+        }
+        if let Some(value) = &params.vetting_id {
+            query.push(("vetting_id".to_string(), value.to_string()));
+        }
         let path_params = [];
         let body = None;
-        let envelope: Envelope<CreatorVettingResult> = self.transport
-            .request(Method::GET, "/api/v1/creator/vetting/results/", &path_params, &query, body)
+        let envelope: Envelope<CreatorVettingResult> = self
+            .transport
+            .request(
+                Method::GET,
+                "/api/v1/creator/vetting/results/",
+                &path_params,
+                &query,
+                body,
+            )
             .await?;
-        let path = self.transport.resolve_path("/api/v1/creator/vetting/results/", &path_params)?;
+        let path = self
+            .transport
+            .resolve_path("/api/v1/creator/vetting/results/", &path_params)?;
         Ok(Page::new(envelope, self.transport.clone(), path, query))
     }
 }

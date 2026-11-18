@@ -69,7 +69,9 @@ impl std::fmt::Debug for ClientBuilder {
 impl Default for ClientBuilder {
     fn default() -> Self {
         Self {
-            api_key: std::env::var(API_KEY_ENV).ok().filter(|key| !key.is_empty()),
+            api_key: std::env::var(API_KEY_ENV)
+                .ok()
+                .filter(|key| !key.is_empty()),
             base_url: std::env::var(BASE_URL_ENV)
                 .ok()
                 .filter(|url| !url.is_empty())
@@ -213,13 +215,18 @@ impl Transport {
                     "{name} is required and must not be empty"
                 )));
             }
-            resolved = resolved.replace(&format!("{{{name}}}"), urlencoding::encode(value).as_ref());
+            resolved =
+                resolved.replace(&format!("{{{name}}}"), urlencoding::encode(value).as_ref());
         }
         Ok(resolved)
     }
 
     pub(crate) fn url(&self, path: &str, path_params: &[(&str, &str)]) -> Result<String> {
-        Ok(format!("{}{}", self.base_url, self.resolve_path(path, path_params)?))
+        Ok(format!(
+            "{}{}",
+            self.base_url,
+            self.resolve_path(path, path_params)?
+        ))
     }
 
     pub(crate) async fn request<T: DeserializeOwned>(
